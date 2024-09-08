@@ -1,6 +1,6 @@
 function Network() {
     return (
-        <div></div>
+        <div>Network</div>
     );
 }
 

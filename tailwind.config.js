@@ -15,7 +15,8 @@ export default {
         gray: "#3498db",
         lightGray: "#3498db",
         orange: "#3498db",
-
+        iconGray: '#9E9B9B',
+        bgGray: '#F5F6F7'
       },
     },
   },

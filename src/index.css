@@ -81,7 +81,7 @@ button:focus-visible {
   font-family: "Roboto", sans-serif;
   scroll-behavior: smooth;
   box-sizing: border-box;
-  background-color: #edfbf8;
+  /* background-color: #edfbf8; */
 }
 
 .hoverBtn {
@@ -122,4 +122,7 @@ button:focus-visible {
 }
 .rounded-90 {
   border-radius: 90px;
+}
+.border-bottom {
+  border-bottom: 1px solid #ccd0d5;
 }
