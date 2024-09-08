@@ -1,13 +1,24 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  mode: "jit",
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        roboto: ['Roboto', 'sans-serif'],
+      },
+      colors: {
+        primary: "#3498db",
+        light: "#3498db",
+        gray: "#3498db",
+        lightGray: "#3498db",
+        orange: "#3498db",
+
+      },
+    },
   },
   plugins: [],
 }
+
