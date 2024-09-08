@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as MdIcons from 'react-icons/md';
 import SidebarItem from './SidebarItem';
-import config from '../../../config';
+import config from '../../../../config';
 
 function Sidebar() {
     const [isActive, setIsActive] = useState(0)
