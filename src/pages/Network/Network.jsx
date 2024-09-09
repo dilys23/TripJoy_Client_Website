@@ -1,6 +1,7 @@
 import ava from '../../images/ava.jpg'
 import * as MdIcons from "react-icons/fa";
 import Posts from '../../components/Layout/components/Posts';
+import FriendRequest from '../../components/Layout/components/FriendRequest';
 function Network() {
     return (
         <div className="flex w-full px-3 my-3">
@@ -17,7 +18,10 @@ function Network() {
                 </div>
                 <Posts></Posts>
             </div>
-            <div className="w=1/4">hihi</div>
+            <div className="w-1/4 px-6">
+                <FriendRequest></FriendRequest>
+
+            </div>
         </div>
     );
 }
