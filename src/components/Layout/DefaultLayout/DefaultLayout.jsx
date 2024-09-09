@@ -8,7 +8,7 @@ function DefaultLayout({ children }) {
             <div className="mx-6 bg-bgGray ">
                 <div className='flex gap-x-3 w-full'>
                     <Sidebar></Sidebar>
-                    <div className="w-4/5">{children}</div>
+                    <div className="w-5/6">{children}</div>
                 </div>
             </div>
         </div>

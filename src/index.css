@@ -123,6 +123,9 @@ button:focus-visible {
 .rounded-90 {
   border-radius: 90px;
 }
+.rounded-20 {
+  border-radius: 7px;
+}
 .border-bottom {
   border-bottom: 1px solid #ccd0d5;
 }
