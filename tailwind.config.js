@@ -12,8 +12,8 @@ export default {
       colors: {
         primary: "#3498db",
         light: "#747474",
-        gray: "#e4e4e4",
-        lightGray: "#3498db",
+        gray: "#E7E7E7",
+        lightGray: "#F8F9FB",
         orange: "#3498db",
 
       }
