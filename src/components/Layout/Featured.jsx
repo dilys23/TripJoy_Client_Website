@@ -3,14 +3,12 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { FaCar, FaShip, FaHotel } from "react-icons/fa6";
 // import { Container } from './styles';
 import Danang from "../../images/Danang.jpg";
-import HoiAn from "../../images/HoiAn1.jpg";
-
 import HaNoi from "../../images/HaNoi.jpg";
 import HaGiang from "../../images/HaGiang.jpg";
 
 function Fetured() {
     const [active, setActive] = useState(false);
-    const Card = ({ packages, image, country, amount, rows }) => {
+    const Card = ({ image, country, amount, rows }) => {
         const [divColor, setDivColor] = useState(
             {
                 bgColor: "",
@@ -20,16 +18,16 @@ function Fetured() {
         return (
             <div className='relative overflow-hidden my-0 mx-auto rounded-2x1'
                 style={{ gridRow: `span${rows} / span${rows}` }}
-                onMouseEnter={() => setDivColor({ bgColor: "#6347F9", textColor: "white" })}
-                onMouseLeave={() => setDivColor({ bgColor: 'white', textColor: "#63479" })}>
+                onMouseEnter={() => setDivColor({ bgColor: "#17A1FA", textColor: "white" })}
+                onMouseLeave={() => setDivColor({ bgColor: 'white', textColor: "#17A1FA" })}>
                 <div className='bg-white text-primary h-12 px-4 rounded-md absolute top-4 right-4 z-10 font-bold flex flex-col items-center justify-center text-lg'
                     style={{ backgroundColor: `${divColor.bgColor}`, color: `${divColor.textColor}` }}
-                >{packages} Packages</div>
+                >Khám phá</div>
                 <img src={image} alt="" className='h-full w-full rounded-2x1 hoverImg' />
                 <div className='absolute bottom-4 left-4'>
                     <h2 className='text-white text-4xl font-bold'>{country}</h2>
                     <p className='text-white'>
-                        Starting from ${amount}
+                        {amount}
                     </p>
                 </div>
 
@@ -82,7 +80,7 @@ function Fetured() {
                             <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-white hover:bg-white hover:text-primary cursor'>Book Now</button>
+                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-primary hover:bg-white hover:text-primary cursor'>Book Now</button>
                         </span>
                     </div>
                 </div>
@@ -92,12 +90,12 @@ function Fetured() {
                         <h2 className='text-4xl text-center font-bold capitalize my-4'>Khám phá những địa điểm mới lạ </h2>
                     </span>
                     <div className='flex lg:flex-1 lg:flex-row flex-col gap-8 my-12'>
-                        <Card amount="1200" country='Paris' image={Danang} packages="3" row="2"  />
+                        <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="2"  />
                         <div className='flex flex-col gap-5  '>
-                            <Card amount="1900" country='Paris' image={HaNoi} packages="3" row="1" />
-                            <Card amount="1500" country='Paris' image={Danang} packages="3" row="1"  />
+                            <Card amount="Hà Nội" country='Hồ Gươm' image={HaNoi}  row="1" />
+                            <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="1"  />
                         </div>
-                        <Card amount="1600" country='Paris' image={HaGiang} packages="3" row="2"  />
+                        <Card amount="Hà Giang" country='Tà Xùa' image={HaGiang}  row="2"  />
                     </div>
                 </div>
 

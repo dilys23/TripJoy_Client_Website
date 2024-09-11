@@ -13,7 +13,7 @@ function Packages() {
         return (
             <div>
                 <div className='overflow-hidden my-0 mx-auto rounded-2xl'>
-                    <img src={image} alt="" className='rounded-2xl w-[410px] h-[240px] mx-auto  ' />
+                    <img src={image} alt="" className='rounded-2xl w-[410px] h-[240px] mx-auto hoverImg1 ' />
                 </div>
                 <h5 className='text-2xl py-4 font-semibold text-center '>{text1}</h5>
                 <p className=' text-center'> {text2}</p>
