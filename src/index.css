@@ -93,13 +93,15 @@ button:focus-visible {
   overflow: hidden !important;
 }
 .hoverImg{
-  width : 100%;
-  /* color:#747474 ; */
-  /* color:#e4e4e4 ; */
+  object-fit: cover; 
+  width: 100%;
+  border-radius: 7px;
+  /* height: auto;  */
   transition: 0.5s all ease-in-out;
 }
 .hoverImg:hover{
   transform: scale(1.5);
+  
 }
 .transition-bg {
   transition: 0.5s all ease-in-out;

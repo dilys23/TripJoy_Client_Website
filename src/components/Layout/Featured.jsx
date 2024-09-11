@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { FaPlaneDeparture } from "react-icons/fa";
 import { FaCar, FaShip, FaHotel } from "react-icons/fa6";
 // import { Container } from './styles';
+import Danang from "../../images/Danang.jpg";
+import HoiAn from "../../images/HoiAn1.jpg";
+
+import HaNoi from "../../images/HaNoi.jpg";
+import HaGiang from "../../images/HaGiang.jpg";
 
 function Fetured() {
     const [active, setActive] = useState(false);
@@ -35,7 +40,7 @@ function Fetured() {
     return (
         <div className='max-w-[1400px] mx-auto relative mt-14'>
             <div className='w-full h-full'>
-                <p className='xl:text-[25rem] lg:text-[20rem] absolute top-0 left-0 w-full text-center z-[-1] text-gray font-semibold opacity-10'>
+                <p className='xl:text-[30rem] lg:text-[20rem] absolute top-0 left-0 w-full text-center z-[-1] text-gray font-semibold opacity-15'>
                     Travel
                 </p>
             </div>
@@ -62,28 +67,42 @@ function Fetured() {
                             <FaShip size={20} className='lg:block hidden' />
                             Hotel
                         </button>
-                        </div>
-                        <div className='flex flex-wrap items-end justify-between px-8 gap-4 '>
-                            <span className='flex flex-col gap-4'>
-                                <p className='font-semibold text-lg '>Your Destination </p>
-                                <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-40 px-4 text-left text-base ' />
-                            </span>
-                            <span className='flex flex-col gap-4'>
-                                <p className='font-semibold text-lg '>Check in</p>
-                                <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-40 px-4 text-left text-base ' />
-                            </span>
-                            <span className='flex flex-col gap-4'>
-                                <p className='font-semibold text-lg '>Check out</p>
-                                <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-40 px-4 text-left text-base ' />
-                            </span>
-                            <span className='flex flex-col gap-4'>
-                                <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-white hover:bg-white hover:text-primary cursor'>Book Now</button>
-                            </span>
-
-                        </div>
+                    </div>
+                    <div className='flex flex-wrap items-end justify-between px-8 gap-4 '>
+                        <span className='flex flex-col gap-4'>
+                            <p className='font-semibold text-lg '>Your Destination </p>
+                            <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                        </span>
+                        <span className='flex flex-col gap-4'>
+                            <p className='font-semibold text-lg '>Check in</p>
+                            <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                        </span>
+                        <span className='flex flex-col gap-4'>
+                            <p className='font-semibold text-lg '>Check out</p>
+                            <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                        </span>
+                        <span className='flex flex-col gap-4'>
+                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-white hover:bg-white hover:text-primary cursor'>Book Now</button>
+                        </span>
                     </div>
                 </div>
-            
+                <div>
+                    <span className='flex flex-col items-center my-20'>
+                        <p className='text-primary font-bold capitalize tracking-[0.15em]'>Featured Tours</p>
+                        <h2 className='text-4xl text-center font-bold capitalize my-4'>Khám phá những địa điểm mới lạ </h2>
+                    </span>
+                    <div className='flex lg:flex-1 lg:flex-row flex-col gap-8 my-12'>
+                        <Card amount="1200" country='Paris' image={Danang} packages="3" row="2"  />
+                        <div className='flex flex-col gap-5  '>
+                            <Card amount="1900" country='Paris' image={HaNoi} packages="3" row="1" />
+                            <Card amount="1500" country='Paris' image={Danang} packages="3" row="1"  />
+                        </div>
+                        <Card amount="1600" country='Paris' image={HaGiang} packages="3" row="2"  />
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     );
 }
