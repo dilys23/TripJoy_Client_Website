@@ -94,6 +94,8 @@ button:focus-visible {
 }
 .hoverImg {
   width: 100%;
+  /* color:#747474 ; */
+  /* color:#e4e4e4 ; */
   transition: 0.5s all ease-in-out;
 }
 .hoverImg:hover {
