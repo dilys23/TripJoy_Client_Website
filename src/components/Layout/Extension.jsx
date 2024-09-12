@@ -1,14 +1,19 @@
 import React from 'react';
 import phoneImg from '../../images/phoneimg.png'
 import travel from '../../images/trip.gif';
+import plane from '../../images/plane.png'
 function Extension() {
     return (
+        
         <div className="bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden " >
+                    
+            
             {/* style={{ backgroundImage: `url(${backgroundImage})` }} */}
             <div className="lg:flex max-w-[1400px] mx-auto justify-between items-center px-3 pt-12">
                 <div className='lg:w-4/5'>
+              
+
                     <h2 className='xl:text-[4rem] lg:text-5xl text-4xl lg:text-left text-center font-bold lg:leading-snug mb-5 '>
-                        {/* Khám phá những<br />  địa điểm xinh đẹp <br /> trên Việt Nam */}
                         Nhanh chóng hơn <br /> với ứng dụng <br />điện thoại
                     </h2 >
                     <p className='text-black text-lg leading-normal mb-3'>Trip planning made easy and (almost) as fun as travelling itself!  </p>
@@ -30,21 +35,13 @@ function Extension() {
                         </button>
                     </div>
                 </div>
-                {/* <div className='grid grid-cols-1 gap-10 my-15 relative z-10 mt-20 xl:grid-cols-2 mx-20'>
-                    <div>
-                        <img src={travel} alt="" className='w-[20-rem] h-full ' />
-                    </div>
-                    <div className='lg:w-3/5 flex items-center justify-end lg:pt-0 pt-10 lg:-mr-50'>
-                        <img src={phoneImg} alt="" className='w-[35rem] h-full ' />
-                    </div>
-                </div> */}
                 <div className='lg:w-3/5 flex items-center mt-[200px]'>
-                    <img src={travel} alt="" className='w-[30rem] h-full ml-[80px] ' />
+                    <img src={travel} alt="" className='w-[35rem]  lg:block hidden absolute bottom-10 right-[300px]'/>
                   
                 </div>
                 {/* <img src={phoneImg} alt="" className='w-[35rem] h-full ' /> */}
                 <div className=' flex items-center justify-end lg:pt-0 pt-10 lg:-mr-0'>
-                    <img src={phoneImg} alt="" className='w-[60rem] h-full ' />
+                    <img src={phoneImg} alt="" className='w-[60rem] h-full  ' />
                 </div>
 
             </div>
