@@ -17,7 +17,7 @@ function Hero() {
           <h2 className='xl:text-[4rem] lg:text-5xl text-4xl lg:text-left text-center font-bold lg:leading-snug mb-5 '>
             Khám phá những<br />  địa điểm xinh đẹp <br /> trên Việt Nam
 
-          </h2 >
+          </h2>
           <p className='text-black text-lg leading-normal mb-8'>Lên kế hoạch và tận hưởng chuyến đi của bạn một cách trọn vẹn </p>
           <button className='bg-[#FF7324] rounded-full transition-bg shadow h-11 lg:px-10 lg:w-auto w-full outline-none text-white text-center hover:bg-white hover:text-black cursor-pointer text-base hover:border-r hover:border-[#FF7324] mb-12'>
             Bắt đầu kế hoạch

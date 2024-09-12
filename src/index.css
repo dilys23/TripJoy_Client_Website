@@ -75,46 +75,45 @@ button:focus-visible {
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   padding: 0;
-  margin: 0 ;
-  font-family: "Roboto", sans-serif; 
+  margin: 0;
+  font-family: "Roboto", sans-serif;
   scroll-behavior: smooth;
   box-sizing: border-box;
   /* background-color: #edfbf8; */
+  /* background-color: #edfbf8; */
 }
 
-.hoverBtn{
+.hoverBtn {
   transition: all o.4s ease 0s !important;
   cursor: pointer;
 }
-.hoverBtn:hover{
+.hoverBtn:hover {
   transform: scale(1.15);
   overflow: hidden !important;
 }
-.hoverImg{
-  object-fit: cover; 
+.hoverImg {
+  object-fit: cover;
   width: 100%;
   border-radius: 7px;
   /* height: auto;  */
   transition: 0.5s all ease-in-out;
 }
-.hoverImg:hover{
+.hoverImg:hover {
   transform: scale(1.5);
-  
 }
-.hoverImg1:hover{
+.hoverImg1:hover {
   transform: scale(1.1);
   transition: 0.4s all ease-in-out;
-  
 }
 .transition-bg {
   transition: 0.5s all ease-in-out;
 }
-.images::-webkit-scrollbar{
+.images::-webkit-scrollbar {
   display: none;
 }
-.images{
+.images {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -127,5 +126,14 @@ button:focus-visible {
   }
 }
 .animate-spin-slow {
-  animation: spin 500s linear infinite;
+  animation: spin 100s linear infinite;
+}
+.rounded-90 {
+  border-radius: 90px;
+}
+.rounded-20 {
+  border-radius: 7px;
+}
+.border-bottom {
+  border-bottom: 1px solid #ccd0d5;
 }

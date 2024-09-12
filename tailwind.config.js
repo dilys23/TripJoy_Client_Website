@@ -11,12 +11,13 @@ export default {
       },
       colors: {
         primary: "#3498db",
-        light: "#747474",
-        gray: "#E7E7E7",
-        lightGray: "#F8F9FB",
+        light: "#3498db",
+        gray: "#3498db",
+        lightGray: "#3498db",
         orange: "#3498db",
-
-      }
+        iconGray: '#9E9B9B',
+        bgGray: '#F5F6F7'
+      },
     },
   },
   plugins: [],
