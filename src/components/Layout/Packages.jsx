@@ -29,6 +29,11 @@ function Packages() {
     };
     return (
         <div className='bg-lightGray my-16 py-16 relative'>
+             <div className='w-full h-full'>
+                <p className='xl:text-[30rem] lg:text-[20rem] absolute top-0 left-0 w-full text-center z-[-1] text-primary font-semibold opacity-0'>
+                    Travel
+                </p>
+            </div>
         <div className='max-w-[1400px] mx-auto px-3'>
             <span className='flex flex-col items-center '>
                 <p className='text-primary font-bold capitalize tracking-[0.15em]'>Popular Packages</p>
