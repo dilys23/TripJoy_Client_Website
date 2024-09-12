@@ -18,8 +18,7 @@ function App() {
       <Packages />
       <Extension />
       {/* <Discover/> */}
-    </>
-    {/* <Router>
+      {/* <Router>
       <div className="App">
         <Routes>
           {publicRoutes.map((route, index) => {
@@ -38,6 +37,8 @@ function App() {
         </Routes>
       </div>
     </Router> */}
+    </>
+
   )
 }
 
