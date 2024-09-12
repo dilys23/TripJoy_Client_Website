@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import backgroundImage from '../../images/background.jpg';
-// import { Container } from './styles';
 import image1 from '../../images/image1.png';
 import icon from '../../images/iconApple.png';
+import plane from '../../images/plane.png'
+import plane2 from '../../images/plane2.png'
+import planegif from '../../images/planegif.gif'
 import Login from "./Login"
 function Hero() {
   const [login, setLogin] = useState(false)
@@ -16,18 +18,18 @@ function Hero() {
     // <div className="bg-[url('../../images/background.jpg')] bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden">
     <div className="bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden " >
       {/* style={{ backgroundImage: `url(${backgroundImage})` }} */}
+      {/* <img src={plane} alt="" className='lg:block hidden absolute bottom-0 right-16' />
+      <img src={plane2} alt="" className='lg:block hidden absolute top-0 left-0' /> */}
       <div className="lg:flex max-w-[1400px] mx-auto justify-between items-center px-3 pt-12">
         <div className='lg:w-2/5'>
           <h2 className='xl:text-[4rem] lg:text-5xl text-4xl lg:text-left text-center font-bold lg:leading-snug mb-5 '>
-            {/* Khám phá những<br />  địa điểm xinh đẹp <br /> trên Việt Nam */}
-            Explore beautiful place <br />
-            in VietNam
+            Khám phá những<br />  địa điểm xinh đẹp <br /> trên Việt Nam
+
           </h2>
-          <p className='text-black text-lg leading-normal mb-8'>Trip planning made easy and (almost) as fun as travelling itself! </p>
+          <p className='text-black text-lg leading-normal mb-8'>Lên kế hoạch và tận hưởng chuyến đi của bạn một cách trọn vẹn </p>
           <button
-            onClick={handleLogin}
-            className='bg-[#FF7324] rounded-full transition-bg shadow h-11 lg:px-10 lg:w-auto w-full outline-none text-white hover:bg-white hover:text-black cursor-pointer text-base hover:border-r hover:border-[#FF7324] mb-12'>
-            Start planning now
+            className='bg-[#FF7324] rounded-full transition-bg shadow h-11 lg:px-10 lg:w-auto w-full outline-none text-white text-center hover:bg-white hover:text-black cursor-pointer text-base hover:border-r hover:border-[#FF7324] mb-12'>
+            Bắt đầu kế hoạch
           </button>
           {login && <Login onClose={handleClose}></Login>}
           <div className='flex flex-1 gap-5 '>
@@ -45,12 +47,20 @@ function Hero() {
               </svg>
               Google Play
             </button>
+            <img src={planegif} alt="" className='lg:block hidden absolute bottom-20 left-[390px] w-[15rem] h-[12rem] ' />
+
           </div>
         </div>
         <div className='lg:w-3/5 flex items-center justify-end lg:pt-0 pt-10 lg:-mr-50'>
-          <img src={image1} alt="" className='w-[35rem] h-full animate-spin-slow' />
+          <img src={image1} alt="" className='w-[35rem] h-full  ' />{/* animate-spin-slow */}
+
         </div>
       </div>
+      {login && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <Login onClose={handleClose} />
+        </div>
+      )}
     </div>
   );
 }
