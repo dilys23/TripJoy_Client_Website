@@ -6,14 +6,14 @@ function Post() {
             <div className="flex justify-between ">
                 <div className="flex gap-3 text-center cursor-pointer ">
                     <img src={ava} alt="" className='rounded-90 w-[50px] h-[50px]' />
-                    <div className='block text-center'>
-                        <div className='font-bold text-base'>Le Nguyen</div>
-                        <div className='text-[##979797] text-xs italic'>12 tieng truoc</div>
+                    <div className='block text-start'>
+                        <div className='font-bold md:text-base text-[13px]'>Le Nguyen</div>
+                        <div className='text-[##979797] text-xs italic md:text-base text-[12px]'>12 tieng truoc</div>
                     </div>
                 </div>
                 <MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' />
             </div>
-            <div className='mt-4 px-2 whitespace-pre-line'>Măng Đen hôm đó nhiều mây.
+            <div className='mt-4 px-2 whitespace-pre-line md:text-base text-[13px]'>Măng Đen hôm đó nhiều mây.
                 Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt.
                 Và nó tuyệt với mìn thật.
             </div>

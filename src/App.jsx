@@ -12,31 +12,31 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar />
       <Hero />
       <Fetured />
       <Packages />
-      <Extension />
+      <Extension /> */}
       {/* <Discover/> */}
-      {/* <Router>
-      <div className="App">
-        <Routes>
-          {publicRoutes.map((route, index) => {
-            const Layout = route.layout || DefaultLayout
-            const Page = route.component
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                element={
-                  <Layout>
-                    <Page></Page>
-                  </Layout>}>
-              </Route>)
-          })}
-        </Routes>
-      </div>
-    </Router> */}
+      <Router>
+        <div className="App">
+          <Routes>
+            {publicRoutes.map((route, index) => {
+              const Layout = route.layout || DefaultLayout
+              const Page = route.component
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Page></Page>
+                    </Layout>}>
+                </Route>)
+            })}
+          </Routes>
+        </div>
+      </Router>
     </>
 
   )
