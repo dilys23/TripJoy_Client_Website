@@ -8,6 +8,7 @@ import Discover from "./components/Layout/Discover"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./router"
 import { DefaultLayout } from "./components/Layout"
+import Footer from "./components/Footer/Footer"
 function App() {
 
   return (
@@ -17,6 +18,7 @@ function App() {
       <Fetured />
       <Packages />
       <Extension />
+      <Footer/>
       {/* <Discover/> */}
       {/* <Router>
       <div className="App">
