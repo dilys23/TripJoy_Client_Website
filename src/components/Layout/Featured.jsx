@@ -20,7 +20,7 @@ function Fetured() {
                 style={{ gridRow: `span${rows} / span${rows}` }}
                 onMouseEnter={() => setDivColor({ bgColor: "#17A1FA", textColor: "white" })}
                 onMouseLeave={() => setDivColor({ bgColor: 'white', textColor: "#17A1FA" })}>
-                <div className='bg-white text-primary h-12 px-4 rounded-md absolute top-4 right-4 z-10 font-bold flex flex-col items-center justify-center text-lg'
+                <div className='bg-white text-primary h-12 px-4 rounded-md absolute top-4 right-4 z-0 font-bold flex flex-col items-center justify-center text-lg'
                     style={{ backgroundColor: `${divColor.bgColor}`, color: `${divColor.textColor}` }}
                 >Khám phá</div>
                 <img src={image} alt="" className='h-full w-full rounded-2x1 hoverImg' />
@@ -43,7 +43,7 @@ function Fetured() {
                 </p>
             </div>
             <div className='px-3 lg:mt-0 mt-12'>
-                <div className='bg-white shadow-xl py-10 relative -top-16 z-10'>
+                <div className='bg-white shadow-xl py-10 relative -top-16 z-0'>
                     <div className='flex lg:gap-x-4 gap-x-2 absolute -top-14'>
                         <button onClick={() => setActive('Hotel')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Hotel" ? "bg-primary text-white" : "bg-white"}`}>
@@ -80,7 +80,7 @@ function Fetured() {
                             <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-primary hover:bg-white hover:text-primary cursor'>Book Now</button>
+                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-white hover:bg-white hover:text-primary cursor'>Book Now</button>
                         </span>
                     </div>
                 </div>
@@ -90,12 +90,12 @@ function Fetured() {
                         <h2 className='text-4xl text-center font-bold capitalize my-4'>Khám phá những địa điểm mới lạ </h2>
                     </span>
                     <div className='flex lg:flex-1 lg:flex-row flex-col gap-8 my-12'>
-                        <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="2"  />
+                        <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang} row="2" />
                         <div className='flex flex-col gap-5  '>
-                            <Card amount="Hà Nội" country='Hồ Gươm' image={HaNoi}  row="1" />
-                            <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="1"  />
+                            <Card amount="Hà Nội" country='Hồ Gươm' image={HaNoi} row="1" />
+                            <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang} row="1" />
                         </div>
-                        <Card amount="Hà Giang" country='Tà Xùa' image={HaGiang}  row="2"  />
+                        <Card amount="Hà Giang" country='Tà Xùa' image={HaGiang} row="2" />
                     </div>
                 </div>
 

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import backgroundImage from '../../images/background.jpg';
 import image1 from '../../images/image1.png';
 import icon from '../../images/iconApple.png';
 import plane from '../../images/plane.png'
 import plane2 from '../../images/plane2.png'
 import planegif from '../../images/planegif.gif'
+import Login from "./Login"
 function Hero() {
+
   return (
     // <div className="bg-[url('../../images/background.jpg')] bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden">
     <div className="bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden " >
@@ -19,9 +21,11 @@ function Hero() {
 
           </h2>
           <p className='text-black text-lg leading-normal mb-8'>Lên kế hoạch và tận hưởng chuyến đi của bạn một cách trọn vẹn </p>
-          <button className='bg-[#FF7324] rounded-full transition-bg shadow h-11 lg:px-10 lg:w-auto w-full outline-none text-white text-center hover:bg-white hover:text-black cursor-pointer text-base hover:border-r hover:border-[#FF7324] mb-12'>
+          <button
+            className='bg-[#FF7324] rounded-full transition-bg shadow h-11 lg:px-10 lg:w-auto w-full outline-none text-white text-center hover:bg-white hover:text-black cursor-pointer text-base hover:border-r hover:border-[#FF7324] mb-12'>
             Bắt đầu kế hoạch
           </button>
+
           <div className='flex flex-1 gap-5 '>
             <div>
               <button type="button" className="text-white bg-[#050708] hover:bg-[#050708]/80 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#050708]/40 dark:focus:ring-gray-600 me-2 mb-2">
@@ -46,6 +50,7 @@ function Hero() {
 
         </div>
       </div>
+
     </div>
   );
 }
