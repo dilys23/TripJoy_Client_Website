@@ -48,39 +48,43 @@ function Fetured() {
                         <button onClick={() => setActive('Hotel')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Hotel" ? "bg-primary text-white" : "bg-white"}`}>
                             <FaHotel size={20} className='lg:block hidden' />
-                            Hotel
+                            Nơi ở 
                         </button>
                         <button onClick={() => setActive('Flight')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Flight" ? "bg-primary text-white" : "bg-white"}`}>
                             <FaPlaneDeparture size={20} className='lg:block hidden' />
-                            Hotel
+                            Phương tiện
                         </button>
-                        <button onClick={() => setActive('Car')} className={`rounded-sm flex gap-x-2 items-center justify-center 
+                        {/* <button onClick={() => setActive('Car')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Car" ? "bg-primary text-white" : "bg-white"}`}>
                             <FaCar size={20} className='lg:block hidden' />
                             Hotel
-                        </button>
-                        <button onClick={() => setActive('Ship')} className={`rounded-sm flex gap-x-2 items-center justify-center 
+                        </button> */}
+                        {/* <button onClick={() => setActive('Ship')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Ship" ? "bg-primary text-white" : "bg-white"}`}>
                             <FaShip size={20} className='lg:block hidden' />
                             Hotel
-                        </button>
+                        </button> */}
                     </div>
                     <div className='flex flex-wrap items-end justify-between px-8 gap-4 '>
                         <span className='flex flex-col gap-4'>
-                            <p className='font-semibold text-lg '>Your Destination </p>
-                            <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                            <p className='font-semibold text-lg '>Địa điểm </p>
+                            <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-3 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <p className='font-semibold text-lg '>Check in</p>
+                            <p className='font-semibold text-lg '>Thời gian bắt đầu</p>
                             <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <p className='font-semibold text-lg '>Check out</p>
-                            <input type="text" placeholder='VietNam' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                            <p className='font-semibold text-lg '>Thời gain kết thúc</p>
+                            <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-primary hover:bg-white hover:text-primary cursor'>Book Now</button>
+                            <p className='font-semibold text-lg '>Kinh phí</p>
+                            <input type="text" placeholder='1.000.000đ' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
+                        </span>
+                        <span className='flex flex-col gap-4'>
+                            <button className='bg-primary rounded transition-bg shadow h-14 px-10 outline-none text-white hover:bg-white hover:text-primary cursor'>Book Now</button>
                         </span>
                     </div>
                 </div>
