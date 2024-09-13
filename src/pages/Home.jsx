@@ -3,7 +3,8 @@ import Navbar from "../components/Header/Navbar"
 import Fetured from "../components/Layout/Featured"
 import Packages from "../components/Layout/Packages"
 import Extension from "../components/Layout/Extension"
-import Discover from "../components/Layout/Discover"
+// import Discover from "../components/Layout/Discover"
+import Footer from "../components/Footer/Footer"
 function Home() {
     return (
         <>
@@ -12,6 +13,7 @@ function Home() {
             <Fetured />
             <Packages />
             <Extension />
+            <Footer />
         </>
     );
 }
