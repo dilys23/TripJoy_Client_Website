@@ -1,5 +1,5 @@
-import ava1 from "../../../../images/ava1.png"
-import ava2 from "../../../../images/ava2.png"
+import ava1 from "../../images/ava1.png"
+import ava2 from "../../images/ava2.png"
 import ContactItem from "./ContactItem";
 function Contact() {
     const contactList = [
@@ -11,7 +11,7 @@ function Contact() {
     ]
     return (
         <div className="w-full">
-            <div className="text-[#aeaeae] md:text-base text-[13px] font-bold my-3">LIÊN HỆ</div>
+            <div className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-3">LIÊN HỆ</div>
             <div className="w-full h-[582px] bg-white rounded-20">
                 {contactList.map((item, index) => (
                     <ContactItem key={index} contact={item}></ContactItem>

@@ -1,12 +1,12 @@
 import ava from '../../images/ava.jpg'
 import * as MdIcons from "react-icons/fa";
-import Posts from '../../components/Layout/components/Posts';
-import FriendRequest from '../../components/Layout/components/FriendRequest';
-import Contact from '../../components/Layout/components/Contact/Contact';
+import Posts from '../../components/Posts';
+import FriendRequest from '../../components/FriendRequest';
+import Contact from '../../components/Contact/Contact';
 function Network() {
     return (
-        <div className="flex w-full px-3 my-3">
-            <div className=" w-7/10">
+        <div className="flex w-full px-3 my-3 md:gap-x-15 lg:gap-x-28 gap-x-0">
+            <div className=" w-5/10">
                 <div className="bg-white w-full flex items-center px-4 h-[71px] justify-between rounded-20">
                     <div className='flex gap-3 items-center cursor-pointer'>
                         <img src={ava} alt="" className='sm:w-[52px] sm:h-[51px] w-[42px] h-[41px] rounded-90' />
@@ -19,7 +19,7 @@ function Network() {
                 </div>
                 <Posts></Posts>
             </div>
-            <div className="w-3/10 px-6 hidden sm:block">
+            <div className="w-4/10 px-6 hidden sm:block">
                 <FriendRequest></FriendRequest>
                 <Contact></Contact>
             </div>
