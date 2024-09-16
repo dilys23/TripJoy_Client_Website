@@ -7,7 +7,7 @@ function SidebarItem({ index, isActive, onClick, icon, title, to }) {
             onClick={() => onClick(index)}>
             <span className={`w-[3px] h-full rounded-[26px] ${isActive === index ? 'bg-[#007AFF]  transition duration-300 ease-in-out' : 'bg-transparent'}`}></span>
             {icon}
-            <span className='text-center sm:font-normal sm:text-base hidden sm:block'>{title}</span>
+            <span className='text-center sm:font-normal lg:text-base sm:text-[13px] hidden sm:block'>{title}</span>
         </NavLink>
     );
 }

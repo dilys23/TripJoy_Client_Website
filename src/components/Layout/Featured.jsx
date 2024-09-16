@@ -48,7 +48,7 @@ function Fetured() {
                         <button onClick={() => setActive('Hotel')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Hotel" ? "bg-primary text-white" : "bg-white"}`}>
                             <FaHotel size={20} className='lg:block hidden' />
-                            Nơi ở 
+                            Nơi ở
                         </button>
                         <button onClick={() => setActive('Flight')} className={`rounded-sm flex gap-x-2 items-center justify-center 
                             focus:outline-none shadow-sm border-none h-14 lg:w-40 px-4 text-base cursor-pointer ${active === "Flight" ? "bg-primary text-white" : "bg-white"}`}>

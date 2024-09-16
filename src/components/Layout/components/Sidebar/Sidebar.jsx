@@ -62,7 +62,7 @@ function Sidebar() {
                 ></SidebarItem>
             </nav>
             <div className='mt-2'>
-                <span className='text-base text-[#AEAEAE] font-bold'>LỜI MỜI</span>
+                <span className='lg:text-base text-[13px] text-[#AEAEAE] font-bold'>LỜI MỜI</span>
             </div>
         </div>
     );
