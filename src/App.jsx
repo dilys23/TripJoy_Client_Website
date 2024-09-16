@@ -1,13 +1,10 @@
-import Hero from "./components/Layout/Hero"
-import Navbar from "./components/Header/Navbar"
-import Fetured from "./components/Layout/Featured"
-import Packages from "./components/Layout/Packages"
-import Extension from "./components/Layout/Extension"
-import Discover from "./components/Layout/Discover"
+
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./router"
 import { DefaultLayout } from "./components/Layout"
+import Footer from "./components/Footer/Footer"
+import Home from "./pages/Home"
 function App() {
 
   return (
@@ -16,9 +13,10 @@ function App() {
       <Hero />
       <Fetured />
       <Packages />
-      <Extension /> */}
+      <Extension />
       {/* <Discover/> */}
-      <Router>
+      <Home></Home>
+      {/* <Router>
         <div className="App">
           <Routes>
             {publicRoutes.map((route, index) => {
@@ -36,7 +34,7 @@ function App() {
             })}
           </Routes>
         </div>
-      </Router>
+      </Router> */}
     </>
 
   )
