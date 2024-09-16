@@ -90,12 +90,12 @@ function Fetured() {
                         <h2 className='text-4xl text-center font-bold capitalize my-4'>Khám phá những địa điểm mới lạ </h2>
                     </span>
                     <div className='flex lg:flex-1 lg:flex-row flex-col gap-8 my-12'>
-                        <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="2"  />
+                        <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang} row="2" />
                         <div className='flex flex-col gap-5  '>
-                            <Card amount="Hà Nội" country='Hồ Gươm' image={HaNoi}  row="1" />
-                            <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang}  row="1"  />
+                            <Card amount="Hà Nội" country='Hồ Gươm' image={HaNoi} row="1" />
+                            <Card amount="Đà Nẵng" country='Cầu Vàng' image={Danang} row="1" />
                         </div>
-                        <Card amount="Hà Giang" country='Tà Xùa' image={HaGiang}  row="2"  />
+                        <Card amount="Hà Giang" country='Tà Xùa' image={HaGiang} row="2" />
                     </div>
                 </div>
 
