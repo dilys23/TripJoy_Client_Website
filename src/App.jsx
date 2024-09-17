@@ -14,7 +14,6 @@ function App() {
       <Fetured />
       <Packages />
       <Extension />
-      <Footer /> */}
       {/* <Discover/> */}
       {/* <Home></Home> */}
       <Router>

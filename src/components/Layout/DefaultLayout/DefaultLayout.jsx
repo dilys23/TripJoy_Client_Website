@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import Header from "../../Layout/components/Header"
+import Navbar from "../../Header/Navbar"
 import Sidebar from "../../Layout/components/Sidebar"
 function DefaultLayout({ children }) {
     return (
         <div className="bg-white">
-            <Header></Header>
+            <Navbar></Navbar>
             <div className="mx-6 bg-bgGray ">
-                <div className='flex gap-x-3 w-full'>
+                <div className='flex md:gap-x-15 lg:gap-x-28 gap-x-0 w-full'>
                     <Sidebar></Sidebar>
                     <div className="w-5/6">{children}</div>
                 </div>
