@@ -18,8 +18,9 @@ function Login({ onClose }) {
                     className="w-[604px] h-[600px] border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center gap-y-5"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="text-[27px] text-[#0F3E4A] w-[370px]">Đăng nhập và tiếp tục cuộc hành trình của bạn!</div>
-                    <div className="flex gap-3 shadow-md stroke-[#D7D7D7] bg-[#f9f7f7] w-[490px] h-[55px] stroke-3 rounded-lg items-center pl-3 cursor-pointer">
+                    <div className="text-[27px] text-[#0F3E4A] w-[370px] font-bold my-3">Đăng nhập</div>
+                    <div
+                        className="flex gap-3 shadow-md stroke-[#D7D7D7] bg-[#f9f7f7] w-[490px] h-[55px] stroke-3 rounded-lg items-center pl-3 cursor-pointer">
                         <img src={google} alt="" className="w-[40px] h-[35px] object-cover" />
                         <div className="text-[#0F3E4A] font-bold text-[20px]">Đăng nhập với Google</div>
                     </div>
