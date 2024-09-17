@@ -9,7 +9,7 @@ function FriendItem({ info }) {
                     <span className=' lg:text-base md:text-[13px]'> đã gửi yêu cầu kết bạn</span>
                 </div>
             </div>
-            <div className='flex gap-3 justify-center pt-1'>
+            <div className='flex gap-3 justify-center px-2'>
                 <button className='bg-[#007AFF] text-white rounded-20 lg:w-[111px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Chấp nhận</button>
                 <button className='border border-[#CCD0D5] text-[#0F3E4A] rounded-20 lg:w-[93px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Xoá</button>
             </div>
