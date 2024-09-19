@@ -1,12 +1,31 @@
 import google from "../../images/google.png"
 import facebook from "../../images/facebook.png"
 import * as FaIcon from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import request from "../../utils/request";
+import axios from "axios";
 function Login({ onClose }) {
     const [showPass, setShowPass] = useState(false);
     const hanldeShow = () => {
         setShowPass(!showPass)
     }
+    const handleGoogleLogin = async () => {
+
+        try {
+            const res = await request.get('Account/login-google');
+            console.log(res.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        // request.get('Account/login-google')
+        //     .then((res) => {
+        //         console.log(res.data)
+        
+        //     })
+        //     .catch(() => {
+        //         console.log('error: '.error)
+        //     })
+    };
     return (
         <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-0"></div>
@@ -20,6 +39,7 @@ function Login({ onClose }) {
                 >
                     <div className="text-[27px] text-[#0F3E4A] w-[370px] font-bold my-3">Đăng nhập</div>
                     <div
+                        onClick={handleGoogleLogin}
                         className="flex gap-3 shadow-md stroke-[#D7D7D7] bg-[#f9f7f7] w-[490px] h-[55px] stroke-3 rounded-lg items-center pl-3 cursor-pointer">
                         <img src={google} alt="" className="w-[40px] h-[35px] object-cover" />
                         <div className="text-[#0F3E4A] font-bold text-[20px]">Đăng nhập với Google</div>
