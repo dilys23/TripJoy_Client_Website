@@ -23,7 +23,9 @@ function Navbar() {
     }
     const handleClose = () => {
         setLogin(false)
+        setRegister(false)
     }
+    
     const currentUser = false
 
     return (
