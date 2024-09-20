@@ -44,7 +44,6 @@ function Login({ onClose }) {
             toast.error("Password is required", {
                 autoClose: 1000
             }
-
             );
             setTimeout(() => {
                 setHasErrorPass(false);
