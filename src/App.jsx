@@ -5,6 +5,7 @@ import { publicRoutes } from "./router"
 import { DefaultLayout } from "./components/Layout"
 import Footer from "./components/Footer/Footer"
 import Home from "./pages/Home"
+import Register from "./components/Layout/Register"
 function App() {
 
   return (
@@ -16,6 +17,7 @@ function App() {
       <Extension />
       {/* <Discover/> */}
       <Home></Home>
+      {/* <Register/> */}
       {/* <Router>
         <div className="App">
           <Routes>
