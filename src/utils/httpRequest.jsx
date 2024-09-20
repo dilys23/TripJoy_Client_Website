@@ -1,11 +1,12 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const request = axios.create({
+const httpRequest = axios.create({
     baseURL: 'https://localhost:7100/api/v1/',
     headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
     }
-})
-export default request
+});
+
+export default httpRequest; 
