@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify';
 function DefaultLayout({ children }) {
     return (
         <>
-
             <div className="bg-white">
                 <Navbar></Navbar>
                 <div className="mx-6 bg-bgGray ">
@@ -18,7 +17,6 @@ function DefaultLayout({ children }) {
         </>
     );
 }
-
 DefaultLayout.propTypes = {
     children: PropTypes.node.isRequired,
 };
