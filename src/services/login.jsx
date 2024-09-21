@@ -1,6 +1,6 @@
 import httpRequest from '../utils/httpRequest';
 
-const login = async (email, password) => {
+const loginService = async (email, password) => {
     try {
         console.log('Payload:', { email, password });
         const res = await httpRequest.post('Account/login', {
@@ -14,5 +14,5 @@ const login = async (email, password) => {
     }
 };
 
-export default login
+export default loginService
 

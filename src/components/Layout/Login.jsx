@@ -1,16 +1,18 @@
 import google from "../../images/google.png"
 import facebook from "../../images/facebook.png"
 import * as FaIcon from "react-icons/fa";
-import { useState } from "react";
-import login from "../../services/login"
+import { useContext, useState } from "react";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
+import loginService from "../../services/login";
+import { UserContext } from "../../contexts/UserContext";
 
 function Login({ onClose }) {
     const [showPass, setShowPass] = useState(false);
     const [hasErrorEmail, setHasErrorEmail] = useState(false);
     const [hasErrorPass, setHasErrorPass] = useState(false);
     const navigate = useNavigate();
+    const { login } = useContext(UserContext);
     const hanldeShow = () => {
         setShowPass(!showPass)
     }
@@ -31,7 +33,7 @@ function Login({ onClose }) {
     const handleLogin = async () => {
         if (!email) {
             // setHasErrorEmail(true)
-            toast.error("Email is required", {
+            toast.error("Vui lòng nhập Email", {
                 autoClose: 1000
             });
             setTimeout(() => {
@@ -41,7 +43,7 @@ function Login({ onClose }) {
         }
         if (!password) {
             // setHasErrorPass(true)
-            toast.error("Password is required", {
+            toast.error("Vui lòng nhập mật khẩu", {
                 autoClose: 1000
             }
             );
@@ -51,12 +53,12 @@ function Login({ onClose }) {
             return
         }
         try {
-            const response = await login(email, password);
+            const response = await loginService(email, password);
             console.log('Login success:', response);
-            const { accessToken, refreshToken, user } = response;
+            const { accessToken, user } = response;
             localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('userInfo', JSON.stringify(user));
+            login(user);
             toast.success("Login successful", {
                 autoClose: 1000
             });
@@ -80,20 +82,6 @@ function Login({ onClose }) {
                 });
             }
         }
-        // const response = await login(email, password);
-        // if (response) {
-        //     console.log('Login success:', response);
-        //     const { accessToken, refreshToken, user } = response;
-        //     localStorage.setItem('accessToken', accessToken);
-        //     localStorage.setItem('refreshToken', refreshToken);
-        //     localStorage.setItem('userInfo', JSON.stringify(user));
-        //     toast.success("Login sucessful");
-        //     handleClose();
-        //     navigate('/network');
-        // } else {
-        //     console.error('Login failed:', error);
-        //     toast.error("Login failed, please try again");
-        // }
     }
 
     return (
