@@ -9,8 +9,8 @@ import Footer from "./components/Footer/Footer"
 import Home from "./pages/Home"
 import Register from "./components/Layout/Register"
 import GlobalStyles from "./components/GlobalStyles";
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
+// import tippy from 'tippy.js';
+// import 'tippy.js/dist/tippy.css';
 function App() {
 
   return (

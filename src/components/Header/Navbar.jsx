@@ -8,7 +8,7 @@ import * as MdIcons from 'react-icons/md';
 import noImages from '../../images/noImages.jpg'
 import { UserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import Tippy from 'tippy.js';
+// import Tippy from 'tippy.js';
 // import { Container } from './styles';
 function Navbar() {
     const [dropdown, setDropdown] = useState(false)
@@ -61,13 +61,13 @@ function Navbar() {
                 {user ? (
                     <div className='flex items-center gap-x-3'>
                         <MdIcons.MdNotifications className='text-iconGray w-[23.74px] h-[30px] sm:w-[30.74px] sm:h-[40px] cursor-pointer' />
-                        {/* <Tippy> */}
+
                         <div className='flex items-center gap-x-1.5 cursor-pointer'>
                             <img src={user.ava || noImages} alt="Avatar-user" className='w-[42px] h-[41px] sm:w-[52px] sm:h-[51px] rounded-90' />
                             {/* <h3 className='sm:block font-medium text-base w-[80px]'>{user.name}</h3> */}
                             <MdIcons.MdExpandMore className='text-iconGray w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]' onClick={handleLogout} />
                         </div>
-                        {/* </Tippy> */}
+
                     </div>
                 )
                     : (
