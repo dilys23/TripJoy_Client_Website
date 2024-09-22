@@ -2,7 +2,7 @@ import google from "../../images/google.png"
 import facebook from "../../images/facebook.png"
 import * as FaIcon from "react-icons/fa";
 import { useContext, useState } from "react";
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 import loginService from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
@@ -13,7 +13,7 @@ function Login({ onClose }) {
     const [hasErrorPass, setHasErrorPass] = useState(false);
     const navigate = useNavigate();
     const { login } = useContext(UserContext);
-    const hanldeShow = () => {
+    const handleShow = () => {
         setShowPass(!showPass)
     }
     const [email, setEmail] = useState('');
@@ -33,9 +33,9 @@ function Login({ onClose }) {
     const handleLogin = async () => {
         if (!email) {
             // setHasErrorEmail(true)
-            toast.error("Vui lòng nhập Email", {
-                autoClose: 1000
-            });
+            // toast.error("Vui lòng nhập Email", {
+            //     autoClose: 1000
+            // });
             setTimeout(() => {
                 setHasErrorEmail(false);
             }, 2000);
@@ -43,10 +43,10 @@ function Login({ onClose }) {
         }
         if (!password) {
             // setHasErrorPass(true)
-            toast.error("Vui lòng nhập mật khẩu", {
-                autoClose: 1000
-            }
-            );
+            // toast.error("Vui lòng nhập mật khẩu", {
+            //     autoClose: 1000
+            // }
+            // );
             setTimeout(() => {
                 setHasErrorPass(false);
             }, 2000);
@@ -59,27 +59,31 @@ function Login({ onClose }) {
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('userInfo', JSON.stringify(user));
             login(user);
-            toast.success("Login successful", {
-                autoClose: 1000
-            });
+
+            // toast.success("Login successful", {
+            //     autoClose: 1000
+            // });
             handleClose();
             navigate('/network');
         } catch (error) {
             if (error.response && error.response.data) {
                 const { errors } = error.response.data;
                 if (errors && errors["Auth.InvalidCredentials"]) {
-                    toast.error("Tài khoản hoặc mật khẩu không đúng", {
-                        autoClose: 1000
-                    });
+                    console.log("Tài khoản hoặc mật khẩu không đúng")
+                    // toast.error("Tài khoản hoặc mật khẩu không đúng", {
+                    //     autoClose: 1000
+                    // });
                 } else {
-                    toast.error("Đăng nhập thất bại, vui lòng thử lại", {
-                        autoClose: 1000
-                    });
+                    console.log("Đăng nhập thất bại, vui lòng thử lại")
+                    // toast.error("Đăng nhập thất bại, vui lòng thử lại", {
+                    //     autoClose: 1000
+                    // });
                 }
             } else {
-                toast.error("Lỗi kết nối, vui lòng thử lại", {
-                    autoClose: 1000
-                });
+                console.log("Lỗi kết nối, vui lòng thử lại")
+                // toast.error("Lỗi kết nối, vui lòng thử lại", {
+                //     autoClose: 1000
+                // });
             }
         }
     }
@@ -129,7 +133,7 @@ function Login({ onClose }) {
                             className="w-full outline-none bg-transparent text-[20px] "
                             placeholder="Mật khẩu..."
                         />
-                        <div className="absolute right-5" onClick={hanldeShow}>
+                        <div className="absolute right-5" onClick={handleShow}>
                             {!showPass && <FaIcon.FaEye className="cursor-pointer w-[25px] h-[25px] text-[#bbb8b8]" />}
                             {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[25px] h-[25px] text-[#bbb8b8]" />}
                         </div>

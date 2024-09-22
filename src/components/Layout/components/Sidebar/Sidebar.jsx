@@ -49,7 +49,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePerson lendarMonth className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlinePerson  className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Tài khoản'
                 ></SidebarItem>
                 <SidebarItem
