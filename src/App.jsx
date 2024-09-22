@@ -9,14 +9,8 @@ function App() {
 
   return (
     <>
-      {/* <Navbar />
-      <Hero />
-      <Fetured />
-      <Packages />
-      <Extension />
-      {/* <Discover/> */}
-      <Home></Home>
-      {/* <Router>
+      {/* <Home></Home> */}
+      <Router>
         <div className="App">
           <Routes>
             {publicRoutes.map((route, index) => {
@@ -34,7 +28,7 @@ function App() {
             })}
           </Routes>
         </div>
-      </Router> */}
+      </Router>
     </>
 
   )
