@@ -1,4 +1,6 @@
+import { Fragment } from "react"
 import { DefaultLayout } from "../components/Layout"
+import Home from "../pages/Home"
 import Network from "../pages/Network/Network"
 import Plan from "../pages/Plan/Plan"
 import Home from "../pages/Home"
