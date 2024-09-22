@@ -1,5 +1,6 @@
 const routes = {
-    network: '/',
+    home: '/',
+    network: '/network',
     plan: '/plan'
 };
 
