@@ -7,9 +7,5 @@ function GlobalStyles({ children }) {
 
 GlobalStyles.propTypes = {
     children: PropTypes.node.isRequired,
-};
-
-GlobalStyles.propTypes = {
-    children: PropTypes.node.isRequired,
 }
 export default GlobalStyles;

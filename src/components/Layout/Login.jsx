@@ -2,7 +2,7 @@ import google from "../../images/google.png"
 import facebook from "../../images/facebook.png"
 import * as FaIcon from "react-icons/fa";
 import { useContext, useState } from "react";
-// import { toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 import loginService from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
@@ -32,21 +32,21 @@ function Login({ onClose }) {
 
     const handleLogin = async () => {
         if (!email) {
-            // setHasErrorEmail(true)
-            // toast.error("Vui lòng nhập Email", {
-            //     autoClose: 1000
-            // });
+            setHasErrorEmail(true)
+            toast.error("Vui lòng nhập Email", {
+                autoClose: 1000
+            });
             setTimeout(() => {
                 setHasErrorEmail(false);
             }, 2000);
             return
         }
         if (!password) {
-            // setHasErrorPass(true)
-            // toast.error("Vui lòng nhập mật khẩu", {
-            //     autoClose: 1000
-            // }
-            // );
+            setHasErrorPass(true)
+            toast.error("Vui lòng nhập mật khẩu", {
+                autoClose: 1000
+            }
+            );
             setTimeout(() => {
                 setHasErrorPass(false);
             }, 2000);
@@ -60,30 +60,28 @@ function Login({ onClose }) {
             localStorage.setItem('userInfo', JSON.stringify(user));
             login(user);
 
-            // toast.success("Login successful", {
-            //     autoClose: 1000
-            // });
+            toast.success("Login successful", {
+                autoClose: 1000
+            });
             handleClose();
             navigate('/network');
         } catch (error) {
             if (error.response && error.response.data) {
                 const { errors } = error.response.data;
                 if (errors && errors["Auth.InvalidCredentials"]) {
-                    console.log("Tài khoản hoặc mật khẩu không đúng")
-                    // toast.error("Tài khoản hoặc mật khẩu không đúng", {
-                    //     autoClose: 1000
-                    // });
+                    toast.error("Tài khoản hoặc mật khẩu không đúng", {
+                        autoClose: 1000
+                    });
                 } else {
-                    console.log("Đăng nhập thất bại, vui lòng thử lại")
-                    // toast.error("Đăng nhập thất bại, vui lòng thử lại", {
-                    //     autoClose: 1000
-                    // });
+                    toast.error("Đăng nhập thất bại, vui lòng thử lại", {
+                        autoClose: 1000
+                    });
                 }
             } else {
-                console.log("Lỗi kết nối, vui lòng thử lại")
-                // toast.error("Lỗi kết nối, vui lòng thử lại", {
-                //     autoClose: 1000
-                // });
+
+                toast.error("Lỗi kết nối, vui lòng thử lại", {
+                    autoClose: 1000
+                });
             }
         }
     }
