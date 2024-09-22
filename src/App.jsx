@@ -16,7 +16,7 @@ function App() {
       <Packages />
       <Extension />
       {/* <Discover/> */}
-      <Home></Home>
+      {/* <Home></Home> */}
       {/* <Register/> */}
       {/* <Router>
       {/* <Home></Home> */}
