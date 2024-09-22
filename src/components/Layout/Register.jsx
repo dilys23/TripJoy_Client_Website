@@ -1,27 +1,44 @@
 import React, { useState } from "react";
-
+import axios from 'axios'
+// import { useNavigate} from "react-router-dom"
+import { Input } from "./components/Input/Input";
 // import { Container } from './styles';
 
 function Register({ onClose }) {
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleApi = (e) => {
+    e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
+  
+    console.log({ email, phoneNumber, name, password });
+    axios.post('https://localhost:7100/api/v1/Account/register', {
+      email: email,
+      phoneNumber: phoneNumber,
+      name: name,
+      password: password,
+      confirmPassword: confirmPassword
+    })
+      .then(result => {
+        if (result.data.success)
+        {
+          console.log(result);
+        const verifyUrl = result.data.data.url;
+          navigate('/otp-confirmation', {state: {verifyUrl}})
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
-  // const 
-  async function register()
-  {
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
+  
   return (
     <div
       id="login-popup"
-      tabindex="-1"
+      // tabindex="-1"
       className="fixed left-0 right-0 top-0 z-50 flex h-full items-center justify-center overflow-y-auto overflow-x-hidden bg-black/65"
       onClick={onClose}
     >
@@ -65,9 +82,9 @@ function Register({ onClose }) {
                                 You must be logged in to perform this action.
                             </p> */}
             </div>
-
+{/* <Input/> */}
             <div className="mt-7 flex flex-col gap-3 px-3">
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
+              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:outline-none focus:border-blue-400">
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   alt="Google"
@@ -76,7 +93,7 @@ function Register({ onClose }) {
                 Đăng kí với Google
               </button>
 
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
+              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:outline-none focus:border-blue-400">
                 <img
                   src="https://www.svgrepo.com/show/475647/facebook-color.svg"
                   alt="GitHub"
@@ -94,84 +111,101 @@ function Register({ onClose }) {
 
             <form className="w-full px-3">
               {/* <label for="email" className="sr-only">Email address</label> */}
-              <div className="mb-4 flex space-x-3">
+              {/* <div className="mb-4 flex space-x-3">
                 <input
                   name="lastname"
                   type="text"
                   autocomplete="text"
+                  onChange={(e) => setLastname(e.target.value)}
                   required=""
-                  className="h-[40px] w-[268px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-2 shadow"
+                  className="h-[40px] w-[268px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-2 shadow focus:outline-none focus:border-blue-400"
                   placeholder="Họ "
-                />
+                /> */}
                 {/* <label for="email" className="sr-only">Email address</label> */}
-                <input
+                {/* <input
                   name="firstname"
                   type="text"
                   autocomplete="text"
+                  // onChange={(e) => setFirstname(e.target.value)}
                   required=""
-                  className="h-[40px] w-[213px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                  className="h-[40px] w-[213px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
                   placeholder="Tên"
+                  
                  
                 />
-                {/* <label for="email" className="sr-only">Email address</label> */}
-              </div>
+               </div> */}
 
               <input
-                name="email"
-                type="email"
-                autocomplete="email"
+                name="name"
+                value={name}
+                type="text"
+                onChange={(e) => setName(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
-                placeholder="Tên Đăng nhập"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                placeholder="Tên "
+                autocomplete="off"
               />
-              {/* <label for="email" className="sr-only">Email address</label> */}
               <input
                 name="email"
+                value={email}
                 type="email"
-                autocomplete="email"
+                onChange={(e) => setEmail(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                autocomplete="off"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
                 placeholder="Email "
               />
-              {/* <label for="password" className="sr-only">Password</label> */}
               <input
                 name="phoneNumber"
                 type="number"
-                autocomplete="current-password"
+                value={phoneNumber}
+                onChange={(e) => setphoneNumber(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
                 placeholder="Số điện thoại"
               />
               <input
                 name="password"
                 type="password"
-                autocomplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                autocomplete="off"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
                 placeholder="Mật khẩu"
               />
-              <div className="flex space-x-[164px]">
+                <input
+                name="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required=""
+                autocomplete="off"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                placeholder="Xác nhận mật khẩu"
+              />
+              {/* <div className="flex space-x-[164px]">
                 <label for="email" className="text-[#0F3E4A]">
                   Ngày sinh
                 </label>
                 <label for="email" className="text-[#0F3E4A]">
                   Giới tính
                 </label>
-              </div>
-
+              </div> */}
+{/* 
               <div className="flex space-x-4">
                 <input
                   name="birthday"
                   type="date"
                   autocomplete="date"
                   required=""
-                  className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                  className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
              
                 />
                 <select
-                  name="sex"
+                  name="gender"
                   required=""
-                  className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
+                  className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
                 >
                   <option value="" disabled selected>
                     Chọn giới tính
@@ -180,7 +214,7 @@ function Register({ onClose }) {
                   <option value="female">Nữ</option>
                   <option value="other">Khác</option>
                 </select>
-              </div>
+              </div> */}
               <div className="flex w-full">
                 <p className="text-gray-500 mb-3 mt-4 text-sm">
                   <a
@@ -192,17 +226,13 @@ function Register({ onClose }) {
                 </p>
                 <button
                   type="submit"
-                  className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:ring-2 focus:ring-black focus:ring-offset-1"
+                  className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:outline-none focus:border-blue-400 "
+                  onClick={handleApi}
                 >
                   Đăng kí
                 </button>
               </div>
             </form>
-            {/* 
-                        <div className="mt-6 text-center text-sm text-slate-600">
-                            Don't have an account?
-                            <a href="/signup" className="font-medium text-[#4285f4]">Sign up</a>
-                        </div> */}
           </div>
         </div>
       </div>
