@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as MdIcons from 'react-icons/md';
 import SidebarItem from './SidebarItem';
 import config from '../../../../config';
+import TripInvites from '../../../TripInvite/TripInvites';
 
 function Sidebar() {
     const [isActive, setIsActive] = useState(0)
@@ -49,7 +50,8 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePerson  className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlinePerson className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+
                     title='Tài khoản'
                 ></SidebarItem>
                 <SidebarItem
@@ -63,6 +65,7 @@ function Sidebar() {
             </nav>
             <div className='mt-2'>
                 <span className='lg:text-base text-[13px] text-[#AEAEAE] font-bold'>LỜI MỜI</span>
+                <TripInvites></TripInvites>
             </div>
         </div>
     );

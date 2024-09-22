@@ -10,8 +10,20 @@ function Posts() {
             avatar: ava,
             name: 'Le Nguyen',
             time: '12 tieng truoc',
-            descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-            image: [anh1, anh2, anh3, anh4, anh1, anh2]
+            descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
+            image: [anh1, anh2, anh3, anh4, anh1, anh2, anh3],
+            isLiked: true,
+            numLikes: '100',
+            numComments: '8'
+        }, {
+            avatar: ava,
+            name: 'My Thuat',
+            time: '5 tieng truoc',
+            descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
+            image: [anh1, anh2, anh3],
+            isLiked: false,
+            numLikes: '50',
+            numComments: '8'
         }
     ]
     return (
