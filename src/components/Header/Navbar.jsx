@@ -3,6 +3,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import logo from '../../images/logo1.png';
 import Login from '../Layout/Login';
+import Register from '../Layout/Register';
 import * as MdIcons from 'react-icons/md';
 import ava from '../../images/ava.jpg'
 
@@ -13,8 +14,12 @@ function Navbar() {
         setDropdown(!dropdown);
     }
     const [login, setLogin] = useState(false)
+    const [register, setRegister] = useState(false)
     const handleLogin = () => {
         setLogin(true);
+    }
+    const handleRegister = () => {
+        setRegister(true);
     }
     const handleClose = () => {
         setLogin(false)
@@ -61,7 +66,8 @@ function Navbar() {
                             <a href="#" className='leading-normal no-underline text-black font-bold text-lg hover:text-primary w-[6rem]'>Liên hệ</a>
                             <a href="#" className='leading-normal no-underline text-black font-bold text-lg hover:text-primary w-[8rem] ' onClick={handleLogin}>Đăng nhập</a>
                             {login && <Login onClose={handleClose}></Login>}
-                            <button className='w-32 h-[39px] bg-[#ff7224] rounded-[20px]  shadow  px-13 outline-none hover:bg-white hover:text-primary cursor-pointer  transition-bg hover:border hover:border-primary text-white text-base font-semibold '>Đăng kí</button>
+                            <button className='w-32 h-[39px] bg-[#ff7224] rounded-[20px]  shadow  px-13 outline-none hover:bg-white hover:text-primary cursor-pointer  transition-bg hover:border hover:border-primary text-white text-base font-semibold ' onClick={handleRegister}>Đăng kí</button>
+                            { register && <Register onClose = {handleClose}></Register>}
                         </ul>
                     )
                 }

@@ -5,10 +5,20 @@ import { publicRoutes } from "./router"
 import { DefaultLayout } from "./components/Layout"
 import Footer from "./components/Footer/Footer"
 import Home from "./pages/Home"
+import Register from "./components/Layout/Register"
 function App() {
 
   return (
     <>
+      {/* <Navbar />
+      <Hero />
+      <Fetured />
+      <Packages />
+      <Extension />
+      {/* <Discover/> */}
+      <Home></Home>
+      {/* <Register/> */}
+      {/* <Router>
       {/* <Home></Home> */}
       <Router>
         <div className="App">

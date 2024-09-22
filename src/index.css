@@ -137,3 +137,21 @@ button:focus-visible {
 .border-bottom {
   border-bottom: 1px solid #ccd0d5;
 }
+
+.regiscard{ 
+  background: white;
+  
+  box-shadow: 8px 8px 40px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 2px solid rgba();
+  z-index: 999;
+}
+
+@layer components{
+
+  .btn-primary {
+    @apply bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded;
+  }
+  
+}
