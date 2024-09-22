@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 import logo from "../../images/logo1.png";
 import Login from "../Layout/Login";
 import Register from "../Layout/Register";
-// import VerifyAccount from "../Layout/VerifyAccount";
+import VerifyAccount from "../Layout/VerifyAccount";
 import * as MdIcons from "react-icons/md";
 import ava from "../../images/ava.jpg";
+import { useAuthStore } from "../../store/authUser";
 
 // import { Container } from './styles';
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
+  var { isRegister, isVerifyAccount, userVerify } = useAuthStore();
   const showDropdown = () => {
     setDropdown(!dropdown);
   };
   const [login, setLogin] = useState(false);
-  const [register, setRegister] = useState(false);
+  var [register, setRegister] = useState(false);
+  const [isVerifyAccountOpen, setIsVerifyAccountOpen] = useState(false);
+
   const handleLogin = () => {
     setLogin(true);
   };
@@ -24,10 +28,24 @@ function Navbar() {
   };
   const handleClose = () => {
     setLogin(false);
-    setRegister(false);
+    setRegister(isRegister);
+    setIsVerifyAccountOpen(false);
   };
 
-  const currentUser = false;
+  useEffect(() => {
+    setRegister(isRegister);
+    if (!isRegister && !isVerifyAccount) {
+      setIsVerifyAccountOpen(false);
+    } else if (isRegister) {
+      setIsVerifyAccountOpen(true);
+    }
+  }, [isRegister, isVerifyAccount]);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    setCurrentUser(userVerify);
+  }, [userVerify]);
 
   return (
     <nav className="sticky top-0 z-20 flex h-24 w-full flex-col items-center justify-center bg-white">
@@ -102,9 +120,11 @@ function Navbar() {
             >
               Đăng kí
             </button>
-            {register && <Register onClose={handleClose}></Register>}
 
-            {/* { register && <VerifyAccount onClose={handleClose}></VerifyAccount>} */}
+            {register && <Register onClose={handleClose}></Register>}
+            {isVerifyAccount && (
+              <VerifyAccount onClose={handleClose}></VerifyAccount>
+            )}
           </ul>
         )}
         {dropdown ? (

@@ -1,32 +1,34 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import { Input } from "./components/Input/Input";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/authUser";
 
 function Register({ onClose }) {
-  const [otp, setOtp] = useState('');
- const location = useLocation();
- const {verifyUrl} = location.state ||{}
+  const { user, verifyAccount } = useAuthStore();
+  console.log(user?.data?.url);
+  const [otp, setOtp] = useState("");
+  //  const location = useLocation();
+  const verifyUrl = user?.data?.url;
   const handleApi = (e) => {
-    e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
-  
-    console.log({ otp });
-    if (verifyUrl)
-    {
-        axios.post(verifyUrl, { otp
-          })
-            .then(result => {
-              console.log(result);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-    }else{
-        console.error("No verification URL provided")
-    }
-    
-  }
-  
+    e.preventDefault();
+    verifyAccount({ verifyUrl, otp });
+
+    // console.log({ otp });
+    // if (verifyUrl) {
+    //   axios
+    //     .post(verifyUrl, { otp })
+    //     .then((result) => {
+    //       console.log(result);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // } else {
+    //   console.error("No verification URL provided");
+    // }
+  };
+
   return (
     <div
       id="login-popup"
@@ -68,35 +70,32 @@ function Register({ onClose }) {
                 Kiểm tra email và nhập OTP !{" "}
               </p>
             </div>
-{/* <Input/> */}
+            {/* <Input/> */}
 
-            <form className="w-full px-3">
-             
-                <input
+            <form className="w-full px-3" onSubmit={handleApi}>
+              <input
                 name="otp"
                 type="text"
                 value={otp}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => setOtp(e.target.value)}
                 required=""
                 autocomplete="off"
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Nhập OTP"
               />
 
-            
               <div className="flex w-full">
-                <p className="text-gray-500 mb-3 mt-4 ml-1 text-sm">
+                <p className="text-gray-500 mb-3 ml-1 mt-4 text-sm">
                   <a
                     href="/resend-OTP"
                     className="text-base text-blue-800 hover:text-blue-600"
                   >
-                   Gửi lại OTP !
+                    Gửi lại OTP !
                   </a>
                 </p>
                 <button
                   type="submit"
-                  className="disabled:bg-gray-400 ml-[220px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:outline-none focus:border-blue-400 "
-                  onClick={handleApi}
+                  className="disabled:bg-gray-400 ml-[220px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
                 >
                   Xác nhận
                 </button>

@@ -1,40 +1,48 @@
-import React, { useState } from "react";
-import axios from 'axios'
-// import { useNavigate} from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 import { Input } from "./components/Input/Input";
 // import { Container } from './styles';
-
+import { useAuthStore } from "../../store/authUser";
 function Register({ onClose }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { register, isRegister, user } = useAuthStore();
 
+  // const navigate = useNavigate();
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    register({ email, phoneNumber, name, password, confirmPassword });
+    console.log(isRegister);
+  };
   const handleApi = (e) => {
     e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
-  
-    console.log({ email, phoneNumber, name, password });
-    axios.post('https://localhost:7100/api/v1/Account/register', {
-      email: email,
-      phoneNumber: phoneNumber,
-      name: name,
-      password: password,
-      confirmPassword: confirmPassword
-    })
-      .then(result => {
-        if (result.data.success)
-        {
+
+    console.log({ email, phoneNumber, name, password, confirmPassword });
+    axios
+      .post("https://localhost:7100/api/v1/Account/register", {
+        email: email,
+        phoneNumber: phoneNumber,
+        name: name,
+        password: password,
+        confirmPassword: confirmPassword,
+      })
+      .then((result) => {
+        if (result.data.success) {
           console.log(result);
-        const verifyUrl = result.data.data.url;
-          navigate('/otp-confirmation', {state: {verifyUrl}})
+          const verifyUrl = result.data.data.url;
+          navigate("/otp-confirmation", { state: { verifyUrl } });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
-  }
-  
+  };
+
   return (
     <div
       id="login-popup"
@@ -82,9 +90,9 @@ function Register({ onClose }) {
                                 You must be logged in to perform this action.
                             </p> */}
             </div>
-{/* <Input/> */}
+            {/* <Input/> */}
             <div className="mt-7 flex flex-col gap-3 px-3">
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:outline-none focus:border-blue-400">
+              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:border-blue-400 focus:outline-none">
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   alt="Google"
@@ -93,7 +101,7 @@ function Register({ onClose }) {
                 Đăng kí với Google
               </button>
 
-              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:outline-none focus:border-blue-400">
+              <button className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black focus:border-blue-400 focus:outline-none">
                 <img
                   src="https://www.svgrepo.com/show/475647/facebook-color.svg"
                   alt="GitHub"
@@ -109,7 +117,7 @@ function Register({ onClose }) {
               <div className="h-px w-full bg-slate-200"></div>
             </div>
 
-            <form className="w-full px-3">
+            <form className="w-full px-3" onSubmit={handleRegister}>
               {/* <label for="email" className="sr-only">Email address</label> */}
               {/* <div className="mb-4 flex space-x-3">
                 <input
@@ -121,8 +129,8 @@ function Register({ onClose }) {
                   className="h-[40px] w-[268px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-2 shadow focus:outline-none focus:border-blue-400"
                   placeholder="Họ "
                 /> */}
-                {/* <label for="email" className="sr-only">Email address</label> */}
-                {/* <input
+              {/* <label for="email" className="sr-only">Email address</label> */}
+              {/* <input
                   name="firstname"
                   type="text"
                   autocomplete="text"
@@ -141,7 +149,7 @@ function Register({ onClose }) {
                 type="text"
                 onChange={(e) => setName(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Tên "
                 autocomplete="off"
               />
@@ -152,7 +160,7 @@ function Register({ onClose }) {
                 onChange={(e) => setEmail(e.target.value)}
                 required=""
                 autocomplete="off"
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Email "
               />
               <input
@@ -161,7 +169,7 @@ function Register({ onClose }) {
                 value={phoneNumber}
                 onChange={(e) => setphoneNumber(e.target.value)}
                 required=""
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Số điện thoại"
               />
               <input
@@ -171,17 +179,17 @@ function Register({ onClose }) {
                 onChange={(e) => setPassword(e.target.value)}
                 required=""
                 autocomplete="off"
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Mật khẩu"
               />
-                <input
+              <input
                 name="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required=""
                 autocomplete="off"
-                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none focus:border-blue-400"
+                className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 placeholder="Xác nhận mật khẩu"
               />
               {/* <div className="flex space-x-[164px]">
@@ -192,7 +200,7 @@ function Register({ onClose }) {
                   Giới tính
                 </label>
               </div> */}
-{/* 
+              {/* 
               <div className="flex space-x-4">
                 <input
                   name="birthday"
@@ -224,12 +232,18 @@ function Register({ onClose }) {
                     Tôi đã có tài khoản!
                   </a>
                 </p>
-                <button
+                {/* <button
                   type="submit"
                   className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:outline-none focus:border-blue-400 "
                   onClick={handleApi}
                 >
                   Đăng kí
+                </button> */}
+                <button
+                  className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
+                  disabled={isRegister}
+                >
+                  {isRegister ? "Đang Đăng kí..." : "Đăng kí"}
                 </button>
               </div>
             </form>
