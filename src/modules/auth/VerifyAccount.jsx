@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Input } from "../../components/Input/Input";
+// import { Input } from "./components/Input/Input";
 // import { useLocation } from "react-router-dom";
 import { useAuthStore } from "../../services/authUser";
 
