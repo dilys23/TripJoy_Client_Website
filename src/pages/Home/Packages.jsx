@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { HiStar } from 'react-icons/hi';
-import Danang from "../../images/Danang.jpg";
-import package1 from "../../images/package1.png";
+import Danang from "../../assets/images/Danang.jpg";
+import package1 from "../../assets/images/package1.png";
 
-import package2 from "../../images/package2.png";
-import package3 from "../../images/package3.png";
-import package4 from "../../images/package4.png";
-import package5 from "../../images/package5.png";
+import package2 from "../../assets/images/package2.png";
+import package3 from "../../assets/images/package3.png";
+import package4 from "../../assets/images/package4.png";
+import package5 from "../../assets/images/package5.png";
 function Packages() {
     const Card = ({ image, text1, text2 }) => {
         return (

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
-import logo from "../../images/logo1.png";
-import Login from "../Layout/Login";
-import Register from "../Layout/Register";
-import VerifyAccount from "../Layout/VerifyAccount";
+import logo from "../../assets/images/logo1.png";
+import Login from "../../modules/auth/Login";
+import Register from "../../modules/auth/Register";
+import VerifyAccount from "../../modules/auth/VerifyAccount";
 import * as MdIcons from "react-icons/md";
-import ava from "../../images/ava.jpg";
-import { useAuthStore } from "../../store/authUser";
+import ava from "../../assets/images/ava.jpg";
+import { useAuthStore } from "../../services/authUser";
 
 // import { Container } from './styles';
 function Navbar() {
