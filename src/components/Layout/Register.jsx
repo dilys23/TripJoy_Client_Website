@@ -11,7 +11,6 @@ function Register({ onClose }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { register, isRegister, user } = useAuthStore();
-
   // const navigate = useNavigate();
 
   const handleRegister = (e) => {
@@ -21,7 +20,6 @@ function Register({ onClose }) {
   };
   const handleApi = (e) => {
     e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
-
     console.log({ email, phoneNumber, name, password, confirmPassword });
     axios
       .post("https://localhost:7100/api/v1/Account/register", {
@@ -42,7 +40,6 @@ function Register({ onClose }) {
         console.log(error);
       });
   };
-
   return (
     <div
       id="login-popup"
