@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Input } from "./components/Input/Input";
+import { Input } from "../../components/Input/Input";
 // import { useLocation } from "react-router-dom";
-import { useAuthStore } from "../../store/authUser";
+import { useAuthStore } from "../../services/authUser";
 
 function Register({ onClose }) {
   const { user, verifyAccount } = useAuthStore();

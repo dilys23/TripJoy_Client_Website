@@ -1,5 +1,5 @@
-import google from "../../images/google.png"
-import facebook from "../../images/facebook.png"
+import google from "../../assets/images/google.png"
+import facebook from "../../assets/images/facebook.png"
 import * as FaIcon from "react-icons/fa";
 import { useState } from "react";
 function Login({ onClose }) {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Navbar from "../../Header/Navbar"
-import Sidebar from "../../Layout/components/Sidebar"
+import Sidebar from "../../Sidebar/Sidebar"
 function DefaultLayout({ children }) {
     return (
         <div className="bg-white">

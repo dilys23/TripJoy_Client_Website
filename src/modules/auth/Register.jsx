@@ -3,20 +3,16 @@ import React, { useState } from "react";
 // import { Container } from './styles';
 
 function Register({ onClose }) {
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
   const handleEmail = (e) => {
     setEmail(e.target.value);
-  }
-  // const 
-  async function register()
-  {
+  };
+  // const
+  async function register() {
     try {
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
   return (
     <div
@@ -111,7 +107,6 @@ function Register({ onClose }) {
                   required=""
                   className="h-[40px] w-[213px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
                   placeholder="Tên"
-                 
                 />
                 {/* <label for="email" className="sr-only">Email address</label> */}
               </div>
@@ -166,7 +161,6 @@ function Register({ onClose }) {
                   autocomplete="date"
                   required=""
                   className="mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow"
-             
                 />
                 <select
                   name="sex"
