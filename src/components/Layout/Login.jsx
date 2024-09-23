@@ -32,24 +32,24 @@ function Login({ onClose }) {
 
     const handleLogin = async () => {
         if (!email) {
-            setHasErrorEmail(true)
+            // setHasErrorEmail(true)
             toast.error("Vui lòng nhập Email", {
                 autoClose: 1000
             });
-            setTimeout(() => {
-                setHasErrorEmail(false);
-            }, 2000);
+            // setTimeout(() => {
+            //     // setHasErrorEmail(false);
+            // }, 2000);
             return
         }
         if (!password) {
-            setHasErrorPass(true)
+            // setHasErrorPass(true)
             toast.error("Vui lòng nhập mật khẩu", {
                 autoClose: 1000
             }
             );
-            setTimeout(() => {
-                setHasErrorPass(false);
-            }, 2000);
+            // setTimeout(() => {
+            //     setHasErrorPass(false);
+            // }, 2000);
             return
         }
         try {
