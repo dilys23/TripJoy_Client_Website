@@ -179,7 +179,13 @@ function Login({ onClose }) {
 
         } catch (error) {
             // console.error("Error during password reset:", error);
-            toast.error("Lỗi kết nối")
+            console.error("Error during password confirmation:", error);
+            if (error.response) {
+                console.error("Error response:", error.response.data);
+                toast.error(error.response.data.message || "Lỗi kết nối");
+            } else {
+                toast.error("Lỗi kết nối");
+            }
         }
         setIsLoading(false);
     }

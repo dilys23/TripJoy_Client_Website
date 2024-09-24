@@ -1,5 +1,7 @@
 import httpRequest from '../utils/httpRequest';
 
+
+// ham login
 const loginService = async (email, password) => {
     try {
         console.log('Payload:', { email, password });
@@ -13,7 +15,7 @@ const loginService = async (email, password) => {
         throw error;
     }
 };
-
+// ham khi nhan vao Quen mat khau
 const resetPasswordService = async (email) => {
     try {
         const res = await httpRequest.post('Account/forget-password', {
@@ -25,9 +27,11 @@ const resetPasswordService = async (email) => {
         throw error;
     }
 }
+
+// xac nhan doi mat khau
 const confirmForgetPasswordService = async ({ otp, key }) => {
-    console.log("Sending OTP:", otp);
-    console.log("key:", key)
+    console.log("Sending OTP:", typeof (otp));
+    console.log("Sending key:", typeof (key));
     try {
         const res = await httpRequest.post('Account/confirm-forget-pw?key=${key}', {
             otp
@@ -43,6 +47,28 @@ const confirmForgetPasswordService = async ({ otp, key }) => {
         throw error;
     }
 }
+
+// ham doi mat khau
+const changePasswordService = async ({ key, password, confirmPassword }) => {
+    // console.log("Sending OTP:", otp);
+    console.log("key:", key)
+    try {
+        const res = await httpRequest.post('Account/change-password?key=${key}', {
+            password,
+            confirmPassword
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        );
+        return res.data;
+    } catch (error) {
+        console.log('Login error: ', error);
+        throw error;
+    }
+}
+//ham logout
 const logoutService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -63,6 +89,9 @@ const logoutService = async () => {
         throw error;
     }
 }
+
+
+// refresh lai token
 const refreshTokenService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -75,5 +104,5 @@ const refreshTokenService = async () => {
     }
 }
 
-export { loginService, resetPasswordService, logoutService, refreshTokenService, confirmForgetPasswordService }
+export { loginService, resetPasswordService, logoutService, refreshTokenService, confirmForgetPasswordService, changePasswordService }
 
