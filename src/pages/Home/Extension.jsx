@@ -1,7 +1,7 @@
 import React from 'react';
-import phoneImg from '../../images/phoneimg.png'
-import travel from '../../images/trip.gif';
-import plane from '../../images/plane.png'
+import phoneImg from '../../assets/images/phoneimg.png'
+import travel from '../../assets/images/trip.gif';
+import plane from '../../assets/images/plane.png'
 function Extension() {
     return (
 

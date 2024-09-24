@@ -1,5 +1,5 @@
-import ava1 from "../../images/ava1.png"
-import ava2 from "../../images/ava2.png"
+import ava1 from "../../assets/images/ava1.png"
+import ava2 from "../../assets/images/ava2.png"
 import ContactItem from "./ContactItem";
 function Contact() {
     const contactList = [

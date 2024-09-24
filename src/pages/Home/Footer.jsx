@@ -1,13 +1,13 @@
 import React from 'react';
 import { FaBehance, FaClock, FaFacebook, FaInstagram, FaLinkedinIn, FaPhone, FaWhatsapp } from 'react-icons/fa';
-import logo from '../../images/logo1.png'
+import logo from '../../assets/images/logo1.png'
 import { FaLocationPin } from 'react-icons/fa6';
-import image1 from '../../images/anh1.jpg'
-import image2 from '../../images/Danang.jpg'
-import image3 from '../../images/anh3.jpg'
-import image4 from '../../images/HoiAn1.jpg'
-import image5 from '../../images/anh5.jpg'
-import image6 from '../../images/HaNoi.jpg'
+import image1 from '../../assets/images/anh1.jpg'
+import image2 from '../../assets/images/Danang.jpg'
+import image3 from '../../assets/images/anh3.jpg'
+import image4 from '../../assets/images/HoiAn1.jpg'
+import image5 from '../../assets/images/anh5.jpg'
+import image6 from '../../assets/images/HaNoi.jpg'
 
 
 function Footer() {

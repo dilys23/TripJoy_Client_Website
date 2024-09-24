@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
-import logo from "../../images/logo1.png";
-import Login from "../Layout/Login";
-import Register from "../Layout/Register";
-import VerifyAccount from "../Layout/VerifyAccount";
+import logo from "../../assets/images/logo1.png";
+import Login from "../../modules/auth/Login";
+import Register from "../../modules/auth/Register";
+import VerifyAccount from "../../modules/auth/VerifyAccount";
 import * as MdIcons from "react-icons/md";
-import noImages from "../../images/noImages.jpg";
-import { useAuthStore } from "../../store/authUser";
+// import noImages from "../../images/noImages.jpg";
 import { UserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 // import Tippy from 'tippy.js';
+import ava from "../../assets/images/ava.jpg";
+import { useAuthStore } from "../../services/authUser";
+import { logoutService } from "../../services/login";
 // import { Container } from './styles';
 function Navbar() {
     const [dropdown, setDropdown] = useState(false);
@@ -50,10 +52,21 @@ function Navbar() {
     useEffect(() => {
         setCurrentUser(userVerify);
     }, [userVerify]);
-    const handleLogout = () => {
-        console.log("User logged out");
-        logout();
-        navigate('/');
+
+
+    const handleLogout = async () => {
+        try {
+            const res = await logoutService();
+            console.log("error:", res)
+            console.log("User logged out");
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            logout();
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+
     }
 
 
@@ -142,7 +155,7 @@ function Navbar() {
         <nav className="sticky top-0 z-20 flex h-24 w-full flex-col items-center justify-center bg-white">
             <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between lg:px-3">
                 <div
-                    className={`${currentUser ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}
+                    className={`${user ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}
                 >
                     <div className="flex flex-col gap-y-4">
                         <div className="flex items-center gap-x-2">
@@ -170,7 +183,7 @@ function Navbar() {
                         </div>
                     </div>
                 </div>
-                {currentUser ? (
+                {user ? (
                     <div className="flex items-center gap-x-3">
                         <MdIcons.MdNotifications className="h-[30px] w-[23.74px] cursor-pointer text-iconGray sm:h-[40px] sm:w-[30.74px]" />
                         <div className="flex cursor-pointer items-center gap-x-1.5">
@@ -180,7 +193,7 @@ function Navbar() {
                                 className="rounded-90 h-[41px] w-[42px] sm:h-[51px] sm:w-[52px]"
                             />
                             <h3 className="text-base font-medium sm:block">Bach Duong</h3>
-                            <MdIcons.MdExpandMore className="h-[18px] w-[18px] text-iconGray sm:h-[20px] sm:w-[20px]" />
+                            <MdIcons.MdExpandMore className="h-[18px] w-[18px] text-iconGray sm:h-[20px] sm:w-[20px]" onClick={handleLogout} />
                         </div>
                     </div>
                 ) : (

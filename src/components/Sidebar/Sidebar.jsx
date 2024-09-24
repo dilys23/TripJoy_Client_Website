@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import * as MdIcons from 'react-icons/md';
 import SidebarItem from './SidebarItem';
-import config from '../../../../config';
-import TripInvites from '../../../TripInvite/TripInvites';
+import config from '../../config';
+import TripInvites from '../TripInvite/TripInvites';
 
 function Sidebar() {
     const [isActive, setIsActive] = useState(0)
@@ -11,7 +11,7 @@ function Sidebar() {
     };
 
     return (
-        <div className='w-1/6 h-full m-3'>
+        <div className='w-1/6 h-full m-3 '>
             <nav className='bg-white rounded-lg sm:h-[390px] h-[270px] items-center py-1'>
                 <SidebarItem
                     index={0}

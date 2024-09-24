@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import Navbar from "../../Header/Navbar"
-import Sidebar from "../../Layout/components/Sidebar"
-// import { ToastContainer } from 'react-toastify';
+import Sidebar from "../../Sidebar/Sidebar"
 function DefaultLayout({ children }) {
     return (
         <>
