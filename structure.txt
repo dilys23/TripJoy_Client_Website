@@ -43,3 +43,26 @@ src/pages
 
 1. Dashboard : folder cha quản lý tất cả tính năng
 
+const handleApi = (e) => {
+    e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
+    console.log({ email, phoneNumber, name, password, confirmPassword });
+    axios
+      .post("https://localhost:7100/api/v1/Account/register", {
+        email: email,
+        phoneNumber: phoneNumber,
+        name: name,
+        password: password,
+        confirmPassword: confirmPassword,
+      })
+      .then((result) => {
+        if (result.data.success) {
+          console.log(result);
+          const verifyUrl = result.data.data.url;
+          navigate("/otp-confirmation", { state: { verifyUrl } });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
