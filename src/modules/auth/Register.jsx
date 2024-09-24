@@ -139,7 +139,7 @@ function Register({ onClose }) {
                 onChange={(e) => setphoneNumber(e.target.value)}
                 validate={validatePhoneNumber}
                 // errorMessage="Mat khau khong hop le"
-                placeholder="So dien thoai"
+                placeholder="Số điện thoại"
                 required={true}
               />
               <InputField
@@ -149,7 +149,7 @@ function Register({ onClose }) {
                 onChange={(e) => setPassword(e.target.value)}
                 validate={validatePassword}
                 // errorMessage="Mat khau khong hop le"
-                placeholder="Mat khau"
+                placeholder="Mật khẩu"
                 required={true}
               />
               <InputField
