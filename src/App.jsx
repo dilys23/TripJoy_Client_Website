@@ -1,13 +1,10 @@
-
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { publicRoutes } from "./router"
-import { DefaultLayout } from "./components/Layout"
-import Footer from "./components/Footer/Footer"
-import Home from "./pages/Home"
-import Register from "./components/Layout/Register"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { publicRoutes } from "./router";
+import { DefaultLayout } from "./components/Layout";
+import Footer from "./pages/Home/Footer";
+import Home from "./pages/Home";
+import Register from "./modules/auth/Register";
 function App() {
-
   return (
     <>
       {/* <Navbar />
@@ -24,8 +21,8 @@ function App() {
         <div className="App">
           <Routes>
             {publicRoutes.map((route, index) => {
-              const Layout = route.layout || DefaultLayout
-              const Page = route.component
+              const Layout = route.layout || DefaultLayout;
+              const Page = route.component;
               return (
                 <Route
                   key={index}
@@ -33,15 +30,16 @@ function App() {
                   element={
                     <Layout>
                       <Page></Page>
-                    </Layout>}>
-                </Route>)
+                    </Layout>
+                  }
+                ></Route>
+              );
             })}
           </Routes>
         </div>
       </Router>
     </>
-
-  )
+  );
 }
 
-export default App
+export default App;

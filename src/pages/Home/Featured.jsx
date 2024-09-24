@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaPlaneDeparture } from "react-icons/fa";
 import { FaCar, FaShip, FaHotel } from "react-icons/fa6";
 // import { Container } from './styles';
-import Danang from "../../images/Danang.jpg";
-import HaNoi from "../../images/HaNoi.jpg";
-import HaGiang from "../../images/HaGiang.jpg";
+import Danang from "../../assets/images/Danang.jpg";
+import HaNoi from "../../assets/images/HaNoi.jpg";
+import HaGiang from "../../assets/images/HaGiang.jpg";
 
 function Fetured() {
     const [active, setActive] = useState(false);

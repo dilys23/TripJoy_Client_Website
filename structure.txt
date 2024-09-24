@@ -1,0 +1,68 @@
+src/components
+
+Chứa các thành phần giao diện tái sử dụng.
+
+1. Button: Chứa các thành phần button tùy chỉnh, bao gồm các thuộc tính và kiểu dáng khác nhau.
+
+2. Card: Chứa các thành phần card để hiển thị thông tin .
+
+3. Contact: Chứa các thành phần liên quan đến thông tin liên hệ.
+
+4. FriendRequest: Chứa các thành phần để hiển thị và quản lý yêu cầu kết bạn.
+
+5. Header: Chứa thành phần header cho ứng dụng, la thanh header truoc khi login va se hien thi avatar sau khi login lun
+
+6. Icons: Chứa các thành phần icon tùy chỉnh.
+
+7. Input: Chứa các thành phần input tùy chỉnh 
+
+Phần này thì thấy cấn cấn nên sẽ chia lại
+Layout: Chứa các layout chính của ứng dụng.
+Posts: Chứa các thành phần liên quan đến việc hiển thị bài viết
+Sidebar: Chứa thành phần sidebar, thường dùng để điều hướng giữa các trang.
+TripInvite: Chứa các thành phần liên quan đến việc mời bạn bè tham gia chuyến đi.
+
+. src/modules
+
+Chứa các mô-đun cho từng chức năng trong ứng dụng.
+
+1. auth: Chứa các thành phần và chức năng liên quan đến xác thực (đăng nhập, đăng ký).
+2. costs: Chứa các thành phần và chức năng quản lý chi phí
+3. members: Chứa các thành phần liên quan đến quản lý thành viên trong chuyến đi.
+4. network: Chứa các thành phần liên quan đến trang đăng bài, cmt like tym các kiểu
+5. notes: Chứa các thành phần cho việc ghi chú về các địa điểm và thông tin liên quan.
+6. tracking: Chứa các thành phần và chức năng theo dõi vị trí của các thành viên trong chuyến đi.
+7. trips: Chứa các thành phần và chức năng quản lý các chuyến đi, bao gồm tạo, chỉnh sửa, và xóa chuyến đi.
+
+
+src/services
+Chứa các tệp để gọi API hoặc tương tác với backend. Mỗi tệp có thể tương ứng với một loại dịch vụ (ni đang sửa code lại "
+
+
+src/pages
+
+1. Dashboard : folder cha quản lý tất cả tính năng
+
+const handleApi = (e) => {
+    e.preventDefault(); // Ngăn form tải lại trang và gửi dữ liệu qua URL
+    console.log({ email, phoneNumber, name, password, confirmPassword });
+    axios
+      .post("https://localhost:7100/api/v1/Account/register", {
+        email: email,
+        phoneNumber: phoneNumber,
+        name: name,
+        password: password,
+        confirmPassword: confirmPassword,
+      })
+      .then((result) => {
+        if (result.data.success) {
+          console.log(result);
+          const verifyUrl = result.data.data.url;
+          navigate("/otp-confirmation", { state: { verifyUrl } });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
