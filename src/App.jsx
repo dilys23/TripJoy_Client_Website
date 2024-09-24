@@ -1,22 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { publicRoutes } from "./router";
-import { DefaultLayout } from "./components/Layout";
-import Footer from "./pages/Home/Footer";
-import Home from "./pages/Home";
-import Register from "./modules/auth/Register";
+
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { publicRoutes } from "./router"
+import { DefaultLayout } from "./components/Layout"
+import GlobalStyles from "./components/GlobalStyles";
+// import tippy from 'tippy.js';
+// import 'tippy.js/dist/tippy.css';
 function App() {
   return (
     <>
-      {/* <Navbar />
-      <Hero />
-      <Fetured />
-      <Packages />
-      <Extension />
-      {/* <Discover/> */}
-      {/* <Home></Home> */}
-      {/* <Register/> */}
-      {/* <Router>
-      {/* <Home></Home> */}
+
       <Router>
         <div className="App">
           <Routes>

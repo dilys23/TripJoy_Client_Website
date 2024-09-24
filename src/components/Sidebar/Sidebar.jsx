@@ -11,7 +11,7 @@ function Sidebar() {
     };
 
     return (
-        <div className='w-1/6 h-full m-3'>
+        <div className='w-1/6 h-full m-3 '>
             <nav className='bg-white rounded-lg sm:h-[390px] h-[270px] items-center py-1'>
                 <SidebarItem
                     index={0}
@@ -51,6 +51,7 @@ function Sidebar() {
                     onClick={handleClick}
                     to={config.routes.plan}
                     icon={<MdIcons.MdOutlinePerson className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+
                     title='Tài khoản'
                 ></SidebarItem>
                 <SidebarItem
