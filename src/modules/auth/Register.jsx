@@ -4,16 +4,13 @@ import axios from "axios";
 // import { Input } from "./components/Input/Input";
 // import { Container } from './styles';
 import { useAuthStore } from "../../services/authUser";
-import { useAuthAccount } from "../../services/authAccount";
 function Register({ onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  // const { register, isRegister, user } = useAuthStore();
-  const { register, isRegister, user } = useAuthAccount();
-
+  const { register, isRegister, user } = useAuthStore();
   // const navigate = useNavigate();
 
   const handleRegister = (e) => {
@@ -243,7 +240,7 @@ function Register({ onClose }) {
                   className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
                   disabled={isRegister}
                 >
-                  {isRegister ? "Đang đăng kí..." : "Đăng kí"}
+                  {isRegister ? "Đang Đăng kí..." : "Đăng kí"}
                 </button>
               </div>
             </form>
