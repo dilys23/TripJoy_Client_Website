@@ -4,39 +4,52 @@ import * as FaIcon from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
-import { loginService, resetPasswordService, refreshTokenService, confirmForgetPasswordService } from "../../services/login";
+import { loginService, resetPasswordService, refreshTokenService, confirmForgetPasswordService, changePasswordService } from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import InputField from "../../components/Input/InputField";
+import InputType from "../../components/Input/InputType";
 
 function Login({ onClose }) {
-    const [showPass, setShowPass] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const { login } = useContext(UserContext);
     const [otp, setOtp] = useState('')
+    const [otpError, setOtpError] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const { login } = useContext(UserContext);
+
+
     const [forgetPass, setForgetPass] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showInputResetPassword, setShowInputResetPassword] = useState(false);
 
 
+    const navigate = useNavigate();
     const handleClose = () => {
         setEmail('');
         setPassword('');
         onClose();
     };
-
-    const checkInputEmail = (e) => {
-        // const value = e.target.value;
-        // setEmail(value);
+    const checkInputConfirmPassword = () => {
+        if (confirmPassword.length === 0) {
+            setConfirmPasswordError('Vui lòng nhập mật khẩu')
+        } else if (confirmPassword !== password) {
+            setConfirmPasswordError('Mật khẩu không trùng khớp')
+        } else {
+            setConfirmPasswordError('');
+        }
+    };
+    const checkInputEmail = () => {
         const emailRole = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
         if (email.length === 0) {
             setEmailError('Vui lòng nhập email')
             return false
-        }
-        else if (!emailRole.test(email)) {
+        } else if (!emailRole.test(email)) {
             setEmailError('Email không hợp lệ')
             return false
         } else {
@@ -49,11 +62,25 @@ function Login({ onClose }) {
             setPasswordError('Vui lòng nhập mật khẩu')
         } else if (password.length < 6) {
             setPasswordError('Mật khẩu phải có ít nhất 6 ký tự')
-        }
-        else {
+        } else {
             setPasswordError('');
         }
     }
+    const validatePassword = () => {
+        if (!password) {
+            setPasswordError('Mật khẩu không được để trống');
+        } else if (password.length < 6) {
+            setPasswordError('Mật khẩu phải có ít nhất 6 ký tự');
+        } else if (!/[A-Z]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa");
+        } else if (!/[a-z]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 chữ cái viết thường");
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt");
+        } else {
+            setPasswordError("");
+        }
+    };
     const handleLogin = async () => {
         if (!email) {
             setEmailError('Vui lòng nhập email')
@@ -90,12 +117,9 @@ function Login({ onClose }) {
                     setPassword('');
                 }
             } else {
-
                 toast.error("Lỗi kết nối, vui lòng thử lại", {
                     autoClose: 1000
                 });
-                // setEmail('');
-                // setPassword('');
             }
         }
         setIsLoading(false);
@@ -136,19 +160,15 @@ function Login({ onClose }) {
     const handleForgetPassword = async () => {
         if (!checkInputEmail()) return;
         setForgetPass(true);
-        sendOTP();
+        // sendOTP();
     }
     const sendOTP = async () => {
         try {
             const response = await resetPasswordService(email);
             if (response && response.status === "success") {
                 console.log("Password reset response:", response);
-                //console.log(forgetPass);
-                // onForgetPassword();
-                // onClose();
                 localStorage.setItem('url', response.url)
-
-                toast.success("Đã gửi mã xác nhận ở email để khôi phục mật khẩu", 3000)
+                toast.success("Đã gửi mã xác nhận ở email", 3000)
             } else {
                 toast.error("Không tìm thấy tài khoản")
             }
@@ -158,21 +178,20 @@ function Login({ onClose }) {
             toast.error("Không tìm thấy tài khoản")
         }
     }
-    const handleConfirmPassword = async () => {
+    const handleConfirmOTP = async () => {
+        if (!otp) {
+            console.log("click")
+            setOtpError("Vui lòng nhập OTP");
+            return
+        }
         setIsLoading(true);
         try {
-
             const url = localStorage.getItem('url');
-            if (!url) {
-                throw new Error("No URL found in local storage");
-            }
-            const parsedUrl = new URL(url);
-            const key = parsedUrl.searchParams.get("key");
-            const response = await confirmForgetPasswordService({ otp, key });
-            console.log("key:", key)
+            const response = await confirmForgetPasswordService({ otp, url });
             if (response && response.status === "success") {
-                // console.log("Khôi phục mật khẩu thành công", response);
-                toast.success("Khôi phục mật khẩu thành công")
+                toast.success("Xác thực OTP thành công")
+                console.log("respone otp:", response)
+                localStorage.setItem('url', response.url)
             } else {
                 toast.error("Không tìm thấy tài khoản")
             }
@@ -188,6 +207,32 @@ function Login({ onClose }) {
             }
         }
         setIsLoading(false);
+        setShowInputResetPassword(true)
+        setOtpError("");
+    }
+    const handleConfirmPassword = async () => {
+        setIsLoading(true);
+        try {
+            const url = localStorage.getItem('url');
+            const response = await changePasswordService({ url, password, confirmPassword });
+            if (response && response.status === "success") {
+                toast.success("Đổi mật khẩu thành công", 1000)
+            } else {
+                toast.error("Không tìm thấy tài khoản")
+            }
+
+        } catch (error) {
+            // console.error("Error during password reset:", error);
+            console.error("Error during password confirmation:", error);
+            if (error.response) {
+                console.error("Error response:", error.response.data);
+                toast.error(error.response.data.message || "Lỗi kết nối");
+            } else {
+                toast.error("Lỗi kết nối");
+            }
+        }
+        setIsLoading(false);
+        handleClose()
     }
     return (
         <>
@@ -197,7 +242,7 @@ function Login({ onClose }) {
                 onClick={handleClose}
             >
                 <div
-                    className="w-[500px] h-[600px] border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center"
+                    className={`w-[500px] ${showInputResetPassword ? "h-[680px]" : "h-[600px]"}  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="text-[27px] text-[#0F3E4A] w-[370px] font-bold my-5">Đăng nhập</div>
@@ -227,52 +272,106 @@ function Login({ onClose }) {
                     <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{emailError}</p>
                     {forgetPass ? (<>
 
-                        <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
-                            <input
-                                required
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                className="w-full outline-none bg-transparent "
-                                placeholder="OTP..."
-                            />
-                            <div
-                                onClick={sendOTP}
-                                className="absolute right-5 text-blue-500 font-bold cursor-pointer">
-                                RESEND
+                        <>
+                            <div className=" w-[350px] mx-auto flex max-w-lg items-center gap-4 h-[40px]">
+                                <input
+                                    required
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    placeholder="OTP"
+                                    className=" h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
+                                    id="voice-search"
+                                    type="text"
+                                />
+                                <button
+                                    className=" flex px-1 gap-1 justify-around h-[40px] w-[40%] items-center rounded-[5px] border border-blue-700 bg-blue-700 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    type="submit"
+                                    onClick={sendOTP}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faPaperPlane}
+                                        size="1x"
+                                        className=""
+                                        color="white"
+                                    />
+                                    Gửi OTP
+                                </button>
+
                             </div>
-                        </div>
+                            <p
+
+                                className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{otpError}</p>
+                        </>
                     </>) : (
-                        <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
-                            <input
-                                required
+                        <InputType
+                            name="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onBlur={checkInputPassword}
+                            placeholder="Mật khẩu"
+                            errorMessage={passwordError}
+                        ></InputType>
+                    )}
+                    {showInputResetPassword ? (
+                        <div className="w-[350px] flex flex-col">
+                            <InputType
+                                name="password"
+                                type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                type={showPass ? 'text' : 'password'}
-                                onBlur={checkInputPassword}
-                                className="w-full outline-none bg-transparent "
-                                placeholder="Mật khẩu..."
-                            />
-                            <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
-                                {!showPass && <FaIcon.FaEye className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                                {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                            </div>
+                                onBlur={validatePassword}
+                                placeholder="Mật khẩu"
+                                required={true}
+                                errorMessage={passwordError}
+                            ></InputType>
+                            <InputType
+                                name="password"
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                onBlur={checkInputConfirmPassword}
+                                placeholder="Xác nhận mật khẩu"
+                                required={true}
+                                errorMessage={confirmPasswordError}
+                            ></InputType>
                         </div>
-                    )}
+                    )
+                        : (<></>)}
 
-                    <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{passwordError}</p>
-                    <div
-                        style={{ pointerEvents: emailError ? 'none' : 'auto' }}
-                        onClick={handleForgetPassword}
-                        className="underline text-[#818080] text-[14px] cursor-pointer hover:text-primary"
-                    >Quên mật khẩu?</div>
-                    <div className="flex justify-between items-center w-[350px] mt-5">
-                        <div className="text-[#818080] w-[100px] text-[15px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
+                    {forgetPass ?
+                        (<div>
+
+                        </div>) : (
+                            <div
+                                style={{ pointerEvents: emailError ? 'none' : 'auto' }}
+                                onClick={handleForgetPassword}
+                                className="underline text-[#818080] text-[14px] cursor-pointer hover:text-primary"
+                            >Quên mật khẩu?</div>
+                        )}
+                    <div className={`flex justify-between items-center w-[350px] mt-5 fixed ${showInputResetPassword ? " bottom-[50px] " : " bottom-[120px] "}`}>
+                        {forgetPass ? (
+                            <div
+                                onClick={() => setForgetPass(false)}
+                                className="text-[#818080] text-[14px] cursor-pointer hover:text-primary">Đăng nhập bằng mật khẩu</div>
+                        ) : (
+                            <div className="text-[#818080] w-[100px] text-[15px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
+                        )}
                         {forgetPass ? (<>
-                            <button
-                                onClick={() => handleConfirmPassword()}
-                                className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
-                                {isLoading ? "Đang xác nhận" : "Xác nhận"}
-                            </button>
+                            {showInputResetPassword ? (
+                                <button
+                                    onClick={() => handleConfirmPassword()}
+                                    className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
+                                    {isLoading ? "Đang xác nhận" : "Xác nhận"}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => handleConfirmOTP()}
+                                    className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
+                                    {isLoading ? "Đang xác nhận" : "Xác nhận"}
+                                </button>
+                            )}
+
                         </>) : (
                             <button
                                 onClick={() => handleLogin()}
