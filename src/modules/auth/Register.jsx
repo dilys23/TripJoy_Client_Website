@@ -10,6 +10,8 @@ function Register({ onClose }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { register, isRegister, user } = useAuthStore();
+  // const navigate = useNavigate();
+
   const handleRegister = (e) => {
     e.preventDefault();
     register({ email, phoneNumber, name, password, confirmPassword });
@@ -174,7 +176,7 @@ function Register({ onClose }) {
                   className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
                   disabled={isRegister}
                 >
-                  {isRegister ? "Đang đăng kí..." : "Đăng kí"}
+                  {isRegister ? "Đang Đăng kí..." : "Đăng kí"}
                 </button>
               </div>
             </form>
