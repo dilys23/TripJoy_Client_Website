@@ -50,11 +50,11 @@ const confirmForgetPasswordService = async ({ otp, url }) => {
 }
 
 // ham doi mat khau
-const changePasswordService = async ({ key, password, confirmPassword }) => {
+const changePasswordService = async ({ url, password, confirmPassword }) => {
     // console.log("Sending OTP:", otp);
-    console.log("key:", key)
+    // console.log("key:", key)
     try {
-        const res = await httpRequest.post('Account/change-password?key=${key}', {
+        const res = await axios.post(url, {
             password,
             confirmPassword
         }, {

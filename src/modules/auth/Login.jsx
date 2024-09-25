@@ -4,42 +4,45 @@ import * as FaIcon from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
-import { loginService, resetPasswordService, refreshTokenService, confirmForgetPasswordService } from "../../services/login";
+import { loginService, resetPasswordService, refreshTokenService, confirmForgetPasswordService, changePasswordService } from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../../components/Input/InputField";
-
+import InputType from "../../components/Input/InputType";
 
 function Login({ onClose }) {
-    const [showPass, setShowPass] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const { login } = useContext(UserContext);
     const [otp, setOtp] = useState('')
-    const [forgetPass, setForgetPass] = useState(false);
-    const [showInputResetPassword, setShowInputResetPassword] = useState(false);
+    const [otpError, setOtpError] = useState('')
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const { login } = useContext(UserContext);
 
+
+    const [forgetPass, setForgetPass] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showInputResetPassword, setShowInputResetPassword] = useState(false);
+
+
+    const navigate = useNavigate();
     const handleClose = () => {
         setEmail('');
         setPassword('');
         onClose();
     };
-    const validatePassword = (value) => {
-        if (!value) return "Mật khẩu không được để trống";
-        if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự";
-        if (!/^[a-zA-Z0-9]+$/.test(value)) return "Mật khẩu không hợp lệ";
-        return "";
-    };
-    const validateConfirmPassword = (value) => {
-        if (!value) return "Xác nhận mật khẩu không được để trống";
-        if (value !== password) return "Mật khẩu không trùng khớp";
-        return "";
+    const checkInputConfirmPassword = () => {
+        if (confirmPassword.length === 0) {
+            setConfirmPasswordError('Vui lòng nhập mật khẩu')
+        } else if (confirmPassword !== password) {
+            setConfirmPasswordError('Mật khẩu không trùng khớp')
+        } else {
+            setConfirmPasswordError('');
+        }
     };
     const checkInputEmail = () => {
         const emailRole = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,6 +66,21 @@ function Login({ onClose }) {
             setPasswordError('');
         }
     }
+    const validatePassword = () => {
+        if (!password) {
+            setPasswordError('Mật khẩu không được để trống');
+        } else if (password.length < 6) {
+            setPasswordError('Mật khẩu phải có ít nhất 6 ký tự');
+        } else if (!/[A-Z]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa");
+        } else if (!/[a-z]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 chữ cái viết thường");
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            setPasswordError("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt");
+        } else {
+            setPasswordError("");
+        }
+    };
     const handleLogin = async () => {
         if (!email) {
             setEmailError('Vui lòng nhập email')
@@ -142,7 +160,7 @@ function Login({ onClose }) {
     const handleForgetPassword = async () => {
         if (!checkInputEmail()) return;
         setForgetPass(true);
-        sendOTP();
+        // sendOTP();
     }
     const sendOTP = async () => {
         try {
@@ -160,13 +178,20 @@ function Login({ onClose }) {
             toast.error("Không tìm thấy tài khoản")
         }
     }
-    const handleConfirmPassword = async () => {
+    const handleConfirmOTP = async () => {
+        if (!otp) {
+            console.log("click")
+            setOtpError("Vui lòng nhập OTP");
+            return
+        }
         setIsLoading(true);
         try {
             const url = localStorage.getItem('url');
             const response = await confirmForgetPasswordService({ otp, url });
             if (response && response.status === "success") {
                 toast.success("Xác thực OTP thành công")
+                console.log("respone otp:", response)
+                localStorage.setItem('url', response.url)
             } else {
                 toast.error("Không tìm thấy tài khoản")
             }
@@ -183,6 +208,31 @@ function Login({ onClose }) {
         }
         setIsLoading(false);
         setShowInputResetPassword(true)
+        setOtpError("");
+    }
+    const handleConfirmPassword = async () => {
+        setIsLoading(true);
+        try {
+            const url = localStorage.getItem('url');
+            const response = await changePasswordService({ url, password, confirmPassword });
+            if (response && response.status === "success") {
+                toast.success("Đổi mật khẩu thành công", 1000)
+            } else {
+                toast.error("Không tìm thấy tài khoản")
+            }
+
+        } catch (error) {
+            // console.error("Error during password reset:", error);
+            console.error("Error during password confirmation:", error);
+            if (error.response) {
+                console.error("Error response:", error.response.data);
+                toast.error(error.response.data.message || "Lỗi kết nối");
+            } else {
+                toast.error("Lỗi kết nối");
+            }
+        }
+        setIsLoading(false);
+        handleClose()
     }
     return (
         <>
@@ -192,7 +242,7 @@ function Login({ onClose }) {
                 onClick={handleClose}
             >
                 <div
-                    className="w-[500px] h-[650px] border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center"
+                    className={`w-[500px] ${showInputResetPassword ? "h-[680px]" : "h-[600px]"}  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="text-[27px] text-[#0F3E4A] w-[370px] font-bold my-5">Đăng nhập</div>
@@ -222,81 +272,69 @@ function Login({ onClose }) {
                     <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{emailError}</p>
                     {forgetPass ? (<>
 
-                        <div className=" w-[350px] mx-auto flex max-w-lg items-center gap-4 h-[40px]">
-                            <input
-                                required
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                placeholder="OTP"
-                                className=" h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
-                                id="voice-search"
-                                type="text"
-                            />
-                            <button
-                                className=" flex px-1 gap-1 justify-between h-[40px] w-[45%] items-center rounded-[5px] border border-blue-700 bg-blue-700 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                type="submit"
-                                onClick={sendOTP}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faPaperPlane}
-                                    size="1x"
-                                    className=""
-                                    color="white"
-                                />
-                                Gửi lại OTP
-                            </button>
-                        </div>
-                    </>) : (
                         <>
-                            {/* <div className="w-[350px]"> */}
-                            {/* <InputField
-                                    name="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    validate={validatePassword}
-                                    placeholder="Mật khẩu"
-                                    required={true}
-                                ></InputField> */}
-                            <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
+                            <div className=" w-[350px] mx-auto flex max-w-lg items-center gap-4 h-[40px]">
                                 <input
                                     required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    type={showPass ? 'text' : 'password'}
-                                    onBlur={checkInputPassword}
-                                    className="w-full outline-none bg-transparent "
-                                    placeholder="Mật khẩu..."
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    placeholder="OTP"
+                                    className=" h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
+                                    id="voice-search"
+                                    type="text"
                                 />
-                                <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
-                                    {!showPass && <FaIcon.FaEye className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                                    {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                                </div>
+                                <button
+                                    className=" flex px-1 gap-1 justify-around h-[40px] w-[40%] items-center rounded-[5px] border border-blue-700 bg-blue-700 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    type="submit"
+                                    onClick={sendOTP}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faPaperPlane}
+                                        size="1x"
+                                        className=""
+                                        color="white"
+                                    />
+                                    Gửi OTP
+                                </button>
+
                             </div>
-                            <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{passwordError}</p>
-                            {/* </div> */}
+                            <p
+
+                                className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{otpError}</p>
                         </>
+                    </>) : (
+                        <InputType
+                            name="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            onBlur={checkInputPassword}
+                            placeholder="Mật khẩu"
+                            errorMessage={passwordError}
+                        ></InputType>
                     )}
                     {showInputResetPassword ? (
-                        <div className="w-[350px] flex flex-col gap-5 mt-7">
-                            <InputField
+                        <div className="w-[350px] flex flex-col">
+                            <InputType
                                 name="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                validate={validatePassword}
+                                onBlur={validatePassword}
                                 placeholder="Mật khẩu"
                                 required={true}
-                            ></InputField>
-                            <InputField
+                                errorMessage={passwordError}
+                            ></InputType>
+                            <InputType
                                 name="password"
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                validate={validateConfirmPassword}
+                                onBlur={checkInputConfirmPassword}
                                 placeholder="Xác nhận mật khẩu"
                                 required={true}
-                            ></InputField>
+                                errorMessage={confirmPasswordError}
+                            ></InputType>
                         </div>
                     )
                         : (<></>)}
@@ -311,14 +349,29 @@ function Login({ onClose }) {
                                 className="underline text-[#818080] text-[14px] cursor-pointer hover:text-primary"
                             >Quên mật khẩu?</div>
                         )}
-                    <div className="flex justify-between items-center w-[350px] mt-5 fixed bottom-[80px] ">
-                        <div className="text-[#818080] w-[100px] text-[15px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
+                    <div className={`flex justify-between items-center w-[350px] mt-5 fixed ${showInputResetPassword ? " bottom-[50px] " : " bottom-[120px] "}`}>
+                        {forgetPass ? (
+                            <div
+                                onClick={() => setForgetPass(false)}
+                                className="text-[#818080] text-[14px] cursor-pointer hover:text-primary">Đăng nhập bằng mật khẩu</div>
+                        ) : (
+                            <div className="text-[#818080] w-[100px] text-[15px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
+                        )}
                         {forgetPass ? (<>
-                            <button
-                                onClick={() => handleConfirmPassword()}
-                                className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
-                                {isLoading ? "Đang xác nhận" : "Xác nhận"}
-                            </button>
+                            {showInputResetPassword ? (
+                                <button
+                                    onClick={() => handleConfirmPassword()}
+                                    className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
+                                    {isLoading ? "Đang xác nhận" : "Xác nhận"}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => handleConfirmOTP()}
+                                    className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
+                                    {isLoading ? "Đang xác nhận" : "Xác nhận"}
+                                </button>
+                            )}
+
                         </>) : (
                             <button
                                 onClick={() => handleLogin()}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import * as FaIcon from "react-icons/fa";
 function InputType({
     name,
@@ -16,13 +17,15 @@ function InputType({
         <div className="w-[350px]">
             <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
                 <input
-                    required
+                    name={name}
+                    required={required}
                     value={value}
                     onChange={onChange}
                     type={showPass ? 'text' : 'password'}
                     onBlur={onBlur}
+                    validate={validate}
                     className="w-full outline-none bg-transparent "
-                    placeholder="Mật khẩu..."
+                    placeholder={placeholder}
                 />
                 <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
                     {!showPass && <FaIcon.FaEye className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
@@ -34,4 +37,4 @@ function InputType({
     );
 }
 
-export default InpuType;
+export default InputType;
