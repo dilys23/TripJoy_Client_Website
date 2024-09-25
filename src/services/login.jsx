@@ -1,3 +1,4 @@
+import axios from 'axios';
 import httpRequest from '../utils/httpRequest';
 
 
@@ -29,11 +30,11 @@ const resetPasswordService = async (email) => {
 }
 
 // xac nhan doi mat khau
-const confirmForgetPasswordService = async ({ otp, key }) => {
-    console.log("Sending OTP:", typeof (otp));
-    console.log("Sending key:", typeof (key));
+const confirmForgetPasswordService = async ({ otp, url }) => {
+    console.log("Sending OTP:", (otp));
+    console.log("Sending key:", (url));
     try {
-        const res = await httpRequest.post('Account/confirm-forget-pw?key=${key}', {
+        const res = await axios.post(url, {
             otp
         }, {
             headers: {

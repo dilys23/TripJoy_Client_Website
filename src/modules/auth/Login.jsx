@@ -6,6 +6,10 @@ import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
 import { loginService, resetPasswordService, refreshTokenService, confirmForgetPasswordService } from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import InputField from "../../components/Input/InputField";
+
 
 function Login({ onClose }) {
     const [showPass, setShowPass] = useState(false);
@@ -18,25 +22,31 @@ function Login({ onClose }) {
     const { login } = useContext(UserContext);
     const [otp, setOtp] = useState('')
     const [forgetPass, setForgetPass] = useState(false);
-
+    const [showInputResetPassword, setShowInputResetPassword] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleClose = () => {
         setEmail('');
         setPassword('');
         onClose();
     };
-
-    const checkInputEmail = (e) => {
-        // const value = e.target.value;
-        // setEmail(value);
+    const validatePassword = (value) => {
+        if (!value) return "Mật khẩu không được để trống";
+        if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự";
+        if (!/^[a-zA-Z0-9]+$/.test(value)) return "Mật khẩu không hợp lệ";
+        return "";
+    };
+    const validateConfirmPassword = (value) => {
+        if (!value) return "Xác nhận mật khẩu không được để trống";
+        if (value !== password) return "Mật khẩu không trùng khớp";
+        return "";
+    };
+    const checkInputEmail = () => {
         const emailRole = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
         if (email.length === 0) {
             setEmailError('Vui lòng nhập email')
             return false
-        }
-        else if (!emailRole.test(email)) {
+        } else if (!emailRole.test(email)) {
             setEmailError('Email không hợp lệ')
             return false
         } else {
@@ -49,8 +59,7 @@ function Login({ onClose }) {
             setPasswordError('Vui lòng nhập mật khẩu')
         } else if (password.length < 6) {
             setPasswordError('Mật khẩu phải có ít nhất 6 ký tự')
-        }
-        else {
+        } else {
             setPasswordError('');
         }
     }
@@ -90,12 +99,9 @@ function Login({ onClose }) {
                     setPassword('');
                 }
             } else {
-
                 toast.error("Lỗi kết nối, vui lòng thử lại", {
                     autoClose: 1000
                 });
-                // setEmail('');
-                // setPassword('');
             }
         }
         setIsLoading(false);
@@ -143,12 +149,8 @@ function Login({ onClose }) {
             const response = await resetPasswordService(email);
             if (response && response.status === "success") {
                 console.log("Password reset response:", response);
-                //console.log(forgetPass);
-                // onForgetPassword();
-                // onClose();
                 localStorage.setItem('url', response.url)
-
-                toast.success("Đã gửi mã xác nhận ở email để khôi phục mật khẩu", 3000)
+                toast.success("Đã gửi mã xác nhận ở email", 3000)
             } else {
                 toast.error("Không tìm thấy tài khoản")
             }
@@ -161,18 +163,10 @@ function Login({ onClose }) {
     const handleConfirmPassword = async () => {
         setIsLoading(true);
         try {
-
             const url = localStorage.getItem('url');
-            if (!url) {
-                throw new Error("No URL found in local storage");
-            }
-            const parsedUrl = new URL(url);
-            const key = parsedUrl.searchParams.get("key");
-            const response = await confirmForgetPasswordService({ otp, key });
-            console.log("key:", key)
+            const response = await confirmForgetPasswordService({ otp, url });
             if (response && response.status === "success") {
-                // console.log("Khôi phục mật khẩu thành công", response);
-                toast.success("Khôi phục mật khẩu thành công")
+                toast.success("Xác thực OTP thành công")
             } else {
                 toast.error("Không tìm thấy tài khoản")
             }
@@ -188,6 +182,7 @@ function Login({ onClose }) {
             }
         }
         setIsLoading(false);
+        setShowInputResetPassword(true)
     }
     return (
         <>
@@ -197,7 +192,7 @@ function Login({ onClose }) {
                 onClick={handleClose}
             >
                 <div
-                    className="w-[500px] h-[600px] border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center"
+                    className="w-[500px] h-[650px] border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] pt-2 flex flex-col items-center"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="text-[27px] text-[#0F3E4A] w-[370px] font-bold my-5">Đăng nhập</div>
@@ -227,45 +222,96 @@ function Login({ onClose }) {
                     <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{emailError}</p>
                     {forgetPass ? (<>
 
-                        <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
+                        <div className=" w-[350px] mx-auto flex max-w-lg items-center gap-4 h-[40px]">
                             <input
                                 required
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
-                                className="w-full outline-none bg-transparent "
-                                placeholder="OTP..."
+                                placeholder="OTP"
+                                className=" h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
+                                id="voice-search"
+                                type="text"
                             />
-                            <div
+                            <button
+                                className=" flex px-1 gap-1 justify-between h-[40px] w-[45%] items-center rounded-[5px] border border-blue-700 bg-blue-700 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                type="submit"
                                 onClick={sendOTP}
-                                className="absolute right-5 text-blue-500 font-bold cursor-pointer">
-                                RESEND
-                            </div>
+                            >
+                                <FontAwesomeIcon
+                                    icon={faPaperPlane}
+                                    size="1x"
+                                    className=""
+                                    color="white"
+                                />
+                                Gửi lại OTP
+                            </button>
                         </div>
                     </>) : (
-                        <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
-                            <input
-                                required
+                        <>
+                            {/* <div className="w-[350px]"> */}
+                            {/* <InputField
+                                    name="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    validate={validatePassword}
+                                    placeholder="Mật khẩu"
+                                    required={true}
+                                ></InputField> */}
+                            <div className="relative flex items-center h-[40px] w-[350px] rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus-within:border-blue-400 focus:outline-none">
+                                <input
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    type={showPass ? 'text' : 'password'}
+                                    onBlur={checkInputPassword}
+                                    className="w-full outline-none bg-transparent "
+                                    placeholder="Mật khẩu..."
+                                />
+                                <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
+                                    {!showPass && <FaIcon.FaEye className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
+                                    {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
+                                </div>
+                            </div>
+                            <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{passwordError}</p>
+                            {/* </div> */}
+                        </>
+                    )}
+                    {showInputResetPassword ? (
+                        <div className="w-[350px] flex flex-col gap-5 mt-7">
+                            <InputField
+                                name="password"
+                                type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                type={showPass ? 'text' : 'password'}
-                                onBlur={checkInputPassword}
-                                className="w-full outline-none bg-transparent "
-                                placeholder="Mật khẩu..."
-                            />
-                            <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
-                                {!showPass && <FaIcon.FaEye className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                                {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
-                            </div>
+                                validate={validatePassword}
+                                placeholder="Mật khẩu"
+                                required={true}
+                            ></InputField>
+                            <InputField
+                                name="password"
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                validate={validateConfirmPassword}
+                                placeholder="Xác nhận mật khẩu"
+                                required={true}
+                            ></InputField>
                         </div>
-                    )}
+                    )
+                        : (<></>)}
 
-                    <p className="text-red-500 w-[350px] h-[40px] flex justify-start items-center text-[14px] px-2">{passwordError}</p>
-                    <div
-                        style={{ pointerEvents: emailError ? 'none' : 'auto' }}
-                        onClick={handleForgetPassword}
-                        className="underline text-[#818080] text-[14px] cursor-pointer hover:text-primary"
-                    >Quên mật khẩu?</div>
-                    <div className="flex justify-between items-center w-[350px] mt-5">
+                    {forgetPass ?
+                        (<div>
+
+                        </div>) : (
+                            <div
+                                style={{ pointerEvents: emailError ? 'none' : 'auto' }}
+                                onClick={handleForgetPassword}
+                                className="underline text-[#818080] text-[14px] cursor-pointer hover:text-primary"
+                            >Quên mật khẩu?</div>
+                        )}
+                    <div className="flex justify-between items-center w-[350px] mt-5 fixed bottom-[80px] ">
                         <div className="text-[#818080] w-[100px] text-[15px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
                         {forgetPass ? (<>
                             <button
