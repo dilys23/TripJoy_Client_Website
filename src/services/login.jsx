@@ -79,7 +79,7 @@ const logoutService = async () => {
             refreshToken,
         }, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`, // Include this if your API requires it
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             }
         }
