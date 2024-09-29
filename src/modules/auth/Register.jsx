@@ -3,10 +3,10 @@ import axios from "axios";
 import InputButton from "../../components/Input/InputButton";
 import InputField from "../../components/Input/InputField";
 import { useAuthStore } from "../../services/authUser";
-import { sendOTP , register1} from "../../services/authAccount";
+import { sendOTP, register1 } from "../../services/authAccount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-function Register({ onClose }) {
+function Register({ onClose,  onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,7 +38,7 @@ function Register({ onClose }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await registqer1({
+      const result = await register1({
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         name: formData.name,
@@ -47,6 +47,7 @@ function Register({ onClose }) {
         otp: formData.otp,
       });
       console.log("Đăng kí thành công  ", result);
+      onSwitchToLogin();
     } catch (error) {
       console.error("Lỗi khi gửi thông tin:", error.message);
     }
@@ -240,9 +241,9 @@ function Register({ onClose }) {
                 </p>
                 <button
                   className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
-                  disabled={isRegister}
+                  // disabled={isRegister}
                 >
-                  {isRegister ? "Đang Đăng kí..." : "Đăng kí"}
+                  {isRegister ? "Đang đăng kí..." : "Đăng kí"}
                 </button>
               </div>
             </form>
