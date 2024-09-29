@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 const InputField = ({
   name,
   type,
@@ -9,10 +10,13 @@ const InputField = ({
   required = false,
   validate,
   errorMessage,
-  onBlur
+  onBlur,
+  className, // Prop để nhận class từ bên ngoài
+  inputClassName, // Prop để chỉ định class cho input
+  errorClassName // Prop để tùy chỉnh class cho thông báo lỗi
 }) => {
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);  // State để quản lý xem mật khẩu có hiện hay không
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleBlur = () => {
     if (validate) {
@@ -27,7 +31,7 @@ const InputField = ({
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}> {/* Thêm className cho container */}
       <input
         name={name}
         type={showPassword ? 'text' : type}
@@ -36,8 +40,8 @@ const InputField = ({
         onBlur={handleBlur}
         required={required}
         autoComplete="off"
-        className={`mb-4 h-[40px] w-full rounded-[5px] border border-[#ccd0d5] bg-[#f5f6f7] px-3 shadow focus:outline-none ${error ? 'border-red-500' : 'border-[#ccd0d5] focus:border-blue-400'
-          }`}
+        className={`${inputClassName} mb-4 h-[40px] w-full rounded-[5px] px-3 shadow focus:outline-none ${error ? 'border-red-500' : 'border-[#ccd0d5] bg-[#f5f6f7] focus:border-blue-400'
+          }`} 
         placeholder={placeholder}
       />
       {type === 'password' && (
@@ -48,7 +52,7 @@ const InputField = ({
           {showPassword ? <FaEyeSlash /> : <FaEye />}
         </span>
       )}
-      {error && <p className="text-red-500 text-sm px-2 mt-[-15px] mb-[4px]">{errorMessage || error}</p>}
+      {error && <p className={`${errorClassName} text-red-500 text-sm px-2 mt-[-15px] mb-[6px ] `}>{errorMessage || error}</p>}
     </div>
   );
 };
