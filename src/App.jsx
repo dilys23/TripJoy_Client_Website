@@ -1,15 +1,10 @@
-
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { publicRoutes } from "./router"
 import { DefaultLayout } from "./components/Layout"
-import GlobalStyles from "./components/GlobalStyles";
-// import tippy from 'tippy.js';
-// import 'tippy.js/dist/tippy.css';
+
 function App() {
   return (
     <>
-
       <Router>
         <div className="App">
           <Routes>
