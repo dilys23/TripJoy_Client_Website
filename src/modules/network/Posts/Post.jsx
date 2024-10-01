@@ -5,7 +5,7 @@ import { FaRegComment } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaMapMarkedAlt, FaCalendarDay, FaMoneyCheckAlt } from "react-icons/fa";
 import { MdGroups } from "react-icons/md";
-import imgmap from "../../assets/images/map.png"
+import imgmap from "../../../assets/images/map.png"
 function Post({ data }) {
     const numImage = data.image.length
     console.log(numImage)

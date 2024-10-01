@@ -17,7 +17,7 @@ function Sidebar() {
                     index={0}
                     isActive={isActive}
                     onClick={handleClick}
-                    to={config.routes.network}
+                    to={config.routes.home}
                     icon={<MdIcons.MdHomeFilled className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Trang chủ'
                 ></SidebarItem>
