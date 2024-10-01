@@ -3,6 +3,9 @@ import { useState } from 'react';
 import * as MdIcons from "react-icons/md";
 import { FaRegComment } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { FaMapMarkedAlt, FaCalendarDay, FaMoneyCheckAlt } from "react-icons/fa";
+import { MdGroups } from "react-icons/md";
+import imgmap from "../../assets/images/map.png"
 function Post({ data }) {
     const numImage = data.image.length
     console.log(numImage)
@@ -23,67 +26,104 @@ function Post({ data }) {
     }
 
     return (
-        <div className="w-full bg-white  lg:h-auto rounded-20 pt-5 mb-10">
-            <div className="flex justify-between px-5 ">
-                <div className="flex gap-3 text-center cursor-pointer ">
-                    <img src={data.avatar} alt="" className='rounded-90 w-[50px] h-[50px]' />
-                    <div className='block text-start'>
-                        <div className='font-bold md:text-base text-[13px]'>{data.name}</div>
-                        <div className='text-[##979797] text-xs italic md:text-base text-[12px]'>{data.time}</div>
+        <div className="w-full bg-white  lg:h-auto rounded-20 pt-5 mb-16">
+            <div className='w-full flex'>
+                <div className='w-3/5'>
+                    <div className="flex justify-between px-5 ">
+                        <div className="flex gap-3 text-center cursor-pointer items-center">
+                            <img src={data.image[0]} alt="" className='w-[60px] h-[60px] object-cover' />
+                            <div className='flex flex-col'>
+                                <div className='nunito-text text-[24px] leading-[32px] font-extrabold'>Hai ngày một đêm ở Hà Giang</div>
+                                <div className='flex gap-2 items-center'>
+                                    <img src={data.avatar} alt="" className='rounded-90 w-[40px] h-[40px]' />
+                                    <div className='block text-start'>
+                                        <div className='font-bold md:text-base text-[12px] nunito-text leading-4'>{data.name}</div>
+                                        <div className='text-[##979797] text-xs italic md:text-base text-[12px] leading-4'>{data.time}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="mt-4  whitespace-pre-line md:text-base text-[13px] px-5 " >
+                        {truncatedText}
+                        {data.descrip.length > 140 && !showFullText && (
+                            <button
+                                onClick={() => setShowFullText(!showFullText)}
+                                className='text-[#161823b0] md:[13px] text-[13px] italic'>...xem tiếp</button>
+                        )}
+
+
+                    </div>
+
+
+                    <div className={`grid w-full h-[430px] gap-1 mt-3
+                    ${numImage === 1 ? "grid-cols-1" :
+                            numImage === 2 ? "grid-cols-2" :
+                                numImage === 3 ? "grid-cols-2 grid-rows-2" :
+                                    numImage === 4 ? "grid-cols-2 grid-rows-2" : ""}
+                        }`}>
+                        {data.image.length >= 5 && (
+                            <>
+                                <div className="grid grid-cols-2 gap-1">
+                                    <img src={data.image[0]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
+                                    <img src={data.image[1]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
+                                </div>
+                                <div className="grid grid-cols-3 gap-1 ">
+                                    <img src={data.image[2]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
+                                    <img src={data.image[3]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
+                                    {data.image.length > 5 ?
+                                        <div className='relative w-full h-full cursor-pointer'>
+                                            <div className='absolute w-full h-full bg-opacity-50 bg-black items-center flex justify-center'>
+                                                <span className=' text-white text-[30px]'>+{data.image.length - 5}</span>
+                                            </div>
+                                            <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
+                                        </div> :
+                                        <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
+                                    }
+                                </div>
+                            </>)
+                        }
+
+                        {data.image.length < 5 && data.image.slice(0, 3).map((img, idx) => (
+                            <img key={idx} src={img} alt={`Post image ${idx + 1}`} className={`w-full h-full max-h-[430px] rounded-10 object-cover cursor-pointer
+                              ${numImage === 3 && idx === 0 ? "row-span-2" : ""}
+                              ${numImage > 1 ? "rounded-[7px] " : ""}
+                              ${numImage === 5 && idx < 2 ? "row-span-1" : ""}`
+                            } />
+                        ))}
                     </div>
                 </div>
-                <MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' />
-            </div>
-            <div className="mt-4  whitespace-pre-line md:text-base text-[13px] px-5 " >
-                {truncatedText}
-                {data.descrip.length > 140 && !showFullText && (
-                    <button
-                        onClick={() => setShowFullText(!showFullText)}
-                        className='text-[#161823b0] md:[13px] text-[13px] italic'>...xem tiếp</button>
-                )}
-
-
-            </div>
-
-
-            <div className={`grid w-full h-[430px] gap-1 mt-3
-            ${numImage === 1 ? "grid-cols-1" :
-                    numImage === 2 ? "grid-cols-2" :
-                        numImage === 3 ? "grid-cols-2 grid-rows-2" :
-                            numImage === 4 ? "grid-cols-2 grid-rows-2" : ""}
-                }`}>
-                {data.image.length >= 5 && (
-                    <>
-                        <div className="grid grid-cols-2 gap-1">
-                            <img src={data.image[0]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                            <img src={data.image[1]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
+                <div className='w-2/5 px-5'>
+                    <div className='flex justify-end'><MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' /></div>
+                    <div className='flex flex-col gap-4 px-5'>
+                        <div className='flex gap-3 items-center'>
+                            <FaMapMarkedAlt className='w-[35px] h-[28px] text-red-500 text-[27px]'></FaMapMarkedAlt>
+                            <p className='nunito-text font-bold text-[15px] '>Lủng Cú, Hà Giang </p>
                         </div>
-                        <div className="grid grid-cols-3 gap-1 ">
-                            <img src={data.image[2]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                            <img src={data.image[3]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                            {data.image.length > 5 ?
-                                <div className='relative w-full h-full cursor-pointer'>
-                                    <div className='absolute w-full h-full bg-opacity-50 bg-black items-center flex justify-center'>
-                                        <span className=' text-white text-[30px]'>+{data.image.length - 5}</span>
-                                    </div>
-                                    <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
-                                </div> :
-                                <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
-                            }
+                        <div className='flex gap-3 items-center'>
+                            <FaCalendarDay className='w-[35px] h-[28px] text-[#4979d1] text-[27px]'></FaCalendarDay>
+                            <p className='nunito-text font-bold text-[15px] '>13/7 - 20/7/2024</p>
                         </div>
-                    </>)
-                }
-
-                {data.image.length < 5 && data.image.slice(0, 3).map((img, idx) => (
-                    <img key={idx} src={img} alt={`Post image ${idx + 1}`} className={`w-full h-full max-h-[430px] rounded-10 object-cover cursor-pointer
-                      ${numImage === 3 && idx === 0 ? "row-span-2" : ""}
-                      ${numImage > 1 ? "rounded-[7px] " : ""}
-                      ${numImage === 5 && idx < 2 ? "row-span-1" : ""}`
-                    } />
-                ))}
+                        <div className='flex gap-3 items-center'>
+                            <FaMoneyCheckAlt className='w-[35px] h-[28px] text-[#96c362] text-[27px]'></FaMoneyCheckAlt>
+                            <p className='nunito-text font-bold text-[15px] text-[#e48055]'>1.500.000 đ</p>
+                        </div>
+                        <div className='flex gap-3 items-center'>
+                            <MdGroups className='w-[35px] h-[28px] text-[#4979d1] text-[27px]'></MdGroups>
+                            <p className='flex gap-1 nunito-text font-medium text-[15px] '>
+                                <p>3</p>
+                                <p>thành viên</p>
+                            </p>
+                        </div>
+                    </div>
+                    <div className='w-full h-[400px] mt-3'>
+                        <img src={imgmap} alt="" className='w-full h-full object-cover' />
+                    </div>
+                </div>
             </div>
             {/* <hr className='my-2 text-[#979797]' /> */}
-            <div className='flex pt-1 w-full  px-[220px] gap-14'>
+            <div className='flex py-3 w-full  px-[220px] gap-14'>
                 <div className='flex gap-2 items-center w-[100px]'>
                     {isLiked ?
                         <AiFillLike

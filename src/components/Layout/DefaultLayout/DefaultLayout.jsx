@@ -4,12 +4,12 @@ import Sidebar from "../../Sidebar/Sidebar"
 function DefaultLayout({ children }) {
     return (
         <>
-            <div className="bg-white">
+            <div className="bg-[#f5f6f7] w-full">
                 <Navbar></Navbar>
-                <div className="mx-6 bg-bgGray ">
-                    <div className='flex md:gap-x-15 lg:gap-x-28 gap-x-0 w-full'>
-                        <Sidebar></Sidebar>
-                        <div className="w-5/6">{children}</div>
+                <div className='flex md:gap-x-15 lg:gap-x-[40px] gap-x-15 w-full px-6 bg-[#f5f6f7] pt-5'>
+                    <Sidebar></Sidebar>
+                    <div className=" lg:w-[calc(100%-257px)] md:w-[calc(100%-160px)] w-[calc(100%-86px)]">
+                        {children}
                     </div>
                 </div>
             </div>

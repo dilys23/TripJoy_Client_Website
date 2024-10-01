@@ -5,10 +5,10 @@ import FriendRequest from "../../../components/FriendRequest";
 import Contact from "../../../components/Contact/Contact";
 function Network() {
   return (
-    <div className="md:gap-x-15 my-3 flex w-full gap-x-0 px-3 lg:gap-x-28">
-      <div className="w-5/10">
-        <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4">
-          <div className="flex cursor-pointer items-center gap-3">
+    <div className=" my-3 flex w-full px-3">
+      <div className="lg:w-5/10 w-full">
+        <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4 ">
+          <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
               src={ava}
               alt=""
@@ -18,7 +18,7 @@ function Network() {
               Có gì mới không? Bach Duong
             </span>
           </div>
-          <div className="rounded-20 flex h-[30px] w-[40px] cursor-pointer items-center gap-3 border-none bg-[#007AFF] pl-2 sm:h-[31px] sm:w-[105px]">
+          <div className=" rounded-20 flex h-[30px] w-[120px] cursor-pointer items-center gap-3 border-none bg-[#007AFF] px-2">
             <MdIcons.FaLink className="text-sm text-white" />
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
@@ -27,7 +27,7 @@ function Network() {
         </div>
         <Posts></Posts>
       </div>
-      <div className="w-4/10 hidden px-6 sm:block">
+      <div className="lg:w-4/10 hidden px-6 lg:block">
         <FriendRequest></FriendRequest>
         <Contact></Contact>
       </div>

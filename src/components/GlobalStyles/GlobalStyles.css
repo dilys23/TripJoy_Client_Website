@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+.nunito-text {
+  font-family: "Nunito", sans-serif;
+}
 .input-container {
   position: relative;
   width: 100px; /* Chiều rộng của ô nhập */

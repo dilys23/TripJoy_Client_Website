@@ -11,14 +11,14 @@ function Sidebar() {
     };
 
     return (
-        <div className='w-1/6 h-full m-3 '>
+        <div className='lg:w-[257px] md:w-[160px] w-[86px] h-full '>
             <nav className='bg-white rounded-lg sm:h-[390px] h-[270px] items-center py-1'>
                 <SidebarItem
                     index={0}
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.network}
-                    icon={<MdIcons.MdHomeFilled className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdHomeFilled className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Trang chủ'
                 ></SidebarItem>
                 <SidebarItem
@@ -26,7 +26,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdCalendarMonth className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdCalendarMonth className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Lịch trình'
                 ></SidebarItem>
                 <SidebarItem
@@ -34,7 +34,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePeopleAlt className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlinePeopleAlt className='lg:w-[35px] lg:h-[30px]] w-[28px] h-[24px] text-iconGray' />}
                     title='Bạn bè'
                 ></SidebarItem>
                 <SidebarItem
@@ -42,7 +42,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdGroups className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdGroups className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Nhóm'
                 ></SidebarItem>
                 <SidebarItem
@@ -50,7 +50,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePerson className='sm:w-[35px] sm:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlinePerson className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
 
                     title='Tài khoản'
                 ></SidebarItem>
@@ -59,7 +59,7 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlineSettings className='sm:w-[38px] sm:h-[34px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlineSettings className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Cài đặt'
                 ></SidebarItem>
             </nav>
