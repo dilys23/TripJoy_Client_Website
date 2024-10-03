@@ -4,14 +4,14 @@ import { DefaultLayout } from "./components/Layout";
 import GlobalStyles from "./components/GlobalStyles";
 // import tippy from 'tippy.js';
 // import 'tippy.js/dist/tippy.css';
-import Mapbox from "./components/MapCard/Mapbox";
-import Avatar from "./components/Avatar/Avatar";
+// import Mapbox from "./components/MapCard/Mapbox";
+// import Avatar from "./components/Avatar/Avatar";
 function App() {
   return (
     <>
       <Router>
         <div className="App">
-          {/* <Routes>
+          <Routes>
             {publicRoutes.map((route, index) => {
               const Layout = route.layout || DefaultLayout;
               const Page = route.component;
@@ -27,7 +27,7 @@ function App() {
                 ></Route>
               );
             })}
-          </Routes> */}
+          </Routes>
           {/* <Avatar
             name="Jane Doe"
             image="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
@@ -35,7 +35,7 @@ function App() {
             onClick={() => alert("Jane Doe clicked!")}
           /> */}
 
-          <Mapbox/>
+          {/* <Mapbox/> */}
         </div>
       </Router>
     </>
