@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: ./Dockerfile
+          file: ./dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: dilysnguyen/tripjoy_client:lastest  # Change the tag as needed
