@@ -10,7 +10,7 @@ jobs:
   # This workflow contains multiple jobs
   build_test:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest  # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
+    runs-on: ubuntu-latest # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -29,7 +29,7 @@ jobs:
 
   push_to_Docker_Hub:
     # This job builds the Docker image and pushes it to Docker Hub
-    runs-on: ubuntu-latest  # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
+    runs-on: ubuntu-latest # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
     # Only run if the build_test job is successful
     needs: [build_test]
     steps:
@@ -53,15 +53,15 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-            context: ./   # Đường dẫn tới thư mục chứa Dockerfile
-          file: ./TripJoy_Client_Website/Dockerfile  # Đường dẫn tới Dockerfile
+          context: ./ # Đường dẫn tới thư mục chứa Dockerfile
+          file: ./TripJoy_Client_Website/Dockerfile # Đường dẫn tới Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: dilysnguyen/tripjoy_client:latest  # Sửa từ lastest thành latest
+          tags: dilysnguyen/tripjoy_client:latest # Sửa từ lastest thành latest
 
   deploy_to_EC2:
     # This job deploys the application to an EC2 instance
-    runs-on: ubuntu-latest  # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
+    runs-on: ubuntu-latest # Sửa 'ubuntu-lastest' thành 'ubuntu-latest'
     needs: [push_to_Docker_Hub]
     steps:
       # Checkout code again (if needed)
@@ -70,7 +70,7 @@ jobs:
       # Deploy to EC2
       - name: Deploy to EC2
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}  # Secret for your EC2 SSH private key
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} # Secret for your EC2 SSH private key
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
