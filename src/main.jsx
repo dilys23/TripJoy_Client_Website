@@ -6,12 +6,15 @@ import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GlobalStyles from "./components/GlobalStyles/GlobalStyles.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
-      <ToastContainer className="justify-center" />
-      <App />
+      <GlobalStyles>
+        <ToastContainer className="justify-center" />
+        <App />
+      </GlobalStyles>
     </UserProvider>
   </React.StrictMode>
 );
