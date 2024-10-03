@@ -58,7 +58,7 @@ function Navbar() {
     setRegister(true);
   };
   const handleClose = () => {
-    setLogin(false);
+    setShowLogin(false);
     setRegister(isRegister);
     setIsVerifyAccountOpen(false);
   };
