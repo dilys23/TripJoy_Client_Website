@@ -59,13 +59,22 @@ jobs:
           push: true
           tags: dilysnguyen/tripjoy_client:lastest  # Change the tag as needed
 
-        - name: Deploy to EC2
+  deploy_to_EC2:
+    # This job deploys the application to an EC2 instance
+    runs-on: ubuntu-lastest
+    needs: [push_to_Docker_Hub]
+    steps:
+      # Checkout code again (if needed)
+      - uses: actions/checkout@v2
+
+      # Deploy to EC2
+      - name: Deploy to EC2
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}  # Secret for your EC2 SSH private key
         run: |
-        echo "$SSH_PRIVATE_KEY" > private_key.pem
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@13.210.233.238 << 'EOF'
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@3.106.182.153 << 'EOF'
             docker stop tripjoy_client || true  # Stop the old container
             docker rm tripjoy_client || true     # Remove the old container
             docker pull dilysnguyen/tripjoy_client:lastest  # Pull the new image from Docker Hub
