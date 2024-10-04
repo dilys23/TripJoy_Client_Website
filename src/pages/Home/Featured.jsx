@@ -76,7 +76,7 @@ function Fetured() {
                             <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
-                            <p className='font-semibold text-lg '>Thời gain kết thúc</p>
+                            <p className='font-semibold text-lg '>Thời gian kết thúc</p>
                             <input type="text" placeholder='23/12/2024' className='bg-white text-gray shadow border-none outline-none h-14 w-50 px-4 text-left text-base ' />
                         </span>
                         <span className='flex flex-col gap-4'>
