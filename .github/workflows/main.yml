@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./ # Đường dẫn tới thư mục chứa Dockerfile
-          file: ./TripJoy_Client_Website/Dockerfile # Đường dẫn tới Dockerfile
+          file: ./Dockerfile # Đường dẫn tới Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: dilysnguyen/tripjoy_client:latest # Sửa từ lastest thành latest
