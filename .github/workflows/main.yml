@@ -1,13 +1,22 @@
 name: Deploy to EC2
+name: Deploy to EC2
 on:
   push:
+    branches:
+      - main
     branches:
       - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
       - name: Checkout Code
         uses: actions/checkout@v2
 
@@ -29,27 +38,44 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        id: buildx
+
+      - name: Cache Docker Image Layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Build and Push Docker Image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: ./
           file: ./Dockerfile
+          context: ./
+          file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags:  dilysnguyen/tripjoy_client:latest
+          tags: dilysnguyen/tripjoy_client:latest
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Deploy to EC2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@ec2-13-210-233-238.ap-southeast-2.compute.amazonaws.com << 'EOF'
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@ec2-13-210-233-238.ap-southeast-2.compute.amazonaws.com << 'EOF'
             docker stop tripjoy_client || true  # Stop the old container    
             docker rm tripjoy_client || true     # Remove the old container
+            docker rmi dilysnguyen/tripjoy_client:latest || true  # Remove the old image
             docker pull dilysnguyen/tripjoy_client:latest  # Pull the new image from Docker Hub
             docker run -d -p 8080:80 --name tripjoy_client dilysnguyen/tripjoy_client:latest  # Run the new container
           EOF
