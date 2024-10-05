@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+.nunito-text {
+  font-family: "Nunito", sans-serif;
+}
 .input-container {
   position: relative;
   width: 100px; /* Chiều rộng của ô nhập */
@@ -59,4 +63,26 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.z-1000 {
+  z-index: 1000;
+}
+
+.post-scroll::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Track */
+.post-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.post-scroll::-webkit-scrollbar-thumb {
+  background: #cac9c9;
+}
+
+/* Handle on hover */
+.post-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

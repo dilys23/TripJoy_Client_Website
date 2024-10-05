@@ -6,7 +6,7 @@ import { useAuthStore } from "../../services/authUser";
 import { sendOTP, register1 } from "../../services/authAccount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-function Register({ onClose,  onSwitchToLogin }) {
+function Register({ onClose, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -241,7 +241,7 @@ function Register({ onClose,  onSwitchToLogin }) {
                 </p>
                 <button
                   className="disabled:bg-gray-400 ml-[170px] mt-3 h-[45px] w-[134px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none"
-                  // disabled={isRegister}
+                // disabled={isRegister}
                 >
                   {isRegister ? "Đang đăng kí..." : "Đăng kí"}
                 </button>
