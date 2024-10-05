@@ -27,13 +27,13 @@ function Post({ data }) {
 
     return (
         <div className="w-full bg-white  lg:h-auto rounded-20 pt-5 mb-16">
-            <div className='w-full flex'>
-                <div className='w-3/5'>
+            <div className='w-full flex md:flex-row flex-col'>
+                <div className='md:w-3/5'>
                     <div className="flex justify-between px-5 ">
                         <div className="flex gap-3 text-center cursor-pointer items-center">
                             <img src={data.image[0]} alt="" className='w-[60px] h-[60px] object-cover' />
                             <div className='flex flex-col'>
-                                <div className='nunito-text text-[24px] leading-[32px] font-extrabold'>Hai ngày một đêm ở Hà Giang</div>
+                                <div className='nunito-text md:text-[24px] text-[16px] md:leading-[32px] leading-[18px] font-extrabold text-start'>Hai ngày một đêm ở Hà Giang</div>
                                 <div className='flex gap-2 items-center'>
                                     <img src={data.avatar} alt="" className='rounded-90 w-[40px] h-[40px]' />
                                     <div className='block text-start'>
@@ -43,9 +43,9 @@ function Post({ data }) {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div className="mt-4  whitespace-pre-line md:text-base text-[13px] px-5 " >
+                        <div className='font-bold text-[20px]'>{data.title}</div>
                         {truncatedText}
                         {data.descrip.length > 140 && !showFullText && (
                             <button
@@ -94,36 +94,36 @@ function Post({ data }) {
                         ))}
                     </div>
                 </div>
-                <div className='w-2/5 px-5'>
-                    <div className='flex justify-end'><MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' /></div>
-                    <div className='flex flex-col gap-4 px-5'>
+                <div className='md:w-2/5 md:px-5 flex md:flex-col flex-row '>
+                    <div className='justify-end md:flex hidden'><MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' /></div>
+                    <div className='flex flex-col gap-4 px-5 md:mt-0 mt-4'>
                         <div className='flex gap-3 items-center'>
-                            <FaMapMarkedAlt className='w-[35px] h-[28px] text-red-500 text-[27px]'></FaMapMarkedAlt>
-                            <p className='nunito-text font-bold text-[15px] '>Lủng Cú, Hà Giang </p>
+                            <FaMapMarkedAlt className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-red-500 text-[27px]'></FaMapMarkedAlt>
+                            <p className='nunito-text font-bold md:text-[15px] text-[13px]'>Lủng Cú, Hà Giang </p>
                         </div>
                         <div className='flex gap-3 items-center'>
-                            <FaCalendarDay className='w-[35px] h-[28px] text-[#4979d1] text-[27px]'></FaCalendarDay>
-                            <p className='nunito-text font-bold text-[15px] '>13/7 - 20/7/2024</p>
+                            <FaCalendarDay className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#4979d1] text-[27px]'></FaCalendarDay>
+                            <p className='nunito-text font-bold md:text-[15px] text-[13px] '>13/7 - 20/7/2024</p>
                         </div>
                         <div className='flex gap-3 items-center'>
-                            <FaMoneyCheckAlt className='w-[35px] h-[28px] text-[#96c362] text-[27px]'></FaMoneyCheckAlt>
-                            <p className='nunito-text font-bold text-[15px] text-[#e48055]'>1.500.000 đ</p>
+                            <FaMoneyCheckAlt className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#96c362] text-[27px]'></FaMoneyCheckAlt>
+                            <p className='nunito-text font-bold md:text-[15px] text-[13px] text-[#e48055]'>1.500.000 đ</p>
                         </div>
                         <div className='flex gap-3 items-center'>
-                            <MdGroups className='w-[35px] h-[28px] text-[#4979d1] text-[27px]'></MdGroups>
-                            <p className='flex gap-1 nunito-text font-medium text-[15px] '>
+                            <MdGroups className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#4979d1] text-[27px]'></MdGroups>
+                            <p className='flex gap-1 nunito-text font-medium md:text-[15px] text-[13px] '>
                                 <p>3</p>
                                 <p>thành viên</p>
                             </p>
                         </div>
                     </div>
-                    <div className='w-full h-[400px] mt-3'>
-                        <img src={imgmap} alt="" className='w-full h-full object-cover' />
+                    <div className='w-full md:h-[400px] mt-3'>
+                        <img src={imgmap} alt="" className='md:w-full md:h-full w-full h-[250px] object-cover' />
                     </div>
                 </div>
             </div>
             {/* <hr className='my-2 text-[#979797]' /> */}
-            <div className='flex py-3 w-full  px-[220px] gap-14'>
+            <div className='flex py-3 w-full justify-center gap-14'>
                 <div className='flex gap-2 items-center w-[100px]'>
                     {isLiked ?
                         <AiFillLike

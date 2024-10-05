@@ -11,13 +11,13 @@ function Sidebar() {
     };
 
     return (
-        <div className='lg:w-[257px] md:w-[160px] w-[86px] h-full '>
+        <div className='fixed lg:w-[257px] md:w-[160px] w-[60px] h-screen hidden md:block'>
             <nav className='bg-white rounded-lg sm:h-[390px] h-[270px] items-center py-1'>
                 <SidebarItem
                     index={0}
                     isActive={isActive}
                     onClick={handleClick}
-                    to={config.routes.home}
+                    to={config.routes.network}
                     icon={<MdIcons.MdHomeFilled className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
                     title='Trang chủ'
                 ></SidebarItem>

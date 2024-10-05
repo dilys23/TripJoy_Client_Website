@@ -11,7 +11,7 @@ function Network() {
     setShowModalListPost(false);
   };
   return (
-    <div className=" my-3 flex w-full px-3">
+    <div className=" my-3 flex w-full md:px-3">
       <div className="lg:w-5/10 w-full">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4 ">
           <div className="flex cursor-pointer items-center gap-3 w-full">
@@ -26,7 +26,7 @@ function Network() {
           </div>
           <div
             onClick={() => setShowModalListPost(!showModalListPost)}
-            className=" rounded-20 flex h-[30px] w-[120px] cursor-pointer items-center gap-3 border-none bg-[#007AFF] px-2">
+            className=" rounded-20 flex h-[30px] md:w-[120px] cursor-pointer items-center gap-3 border-none bg-[#007AFF] px-2">
             <MdIcons.FaLink className="text-sm text-white" />
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
