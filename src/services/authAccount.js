@@ -4,7 +4,7 @@ import api from "../utils/httpRequest";
 // Hàm đăng ký
 export const register1 = async (credentials) => {
   try {
-    const response = await api.post("http://localhost:7100/api/v1/Account/register-with-otp", credentials);
+    const response = await api.post("http://192.168.4.11:6200/api/v1/Account/register-with-otp", credentials);
     toast.success("Đăng kí thành công");
     return response.data;
   } catch (error) {

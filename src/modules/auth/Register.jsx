@@ -58,7 +58,7 @@ function Register({ onClose,  onSwitchToLogin }) {
   };
   const validateEmail = (value) => {
     if (!value) return "Email không được để trống ";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email khong hop le";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email không hợp lệ";
     return "";
   };
   const validatePhoneNumber = (value) => {
