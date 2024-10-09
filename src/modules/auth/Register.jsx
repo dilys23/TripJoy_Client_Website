@@ -233,8 +233,8 @@ function Register({ onClose, onSwitchToLogin }) {
               <div className="flex w-full">
                 <p className="text-gray-500 mb-3 mt-4 text-sm">
                   <a
-                    href="/forgot-password"
                     className="text-base text-blue-800 hover:text-blue-600"
+                    onClick={() => onSwitchToLogin()}
                   >
                     Tôi đã có tài khoản!
                   </a>
