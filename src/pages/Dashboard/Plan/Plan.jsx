@@ -1,9 +1,10 @@
 import { FaSearch } from "react-icons/fa";
 import planImage from "../../../assets/images/planIcon.png"
 import aiIcon from "../../../assets/images/aiIcon.png"
-import { MdLocationOn } from "react-icons/md";
 import PlanCard from "../../../modules/trips/PlanCard";
 import RecommendationPlan from "../../../modules/trips/RecommendationPlan";
+import { Link } from "react-router-dom";
+import config from "../../../config";
 function Plan() {
     const listPlan = [
         {
@@ -48,17 +49,17 @@ function Plan() {
 
     return (
         <div className="my-1 flex w-full md:px-3 flex-col">
-            <div className="w-full h-[94px] rounded-[7px] border-[0.4px] shadow-md bg-white border-[#CCD0D5] px-4 py-2 flex justify-between items-center">
+            <div className="w-full h-[75px] rounded-[7px] border-[0.4px] shadow-md bg-white border-[#CCD0D5] px-4 py-2 flex justify-between items-center">
                 <div className="flex flex-col ">
                     <div className="flex items-center ">
-                        <div className="text-[28px] nunito-text font-semibold">Hora, Dilysnguyen</div>
-                        <img src={planImage} alt="" className="w-[50px] h-[50px]" />
+                        <div className="text-[25px] nunito-text font-semibold">Hora, Dilysnguyen</div>
+                        <img src={planImage} alt="" className="w-[45px] h-[45px]" />
                     </div>
                     <div className="text-[13px]">Hãy bắt đầu chuyến đi mới đầy thú vị nhé !</div>
                 </div>
                 <div className="flex gap-1 items-center pr-5 cursor-pointer">
-                    <img src={aiIcon} alt="" className="text-[#0023FE] w-[33px] h-[35px]" />
-                    <span className="text-[#0023FE] text-[20px] font-bold">Tạo chuyến đi mới với AI </span>
+                    <img src={aiIcon} alt="" className="text-[#0023FE] w-[30px] h-[32px]" />
+                    <Link to={config.routes.planAI} className="text-[#0023FE] text-[16px] font-bold">Tạo chuyến đi mới với AI </Link>
                 </div>
             </div>
             <div className="w-full h-full flex mt-8 gap-6">
