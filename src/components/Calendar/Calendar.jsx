@@ -59,7 +59,14 @@ function Calendar({ primary, secondary, currentMonth, currentYear, handlePrevMon
             }
         }
     };
-
+    // const isInRange = (day) => {
+    //     if (selectedDates.length === 2) {
+    //         const [startDate, endDate] = selectedDates.map(date => new Date(date));
+    //         const currentDate = new Date(currentYear, currentMonth, day);
+    //         return currentDate >= startDate && currentDate <= endDate;
+    //     }
+    //     return false;
+    // };
 
     return (
         <div className="flex flex-col items-center bg-white p-4 rounded-lg  ">
@@ -85,10 +92,13 @@ function Calendar({ primary, secondary, currentMonth, currentYear, handlePrevMon
                             {week.map((day, dayIndex) => {
                                 const isSelected = selectedDates.includes(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, '0')}`);
                                 const isPast = day && (new Date(currentYear, currentMonth, day) < today);
-
+                                {/* const isInSelectedRange = isInRange(day); */ }
                                 return (
                                     <td
                                         key={dayIndex}
+                                        // className={`px-4 py-3 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} 
+                                        //     ${isSelected ? 'bg-black text-white rounded-full' : isInSelectedRange ? 'bg-[#e0e0e0] py-1' : 'rounded-full hover:ring-2 hover:ring-black '}`}
+                                        // className={`px-4 py-3 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : isInSelectedRange ? 'bg-gray-300' : 'rounded-full hover:ring-2 hover:ring-black '}`}
                                         className={`px-4 py-3 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : 'rounded-full hover:ring-2 hover:ring-black  '}`}
                                         style={{ color: isPast ? 'lightgray' : isSelected ? 'white' : 'inherit' }}
                                         onClick={() => handleDateClick(day)}

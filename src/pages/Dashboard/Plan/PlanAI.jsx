@@ -10,8 +10,8 @@ import recom3 from "../../../assets/images/recom3.png"
 import recom4 from "../../../assets/images/recom4.png"
 import Button from "../../../components/Button/Button";
 import { useState } from "react";
-import Calendar from "../../../components/Calendar";
 import CalendarContainer from "../../../components/Calendar/CalendarContainer";
+import ModelAddTopic from "../../../modules/trips/ModelAddTopic";
 function PlanAI() {
     const listImage = [
         { id: 1, image: recom1 },
@@ -22,10 +22,9 @@ function PlanAI() {
     ]
     const [currentStep, setCurrentStep] = useState(1);
     const [slideDirection, setSlideDirection] = useState('');
-    const [totalDay, setTotalDay] = useState(0);
-    // const [startDate, setStartDate] = useState('');
-    // const [endDate, setEndDate] = useState('');
+    const [selectedTopic, setSelectedTopic] = useState([]);
     const [selectedMember, setSelectedMember] = useState("personal");
+    const [openModelAddTopic, setOpenModelAddTopic] = useState(false);
     const handleSelect = (option) => {
         setSelectedMember(option);
     };
@@ -42,30 +41,31 @@ function PlanAI() {
             setCurrentStep((prev) => prev - 1);
         }, 300);
     }
-    // const handleDateChange = (e) => {
-    //     const { name, value } = e.target;
-    //     if (name === 'startDate') {
-    //         setStartDate(value);
-    //     } else if (name === 'endDate') {
-    //         setEndDate(value);
-    //     }
-    // };
+    const topics = [
+        "Địa điểm nổi tiếng",
+        "Quán coffee",
+        "Quán ăn bình dân",
+        "Nhà hàng nổi tiếng",
+        "Ngoài trời",
+        "Thiên nhiên",
+        "Danh lam thắng cảnh",
+        "+ Thêm mới"
+    ];
+    const handleSelectTopic = (topic) => {
+        if (topic === "+ Thêm mới") {
+            setOpenModelAddTopic(true);
+        } else {
+            setSelectedTopic((prev) => {
+                if (prev.includes(topic)) {
+                    return prev.filter((t) => t !== topic);
+                } else {
+                    return [...prev, topic];
+                }
+            });
+        }
 
-    // const handleDateSelect = (date) => {
-    //     if (totalDay < 2) {
-    //         const [year, month, day] = date.split('-');
-    //         const selectedDate = new Date(year, month - 1, day);
-    //         const selectedStartDate = new Date(startDate);
+    };
 
-    //         if (startDate === '' || selectedDate < selectedStartDate) {
-    //             setStartDate(date);
-    //         } else {
-    //             setEndDate(date);
-    //         }
-
-    //         setTotalDay((prev) => prev + 1);
-    //     }
-    // };
 
     return (
         <div className="mt-1 flex w-full md:px-3 flex-col gap-4 bg-[#f5f6f7] h-[89vh] overflow-y-hidden">
@@ -90,42 +90,48 @@ function PlanAI() {
                         <input type="text" placeholder="Nơi kết thúc..." className="sm:w-1/3 w-full border border-gray rounded-[98px] sm:h-[50px] h-[35px] text-[10px] sm:text-[16px] px-3 outline-none" />
                         <div className="w-full justify-center items-center flex flex-col gap-2">
                             <span className="w-[70%] font-semibold sm:text-base text-[11px] text-start">Các địa điểm gợi ý</span>
-                            <div className="w-[70%] relative">
-                                <Swiper
-                                    spaceBetween={0}
-                                    breakpoints={{
-                                        400: {
-                                            slidesPerView: 2,
-                                        },
-                                        768: {
-                                            slidesPerView: 2,
-                                        },
-                                        1024: {
-                                            slidesPerView: 3,
-                                        },
-                                        1280: {
-                                            slidesPerView: 4,
-                                        },
-                                    }}
-                                    loop={true}
-                                    // autoplay={{ delay: 500 }}
-                                    navigation={{
-                                        nextEl: ".swiper-button-next",
-                                        prevEl: ".swiper-button-prev",
-                                    }}
-                                    modules={[Navigation]}
-                                >
-                                    {listImage.map((img) => (
-                                        <SwiperSlide key={img.id}>
-                                            <img src={img.image} alt="" className="sm:w-[190px] sm:h-[210px] w-[120px] h-[150px] object-cover rounded-[19px] cursor-pointer" />
-                                        </SwiperSlide>
-                                    ))}
+                            <div className="w-[70%] flex justify-center items-center relative gap-2">
+                                {/* <div className="swiper-button-prev absolute top-[50%] left-[-40px] transform -translate-y-[50%] cursor-pointer z-10" >
+                                </div> */}
+                                <div className="swiper-button-prev cursor-pointer z-10 w-1/12" >
+                                </div>
+                                <div className="w-10/12">
+                                    <Swiper
+                                        spaceBetween={0}
+                                        breakpoints={{
+                                            400: {
+                                                slidesPerView: 2,
+                                            },
+                                            768: {
+                                                slidesPerView: 2,
+                                            },
+                                            1024: {
+                                                slidesPerView: 3,
+                                            },
+                                            1280: {
+                                                slidesPerView: 4,
+                                            },
+                                        }}
+                                        loop={true}
+                                        // autoplay={{ delay: 500 }}
+                                        navigation={{
+                                            nextEl: ".swiper-button-next",
+                                            prevEl: ".swiper-button-prev",
+                                        }}
+                                        modules={[Navigation]}
+                                    >
+                                        {listImage.map((img) => (
+                                            <SwiperSlide key={img.id}>
+                                                <img src={img.image} alt="" className="sm:w-[190px] sm:h-[210px] w-[120px] h-[150px] object-cover rounded-[19px] cursor-pointer" />
+                                            </SwiperSlide>
+                                        ))}
 
-                                </Swiper>
-                                <div className="swiper-button-prev absolute top-[50%] left-[-40px] transform -translate-y-[50%] cursor-pointer z-10" >
+                                    </Swiper>
                                 </div>
-                                <div className="swiper-button-next absolute top-[50%] md:right-[30px] right-[-20px] transform -translate-y-[50%] cursor-pointer z-10">
+                                <div className="swiper-button-next cursor-pointer z-10 w-1/12">
                                 </div>
+                                {/* <div className="swiper-button-next absolute top-[50%] md:right-[30px] right-[-20px] transform -translate-y-[50%] cursor-pointer z-10">
+                                </div> */}
                             </div>
                         </div>
                         <div className="w-[90%] absolute bottom-10  justify-end flex pt-0">
@@ -140,26 +146,7 @@ function PlanAI() {
                             <div className="w-1/3 h-full bg-black rounded-s-3xl "></div>
                         </div>
                         <span className="md:text-[25px] text-[14px] font-bold leading-10 ">Thời gian dự định cho chuyến đi ?</span>
-                        {/* <div className="w-full flex md:flex-row flex-col md:gap-12 gap-5 justify-center md:px-0 px-5">
-                            <input
-                                type="date"
-                                placeholder="dd-mm-yyyy"
-                                name="startDate"
-                                value={startDate}
-                                onChange={handleDateChange}
-                                className="md:w-1/4 w-full border border-gray rounded-[98px] sm:h-[50px] h-[35px] text-[10px] sm:text-[16px] px-3 outline-none" />
-                            <span className="md:text-[25px] text-[14px] font-bold leading-10 text-center">đến</span>
-                            <input
-                                type="date"
-                                placeholder="Ngày kết thúc..."
-                                onChange={handleDateChange}
-                                className="md:w-1/4 w-full border border-gray rounded-[98px] sm:h-[50px] h-[35px] text-[10px] sm:text-[16px] px-3 outline-none" />
-                        </div> */}
                         <CalendarContainer></CalendarContainer>
-                        {/* <div className="w-full flex gap-5 justify-center">
-                            <Calendar primary totalDay={totalDay} setTotalDay={setTotalDay}></Calendar>
-                            <Calendar secondary totalDay={totalDay} setTotalDay={setTotalDay}></Calendar>
-                        </div> */}
                         <div className="w-[90%] absolute bottom-10 flex justify-between">
                             <Button tertiary onClick={handleBackPage}>Trở về</Button>
                             <Button secondary onClick={handleNextPage}>Kế tiếp</Button>
@@ -222,16 +209,26 @@ function PlanAI() {
                         </div>
                         <span className="md:text-[25px] text-[14px] font-bold leading-10 pt-14">Bạn hứng thú về chủ đề gì ?</span>
                         <div className="flex flex-wrap w-[80%] px-5 gap-7">
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Địa điểm nổi tiếng</div>
+                            {topics.map((topic, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleSelectTopic(topic)} // Cập nhật chủ đề đã chọn khi nhấp vào
+                                    className={`text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 cursor-pointer
+                                    ${selectedTopic.includes(topic) ? 'bg-[#45EDA7] text-white' : 'hover:bg-[#f1f2f4]'}`}
+                                >
+                                    {topic}
+                                </div>
+                            ))}
+                            {/* <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Địa điểm nổi tiếng</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Quán coffee</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Quán ăn bình dân</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Nhà hàng nổi tiếng</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Ngoài trời</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Thiên nhiên</div>
                             <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Danh lam thắng cảnh</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">+ Thêm mới</div>
+                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">+ Thêm mới</div> */}
                         </div>
-                        <div className="w-[90%] absolute justify-start flex bottom-10 justify-between">
+                        <div className="w-[90%] absolute flex bottom-10 justify-between">
                             <Button tertiary onClick={handleBackPage}>Trở về</Button>
                             <Button className="bg-[#ff7224]  w-[85px] h-[37px] rounded-lg hover:bg-[#ff7124fc] transition-all duration-150">Kết thúc</Button>
                         </div>
@@ -240,6 +237,7 @@ function PlanAI() {
 
 
             </div>
+            {openModelAddTopic && <ModelAddTopic handleClose={() => setOpenModelAddTopic(false)}></ModelAddTopic>}
         </div>
     );
 }
