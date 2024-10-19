@@ -108,7 +108,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                 onClick={handleClose}
             >
                 <div
-                    className="modal w-[500px] h-[540px] flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center"
+                    className="modal w-[500px] h-[580px] flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="text-[27px] w-[400px] text-[#0F3E4A] font-bold mt-8 mb-5">Đăng nhập và tiếp tục cuộc hành trình của bạn!</div>

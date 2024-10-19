@@ -3,11 +3,12 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Calendar({ primary, secondary }) {
+function Calendar({ primary, secondary, totalDay, setTotalDay }) {
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(primary ? today.getMonth() : (today.getMonth() + 1) % 12);
     const [currentYear, setCurrentYear] = useState(primary ? today.getFullYear() : today.getFullYear() + (today.getMonth() === 11 ? 1 : 0));
-    const [selectedDates, setSelectedDates] = useState([]);
+    const [selectedDates, setSelectedDates] = useState([]); // Mảng lưu trữ các ngày đã chọn
+
     useEffect(() => {
         updateCalendar(currentMonth, currentYear);
     }, [currentMonth, currentYear]);
@@ -47,24 +48,38 @@ function Calendar({ primary, secondary }) {
 
     const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const calendarDays = updateCalendar(currentMonth, currentYear);
+
     const handleDateClick = (day) => {
+
         if (day) {
             const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            if (selectedDates.includes(dateString)) {
-                setSelectedDates(prev => prev.filter(date => date !== dateString));
-            } else {
-                if (selectedDates.length < 2) {
-                    setSelectedDates(prev => [...prev, dateString]);
-                } else {
-                    setSelectedDates([selectedDates[1], dateString]);
-                }
+            const isPast = new Date(currentYear, currentMonth, day) < today;
+
+            if (isPast) {
+                return;
+            }
+
+            const alreadySelected = selectedDates.includes(dateString);
+            const selectedCount = selectedDates.filter(date => date !== dateString).length;
+
+
+            console.log(selectedCount)
+            if (alreadySelected) {
+                setSelectedDates(selectedDates.filter(date => date !== dateString));
+                setTotalDay((prev) => prev - 1);
+            } else if (selectedCount < 2 && totalDay < 2) {
+                setSelectedDates([...selectedDates, dateString]);
+                setTotalDay((prev) => prev + 1);
+                console.log('tong ngay', totalDay);
             }
         }
     };
+
+
     return (
-        <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-lg ">
+        <div className="flex flex-col items-center bg-white p-4 rounded-lg  ">
             <div className="flex justify-between items-center w-full mb-4">
-                {primary ? <MdNavigateBefore onClick={handlePrevMonth} className="text-[20px] w-[30px] h-[30px] cursor-pointer" ></MdNavigateBefore> : <div></div>}
+                {primary ? <MdNavigateBefore onClick={handlePrevMonth} className="text-[20px] w-[30px] h-[30px] cursor-pointer" /> : <div></div>}
                 <h2 className="text-lg font-bold">
                     {monthNames[currentMonth]} {currentYear}
                 </h2>
@@ -83,21 +98,20 @@ function Calendar({ primary, secondary }) {
                     {calendarDays.map((week, weekIndex) => (
                         <tr key={weekIndex}>
                             {week.map((day, dayIndex) => {
+                                const isSelected = selectedDates.includes(`${currentYear}-${currentMonth + 1}-${String(day).padStart(2, '0')}`);
                                 const isPast = day && (new Date(currentYear, currentMonth, day) < today);
-                                const isSelected = selectedDates.includes(`${currentYear}-${currentMonth + 1}-${day}`);
+
                                 return (
                                     <td
                                         key={dayIndex}
-                                        className={`py-2 px-3 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : ''}`}
+                                        className={`p-4 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : ''}`}
                                         style={{ color: isPast ? 'lightgray' : isSelected ? 'white' : 'inherit' }}
                                         onClick={() => handleDateClick(day)}
                                     >
                                         {day}
                                     </td>
                                 );
-                            }
-
-                            )}
+                            })}
                         </tr>
                     ))}
                 </tbody>

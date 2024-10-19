@@ -16,11 +16,11 @@ function SidebarItem({ index, isActive, onClick, icon, title, to, backIcon, show
 }
 SidebarItem.propTypes = {
     index: PropTypes.number.isRequired,
-    isActive: PropTypes.number.isRequired,
+    isActive: PropTypes.number,
     onClick: PropTypes.func.isRequired,
     icon: PropTypes.node.isRequired,
     title: PropTypes.string.isRequired,
-    to: PropTypes.string.isRequired
+    to: PropTypes.string
 };
 
 

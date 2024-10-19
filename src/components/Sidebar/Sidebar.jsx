@@ -14,9 +14,15 @@ function Sidebar({ showSidebar, toggleSidebar }) {
 
     return (
         <div
-            onMouseDown={toggleSidebar}
-            className={`fixed ${showSidebar ? "w-[257px] " : "w-[60px]"} h-[86vh] hidden md:block transition-width`}>
+            className={`fixed ${showSidebar ? "w-[230px] " : "w-[60px]"} h-[86vh] hidden md:block transition-width`}>
             <nav className={`bg-white rounded-lg ${showSidebar ? "lg:h-[390px] h-[270px]" : ""}  items-center py-1`}>
+                <SidebarItem
+                    index={0}
+                    showSidebar={showSidebar}
+                    onClick={toggleSidebar}
+                    icon={!showSidebar ? <MdIcons.MdArrowForwardIos className=' w-[28px] h-[24px] text-iconGray' /> : <MdIcons.MdArrowBackIosNew className=' w-[28px] h-[24px] text-iconGray'></MdIcons.MdArrowBackIosNew>}
+                    title='Thu gọn'
+                ></SidebarItem>
                 <SidebarItem
                     index={0}
                     isActive={isActive}
