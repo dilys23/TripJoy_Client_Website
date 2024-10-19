@@ -11,6 +11,7 @@ import recom4 from "../../../assets/images/recom4.png"
 import Button from "../../../components/Button/Button";
 import { useState } from "react";
 import Calendar from "../../../components/Calendar";
+import CalendarContainer from "../../../components/Calendar/CalendarContainer";
 function PlanAI() {
     const listImage = [
         { id: 1, image: recom1 },
@@ -154,10 +155,11 @@ function PlanAI() {
                                 onChange={handleDateChange}
                                 className="md:w-1/4 w-full border border-gray rounded-[98px] sm:h-[50px] h-[35px] text-[10px] sm:text-[16px] px-3 outline-none" />
                         </div> */}
-                        <div className="w-full flex gap-5 justify-center">
+                        <CalendarContainer></CalendarContainer>
+                        {/* <div className="w-full flex gap-5 justify-center">
                             <Calendar primary totalDay={totalDay} setTotalDay={setTotalDay}></Calendar>
                             <Calendar secondary totalDay={totalDay} setTotalDay={setTotalDay}></Calendar>
-                        </div>
+                        </div> */}
                         <div className="w-[90%] absolute bottom-10 flex justify-between">
                             <Button tertiary onClick={handleBackPage}>Trở về</Button>
                             <Button secondary onClick={handleNextPage}>Kế tiếp</Button>

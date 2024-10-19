@@ -3,12 +3,8 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Calendar({ primary, secondary, totalDay, setTotalDay }) {
+function Calendar({ primary, secondary, currentMonth, currentYear, handlePrevMonth, handleNextMonth, totalDay, setTotalDay, selectedDates, setSelectedDates }) {
     const today = new Date();
-    const [currentMonth, setCurrentMonth] = useState(primary ? today.getMonth() : (today.getMonth() + 1) % 12);
-    const [currentYear, setCurrentYear] = useState(primary ? today.getFullYear() : today.getFullYear() + (today.getMonth() === 11 ? 1 : 0));
-    const [selectedDates, setSelectedDates] = useState([]); // Mảng lưu trữ các ngày đã chọn
-
     useEffect(() => {
         updateCalendar(currentMonth, currentYear);
     }, [currentMonth, currentYear]);
@@ -36,15 +32,6 @@ function Calendar({ primary, secondary, totalDay, setTotalDay }) {
         return calendarDays;
     };
 
-    const handlePrevMonth = () => {
-        setCurrentMonth(prev => (prev === 0 ? 11 : prev - 1));
-        setCurrentYear(prev => (currentMonth === 0 ? prev - 1 : prev));
-    };
-
-    const handleNextMonth = () => {
-        setCurrentMonth(prev => (prev === 11 ? 0 : prev + 1));
-        setCurrentYear(prev => (currentMonth === 11 ? prev + 1 : prev));
-    };
 
     const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const calendarDays = updateCalendar(currentMonth, currentYear);
@@ -63,14 +50,12 @@ function Calendar({ primary, secondary, totalDay, setTotalDay }) {
             const selectedCount = selectedDates.filter(date => date !== dateString).length;
 
 
-            console.log(selectedCount)
             if (alreadySelected) {
                 setSelectedDates(selectedDates.filter(date => date !== dateString));
                 setTotalDay((prev) => prev - 1);
             } else if (selectedCount < 2 && totalDay < 2) {
                 setSelectedDates([...selectedDates, dateString]);
                 setTotalDay((prev) => prev + 1);
-                console.log('tong ngay', totalDay);
             }
         }
     };
@@ -104,7 +89,7 @@ function Calendar({ primary, secondary, totalDay, setTotalDay }) {
                                 return (
                                     <td
                                         key={dayIndex}
-                                        className={`p-4 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : ''}`}
+                                        className={`px-4 py-3 ${isPast ? 'bg-gray-200 cursor-default' : 'hover:bg-gray-200 cursor-pointer'} ${isSelected ? 'bg-black text-white rounded-full' : 'rounded-full hover:ring-2 hover:ring-black  '}`}
                                         style={{ color: isPast ? 'lightgray' : isSelected ? 'white' : 'inherit' }}
                                         onClick={() => handleDateClick(day)}
                                     >
