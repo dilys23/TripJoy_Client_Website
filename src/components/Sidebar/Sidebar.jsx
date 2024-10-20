@@ -15,7 +15,7 @@ function Sidebar({ showSidebar, toggleSidebar }) {
     return (
         <div
             className={`fixed ${showSidebar ? "w-[230px] " : "w-[60px]"} h-[86vh] hidden md:block transition-width`}>
-            <nav className={`bg-white rounded-lg ${showSidebar ? "lg:h-[390px] h-[270px]" : ""}  items-center py-1`}>
+            <nav className={`bg-white rounded-lg ${showSidebar ? "h-[455px]" : ""}  items-center py-1`}>
                 <SidebarItem
                     index={0}
                     showSidebar={showSidebar}

@@ -13,7 +13,7 @@ function SharePost() {
                 <div className="flex flex-col w-1/4 p-4 pl-8 ">
                     <p className="nunito-text font-bold text-[28px] text-start leading-[35px]">Viết về chuyến đi của bạn !</p>
                     <div className="p-3 border border-[#aeaeae] rounded-[10px] flex flex-col h-[500px]">
-                        <img src={image} alt="" className="w-[246px] h-[275px] object-cover" />
+                        <img src={image} alt="" className="w-[100%] h-[275px] object-cover" />
                         <div className="nunito-text font-bold text-[20px] text-start pt-3 leading-[25px]">Hai ngày một đêm ở Hà Giang</div>
                         <div className='flex flex-col gap-4 pt-1'>
                             <div className='flex gap-3 items-center'>
