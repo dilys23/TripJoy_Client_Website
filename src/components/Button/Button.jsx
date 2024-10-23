@@ -16,10 +16,10 @@ function Button({
         <button
             onClick={onClick}
             style={{ width, height }}
-            className={`flex items-center gap-1 cursor-pointer text-base font-semibold text-white shadow outline-none justify-center transition-all duration-300
-            ${primary ? 'bg-[#ff7224] rounded-[15px]' : ''}
-            ${secondary ? 'bg-[#007AFF] w-[85px] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}
-            ${tertiary ? 'bg-[#B3B3B3] w-[85px] h-[37px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150' : ''}
+            className={`flex items-center gap-1 cursor-pointer  font-semibold  shadow outline-none justify-center transition-all duration-300
+            ${primary ? 'bg-[#ff7224] rounded-[15px] text-base text-white' : ''}
+            ${secondary ? 'bg-[#007AFF] w-[85px] h-[37px] text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}
+            ${tertiary ? 'bg-[#B3B3B3] w-[85px] h-[37px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
             ${className}`}
         >
             {leftIcon && <span>{leftIcon}</span>}

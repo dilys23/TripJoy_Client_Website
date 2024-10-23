@@ -65,9 +65,8 @@ function Sidebar({ showSidebar, toggleSidebar }) {
                     isActive={isActive}
                     showSidebar={showSidebar}
                     onClick={handleClick}
-                    to={config.routes.plan}
+                    to={config.routes.profile}
                     icon={<MdIcons.MdOutlinePerson className=' w-[28px] h-[24px] text-iconGray' />}
-
                     title='Tài khoản'
                 ></SidebarItem>
                 <SidebarItem

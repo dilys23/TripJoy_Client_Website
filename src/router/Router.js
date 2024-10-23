@@ -5,12 +5,14 @@ import Network from "../pages/Dashboard/Network/Network";
 import SharePost from "../pages/Dashboard/Network/SharePost";
 import Plan from "../pages/Dashboard/Plan/Plan";
 import PlanAI from "../pages/Dashboard/Plan/PlanAI";
+import Profile from "../pages/Dashboard/Profile";
 const publicRoutes = [
   { path: "/", component: Home, layout: Fragment },
   { path: "/network", component: Network, layout: DefaultLayout },
   { path: "/sharepost", component: SharePost, layout: DefaultLayout },
   { path: "/plan", component: Plan, layout: DefaultLayout },
-  { path: "/planAI", component: PlanAI, layout: DefaultLayout }
+  { path: "/planAI", component: PlanAI, layout: DefaultLayout },
+  { path: "/profile", component: Profile, layout: DefaultLayout }
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };
