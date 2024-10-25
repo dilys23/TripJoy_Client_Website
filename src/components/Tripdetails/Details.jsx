@@ -3,7 +3,7 @@ import Avatar from "../Avatar/Avatar";
 const Details = ({className, username}) => {
   return (
     // <div className="ml-10 ">
-      <div className=" h-full w-full rounded-[10px] border bg-white">
+      <div className=" h-full w-full rounded-[10px] box-border border bg-white">
         <div className="w-44 mt-2 text-center font-['Arial'] text-base font-bold text-black ">
           Chi tiết hành trình
         </div>

@@ -15,11 +15,8 @@ const List = () => {
             alt="expensive-2--v1"
           />
           <div className="flex-1 space-y-0.5">
-            <h3 className="text-gray-900 text-lg font-medium leading-tight tracking-tight">
-              Chi tiết kinh phí
-            </h3>
-            <p className="text-gray-400 text-sm font-normal leading-none">
-              {/* Daily usage */}
+          <p className="text-gray-900 text-base font-medium leading-tight tracking-tight">
+              Trò chuyện 
             </p>
           </div>
           <a
@@ -29,9 +26,9 @@ const List = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
               stroke-width="1.5"
               stroke="currentColor"
               fill="none"

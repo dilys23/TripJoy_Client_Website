@@ -4,6 +4,7 @@ import ExpenseList from "../../components/ExpenseDetails/ExpenseList";
 import List from "../../components/ExpenseDetails/PlaceList";
 import Map from "../../components/MapCard/Map";
 import FriendList from "../../components/Tripdetails/FriendList";
+import ChatBox from "../../components/Tripdetails/ChatBox";
 
 const DetailsTrip = () => {
   return (
@@ -37,7 +38,7 @@ const DetailsTrip = () => {
 
   {/* Cột thứ ba: giữ nguyên */}
   <div className="col-span-2">
-  <FriendList />
+  <ChatBox />
   </div>
 </div>
 

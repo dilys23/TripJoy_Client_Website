@@ -41,7 +41,8 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-                $67
+              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+
               </div>
             </div>
           </li>
@@ -63,7 +64,8 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-                $67
+              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+
               </div>
             </div>
           </li>
@@ -85,7 +87,8 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-                $67
+              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+
               </div>
             </div>
           </li>
