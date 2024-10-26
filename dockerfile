@@ -15,13 +15,13 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Build the React application and check if build folder exists
-RUN npm run build && ls -la /app/build
+RUN npm run build && ls -la /app/dist  # Sử dụng dist thay vì build
 
 # Stage 2: Use NGINX to serve the application
 FROM nginx:alpine
 
 # Copy the build folder from the build stage into NGINX's HTML folder
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html  # Sử dụng dist thay vì build
 
 # Expose port 80 for the application
 EXPOSE 80
