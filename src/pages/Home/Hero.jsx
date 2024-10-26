@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import backgroundImage from "../../assets/images/background.jpg";
+// import backgroundImage from "../../assets/images/background.jpg";
 import image1 from "../../assets/images/image1.png";
-import icon from "../../assets/images/iconApple.png";
-import plane from "../../assets/images/plane.png";
-import plane2 from "../../assets/images/plane2.png";
+// import icon from "../../assets/images/iconApple.png";
+// import plane from "../../assets/images/plane.png";
+// import plane2 from "../../assets/images/plane2.png";
 import planegif from "../../assets/images/planegif.gif";
-import Login from "../../modules/auth/Login";
+// import Login from "../../modules/auth/Login";
 function Hero() {
   return (
     // <div className="bg-[url('../../images/background.jpg')] bg-no-repeat bg-cover bg-center relative z-10 pb-32 overflow-x-hidden">
