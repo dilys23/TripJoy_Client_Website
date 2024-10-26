@@ -31,11 +31,17 @@ function Navbar() {
   const navigate = useNavigate()
 
   const [showLogin, setShowLogin] = useState(false);
+  // const [showRegister, setShowRegister] = useState(false);
+
   const [showSendOTP, setShowSendOTP] = useState(false);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const [email, setEmailParent] = useState("");
 
-  const handleLoginOpen = () => setShowLogin(true);
+  const handleLoginOpen = () => {
+    console.log("chuyển qua trang login")
+    setShowLogin(true);
+    setRegister(false);
+  } 
   const handleLoginClose = () => setShowLogin(false);
   const handleSendOTPOpen = () => {
     setShowLogin(false);

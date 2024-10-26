@@ -96,7 +96,7 @@ const logoutService = async () => {
 const refreshTokenService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = await api.post('Account/refresh', {
+        const res = await api.post('identity-service/refresh', {
             refreshToken: refreshToken,
         });
         return res.data;

@@ -58,7 +58,7 @@ function Register({ onClose, onSwitchToLogin }) {
   };
   const validateEmail = (value) => {
     if (!value) return "Email không được để trống ";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email khong hop le";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email không hợp lệ";
     return "";
   };
   const validatePhoneNumber = (value) => {
@@ -233,8 +233,8 @@ function Register({ onClose, onSwitchToLogin }) {
               <div className="flex w-full">
                 <p className="text-gray-500 mb-3 mt-4 text-sm">
                   <a
-                    href="/forgot-password"
                     className="text-base text-blue-800 hover:text-blue-600"
+                    onClick={() => onSwitchToLogin()}
                   >
                     Tôi đã có tài khoản!
                   </a>
