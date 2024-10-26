@@ -153,7 +153,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                             className="underline text-[#818080] text-[16px] cursor-pointer hover:text-primary"
                         >Quên mật khẩu?</div>
                     </div>
-                    <div className={`flex justify-between  items-center w-[450px] mt-5 fixed bottom-[120px]`}>
+                    <div className={`flex justify-between  items-center w-[450px] mt-5`}>
                         <div className="text-[#818080] w-[100px] text-[16px] cursor-pointer hover:text-primary">Tạo tài khoản</div>
                         <button
                             onClick={() => handleLogin()}

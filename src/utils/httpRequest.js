@@ -5,7 +5,21 @@ const api = axios.create({
     headers: {
         "Content-Type": "application/json"
     },
-    withCredentials: true
+    // withCredentials: true
 });
 
+export const get = async (path, options = {}) => {
+    const response = await httpRequest.get(path, options)
+    return response.data
+}
+
+export const post = async (path, body = {}, options = {}) => {
+    const response = await httpRequest.post(path, body, options);
+    return response.data;
+}
+
+export const DELETE = async (path, options = {}) => {
+    const response = await httpRequest.delete(path, options)
+    return response.data
+}
 export default api; 
