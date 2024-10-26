@@ -7,11 +7,6 @@ WORKDIR /app
 # Copy the package.json and package-lock.json to install dependencies
 COPY package*.json ./
 
-# Check if the assets directory exists before copying
-RUN if [ ! -d "./assets" ]; then echo "Warning: assets directory not found"; else echo "Copying assets"; fi
-
-
-
 # Update npm and install dependencies with --legacy-peer-deps
 RUN npm install -g npm@latest
 RUN npm install --legacy-peer-deps
@@ -19,8 +14,8 @@ RUN npm install --legacy-peer-deps
 # Copy the entire source code into the container
 COPY . .
 
-# Build the React application
-RUN npm run build
+# Build the React application and check if build folder exists
+RUN npm run build && ls -la /app/build
 
 # Stage 2: Use NGINX to serve the application
 FROM nginx:alpine
