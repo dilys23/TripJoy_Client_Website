@@ -37,7 +37,7 @@ const Map = ({ className }) => {
                             iconAnchor: [20, 40],
                         }),
                     }).addTo(mapInstance);
-                    
+
                     mapInstance.setView([latitude, longitude], 13); // Zoom to current location
                 },
                 (error) => {
@@ -97,7 +97,7 @@ const Map = ({ className }) => {
             }
         }).addTo(map);
 
-        control.on('routesfound', function(e) {
+        control.on('routesfound', function (e) {
             const routes = e.routes;
             const summary = routes[0].summary;
             const totalDistance = (summary.totalDistance / 1000).toFixed(2);
@@ -119,7 +119,7 @@ const Map = ({ className }) => {
                 const newWaypoint = { lat, lng };
                 setWaypoints(prevWaypoints => {
                     const updatedWaypoints = [...prevWaypoints, newWaypoint];
-                    
+
                     // Add marker for new waypoint
                     L.marker([lat, lng], {
                         icon: L.icon({
@@ -148,21 +148,21 @@ const Map = ({ className }) => {
         <div className={`relative ${className}`}>
             <div id='map' className={`w-full h-[215px] relative rounded-[10px] padding-5`} ></div>
             <div className="absolute top-4 left-4 z-[1200] flex space-x-2">
-                <input 
-                    type="text" 
-                    value={endPoint} 
-                    onChange={(e) => setEndPoint(e.target.value)} 
-                    placeholder='Enter coordinates (lat,lng)' 
-                    className='p-1 rounded opacity-[95%]' 
+                <input
+                    type="text"
+                    value={endPoint}
+                    onChange={(e) => setEndPoint(e.target.value)}
+                    placeholder='Enter coordinates (lat,lng)'
+                    className='p-1 rounded opacity-[95%]'
                 />
-                <button 
-                    onClick={addWaypoint} 
+                <button
+                    onClick={addWaypoint}
                     className='bg-green-500 text-white p-1 rounded'
                 >
                     Add Waypoint
                 </button>
-                <button 
-                    onClick={calculateRoute} 
+                <button
+                    onClick={calculateRoute}
                     className='bg-blue-500 text-white p-1 rounded'
                 >
                     Calculate Route

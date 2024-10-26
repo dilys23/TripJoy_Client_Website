@@ -42,12 +42,12 @@ function App() {
             className="w-32 hover:opacity-80 "
             onClick={() => alert("Jane Doe clicked!")}
           /> */}
-          <DetailsTrip/>
+          <DetailsTrip />
           {/* <Mapbox /> */}
           {/* <APIProvider apiKey={'AIzaSyCua2bI_3tFW1T5CnSVDjhmgQkiJxBPTfk'}>
           <CustomMap />
       </APIProvider> */}
-      {/* <div className="border flex row w-[100vw] h-[100vw]">
+          {/* <div className="border flex row w-[100vw] h-[100vw]">
 
             <div className="border w-[50vw]">
               <Map selectPosition={selectPosition}/>
@@ -57,7 +57,7 @@ aaa
               <InputSearch selectPosition={selectPosition} setSelectPosition={setSelectPosition}/>
             </div>
       </div> */}
-      {/* <MapSearch/> */}
+          {/* <MapSearch/> */}
         </div>
       </Router>
     </>

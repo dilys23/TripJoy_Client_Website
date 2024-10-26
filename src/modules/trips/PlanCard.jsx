@@ -1,6 +1,8 @@
 import map from "../../assets/images/map.png"
 import avatar from "../../assets/images/ava.jpg"
 import motor from "../../assets/images/motor.png"
+import config from "../../config";
+import Button from "../../components/Button/Button";
 function PlanCard({ plan }) {
     return (
         <div className=" rounded-[7px] border-[0.4px] shadow-md bg-white border-[#CCD0D5] w-full h-[209px] p-3 flex">
@@ -32,7 +34,7 @@ function PlanCard({ plan }) {
                         <span className="text-[14px] text-[#979797] leading-4 font-normal">Chi phí</span>
                         <span className="text-[14px] text-[#FF7324] leading-4 font-normal">{plan.budget}</span>
                     </div>
-                    <button className="w-1/4 h-[33px] rounded-[5px] text-white bg-[#007AFF] flex items-center justify-center">Chi tiết</button>
+                    <Button to={config.routes.detailTrip} secondary className=" rounded-[5px] text-white bg-[#007AFF] flex items-center justify-center">Chi tiết</Button>
                 </div>
             </div>
             <div className="w-1/3 full">
