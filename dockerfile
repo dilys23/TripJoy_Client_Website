@@ -6,6 +6,8 @@ WORKDIR /app
 
 # Copy the package.json và package-lock.json để cài đặt dependencies
 COPY package*.json ./
+# Copy assets folder into the container
+COPY ./assets /app/assets
 
 # Update npm và cài đặt dependencies với --legacy-peer-deps
 RUN npm install -g npm@latest
