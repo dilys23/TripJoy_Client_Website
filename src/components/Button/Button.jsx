@@ -1,16 +1,41 @@
+import { Link } from 'react-router-dom';
+
 function Button({
     width,
     height,
     children,
     className = '',
-    leftIcon
+    leftIcon,
+    primary,
+    secondary,
+    tertiary,
+    onClick,
+    to,
+    hide = false,
+    rightIcon
 }) {
-    return (
+    const buttonContent = (
         <button
-            style={{ width: width, height: height }}
-            className={`flex items-center gap-1 cursor-pointer rounded-[15px] bg-[#ff7224] text-base font-semibold text-white shadow outline-none ${className}`}>
-            {leftIcon && <span className="">{leftIcon}</span>}
-            {children}</button>
+            onClick={onClick}
+            style={{ width, height }}
+            className={`flex items-center gap-2 cursor-pointer  font-semibold  shadow outline-none justify-center transition-all duration-300
+            ${primary ? 'bg-[#ff7224] hover:bg-[#ff7124fc] transition-all duration-150   text-base text-white' : ''}
+            ${secondary ? 'bg-[#007AFF] w-[85px] h-[37px] text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}
+            ${tertiary ? 'bg-[#B3B3B3] sm:w-[85px] sm:h-[37px] w-[70px] h-[25px] sm:text-base text-[13px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
+            ${className}`}
+        >
+            {leftIcon && <span>{leftIcon}</span>}
+            <span className={`lg:block  sm:hidden ${hide ? 'hidden' : 'block'}`}>{children}</span>
+            {rightIcon && <span>{rightIcon}</span>}
+        </button>
+    );
+
+    return to ? (
+        <Link to={to} transition-all duration-300>
+            {buttonContent}
+        </Link>
+    ) : (
+        buttonContent
     );
 }
 

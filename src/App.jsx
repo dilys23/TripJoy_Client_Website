@@ -1,10 +1,11 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./router";
 import { DefaultLayout } from "./components/Layout";
 import GlobalStyles from "./components/GlobalStyles";
 // import tippy from 'tippy.js';
 // import 'tippy.js/dist/tippy.css';
-// import Mapbox from "./components/MapCard/Mapbox";
+import Mapbox from "./components/MapCard/Mapbox";
 // import Avatar from "./components/Avatar/Avatar";
 function App() {
   return (

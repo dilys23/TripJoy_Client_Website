@@ -4,7 +4,7 @@ import api from "../utils/httpRequest";
 // Hàm đăng ký
 export const register1 = async (credentials) => {
   try {
-    const response = await api.post("http://192.168.4.11:6200/api/v1/Account/register-with-otp", credentials);
+    const response = await api.post("https://pbl6.sodro44.io.vn/identity-service/register-with-otp", credentials);
     toast.success("Đăng kí thành công");
     return response.data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const register1 = async (credentials) => {
 export const sendOTP = async (credentials) => {
   try {
     // const response = await api.post("http://localhost:7100/api/v1/Account/send-otp-verify-email", credentials);
-    const response = await api.post("/Account/send-otp-verify-email", credentials);
+    const response = await api.post("/identity-service/send-otp-verify-email", credentials);
 
     toast.success("OTP đã gửi về email của bạn");
     return response.data;
@@ -27,7 +27,7 @@ export const sendOTP = async (credentials) => {
 // Hàm đăng nhập
 export const login = async (email, password) => {
   try {
-    const response = await api.post("Account/login", { email, password });
+    const response = await api.post("/identity-service/login", { email, password });
     toast.success("Đăng nhập thành công");
     return response.data;
   } catch (error) {

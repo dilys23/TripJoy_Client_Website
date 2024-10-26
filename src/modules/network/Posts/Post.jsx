@@ -58,18 +58,18 @@ function Post({ data }) {
 
 
                     <div className={`grid w-full h-[430px] gap-1 mt-3
-                    ${numImage === 1 ? "grid-cols-1" :
+                        ${numImage === 1 ? "grid-cols-1" :
                             numImage === 2 ? "grid-cols-2" :
                                 numImage === 3 ? "grid-cols-2 grid-rows-2" :
                                     numImage === 4 ? "grid-cols-2 grid-rows-2" : ""}
-                        }`}>
+                            }`}>
                         {data.image.length >= 5 && (
-                            <>
-                                <div className="grid grid-cols-2 gap-1">
+                            <div className='w-full min-h-[430px]'>
+                                <div className="grid grid-cols-2 gap-1 h-1/2">
                                     <img src={data.image[0]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
                                     <img src={data.image[1]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
                                 </div>
-                                <div className="grid grid-cols-3 gap-1 ">
+                                <div className="grid grid-cols-3 gap-1 h-1/2">
                                     <img src={data.image[2]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
                                     <img src={data.image[3]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
                                     {data.image.length > 5 ?
@@ -82,14 +82,14 @@ function Post({ data }) {
                                         <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
                                     }
                                 </div>
-                            </>)
+                            </div>)
                         }
 
                         {data.image.length < 5 && data.image.slice(0, 3).map((img, idx) => (
                             <img key={idx} src={img} alt={`Post image ${idx + 1}`} className={`w-full h-full max-h-[430px] rounded-10 object-cover cursor-pointer
-                              ${numImage === 3 && idx === 0 ? "row-span-2" : ""}
-                              ${numImage > 1 ? "rounded-[7px] " : ""}
-                              ${numImage === 5 && idx < 2 ? "row-span-1" : ""}`
+                                ${numImage === 3 && idx === 0 ? "row-span-2" : ""}
+                                ${numImage > 1 ? "rounded-[7px] " : ""}
+                                ${numImage === 5 && idx < 2 ? "row-span-1" : ""}`
                             } />
                         ))}
                     </div>
@@ -123,7 +123,7 @@ function Post({ data }) {
                 </div>
             </div>
             {/* <hr className='my-2 text-[#979797]' /> */}
-            <div className='flex py-3 w-full justify-center gap-14'>
+            <div className='flex py-3 w-full justify-center gap-14 pt-5'>
                 <div className='flex gap-2 items-center w-[100px]'>
                     {isLiked ?
                         <AiFillLike
