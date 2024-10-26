@@ -40,7 +40,6 @@ function ModalListPost({ onClose }) {
                         {modalListPost.map((post, index) => (
                             <PostCard key={index} post={post}></PostCard>
                         ))}
-
                     </div>
                 </div>
             </div>

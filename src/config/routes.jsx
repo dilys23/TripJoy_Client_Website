@@ -2,7 +2,9 @@ const routes = {
     home: '/',
     network: '/network',
     sharepost: '/sharepost',
-    plan: '/plan'
+    plan: '/plan',
+    planAI: '/planAI',
+    profile: '/profile'
 };
 
 export default routes;

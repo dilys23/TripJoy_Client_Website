@@ -4,54 +4,69 @@ import SidebarItem from './SidebarItem';
 import config from '../../config';
 import TripInvites from '../TripInvite/TripInvites';
 
-function Sidebar() {
+function Sidebar({ showSidebar, toggleSidebar }) {
     const [isActive, setIsActive] = useState(0)
+
     const handleClick = (index) => {
         setIsActive(index);
     };
+    console.log("helo", showSidebar);
 
     return (
-        <div className='fixed lg:w-[257px] md:w-[160px] w-[60px] h-screen hidden md:block'>
-            <nav className='bg-white rounded-lg sm:h-[390px] h-[270px] items-center py-1'>
+        <div
+            className={`fixed ${showSidebar ? "w-[230px] " : "w-[60px]"} h-[86vh] hidden md:block transition-width`}>
+            <nav className={`bg-white rounded-lg ${showSidebar ? "h-[455px]" : ""}  items-center py-1`}>
+                <SidebarItem
+                    index={0}
+                    showSidebar={showSidebar}
+                    onClick={toggleSidebar}
+                    icon={!showSidebar ? <MdIcons.MdArrowForwardIos className=' w-[28px] h-[24px] text-iconGray' /> : <MdIcons.MdArrowBackIosNew className=' w-[28px] h-[24px] text-iconGray'></MdIcons.MdArrowBackIosNew>}
+                    title='Thu gọn'
+                ></SidebarItem>
                 <SidebarItem
                     index={0}
                     isActive={isActive}
                     onClick={handleClick}
+                    showSidebar={showSidebar}
                     to={config.routes.network}
-                    icon={<MdIcons.MdHomeFilled className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdHomeFilled className=' w-[28px] h-[24px] text-iconGray' />}
+                    // backIcon={<MdIcons.MdChevronLeft className="w-6 h-6" />}
                     title='Trang chủ'
                 ></SidebarItem>
                 <SidebarItem
                     index={1}
                     isActive={isActive}
                     onClick={handleClick}
+                    showSidebar={showSidebar}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdCalendarMonth className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdCalendarMonth className=' w-[28px] h-[24px] text-iconGray' />}
                     title='Lịch trình'
                 ></SidebarItem>
                 <SidebarItem
                     index={2}
                     isActive={isActive}
                     onClick={handleClick}
+                    showSidebar={showSidebar}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePeopleAlt className='lg:w-[35px] lg:h-[30px]] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdOutlinePeopleAlt className='] w-[28px] h-[24px] text-iconGray' />}
                     title='Bạn bè'
                 ></SidebarItem>
                 <SidebarItem
                     index={3}
                     isActive={isActive}
                     onClick={handleClick}
+                    showSidebar={showSidebar}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdGroups className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    icon={<MdIcons.MdGroups className=' w-[28px] h-[24px] text-iconGray' />}
                     title='Nhóm'
                 ></SidebarItem>
                 <SidebarItem
                     index={4}
                     isActive={isActive}
+                    showSidebar={showSidebar}
                     onClick={handleClick}
-                    to={config.routes.plan}
-                    icon={<MdIcons.MdOutlinePerson className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
-
+                    to={config.routes.profile}
+                    icon={<MdIcons.MdOutlinePerson className=' w-[28px] h-[24px] text-iconGray' />}
                     title='Tài khoản'
                 ></SidebarItem>
                 <SidebarItem
@@ -59,7 +74,8 @@ function Sidebar() {
                     isActive={isActive}
                     onClick={handleClick}
                     to={config.routes.plan}
-                    icon={<MdIcons.MdOutlineSettings className='lg:w-[35px] lg:h-[30px] w-[28px] h-[24px] text-iconGray' />}
+                    showSidebar={showSidebar}
+                    icon={<MdIcons.MdOutlineSettings className=' w-[28px] h-[24px] text-iconGray' />}
                     title='Cài đặt'
                 ></SidebarItem>
             </nav>

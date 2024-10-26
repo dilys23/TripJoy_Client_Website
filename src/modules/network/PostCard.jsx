@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
 import noImage from "../../assets/images/noImages.jpg"
+import config from "../../config";
+import Button from "../../components/Button/Button";
 function PostCard({ post }) {
     return (
         <div className="w-[662px] h-[140px] border border-[#ccd0d5] shadow-sm rounded-[15px] flex">
@@ -20,7 +23,7 @@ function PostCard({ post }) {
                 </div>
                 <div className="flex gap-3 justify-between px-5">
                     <div className="text-[24px] font-bold leading-7">{post.title}</div>
-                    <button className="text-[14px] px-2 py-1 rounded-[5px] bg-[#ff7324] text-white">Chia sẻ</button>
+                    <Button to={config.routes.sharepost} className="text-[14px] px-2 py-1 rounded-[5px] bg-[#ff7324] text-white">Chia sẻ</Button>
                 </div>
             </div>
         </div>
