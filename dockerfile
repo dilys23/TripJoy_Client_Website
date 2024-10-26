@@ -7,9 +7,9 @@ WORKDIR /app
 # Copy the package.json và package-lock.json để cài đặt dependencies
 COPY package*.json ./
 
-# Update npm và cài đặt dependencies với npm ci
+# Update npm và cài đặt dependencies với --legacy-peer-deps
 RUN npm install -g npm@latest
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 # Copy toàn bộ mã nguồn vào container
 COPY . .
