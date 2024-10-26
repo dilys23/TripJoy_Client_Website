@@ -1,31 +1,30 @@
 # Stage 1: Build the React app
-# Use the official Node.js image for building the application
-FROM node:20 as build
+FROM node:20 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (if exists) to install dependencies
+# Copy the package.json và package-lock.json để cài đặt dependencies
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Update npm và cài đặt dependencies với npm ci
+RUN npm install -g npm@latest
+RUN npm ci
 
-# Copy the rest of the application code to the container
+# Copy toàn bộ mã nguồn vào container
 COPY . .
 
-# Build the application
+# Build ứng dụng React
 RUN npm run build
 
-# Stage 2: Serve the React app using a lightweight web server
-# Use an official Nginx image to serve the application
+# Stage 2: Sử dụng NGINX để phục vụ ứng dụng
 FROM nginx:alpine
 
-# Copy the build output from the previous stage to the Nginx HTML directory
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copy thư mục build từ giai đoạn build vào thư mục HTML của NGINX
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 80 to the outside world
+# Mở cổng 80 cho ứng dụng
 EXPOSE 80
 
-# Start Nginx server
+# Chạy server NGINX
 CMD ["nginx", "-g", "daemon off;"]
