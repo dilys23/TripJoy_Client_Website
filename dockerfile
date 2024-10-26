@@ -4,29 +4,33 @@ FROM node:20 AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json và package-lock.json để cài đặt dependencies
+# Copy the package.json and package-lock.json to install dependencies
 COPY package*.json ./
-# Copy assets folder into the container
-COPY ./assets /app/assets
 
-# Update npm và cài đặt dependencies với --legacy-peer-deps
+# Check if the assets directory exists before copying
+RUN if [ ! -d "./assets" ]; then echo "Warning: assets directory not found"; else echo "Copying assets"; fi
+
+# Copy assets folder into the container
+COPY ./assets ./assets
+
+# Update npm and install dependencies with --legacy-peer-deps
 RUN npm install -g npm@latest
 RUN npm install --legacy-peer-deps
 
-# Copy toàn bộ mã nguồn vào container
+# Copy the entire source code into the container
 COPY . .
 
-# Build ứng dụng React
+# Build the React application
 RUN npm run build
 
-# Stage 2: Sử dụng NGINX để phục vụ ứng dụng
+# Stage 2: Use NGINX to serve the application
 FROM nginx:alpine
 
-# Copy thư mục build từ giai đoạn build vào thư mục HTML của NGINX
+# Copy the build folder from the build stage into NGINX's HTML folder
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Mở cổng 80 cho ứng dụng
+# Expose port 80 for the application
 EXPOSE 80
 
-# Chạy server NGINX
+# Run the NGINX server
 CMD ["nginx", "-g", "daemon off;"]
