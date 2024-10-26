@@ -10,8 +10,7 @@ COPY package*.json ./
 # Check if the assets directory exists before copying
 RUN if [ ! -d "./assets" ]; then echo "Warning: assets directory not found"; else echo "Copying assets"; fi
 
-# Copy assets folder into the container
-COPY ./assets ./assets
+
 
 # Update npm and install dependencies with --legacy-peer-deps
 RUN npm install -g npm@latest

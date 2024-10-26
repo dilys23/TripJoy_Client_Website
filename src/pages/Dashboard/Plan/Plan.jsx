@@ -1,8 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import planImage from "../../../assets/images/planIcon.png"
 // Kiểm tra cách bạn import hình ảnh
-import aiIcon from '../../../assets/images/aiIcon.png';
-
 
 import PlanCard from "../../../modules/trips/PlanCard";
 import RecommendationPlan from "../../../modules/trips/RecommendationPlan";
@@ -56,12 +53,10 @@ function Plan() {
                 <div className="flex flex-col ">
                     <div className="flex items-center ">
                         <div className="text-[25px] nunito-text font-semibold">Hora, Dilysnguyen</div>
-                        <img src={planImage} alt="" className="w-[45px] h-[45px]" />
                     </div>
                     <div className="text-[13px]">Hãy bắt đầu chuyến đi mới đầy thú vị nhé !</div>
                 </div>
                 <div className="flex gap-1 items-center pr-5 cursor-pointer">
-                    <img src={aiIcon} alt="" className="text-[#0023FE] w-[30px] h-[32px]" />
                     <Link to={config.routes.planAI} className="text-[#0023FE] text-[16px] font-bold">Tạo chuyến đi mới với AI </Link>
                 </div>
             </div>
