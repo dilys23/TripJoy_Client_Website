@@ -37,7 +37,7 @@ function SharePost() {
                             </div>
                         </div>
                     </div>
-                    <Button to={config.routes.network} primary width="150px" height="40px" className="mt-5 pl-1" leftIcon={<MdArrowBack />}>Trở về trang chủ</Button>
+                    <Button to={config.routes.network} primary width="150px" height="40px" className="mt-5 pl-1 rounded-lg" leftIcon={<MdArrowBack />}>Trở về trang chủ</Button>
                 </div>
                 <div className="border border-l-[1px] border-[#aeaeae] h-[90%] mt-[50px] w-[2px]"></div>
                 <div className="flex flex-col w-2/4 p-4 gap-2">

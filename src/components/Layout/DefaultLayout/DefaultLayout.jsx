@@ -15,7 +15,7 @@ function DefaultLayout({ children }) {
         <>
             <div className="bg-[#f5f6f7] w-full h-full">
                 <Navbar></Navbar>
-                <div className='flex w-full md:px-6  bg-[#f5f6f7] pt-5 min-h-full h-full'>
+                <div className='flex w-full md:px-6 px-0 bg-[#f5f6f7] pt-5 min-h-full h-full'>
                     <Sidebar showSidebar={showSidebar} toggleSidebar={toggleSidebar} />
                     <div className={`${showSidebar ? 'sm:ml-[270px]' : 'sm:ml-[70px]'}  h-full bg-[#f5f6f7] 
                     `}

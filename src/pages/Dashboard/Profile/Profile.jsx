@@ -10,7 +10,7 @@ function Profile() {
     const [openModalEdit, setOpenModalEdit] = useState(false);
 
     return (
-        <div className="w-full flex md:px-10 min-h-[780px] h-auto flex-col gap-5">
+        <div className="w-full flex md:px-10 min-h-screen h-auto flex-col gap-5 lg:px-[150px]">
             <div className="w-full bg-white sm:h-[340px] h-[500px] flex relative rounded-md sm:justify-normal justify-center">
                 <img src={ava} alt="" className="w-full sm:h-1/2 h-1/3 object-cover absolute top-0 rounded-md" />
                 <div className="opacity-50 absolute top-0 bg-black w-full sm:h-1/2 h-1/3  rounded-md"></div>
@@ -38,17 +38,17 @@ function Profile() {
                         <div className="flex gap-1">
                             <Button
                                 onClick={() => setOpenModalEdit(true)}
-                                className="lg:w-[240px] sm:w-[37px]  w-full bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black" leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
+                                className="lg:w-[240px] sm:w-[37px]  w-full bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black px-2" leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
                             <Button className="w-[37px] bg-[#E4E6EB] h-[37px] transition-all duration-150 md:text-base text-[16px] text-black rounded-lg block sm:hidden"> <MdKeyboardArrowDown /></Button>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="bg-white w-full h-[87px] flex justify-between px-10 items-center">
-                <div className="text-black font-bold text-[30px]">Bài viết</div>
+                <div className="text-black font-bold lg:text-[30px] text-[25px] sm:text-[20px]">Bài viết</div>
                 <div className="flex gap-3">
-                    <Button className="bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 text-[16px] text-black px-2" leftIcon={<MdFilterList />}>Bộ lọc</Button>
-                    <Button className="bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 text-[16px] text-black px-2" leftIcon={<MdOutlineSettings />}>Quản lý bài viết</Button>
+                    <Button className="bg-[#E4E6EB] lg:w-[] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 text-[16px] text-black px-2" leftIcon={<MdFilterList />} hide>Bộ lọc</Button>
+                    <Button className="bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 sm:text-[16px] text-black px-2" leftIcon={<MdOutlineSettings />} hide>Quản lý bài viết</Button>
                 </div>
             </div>
             <Posts></Posts>

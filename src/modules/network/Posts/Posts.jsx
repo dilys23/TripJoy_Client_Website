@@ -29,7 +29,7 @@ function Posts() {
         }
     ]
     return (
-        <div className="mt-6">
+        <div className="mt-6 sm:px-0 px-1">
             {dataPost.map((data, index) => (
                 <Post key={index} data={data}></Post>
             ))}

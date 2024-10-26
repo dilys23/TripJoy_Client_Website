@@ -1,6 +1,6 @@
 import axios from 'axios';
-import httpRequest from '../utils/httpRequest';
-
+// import httpRequest from '../utils/httpRequest';
+import api from "../utils/httpRequest"
 
 // ham login
 const loginService = async (email, password) => {
@@ -96,7 +96,7 @@ const logoutService = async () => {
 const refreshTokenService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = await httpRequest.post('Account/refresh', {
+        const res = await api.post('Account/refresh', {
             refreshToken: refreshToken,
         });
         return res.data;
