@@ -6,7 +6,7 @@ import api from "../utils/httpRequest"
 const loginService = async (email, password) => {
     try {
         console.log('Payload:', { email, password });
-        const res = await httpRequest.post('identity-service/login', {
+        const res = await api.post('identity-service/login', {
             email,
             password,
         });
@@ -19,7 +19,7 @@ const loginService = async (email, password) => {
 // ham khi nhan vao Quen mat khau
 const resetPasswordService = async (email) => {
     try {
-        const res = await httpRequest.post('identity-service/forget-password', {
+        const res = await api.post('identity-service/forget-password', {
             email
         });
         return res.data;
@@ -74,7 +74,7 @@ const logoutService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
         const accessToken = localStorage.getItem('accessToken');
-        const res = await httpRequest.post('identity-service/logout', {
+        const res = await api.post('identity-service/logout', {
             accessToken,
             refreshToken,
         }, {
@@ -96,7 +96,7 @@ const logoutService = async () => {
 const refreshTokenService = async () => {
     try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = await api.post('Account/refresh', {
+        const res = await api.post('identity-service/refresh', {
             refreshToken: refreshToken,
         });
         return res.data;
