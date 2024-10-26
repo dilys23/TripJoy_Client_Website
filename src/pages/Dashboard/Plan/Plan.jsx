@@ -1,6 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import planImage from "../../../assets/images/planIcon.png"
-import aiIcon from "../../../assets/images/aiIcon.png"
+import aiIcon from '../../../assets/images/aiIcon.png';
+
 import PlanCard from "../../../modules/trips/PlanCard";
 import RecommendationPlan from "../../../modules/trips/RecommendationPlan";
 import { Link } from "react-router-dom";
