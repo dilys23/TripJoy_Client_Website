@@ -1,5 +1,4 @@
 import planImage from "../../../assets/images/planIcon.png"
-import aiIcon from "../../../assets/images/aiIcon.png";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import "swiper/css/navigation";
 import 'swiper/css';
@@ -79,7 +78,6 @@ function PlanAI() {
                     <div className="sm:text-[13px] text-[6px]">Hãy bắt đầu chuyến đi mới đầy thú vị nhé !</div>
                 </div>
                 <div className="flex gap-1 items-center sm:pr-5 cursor-pointer">
-                    <img src={aiIcon} alt="" className="text-[#0023FE] sm:w-[30px] sm:h-[32px] w-[18px] h-[18px]" />
                     <span className="text-[#0023FE] sm:text-[16px] text-[10px] font-bold">Tạo chuyến đi mới với AI </span>
                 </div>
             </div>)}
