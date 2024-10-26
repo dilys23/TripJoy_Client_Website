@@ -12,6 +12,7 @@ import Button from "../../../components/Button/Button";
 import { useState } from "react";
 import CalendarContainer from "../../../components/Calendar/CalendarContainer";
 import ModelAddTopic from "../../../modules/trips/ModelAddTopic";
+import config from "../../../config";
 function PlanAI() {
     const listImage = [
         { id: 1, image: recom1 },
@@ -212,25 +213,20 @@ function PlanAI() {
                             {topics.map((topic, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => handleSelectTopic(topic)} // Cập nhật chủ đề đã chọn khi nhấp vào
+                                    onClick={() => handleSelectTopic(topic)}
                                     className={`text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 cursor-pointer
                                     ${selectedTopic.includes(topic) ? 'bg-[#45EDA7] text-white' : 'hover:bg-[#f1f2f4]'}`}
                                 >
                                     {topic}
                                 </div>
                             ))}
-                            {/* <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Địa điểm nổi tiếng</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Quán coffee</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Quán ăn bình dân</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Nhà hàng nổi tiếng</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Ngoài trời</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Thiên nhiên</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">Danh lam thắng cảnh</div>
-                            <div className="text-[20px] font-bold nunito-text border border-[#CCD0D5] rounded-[66px] px-10 py-5 hover:bg-[#f1f2f4] cursor-pointer">+ Thêm mới</div> */}
                         </div>
                         <div className="w-[90%] absolute flex bottom-10 justify-between">
                             <Button tertiary onClick={handleBackPage}>Trở về</Button>
-                            <Button className="bg-[#ff7224]  w-[85px] h-[37px] rounded-lg hover:bg-[#ff7124fc] transition-all duration-150">Kết thúc</Button>
+                            <Button
+                                primary
+                                to={config.routes.generatePlan}
+                                className=" w-[85px] h-[37px] rounded-lg">Kết thúc</Button>
                         </div>
                     </div>
                 )}

@@ -54,9 +54,9 @@ function ModalEditProfile({ handleClose }) {
                     <div className="w-full justify-end flex">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
-                    <div className="flex flex-col justify-start w-full sm:gap-4 gap-3 px-6 pt-3">
+                    <div className="flex flex-col justify-start w-full sm:gap-4 pb-3 gap-3 px-6 pt-3">
                         <span className="sm:text-[20px] text-base font-semibold text-start">Chỉnh sửa thông tin cá nhân</span>
-                        <div className="w-full h-[80px] flex  px-2">
+                        <div className="w-full h-[96px] flex  px-2">
                             <div className="w-1/3 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ảnh đại diện</div>
                             <div className="sm:w-[190px] w-[100px] flex sm:justify-end justify-center">
                                 <div className="relative sm:w-[96px] sm:h-[96px] w-[70px] h-[70px]">
