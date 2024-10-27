@@ -1,31 +1,30 @@
 # Stage 1: Build the React app
-# Use the official Node.js image for building the application
-FROM node:20 as build
+FROM node:20 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (if exists) to install dependencies
+# Copy the package.json and package-lock.json to install dependencies
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Update npm and install dependencies with --legacy-peer-deps
+RUN npm install -g npm@latest
+RUN npm install --legacy-peer-deps
 
-# Copy the rest of the application code to the container
+# Copy the entire source code into the container
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the React application and check if build folder exists
+RUN npm run build && ls -la /app/dist  # Kiểm tra nội dung thư mục dist
 
-# Stage 2: Serve the React app using a lightweight web server
-# Use an official Nginx image to serve the application
+# Stage 2: Use NGINX to serve the application
 FROM nginx:alpine
 
-# Copy the build output from the previous stage to the Nginx HTML directory
+# Copy the build folder from the build stage into NGINX's HTML folder
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 80 to the outside world
+# Expose port 80 for the application
 EXPOSE 80
 
-# Start Nginx server
+# Run the NGINX server
 CMD ["nginx", "-g", "daemon off;"]

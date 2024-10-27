@@ -7,6 +7,7 @@ import Plan from "../pages/Dashboard/Plan/Plan";
 import PlanAI from "../pages/Dashboard/Plan/PlanAI";
 import Profile from "../pages/Dashboard/Profile";
 import GeneratePlan from "../pages/Dashboard/Plan/GeneratePlan";
+import DetailsTrip from "../modules/trips/DetailsTrip";
 const publicRoutes = [
   { path: "/", component: Home, layout: Fragment },
   { path: "/network", component: Network, layout: DefaultLayout },
@@ -15,6 +16,8 @@ const publicRoutes = [
   { path: "/planAI", component: PlanAI, layout: DefaultLayout },
   { path: "/profile", component: Profile, layout: DefaultLayout },
   { path: "/generate-plan", component: GeneratePlan, layout: DefaultLayout },
+  { path: "/detail-trip", component: DetailsTrip, layout: DefaultLayout },
+
 
 ];
 const privateRoutes = [];

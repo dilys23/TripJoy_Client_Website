@@ -34,13 +34,11 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./
-          file: ./Dockerfile
+          context: ./  # Thư mục chứa Dockerfile
+          file: ./Dockerfile  # Đường dẫn đến Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          push: true
+          push: true  # Đẩy image lên Docker Hub
           tags: dilysnguyen/tripjoy_client:latest
-          # cache-from: type=local,src=/tmp/.buildx-cache
-          # cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Deploy to EC2
         env:
@@ -48,10 +46,10 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@ec2-13-210-233-238.ap-southeast-2.compute.amazonaws.com << 'EOF'
-            docker stop tripjoy_client || true  # Stop the old container    
-            docker rm tripjoy_client || true     # Remove the old container
-            docker rmi dilysnguyen/tripjoy_client:latest || true  # Remove the old image
-            docker pull dilysnguyen/tripjoy_client:latest  # Pull the new image from Docker Hub
-            docker run -d -p 8080:80 --name tripjoy_client dilysnguyen/tripjoy_client:latest  # Run the new container
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@ec2-3-27-57-90.ap-southeast-2.compute.amazonaws.com << 'EOF'
+            docker stop tripjoy_client || true  # Dừng container cũ
+            docker rm tripjoy_client || true     # Xóa container cũ
+            docker rmi dilysnguyen/tripjoy_client:latest || true  # Xóa image cũ
+            docker pull dilysnguyen/tripjoy_client:latest  # Kéo image mới từ Docker Hub
+            docker run -d -p 8080:80 --name tripjoy_client dilysnguyen/tripjoy_client:latest  # Chạy container mới
           EOF
