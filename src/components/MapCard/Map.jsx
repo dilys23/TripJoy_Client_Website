@@ -9,7 +9,6 @@ import { act } from "react";
 
 const Map = ({ className }) => {
   const [map, setMap] = useState(null);
-  const [endPoint, setEndPoint] = useState(""); // Input for new location
   const [routingControl, setRoutingControl] = useState(null);
   const [currentPosition, setCurrentPosition] = useState(null); // GPS position
   const [distance, setDistance] = useState(null);
@@ -17,7 +16,62 @@ const Map = ({ className }) => {
     { lat: 16.467, lng: 107.59 }, // Start (Hue)
     { lat: 16.054, lng: 108.202 }, // End (Da Nang)
   ]);
+  const [markers, setMarkers] = useState([    {
+    lat: 16.467,
+    lng: 107.59,
+    icon: L.icon({
+      iconUrl: "https://img.icons8.com/arcade/44/marker.png",
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    }),
+  },
+  {
+    lat:16.054,
+    lng: 108.202,
+    icon: L.icon({
+      iconUrl: "https://img.icons8.com/arcade/44/marker.png",
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    }),
+  },]);
+/*
+ const updateWaypoints = (lat, lng) => {
+    setWaypoints((previewPoints)=>
+    {
+      const updatedWaypoints = [...previewpoints];
+      updatedWaypoints.splice(previewPoints.length -1, 0, {lat: lat, lng: lng});
+      console.log("Cập nhật waypoints", updatedWaypoints);
+      return updatedWaypoints
+    })
+  };
+    const updatedMarkers = (lat, lng) => {
+      const newMarker = L.marker([lat, lng], {
+        icon: L.icon({
+            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+        }),
+    }).addTo(mapInstance);
+      setMarkers((prevMarkers) => {
+        const updatedMarkers = [...prevMarkers];
+        updatedMarkers.splice(prevMarkers.length -1, 0, newMarker);
+        console.log("Cập nhật markers", updatedMarkers);
+        return updatedMarkers; // Trả về mảng mới
+      });}
 
+
+    
+  };
+
+  const handleMapClick = (event) => {
+    const { lat, lng } = event.latlng;
+    console.log("Clicked position:", lat, lng);
+    updateWaypoints(lat, lng);
+    updateMarkers(lat, lng);
+    calculateRoute();
+};
+
+*/  
   useEffect(() => {
     // Initialize map
     const mapInstance = L.map("map").setView([16.054, 108.202], 12); // Da Nang coords
@@ -33,22 +87,33 @@ const Map = ({ className }) => {
       marker: {
         icon,
       },
-      style: "button", // or "bar" for a search bar style
+      style: "button",
       autoComplete: true,
       autoCompleteDelay: 250,
       keepResult: true,
       updateMap: false,
     });
 
-    // Add search control to map
     mapInstance.addControl(searchControl);
+    mapInstance.on("geosearch/showlocation", async (result) => {
+      if (result.location) {
+        const { x, y } = result.location;
+        mapInstance.setView([y, x], 13);
 
-    mapInstance.on("geosearch/showlocation", (result) => {
-      const { x, y } = result.location;
-      if (x && y) {
-        mapInstance.setView([y, x], 13); // Center map on the search result
+        setWaypoints((prevWaypoints) => {
+        let position = prevWaypoints.length - 1; // Tính vị trí n-1
+
+        // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
+        const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
+        updatedWaypoints.splice(position, 0, { lat: y, lng: x }); // Chèn phần tử mới
+
+        console.log("Cập nhật waypoints", updatedWaypoints);
+       
+        return updatedWaypoints; // Trả về mảng đã cập nhật
+      });
+        calculateRoute();
       } else {
-        console.error("Invalid bounds for search result.");
+        console.error("Không thể xác định vị trí tìm kiếm.");
       }
     });
 
@@ -83,59 +148,65 @@ const Map = ({ className }) => {
 
     const handleMapClick = async (event) => {
       const { lat, lng } = event.latlng;
-      setWaypoints((prevWaypoints) => [...prevWaypoints, { lat, lng }]);
-      console.log(waypoints);
-      L.marker([lat, lng], {
+      const clickedPoint = { lat, lng }; // Tọa độ của điểm được nhấp
+      console.log("1234", lat, lng);
+      const start = { lat: 10.762, lng: 106.659 }; // Điểm bắt đầu
+      const end = { lat: 10.763, lng: 106.661 }; // Điểm kết thúc
+      const updateWaypoint =setWaypoints((prevWaypoints) => {
+        let position = prevWaypoints.length - 1; // Tính vị trí n-1
+
+        // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
+        const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
+        updatedWaypoints.splice(position, 0, { lat, lng }); // Chèn phần tử mới
+
+        console.log("Cập nhật waypoints", updatedWaypoints);
+       
+        return updatedWaypoints; // Trả về mảng đã cập nhật
+      });
+      console.log("handle map", waypoints);
+      const newMarker = L.marker([lat, lng], {
         icon: L.icon({
           iconUrl: "https://img.icons8.com/arcade/44/marker.png",
           iconSize: [40, 40],
           iconAnchor: [20, 40],
         }),
       }).addTo(mapInstance);
-      calculateRoute();
+      const updateMarker = setMarkers((prevMarkers) => {
+        const updatedMarkers = [...prevMarkers, newMarker];
+        console.log("Cập nhật markers", updatedMarkers);
+        return updatedMarkers; // Trả về mảng mới
+      });
+      calculateRoute(updateWaypoint);
+     
     };
-
     mapInstance.on("click", handleMapClick);
-    // mapInstance.on("click", addWaypoint);
-
     return () => {
       mapInstance.off("click", handleMapClick);
       mapInstance.remove();
     };
   }, []);
 
-  const fetchCoordinates = async (address) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          address,
-        )}`,
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        const lat = parseFloat(data[0].lat);
-        const lng = parseFloat(data[0].lon);
-        return { lat, lng };
-      } else {
-        alert("Không tìm thấy địa chỉ.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Lỗi khi lấy tọa độ:", error);
-      return null;
-    }
-  };
+  const calculateRoute = (newWaypoints = []) => {
+    console.log("vào hàm calculateRoute");
+    console.log("routingControl", routingControl);
 
-  const calculateRoute = () => {
     if (routingControl) {
-      routingControl.remove(); // Remove old route
+      routingControl.remove(); // Xoá lộ trình cũ nếu có
     }
+    const waypointsToUse =
+      Array.isArray(newWaypoints) && newWaypoints.length > 0
+        ? newWaypoints
+        : waypoints;
+    console.log("in ra way mới", waypointsToUse);
+    // markers.forEach((marker) => map.removeLayer(marker));
 
+    // Sử dụng các điểm dừng trong `waypoints` để tính lộ trình
     const control = L.Routing.control({
-      waypoints: waypoints.map((point) => L.latLng(point.lat, point.lng)),
+      waypoints: waypointsToUse.map((point) => L.latLng(point.lat, point.lng)),
       routeWhileDragging: true,
       show: false,
       createMarker: (i, waypoint, n) => {
+        console.log('vào hàm createrMarker', i, waypoint);
         const marker = L.marker(waypoint.latLng, {
           icon: L.icon({
             iconUrl: "https://img.icons8.com/arcade/44/marker.png",
@@ -143,21 +214,20 @@ const Map = ({ className }) => {
             iconAnchor: [20, 40],
           }),
         });
-
+       console.log("qua control");
         marker.bindPopup(
           `<div>
-                        <p>Location: (${waypoint.latLng.lat.toFixed(
-                          3,
-                        )}, ${waypoint.latLng.lng.toFixed(3)})</p>
-                        <button id="remove-${i}" class="remove-btn">Remove</button>
-                    </div>`,
+            <p>Location: (${waypoint.latLng.lat.toFixed(3)}, ${waypoint.latLng.lng.toFixed(3)})</p>
+            <button id="remove-${i}" class="remove-btn">Remove</button>
+          </div>`,
         );
 
         marker.on("popupopen", () => {
+          // Thêm sự kiện `click` vào nút "Remove"
           document
             .getElementById(`remove-${i}`)
             .addEventListener("click", () => {
-              removeWaypoint(i);
+              removeWaypoint(i); // Gọi hàm `removeWaypoint` với chỉ số `i`
             });
         });
 
@@ -168,8 +238,9 @@ const Map = ({ className }) => {
     control.on("routesfound", function (e) {
       const routes = e.routes;
       const summary = routes[0].summary;
-      const totalDistance = (summary.totalDistance / 1000).toFixed(2);
+      const totalDistance = (summary.totalDistance / 1000).toFixed(2); // Chuyển đổi sang km
       setDistance(totalDistance);
+
       const midPoint =
         routes[0].coordinates[Math.floor(routes[0].coordinates.length / 2)];
       L.popup()
@@ -177,39 +248,40 @@ const Map = ({ className }) => {
         .setContent(`Distance: ${totalDistance} km`)
         .openOn(map);
     });
-
     setRoutingControl(control);
   };
 
-  const addWaypoint = async () => {
-    console.log("1111");
-    console.log(endPoint);
-    if (!endPoint) {
-      const coords = await fetchCoordinates(endPoint);
-      if (coords) {
-        const newWaypoint = coords;
-        const updatedWaypoints = [...waypoints];
-        updatedWaypoints.push(newWaypoint);
-        setWaypoints(updatedWaypoints);
-        console.log(waypoints);
-
-        L.marker([coords.lat, coords.lng], {
-          icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-          }),
-        }).addTo(map);
-
-        calculateRoute();
-        setEndPoint("");
-      }
-    }
-  };
-
   const removeWaypoint = (index) => {
-    setWaypoints(waypoints.filter((_, i) => i !== index));
-    calculateRoute();
+    console.log("remove click");
+
+    // Update waypoints and markers
+    setWaypoints((prevWaypoints) => {
+      const newWaypoints = prevWaypoints.filter((_, i) => i !== index); // Remove the waypoint
+      console.log("waypoints after remove", newWaypoints);
+
+      setMarkers((prevMarkers) => {
+        const newMarkers = prevMarkers.filter((_, i) => i !== index); // Remove the marker from state
+
+        // Remove the marker from the map
+        if (prevMarkers[index]) {
+          console.log("xóa marker ", prevMarkers[index]);
+          map.removeLayer(prevMarkers[index]); // Ensure the marker is removed from the map
+        }
+
+        console.log("markers after remove", newMarkers);
+        return newMarkers; // Update markers state
+      });
+
+      // Remove the routing control and re-calculate the route
+      if (routingControl) {
+        console.log(routingControl);
+        routingControl.remove(); // Remove the existing route
+      }
+
+      // Recalculate the route with the updated waypoints
+      calculateRoute(newWaypoints); // Use updated waypoints
+      return newWaypoints; // Update waypoints state
+    });
   };
 
   return (
@@ -218,26 +290,12 @@ const Map = ({ className }) => {
         id="map"
         className={`padding-5 relative h-[215px] w-full rounded-[10px]`}
       ></div>
-      <div className="absolute left-4 top-4 z-[1200] flex space-x-2">
-        <input
-          type="text"
-          value={endPoint}
-          onChange={(e) => setEndPoint(e.target.value)}
-          placeholder="Enter address"
-          className="rounded p-1 opacity-[95%]"
-        />
-
-        <button
-          onClick={addWaypoint}
-          className="rounded bg-green-500 p-1 text-white"
-        >
-          Add Waypoint
-        </button>
+      <div className="absolute left-3 top-16 z-[1200] mt-[60px] flex space-x-2">
         <button
           onClick={calculateRoute}
-          className="rounded bg-blue-500 p-1 text-white"
+          className="rounded bg-blue-500 p-1 text-sm text-white"
         >
-          Calculate Route
+          Calculate
         </button>
       </div>
 
