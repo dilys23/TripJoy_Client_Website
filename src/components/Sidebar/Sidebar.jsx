@@ -14,7 +14,7 @@ function Sidebar({ showSidebar, toggleSidebar }) {
 
     return (
         <div
-            className={`fixed ${showSidebar ? "w-[230px] " : "w-[60px]"} h-[86vh] hidden md:block transition-width`}>
+            className={`fixed ${showSidebar ? "w-[230px]" : "w-[60px]"} h-[86vh] transition-width ${showSidebar ? "hidden md:block" : ""} hidden md:block ${showSidebar ? "w-0 sm:w-[230px]" : "w-0 sm:w-[60px]"}`}>
             <nav className={`bg-white rounded-lg ${showSidebar ? "h-[455px]" : ""}  items-center py-1`}>
                 <SidebarItem
                     index={0}
@@ -80,8 +80,8 @@ function Sidebar({ showSidebar, toggleSidebar }) {
                 ></SidebarItem>
             </nav>
             <div className='mt-2'>
-                <span className='lg:text-base text-[13px] text-[#AEAEAE] font-bold'>LỜI MỜI</span>
-                <TripInvites></TripInvites>
+                {/* <span className='lg:text-base text-[13px] text-[#AEAEAE] font-bold'>LỜI MỜI</span>
+                <TripInvites></TripInvites> */}
             </div>
         </div>
     );
