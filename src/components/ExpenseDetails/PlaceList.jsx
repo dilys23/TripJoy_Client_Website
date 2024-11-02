@@ -1,6 +1,6 @@
 import React from "react";
 
-const PlaceList = () => {
+const PlaceList = ({ waypoints }) => {
   return (
     <div
       aria-label="card"
@@ -38,72 +38,26 @@ const PlaceList = () => {
           role="list"
           className="flex flex-col space-y-4 flex-1 max-h-full overflow-y pr-2"
         >
-           <li>
-      <div class="relative pb-3  ">
-        <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-black" aria-hidden="true"></span>
-        <div class="relative flex space-x-3">
-          <div>
-            <span class="h-8 w-8 rounded-full bg-[#71B0F6] flex items-center justify-center ring-8 ring-white">
-            <img className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                src="https://img.icons8.com/arcade/44/marker.png" />
-            
-            </span>
-          </div>
-          <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-            <div>
-              <p class="text-sm text-gray-500">packing at <a href="#" class="font-medium text-gray-900">France</a></p>
+           {waypoints.map((waypoint, index) => (
+          <li key={index}>
+            <div className="relative pb-3">
+              <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-black" aria-hidden="true"></span>
+              <div className="relative flex space-x-3">
+                <div>
+                  <span className="h-8 w-8 rounded-full bg-[#71B0F6] flex items-center justify-center ring-8 ring-white">
+                    <img className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+                      src="https://img.icons8.com/arcade/44/marker.png" />
+                  </span>
+                </div>
+                <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                  <div>
+                    <p className="text-sm text-gray-500">Vị trí: {`Lat: ${waypoint.lat}, Lng: ${waypoint.lng}`}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="whitespace-nowrap text-right text-sm text-gray-500">
-              <time datetime="2020-09-20">Sep 20</time>
-            </div>
-          </div>
-        </div>
-      </div>
-    </li>
-     <li>
-      <div class="relative pb-3 ">
-        <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-black" aria-hidden="true"></span>
-        <div class="relative flex space-x-3">
-          <div>
-            <span class="h-8 w-8 rounded-full bg-[#71B0F6]  flex items-center justify-center ring-8 ring-white">
-            <img className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                src="https://img.icons8.com/arcade/44/marker.png" />
-            
-            </span>
-          </div>
-          <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-            <div>
-              <p class="text-sm text-gray-500">with driver </p>
-            </div>
-            <div class="whitespace-nowrap text-right text-sm text-gray-500">
-              <time datetime="2020-09-22">Sep 22</time>
-            </div>
-          </div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div className="relative ">
-        <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-black" aria-hidden="true"></span>
-        <div className="relative flex space-x-3">
-          <div>
-            <span className="h-8 w-8 rounded-full bg-[#46E8A5] flex items-center justify-center ring-8 ring-white">
-              <img className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-                src="https://img.icons8.com/arcade/44/marker.png" />
-            
-            </span>
-          </div>
-          <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-            <div>
-              <p className="text-sm text-gray-500">Hội An</p>
-            </div>
-            <div className="whitespace-nowrap text-right text-sm text-gray-500">
-              <time datetime="2020-09-28">Sep 28</time>
-            </div>
-          </div>
-        </div>
-      </div>
-    </li>
+          </li>
+        ))}
         </ul>
       </div>
     </div>
