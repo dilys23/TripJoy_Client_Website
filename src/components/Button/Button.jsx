@@ -25,7 +25,7 @@ function Button({
             ${className}`}
         >
             {leftIcon && <span>{leftIcon}</span>}
-            <span className={`lg:block sm:hidden ${hide ? 'hidden' : 'block'}`}>{children}</span>
+            <span className={`${hide ? 'lg:block sm:hidden ' : 'block'}`}>{children}</span>
             {rightIcon && <span>{rightIcon}</span>}
         </button>
     );

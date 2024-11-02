@@ -6,6 +6,7 @@ import TextArea from "../../../components/Input/TextArea";
 import map from "../../../assets/images/map.png"
 import { Link } from "react-router-dom";
 import config from "../../../config";
+import ExpenseList from "../../../components/ExpenseDetails/ExpenseList"
 function SharePost() {
     return (
         <div className="w-full h-screen ">
@@ -51,6 +52,7 @@ function SharePost() {
                     <img src={map} alt="" className="w-[385px] h-[370px] mt-[50px] rounded-[10px] object-cover" />
                     <div className="flex flex-col">
                         <div className="nunito-text text-[24px] font-semibold">Lịch sử</div>
+                        <ExpenseList />
                     </div>
                 </div>
             </div>
