@@ -24,6 +24,7 @@
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^4.0.0",
     "leaflet-routing-machine": "^3.2.12",
     "mapbox-gl": "^3.7.0",
     "query-string": "^9.1.0",
