@@ -2,7 +2,8 @@ import { MdClose, MdFilterList, MdOutlineSearch } from "react-icons/md";
 import Button from "../../../components/Button/Button";
 import CardGeneratePlan from "../../../modules/planAI/CardGeneratePlan"
 import { useState } from "react";
-import DetailPlanAI from "../../../modules/planAI/DetailPlanAI";
+import DetailPlanAI from "../../../modules/planAI/DetailGeneratePlan";
+import DetailGeneratePlan from "../../../modules/planAI/DetailGeneratePlan";
 function GeneratePlan() {
     const [isChoosePlan, setIsChoosePlan] = useState(1);
 
@@ -32,7 +33,7 @@ function GeneratePlan() {
                 </div>
             </div>
             <div className="sm:w-3/5 sm:block hidden min-h-[80%] bg-white shadow-md rounded-md ">
-                <DetailPlanAI></DetailPlanAI>
+                <DetailGeneratePlan></DetailGeneratePlan>
             </div>
         </div>
     );
