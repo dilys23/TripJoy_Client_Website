@@ -7,15 +7,12 @@ import icon from "./constants";
 import "leaflet-geosearch/dist/geosearch.css";
 import { act } from "react";
 
-const Map = ({ className }) => {
+const Map = ({ className, waypoints, setWaypoints }) => {
   const [map, setMap] = useState(null);
   const [routingControl, setRoutingControl] = useState(null);
   const [currentPosition, setCurrentPosition] = useState(null); // GPS position
   const [distance, setDistance] = useState(null);
-  const [waypoints, setWaypoints] = useState([
-    { lat: 16.467, lng: 107.59 }, // Start (Hue)
-    { lat: 16.054, lng: 108.202 }, // End (Da Nang)
-  ]);
+
   const [markers, setMarkers] = useState([    {
     lat: 16.467,
     lng: 107.59,
