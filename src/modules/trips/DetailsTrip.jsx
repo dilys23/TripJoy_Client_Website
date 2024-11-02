@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Details from "../../components/Tripdetails/Details";
 import ExpenseList from "../../components/ExpenseDetails/ExpenseList";
 import List from "../../components/ExpenseDetails/PlaceList";
@@ -7,11 +7,15 @@ import FriendList from "../../components/Tripdetails/FriendList";
 import ChatBox from "../../components/Tripdetails/ChatBox";
 
 const DetailsTrip = () => {
+  const [waypoints, setWaypoints] = useState([
+    { lat: 16.467, lng: 107.59 }, // Start (Hue)
+    { lat: 16.054, lng: 108.202 }, // End (Da Nang)
+  ]);
   return (
     <div className="grid grid-rows-3 mr-4 mx-auto p-4 max-w-[1410px] ">
       {/* Row 1: Map */}
       <div className="row-span-1 flex flex-col h-[90px]">
-        <Map />
+        <Map   waypoints={waypoints} setWaypoints={setWaypoints} />
       </div>
 
       <div className=" row-span-1 grid grid-cols-3 gap-5 h-[220px] ">
@@ -33,7 +37,7 @@ const DetailsTrip = () => {
         </div>
 
         <div className="col-span-2 ml-[-65px]">
-          <List />
+          <List  waypoints={waypoints}  />
         </div>
 
         {/* Cột thứ ba: giữ nguyên */}
