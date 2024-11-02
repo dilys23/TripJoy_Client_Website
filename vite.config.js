@@ -11,4 +11,9 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      external: ['leaflet-geosearch'], // Loại bỏ module khỏi quá trình build
+    },
+  },
 });
