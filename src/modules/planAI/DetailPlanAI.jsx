@@ -117,10 +117,10 @@ function DetailPlanAI() {
                         <div className="w-full flex flex-col pt-2 gap-5 relative overflow-auto sm:max-h-[85%] max-h-[60%] h-auto list-address">
                             <div className="flex flex-col sm:gap-5 gap-2 " ref={listRef}>
                                 {listAddress.map((address) => (
-                                    <div key={address.id} className={`flex items-center text-black w-full text-[14px] gap-2`} >
-                                        <span className=" inline-block lg:w-1/6 w-1/5 lg:text-[15px] text-[13px] leading-3">{address.date}</span>
+                                    <div key={address.id} className={`flex items-center text-black w-full text-[14px] gap-2 cursor-pointer`} >
+                                        <span className=" inline-block lg:w-1/6 w-1/5 lg:text-[15px] text-[13px] leading-3 cursor-pointer">{address.date}</span>
                                         <MdCircle className={`z-50 rounded-[90px] ${address.id === 1 ? "fill-[#007AFF] text-[16px] flex justify-center ml-[-1px]" : "border-[1px] fill-white"}`} />
-                                        <span className="inline-block whitespace-nowrap overflow-hidden text-ellipsis w-2/3 lg:text-[15px] text-[13px]">{address.address}</span>
+                                        <span className="inline-block whitespace-nowrap overflow-hidden text-ellipsis w-2/3 lg:text-[15px] text-[13px] cursor-pointer">{address.address}</span>
                                     </div>
                                 ))}
                             </div>
@@ -128,8 +128,7 @@ function DetailPlanAI() {
                                 style={{ height: listHeight }}
                                 className="absolute  top-0 gap-[14px] items-center flex-row flex w-full pt-3 ">
                                 <div className="lg:w-1/6 w-1/5 inline-block"></div>
-
-                                <div className={`border-l-[1px] border-white" border h-full`}></div>
+                                <div className={`border-l-[1px] border-[#C2BFBF] border h-full`}></div>
                                 <div className="w-2/3"></div>
                             </div>
                         </div>
