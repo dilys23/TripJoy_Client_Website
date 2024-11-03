@@ -19,7 +19,7 @@ function Button({
             onClick={onClick}
             style={{ width, height }}
             className={`flex items-center gap-2 cursor-pointer  font-semibold  shadow outline-none justify-center transition-all duration-300 text-start
-            ${primary ? 'bg-[#ff7224] hover:bg-[#ff7124fc] transition-all duration-150   text-base text-white' : ''}
+            ${primary ? 'bg-[#ff7224] hover:bg-[#ff7124fc] transition-all duration-150    text-white' : ''}
             ${secondary ? 'bg-[#007AFF] w-[85px] h-[37px] text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150 px-2' : ''}
             ${tertiary ? 'bg-[#B3B3B3] sm:w-[85px] sm:h-[37px] w-[70px] h-[25px] sm:text-base text-[13px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
             ${className}`}
