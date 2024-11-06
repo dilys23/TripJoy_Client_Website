@@ -285,7 +285,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
     <div className={`relative ${className}`}>
       <div
         id="map"
-        className={`padding-5 relative h-[215px] w-full rounded-[10px]`}
+        className={`padding-5 relative h-[420px] w-full rounded-[10px] border border-slate-300`}
       ></div>
       <div className="absolute left-3 top-16 z-[1200] mt-[60px] flex space-x-2">
         <button

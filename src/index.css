@@ -178,3 +178,7 @@ button:focus-visible {
 .leaflet-routing-container {
   display: none !important;
 }
+.custom-rows
+{
+  grid-template-row: 400px 300px 150px;
+}

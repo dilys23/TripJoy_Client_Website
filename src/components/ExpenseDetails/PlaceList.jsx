@@ -4,7 +4,7 @@ const PlaceList = ({ waypoints }) => {
   return (
     <div
       aria-label="card"
-      className="w-full h-full bg-white rounded-[10px] px-4 flex flex-col space-y-4"
+      className="w-full h-full bg-white rounded-[10px] px-4 flex flex-col space-y-4 border border-slate-300 overflow-y-auto"
     >
       <div aria-label="header" className="flex items-center justify-between ">
         {/* <div className="flex items-center space-x-2">
@@ -26,13 +26,13 @@ const PlaceList = ({ waypoints }) => {
 
       {/* Body: chia cột giữa ảnh và danh sách địa điểm */}
       <div className="flex space-x-4 flex-1 max-h-[80%]">
-        <div className="w-[180px] h-[90%] flex items-center rounded-[10px] overflow-hidden">
+        {/* <div className="w-[180px] h-[90%] flex items-center rounded-[10px] overflow-hidden">
           <img
             src="https://lh5.googleusercontent.com/proxy/wyG_LljX3QV2RZjPMpns6tn1rIpke_-6AWZgk2gMw2brKy4xz75JSSXCvh_XGMT7Lh668oomHjmz2zkjZVS5ZMhRQjR-zu53x4GZ6OMQ0eTE_aypLgC0jo4nF3LvrkwIL43cSP2vLRxQOiFDbMghutJcUiKsaGijTP478e6qrqA"
             alt="Hoi An - Quang Nam"
             className="w-full h-full object-cover"
           />
-        </div>
+        </div> */}
 
         <ul
           role="list"

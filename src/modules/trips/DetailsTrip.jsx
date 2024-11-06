@@ -12,42 +12,31 @@ const DetailsTrip = () => {
     { lat: 16.054, lng: 108.202 }, // End (Da Nang)
   ]);
   return (
-    <div className="grid grid-rows-3 mr-4 mx-auto p-4 max-w-[1410px] ">
-      {/* Row 1: Map */}
-      <div className="row-span-1 flex flex-col h-[90px]">
-        <Map   waypoints={waypoints} setWaypoints={setWaypoints} />
-      </div>
-
-      <div className=" row-span-1 grid grid-cols-3 gap-5 h-[220px] ">
-
-        <div className="col-span-2 items-center">
-          <Details />
-        </div>
-
-        <div className="col-span-1">
-
-          <FriendList />
-        </div>
-      </div>
-
-      <div className="row-span-1 grid grid-cols-6 gap-4 h-[230px]">
-        {/* Cột đầu tiên: tăng kích thước */}
-        <div className="col-span-2 mr-[65px]">
-          <ExpenseList />
-        </div>
-
-        <div className="col-span-2 ml-[-65px]">
-          <List  waypoints={waypoints}  />
-        </div>
-
-        {/* Cột thứ ba: giữ nguyên */}
-        <div className="col-span-2">
-          <ChatBox />
-        </div>
-      </div>
-
-
+    <div className="mx-auto  grid max-w-[1410px] grid-rows-3 gap-3 p-4">
+  <div className="row-span-1 grid h-[420px] grid-cols-1 md:grid-cols-3 gap-5">
+    <div className="col-span-2 items-center">
+      <Map waypoints={waypoints} setWaypoints={setWaypoints} />
     </div>
+
+    <div className="col-span-1 overflow-y-auto">
+      <List waypoints={waypoints} />
+    </div>
+  </div>
+  
+  <div className="row-span-1 grid h-[250px] grid-cols-1 md:grid-cols-3 gap-5">
+    <div className="col-span-2 items-center">
+      <Details />
+    </div>
+
+    <div className="col-span-1">
+      <FriendList />
+    </div>
+  </div>
+
+  <div className="row-span-1 grid h-[530px] grid-cols-1 mt-[-170px]">
+    <ExpenseList />
+  </div>
+</div>
 
   );
 };
