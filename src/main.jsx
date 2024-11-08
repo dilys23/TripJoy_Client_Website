@@ -9,12 +9,15 @@ import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "./components/GlobalStyles/GlobalStyles.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
+  
     <UserProvider>
       <GlobalStyles>
         <ToastContainer className="justify-center" />
         <App />
       </GlobalStyles>
     </UserProvider>
-  </React.StrictMode>
+ {/* </React.StrictMode> */}
+  </>
 );

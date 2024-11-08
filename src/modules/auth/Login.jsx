@@ -128,14 +128,17 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                     </div>
 
                     <input
+                        id="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         type="email"
+                        pattern=".+@example\.com"
                         onBlur={checkInputEmail}
-                        className={`h-[40px] w-[450px] rounded-[5px] border  bg-white px-3 shadow focus:border-blue-400 focus:outline-none ${emailError === "" ? "border-[#ccd0d5]" : "border-red-500"}`}
+                        size="30"
+                        className={`h-[40px] w-[450px] text-[15px] rounded-[5px] border  bg-white px-3 shadow focus:border-blue-400 focus:outline-none ${emailError === "" ? "border-[#ccd0d5]" : "border-red-500"}`}
                         placeholder="Tên đăng nhập..." />
-                    <p className="text-red-500 w-[450px] h-[20px] flex justify-start items-center text-[14px] px-2">{emailError}</p>
+                    <p className="text-red-500 w-[450px] h-[20px] flex justify-start items-center text-[11px] px-2">{emailError}</p>
 
                     <InputType
                         name="password"

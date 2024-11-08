@@ -24,7 +24,7 @@ function InputType({
                     type={showPass ? 'text' : 'password'}
                     onBlur={onBlur}
                     validate={validate}
-                    className="w-full outline-none bg-transparent "
+                    className="w-full outline-none bg-transparent text-[15px]"
                     placeholder={placeholder}
                 />
                 <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>
@@ -32,7 +32,7 @@ function InputType({
                     {showPass && <FaIcon.FaEyeSlash className="cursor-pointer w-[20px] h-[20px] text-[#bbb8b8]" />}
                 </div>
             </div>
-            <p className="text-red-500 w-[350px] h-[20px] flex justify-start items-center text-[14px] px-2">{errorMessage}</p>
+            <p className="text-red-500 w-[350px] h-[20px] flex justify-start items-center text-[11px] px-2">{errorMessage}</p>
         </div>
     );
 }

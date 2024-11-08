@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Navbar from "../../Header/Navbar"
+import Navbar from "../../Header/Navbar1"
 import Sidebar from "../../Sidebar/Sidebar"
 import { useState } from 'react';
 function DefaultLayout({ children }) {
@@ -15,7 +15,7 @@ function DefaultLayout({ children }) {
         <>
             <div className="bg-[#f5f6f7] w-full h-full">
                 <Navbar></Navbar>
-                <div className='flex w-full md:px-6 px-0 bg-[#f5f6f7] pt-5 min-h-full h-full '>
+                <div className='flex w-full md:px-6 px-0 bg-[#f5f6f7] pt-20 min-h-full h-full '>
                     <Sidebar showSidebar={showSidebar} toggleSidebar={toggleSidebar} />
                     <div className={`${showSidebar ? 'sm:ml-[270px]' : 'lg:ml-[140px] md:ml-[120px] ml-[0px]'}  h-full bg-[#f5f6f7] mx-auto
                     `}

@@ -41,7 +41,7 @@ function Navbar() {
     console.log("chuyển qua trang login")
     setShowLogin(true);
     setRegister(false);
-  } 
+  }
   const handleLoginClose = () => setShowLogin(false);
   const handleSendOTPOpen = () => {
     setShowLogin(false);
@@ -101,7 +101,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-20 flex h-16 w-full flex-col items-center justify-center bg-white">
+    <nav className="flex h-16 w-full flex-col items-center justify-center bg-white">
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between lg:px-3">
         <div
           className={`${user ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}

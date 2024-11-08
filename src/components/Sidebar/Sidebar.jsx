@@ -1,17 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as MdIcons from 'react-icons/md';
 import SidebarItem from './SidebarItem';
 import config from '../../config';
 import TripInvites from '../TripInvite/TripInvites';
+import { useLocation } from 'react-router-dom';
 
 function Sidebar({ showSidebar, toggleSidebar }) {
     const [isActive, setIsActive] = useState(0)
-
+    const location = useLocation();
     const handleClick = (index) => {
         setIsActive(index);
     };
     console.log("helo", showSidebar);
-
+    const getActiveIndex = () => {
+        if (location.pathname === config.routes.network) setIsActive(0);
+        if (location.pathname === config.routes.plan) setIsActive(1);
+        if (location.pathname === config.routes.profile) setIsActive(4);
+        // return 0;
+    };
+    useEffect(() => {
+        getActiveIndex();
+    }, [location.pathname])
     return (
         <div
             className={`fixed ${showSidebar ? "w-[230px]" : "w-[60px]"} h-[86vh] transition-width ${showSidebar ? "hidden md:block" : ""} hidden md:block ${showSidebar ? "w-0 sm:w-[230px]" : "w-0 sm:w-[60px]"}`}>
@@ -44,7 +53,7 @@ function Sidebar({ showSidebar, toggleSidebar }) {
                 ></SidebarItem>
                 <SidebarItem
                     index={2}
-                    isActive={isActive}
+                    isActive={location.pathname === config.routes.plan}
                     onClick={handleClick}
                     showSidebar={showSidebar}
                     to={config.routes.plan}
@@ -71,7 +80,7 @@ function Sidebar({ showSidebar, toggleSidebar }) {
                 ></SidebarItem>
                 <SidebarItem
                     index={5}
-                    isActive={isActive}
+                    isActive={location.pathname === config.routes.nework}
                     onClick={handleClick}
                     to={config.routes.plan}
                     showSidebar={showSidebar}
