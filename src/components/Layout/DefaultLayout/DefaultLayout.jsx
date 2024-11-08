@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Navbar from "../../Header/Navbar"
+import Navbar from "../../Header/Navbar1"
 import Sidebar from "../../Sidebar/Sidebar"
 import { useState } from 'react';
 function DefaultLayout({ children }) {

@@ -7,13 +7,15 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:7100",
+        target: "https://192.168.4.11:8080",
+        changeOrigin: true,
+        secure: false, // Bỏ qua kiểm tra SSL
       },
     },
   },
   build: {
     rollupOptions: {
-      external: ['leaflet-geosearch', 'leaflet-geosearch/dist/geosearch.css'], // Loại bỏ module khỏi quá trình build
+      external: ["leaflet-geosearch", "leaflet-geosearch/dist/geosearch.css"], // Loại bỏ module khỏi quá trình build
     },
   },
 });
