@@ -4,7 +4,7 @@ import api from "../utils/httpRequest";
 // Hàm đăng ký
 export const register1 = async (credentials) => {
   try {
-    const response = await api.post("https://pbl6.sodro44.io.vn/identity-service/register-with-otp", credentials);
+    const response = await api.post("/identity-service/register-with-otp", credentials);
     toast.success("Đăng kí thành công");
     return response.data;
   } catch (error) {
