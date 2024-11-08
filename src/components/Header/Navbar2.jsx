@@ -12,19 +12,16 @@ import VerifyAccount from "../../modules/auth/VerifyAccount";
 import * as MdIcons from "react-icons/md";
 // import noImages from "../../images/noImages.jpg";
 import { UserContext } from "../../contexts/UserContext";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import Tippy from 'tippy.js';
-import Tippy from '@tippyjs/react/headless';
 import ava from "../../assets/images/ava.jpg";
 import { useAuthStore } from "../../services/authUser";
 import { logoutService } from "../../services/login";
-import config from "../../config";
-import Search from "./Search";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+
   // Hàm xử lý khi nhấn vào nút
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen); // Đảo ngược trạng thái hiển thị menu
@@ -48,7 +45,7 @@ const Navbar1 = () => {
   const [showSendOTP, setShowSendOTP] = useState(false);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const [email, setEmailParent] = useState("");
-  const location = useLocation();
+
   const handleLoginOpen = () => {
     console.log("chuyển qua trang login");
     setShowLogin(true);
@@ -109,14 +106,9 @@ const Navbar1 = () => {
       console.error("Logout error:", error);
     }
   };
-  const handleHideResult = () => {
-    setShowMenu(false);
-  };
-  useEffect(() => {
-    handleHideResult();
-  }, [location.pathname])
+
   return (
-    <div>
+    <div className="mb-12">
       <nav className="shadow-dark-mild fixed top-0 z-20 flex h-[62px] w-full flex-wrap justify-between bg-zinc-50 py-2 font-[sans-serif] shadow-sm lg:py-4">
         <div className="mt-[-7px] flex w-full flex-wrap items-center justify-between px-2">
           {/* <div
@@ -186,7 +178,34 @@ const Navbar1 = () => {
                   </div>
                 </div>
               </div>
-              <Search></Search>
+              <form className="hidden md:flex">
+                <div className="ml-3 flex w-[30%] items-center justify-between">
+                  <input
+                    type="search"
+                    className="border-secondary-200 text-surface focus:text-gray-700 focus:shadow-inset dark:bg-body-dark dark:autofill:shadow-autofill relative m-0 block flex-auto rounded-full border border-zinc-200 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal transition duration-300 ease-in-out focus:border-primary focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-300"
+                    placeholder="Tìm kiếm"
+                    aria-label="Search"
+                    aria-describedby="button-addon2"
+                  />
+
+                  <span
+                    className="text-gray-600 flex items-center whitespace-nowrap rounded px-3 py-1.5 text-center text-base font-normal dark:text-white [&>svg]:w-5"
+                    id="basic-addon2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </form>
 
               <ul class="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
                 <li class="px-3 max-lg:border-b max-lg:py-3">
@@ -270,6 +289,26 @@ const Navbar1 = () => {
                 className="list-style-none mr-5 ms-auto flex flex-row items-center ps-0 md:ps-4"
                 data-twe-navbar-nav-ref
               >
+                <li className="px-2" data-twe-nav-item-ref>
+                  <a
+                    className="flex text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
+                    href="#"
+                    data-twe-nav-link-ref
+                  >
+                    <img
+                      src={ava}
+                      type="button"
+                      data-dropdown-toggle="userDropdown"
+                      data-dropdown-placement="bottom-start"
+                      className="h-[40px] w-[40px] cursor-pointer rounded-full"
+                      //   style="height: 25px; width: 25px"
+                      alt="Avatar-user"
+                      loading="lazy"
+                    />
+                    {/* <!-- Dropdown menu --> */}
+                  </a>
+                  {/* */}
+                </li>
 
                 <li className="relative px-2" data-twe-dropdown-ref>
                   <a
@@ -337,7 +376,7 @@ const Navbar1 = () => {
                   data-twe-dropdown-alignment="end"
                 >
                   <a
-                    className="hidden-arrow mr  flex items-center text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
+                    className="hidden-arrow mr flex items-center text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
                     href="#"
                     id="dropdownMenuButton1"
                     role="button"
@@ -351,9 +390,9 @@ const Navbar1 = () => {
                         fill="currentColor"
                       >
                         <path
-                          fillRule="evenodd"
+                          fill-rule="evenodd"
                           d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                          clipRule="evenodd"
+                          clip-rule="evenodd"
                         />
                       </svg>
                     </span>
@@ -397,68 +436,54 @@ const Navbar1 = () => {
                     </li>
                   </ul>
                 </li>
-                <li className="px-2" data-twe-nav-item-ref>
-                  <a
-                    className="flex text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
-                    // href="#"
-                    data-twe-nav-link-ref
-                  >
-                    <Tippy
-                      onClickOutside={handleHideResult}
-                      visible={showMenu}
-                      interactive
-                      placement="bottom-end"
-                      render={(attrs) => (
-                        <div
-                          className="w-[200px] items-start flex"
-                          tabIndex="-1"
-                          {...attrs}
-                        >
-                          <div className="w-full min-h-[100px] rounded-lg shadow-xl bg-white mt-[-10px] py-2 flex-col flex gap-1">
-                            <NavLink
-                              to={config.routes.profile}
-                              className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
-                              <MdIcons.MdOutlinePerson className=" text-[25px]" />
-                              <span className="text-[14px]">Trang cá nhân</span>
-                            </NavLink>
-                            <div className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
-                              <MdIcons.MdOutlineSettings className=" text-[25px]" />
-                              <span className="text-[14px">Cài đặt</span>
-                            </div>
-                            <div
-                              onClick={handleLogout}
-                              className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer"
-                            >
-                              <MdIcons.MdLogin className=" text-[25px]" />
-                              <span className="text-[14px">Đăng xuất</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}>
-                      <img
-                        onMouseEnter={() => {
-                          setShowMenu(true);
-                        }}
-                        src={ava}
-                        type="button"
-                        data-dropdown-toggle="userDropdown"
-                        data-dropdown-placement="bottom-start"
-                        className="h-[40px] w-[40px] cursor-pointer rounded-full"
-                        //   style="height: 25px; width: 25px"
-                        alt="Avatar-user"
-                        loading="lazy"
-                      />
-                    </Tippy>
-                    {/* <!-- Dropdown menu --> */}
-
-                  </a>
-                  {/* */}
-                </li>
-
               </ul>
-
+              {/* <div
+                  id="userDropdown"
+                  class="divide-gray-100 dark:bg-gray-700 dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
+                >
+                  <div class="text-gray-900 px-4 py-3 text-sm dark:text-white">
+                    <div>Bonnie Green</div>
+                    <div class="truncate font-medium">name@flowbite.com</div>
+                  </div>
+                  <ul
+                    class="text-gray-700 dark:text-gray-200 py-2 text-sm"
+                    aria-labelledby="avatarButton"
+                  >
+                    <li>
+                      <a
+                        href="#"
+                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                      >
+                        Dashboard
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                      >
+                        Settings
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                      >
+                        Earnings
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="py-1">
+                    <a
+                      href="#"
+                      class="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
+                    >
+                      Sign out
+                    </a>
+                  </div>
+                </div> */}
             </div>
-
           ) : (
             <div class="flex w-full flex-wrap items-center justify-between gap-5">
               <div className="flex flex-col gap-y-4">
@@ -499,8 +524,9 @@ const Navbar1 = () => {
               </div>
               <div
                 id="collapseMenu"
-                className={`${isMenuOpen ? "block" : "hidden"
-                  } max-lg:before:fixed max-lg:before:inset-0 max-lg:before:z-50 max-lg:before:bg-black max-lg:before:opacity-50 lg:!block`}
+                className={`${
+                  isMenuOpen ? "block" : "hidden"
+                } max-lg:before:fixed max-lg:before:inset-0 max-lg:before:z-50 max-lg:before:bg-black max-lg:before:opacity-50 lg:!block`}
               >
                 <button
                   id="toggleClose"
@@ -610,9 +636,9 @@ const Navbar1 = () => {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fillRule="evenodd"
+                      fill-rule="evenodd"
                       d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clipRule="evenodd"
+                      clip-rule="evenodd"
                     ></path>
                   </svg>
                   {isMenuOpen ? "Close Menu" : "Open Menu"}
@@ -622,6 +648,52 @@ const Navbar1 = () => {
           )}
         </div>
       </nav>
+      <div
+        id="userDropdown"
+        class="divide-gray-100 dark:bg-gray-700 hidden dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
+      >
+        <div class="text-gray-900 px-4 py-3 text-sm dark:text-white">
+          <div>Bonnie Green</div>
+          <div class="truncate font-medium">name@flowbite.com</div>
+        </div>
+        <ul
+          class="text-gray-700 dark:text-gray-200 py-2 text-sm"
+          aria-labelledby="avatarButton"
+        >
+          <li>
+            <a
+              href="#"
+              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+            >
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+            >
+              Settings
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+            >
+              Earnings
+            </a>
+          </li>
+        </ul>
+        <div class="py-1">
+          <a
+            href="#"
+            class="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
+          >
+            Sign out
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
