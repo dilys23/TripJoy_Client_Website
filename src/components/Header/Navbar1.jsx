@@ -8,23 +8,22 @@ import Login from "../../modules/auth/Login";
 import SendOTP from "../../modules/auth/SendOTP";
 import ForgetPassword from "../../modules/auth/ForgetPassword";
 import Register from "../../modules/auth/Register";
-import VerifyAccount from "../../modules/auth/VerifyAccount";
 import * as MdIcons from "react-icons/md";
 // import noImages from "../../images/noImages.jpg";
 import { UserContext } from "../../contexts/UserContext";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-// import Tippy from 'tippy.js';
+import { useLocation, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
-import ava from "../../assets/images/ava.jpg";
 import { useAuthStore } from "../../services/authUser";
 import { logoutService } from "../../services/login";
-import config from "../../config";
+
 import Search from "./Search";
+import avatarDefault from "../../assets/images/avatarDefault.png"
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const isLogin = localStorage.getItem('isLogin');
   // Hàm xử lý khi nhấn vào nút
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen); // Đảo ngược trạng thái hiển thị menu
@@ -41,7 +40,7 @@ const Navbar1 = () => {
   const [isVerifyAccountOpen, setIsVerifyAccountOpen] = useState(false);
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
-
+  // console.log(user.profile.id);
   const [showLogin, setShowLogin] = useState(false);
   // const [showRegister, setShowRegister] = useState(false);
 
@@ -115,6 +114,11 @@ const Navbar1 = () => {
   useEffect(() => {
     handleHideResult();
   }, [location.pathname])
+  const handleClickProfile = () => {
+    console.log("hi")
+    navigate(`/profile/${user.profile.id}`);
+    // window.location.reload();
+  };
   return (
     <div>
       <nav className="shadow-dark-mild fixed top-0 z-20 flex h-[62px] w-full flex-wrap justify-between bg-zinc-50 py-2 font-[sans-serif] shadow-sm lg:py-4">
@@ -149,7 +153,7 @@ const Navbar1 = () => {
             </div>
           </div> */}
 
-          {user ? (
+          {isLogin ? (
             <div className="flex w-full">
               <div
                 className={`${user ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}
@@ -399,7 +403,7 @@ const Navbar1 = () => {
                 </li>
                 <li className="px-2" data-twe-nav-item-ref>
                   <a
-                    className="flex text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
+                    className="flex transition duration-200  hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
                     // href="#"
                     data-twe-nav-link-ref
                   >
@@ -415,22 +419,23 @@ const Navbar1 = () => {
                           {...attrs}
                         >
                           <div className="w-full min-h-[100px] rounded-lg shadow-xl bg-white mt-[-10px] py-2 flex-col flex gap-1">
-                            <NavLink
-                              to={config.routes.profile}
+                            <div
+                              onClick={handleClickProfile}
+                              // to={`${config.routes.profile.replace(':id', user.userId)}`}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
                               <MdIcons.MdOutlinePerson className=" text-[25px]" />
                               <span className="text-[14px]">Trang cá nhân</span>
-                            </NavLink>
+                            </div>
                             <div className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
                               <MdIcons.MdOutlineSettings className=" text-[25px]" />
-                              <span className="text-[14px">Cài đặt</span>
+                              <span className="text-[14px]">Cài đặt</span>
                             </div>
                             <div
                               onClick={handleLogout}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer"
                             >
                               <MdIcons.MdLogin className=" text-[25px]" />
-                              <span className="text-[14px">Đăng xuất</span>
+                              <span className="text-[14px]">Đăng xuất</span>
                             </div>
                           </div>
                         </div>
@@ -439,10 +444,10 @@ const Navbar1 = () => {
                         onMouseEnter={() => {
                           setShowMenu(true);
                         }}
-                        src={ava}
+                        src={avatarDefault}
                         type="button"
-                        data-dropdown-toggle="userDropdown"
-                        data-dropdown-placement="bottom-start"
+                        // data-dropdown-toggle="userDropdown"
+                        // data-dropdown-placement="bottom-start"
                         className="h-[40px] w-[40px] cursor-pointer rounded-full"
                         //   style="height: 25px; width: 25px"
                         alt="Avatar-user"

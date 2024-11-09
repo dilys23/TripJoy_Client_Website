@@ -15,7 +15,7 @@ const publicRoutes = [
   { path: "/sharepost", component: SharePost, layout: DefaultLayout },
   { path: "/plan", component: Plan, layout: DefaultLayout },
   { path: "/planAI", component: PlanAI, layout: DefaultLayout },
-  { path: "/profile", component: Profile, layout: DefaultLayout },
+  { path: "/profile/:id", component: Profile, layout: DefaultLayout },
   { path: "/generate-plan", component: GeneratePlan, layout: DefaultLayout },
   { path: "/detail-trip", component: DetailsTrip, layout: DefaultLayout },
   { path: "/detail-plan-ai", component: DetailPlanAI, layout: DefaultLayout },

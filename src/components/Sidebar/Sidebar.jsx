@@ -11,11 +11,12 @@ function Sidebar({ showSidebar, toggleSidebar }) {
     const handleClick = (index) => {
         setIsActive(index);
     };
-    console.log("helo", showSidebar);
+    // console.log("helo", showSidebar);
     const getActiveIndex = () => {
         if (location.pathname === config.routes.network) setIsActive(0);
-        if (location.pathname === config.routes.plan) setIsActive(1);
-        if (location.pathname === config.routes.profile) setIsActive(4);
+        else if (location.pathname === config.routes.plan) setIsActive(1);
+        else setIsActive(0);
+        // if (location.pathname === config.routes.profile) setIsActive(4);
         // return 0;
     };
     useEffect(() => {

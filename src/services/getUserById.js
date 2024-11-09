@@ -1,18 +1,18 @@
 import api from "../utils/httpRequest"
-const searchUserRequest = async (searchValue) => {
+const getUserById = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get('useraccess-service/users/search', {
-            params: { name: searchValue },
+        const res = await api.get(`useraccess-service/users/${id}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             }
-        });
-        return res.data.users.data;
+        }
+        );
+        return res.data;
     } catch (error) {
-        console.log('search error: ', error);
+        console.log('get friend error: ', error);
         throw error;
     }
 }
-export { searchUserRequest }
+export { getUserById }

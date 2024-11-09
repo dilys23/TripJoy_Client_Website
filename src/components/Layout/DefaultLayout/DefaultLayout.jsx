@@ -3,7 +3,7 @@ import Navbar from "../../Header/Navbar1"
 import Sidebar from "../../Sidebar/Sidebar"
 import { useState } from 'react';
 function DefaultLayout({ children }) {
-    const [showSidebar, setShowSidebar] = useState(true);
+    const [showSidebar, setShowSidebar] = useState(false);
 
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar);

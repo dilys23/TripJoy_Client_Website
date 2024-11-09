@@ -5,8 +5,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
     return (
         <div className="w-full h-[100px] bg-white rounded-20 my-3 px-5 ">
             <div className="flex gap-3 items-center px-2 py-1 ">
-                <AvatarDefault src="" alt=""></AvatarDefault>
-                {/* <img src={info.ava} alt="" className="lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] rounded-90 cursor-pointer" /> */}
+                <AvatarDefault src={null} alt=""></AvatarDefault>
                 <div>
                     <span className="font-bold  lg:text-base md:text-[13px] cursor-pointer">{info.userName}</span>
                     <span className=' lg:text-base md:text-[13px]'> đã gửi yêu cầu kết bạn</span>
@@ -24,10 +23,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
     );
 }
 FriendItem.propTypes = {
-    info: PropTypes.shape({
-        ava: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired
-    }).isRequired
+
 };
 
 export default FriendItem;
