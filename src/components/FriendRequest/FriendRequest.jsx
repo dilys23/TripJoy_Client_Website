@@ -19,7 +19,7 @@ function FriendRequest() {
     const handleAcceptRequest = async (userId) => {
         console.log(userId);
         try {
-            const res = acceptFriendRequest(userId);
+            const res = await acceptFriendRequest(userId);
             console.log(res);
             setListFriend(prevList => {
                 const updatedList = prevList.filter(friend => friend.id !== userId);
@@ -29,12 +29,11 @@ function FriendRequest() {
             throw console.error();
 
         }
-
     }
-    const handleDeclineRequest = (userId) => {
+    const handleDeclineRequest = async (userId) => {
         console.log(userId);
         try {
-            const res = declineFriendRequest(userId);
+            const res = await declineFriendRequest(userId);
             console.log(res);
             setListFriend(prevList => {
                 const updatedList = prevList.filter(friend => friend.id !== userId);

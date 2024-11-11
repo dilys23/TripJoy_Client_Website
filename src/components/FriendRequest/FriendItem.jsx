@@ -1,10 +1,17 @@
 
 import PropTypes from 'prop-types';
 import AvatarDefault from '../Avatar/AvatarDefault';
+import { useNavigate } from 'react-router-dom';
 function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
+    const navigate = useNavigate();
+    console.log(info)
+    const handleToProfile = () => {
+        navigate(`/profile/${info.id}`);
+        window.location.reload();
+    }
     return (
         <div className="w-full h-[100px] bg-white rounded-20 my-3 px-5 ">
-            <div className="flex gap-3 items-center px-2 py-1 ">
+            <div onClick={handleToProfile} className="flex gap-3 items-center px-2 py-1 ">
                 <AvatarDefault src={null} alt=""></AvatarDefault>
                 <div>
                     <span className="font-bold  lg:text-base md:text-[13px] cursor-pointer">{info.userName}</span>
