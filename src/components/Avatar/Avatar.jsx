@@ -6,7 +6,7 @@ const Avatar = ({
   className = "",
   classNameImage,
   classNameP,
-  onClick = () => {}, // optional onClick function
+  onClick = () => { }, // optional onClick function
 }) => {
   return (
     <div
@@ -23,7 +23,7 @@ const Avatar = ({
         <p className={`ml-[-18px] w-[132px] text-center text-[#979797] text-[10px] font-normal font-['Arial'] ${classNameP}`}>@{name}</p>
 
       </div>
-     
+
     </div>
   );
 };

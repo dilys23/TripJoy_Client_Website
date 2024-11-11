@@ -41,7 +41,7 @@ function Navbar() {
     console.log("chuyển qua trang login")
     setShowLogin(true);
     setRegister(false);
-  } 
+  }
   const handleLoginClose = () => setShowLogin(false);
   const handleSendOTPOpen = () => {
     setShowLogin(false);

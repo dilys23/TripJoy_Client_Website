@@ -8,7 +8,7 @@ import { MdGroups } from "react-icons/md";
 import imgmap from "../../../assets/images/map.png"
 function Post({ data }) {
     const numImage = data.image.length
-    console.log(numImage)
+    // console.log(numImage)
     const [showFullText, setShowFullText] = useState(false)
     const truncatedText = data.descrip.length > 140 && !showFullText
         ? `${data.descrip.slice(0, 140)}...`

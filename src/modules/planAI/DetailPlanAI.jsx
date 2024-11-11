@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import map from "../../assets/images/map.png"
+import Button from "../../components/Button/Button"
 import Map from "../../components/MapCard/Map";
-import { MdAccessTime, MdCircle, MdOutlineKeyboardArrowDown, MdOutlineKeyboardControlKey, MdOutlineShareLocation } from "react-icons/md";
+import { MdAccessTime, MdAddCircle, MdCircle, MdOutlineKeyboardArrowDown, MdOutlineKeyboardControlKey, MdOutlineShareLocation } from "react-icons/md";
 function DetailPlanAI() {
     const [isUpInformationDetail, setIsUpInformaitonDetail] = useState(false);
     const listAddress = [
@@ -78,11 +79,23 @@ function DetailPlanAI() {
 
 
     ]
+    const listRef = useRef(null);
+    const [listHeight, setListHeight] = useState("auto");
+    const updateHeight = () => {
+        if (listRef.current) {
+            setListHeight(listRef.current.offsetHeight)
+        }
+    }
+    useEffect(() => {
+        updateHeight();
+        window.addEventListener("resize", updateHeight);
+        return () => window.removeEventListener("resize", updateHeight);
+    }, [listAddress])
     return (
         <div className="relative w-full lg:h-[88vh] sm:h-[92vh] h-[85vh] lg:px-0 px-3">
             {/* <Map /> */}
             <img src={map} alt="" className="w-full h-full object-cover" />
-            <div className={`absolute lg:w-1/3 sm:w-1/2 w-full lg:h-full sm:h-2/3  ${isUpInformationDetail ? "h-1/2 transition-all duration-700 transform translate-y-0 opacity-100" : "h-auto transition-all transform translate-y-3 duration-700"} left-0 sm:top-0 bottom-0 sm:px-5 sm:py-5 px-3`}>
+            <div className={`absolute lg:w-1/3 sm:w-1/2 w-full lg:h-full sm:h-2/3  ${isUpInformationDetail ? "h-3/5 transition-all duration-700 transform translate-y-0 opacity-100" : "h-auto transition-all transform translate-y-1 duration-700"} left-0 sm:top-0 bottom-0 sm:px-5 sm:py-5 px-3`}>
                 <div className="w-full sm:min-w-[280px] lg:min-w-[460px] h-full bg-white rounded-lg flex flex-col">
                     <div className="w-full sm:h-[85px] h-[60px] min-h-[60px] max-h-[85px] shadow-lg border-[#B3B3B3]  rounded-[15px] flex flex-col justify-center sm:px-5 px-3  gap-1">
                         <div className="flex justify-between items-center">
@@ -100,23 +113,35 @@ function DetailPlanAI() {
                             </div>
                         </div>
                     </div>
-                    <div className={`w-full px-2 pt-4 h-[90%] ${isUpInformationDetail ? "block" : "hidden"} sm:block`}>
-                        <div className="w-full flex flex-col pt-2 gap-5 relative overflow-auto max-h-[85%] list-address">
-                            {listAddress.map((address) => (
-                                <div key={address.id} className={`flex items-center text-black w-full text-[14px] gap-2`} >
-                                    <span className=" inline-block lg:w-1/6 w-1/5 lg:text-base text-[13px] leading-3">{address.date}</span>
-                                    <MdCircle className={`z-50 rounded-[90px] ${address.id === 1 ? "fill-[#007AFF] text-[16px] flex justify-center ml-[-1px]" : "border-[1px] fill-white"}`} />
-                                    <span className="inline-block whitespace-nowrap overflow-hidden text-ellipsis w-2/3 lg:text-base text-[13px]">{address.address}</span>
-                                </div>
-                            ))}
-                            <div className="absolute h-full gap-[14px] items-center flex-row flex w-full pt-2 pb-4">
+                    <div className={`w-full  px-2 pt-4 sm:h-[90%] h-[90%] ${isUpInformationDetail ? "block" : "hidden"} sm:block`}>
+                        <div className="w-full flex flex-col pt-2 gap-5 relative overflow-auto sm:max-h-[85%] max-h-[60%] h-auto list-address">
+                            <div className="flex flex-col sm:gap-5 gap-2 " ref={listRef}>
+                                {listAddress.map((address) => (
+                                    <div key={address.id} className={`flex items-center text-black w-full text-[14px] gap-2 cursor-pointer`} >
+                                        <span className=" inline-block lg:w-1/6 w-1/5 lg:text-[15px] text-[13px] leading-3 cursor-pointer">{address.date}</span>
+                                        <MdCircle className={`z-50 rounded-[90px] ${address.id === 1 ? "fill-[#007AFF] text-[16px] flex justify-center ml-[-1px]" : "border-[1px] fill-white"}`} />
+                                        <span className="inline-block whitespace-nowrap overflow-hidden text-ellipsis w-2/3 lg:text-[15px] text-[13px] cursor-pointer">{address.address}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div
+                                style={{ height: listHeight }}
+                                className="absolute  top-0 gap-[14px] items-center flex-row flex w-full pt-3 ">
                                 <div className="lg:w-1/6 w-1/5 inline-block"></div>
-                                <div className={`border-l-[1px] border-white" border h-full`}></div>
+                                <div className={`border-l-[1px] border-[#C2BFBF] border h-full`}></div>
                                 <div className="w-2/3"></div>
                             </div>
-
+                        </div>
+                        <div className="flex pt-1 gap-1 mt-2">
+                            <MdAddCircle className="text-[#007AFF] text-[20px] cursor-pointer " />
+                            <span className="text-[#007AFF] text-[13px] cursor-pointer ">Bạn có muốn thêm địa chỉ khác</span>
+                        </div>
+                        <div className="flex justify-end px-3">
+                            <Button primary className="px-3 py-1 text-[13px] rounded-md">Bắt đầu</Button>
                         </div>
                     </div>
+
+
                 </div>
 
             </div>

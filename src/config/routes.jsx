@@ -5,7 +5,7 @@ const routes = {
     sharepost: '/sharepost',
     plan: '/plan',
     planAI: '/planAI',
-    profile: '/profile',
+    profile: '/profile/:id',
     generatePlan: '/generate-plan',
     detailGeneratePlan: '/detail-generate-plan',
     detailTrip: '/detail-trip',

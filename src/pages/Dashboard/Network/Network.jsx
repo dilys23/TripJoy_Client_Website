@@ -3,16 +3,19 @@ import * as MdIcons from "react-icons/fa";
 import Posts from "../../../modules/network/Posts";
 import FriendRequest from "../../../components/FriendRequest";
 import Contact from "../../../components/Contact/Contact";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ModalListPost from "../../../modules/network/ModalListPost";
+import { UserContext } from "../../../contexts/UserContext";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false)
   const closeModal = () => {
     setShowModalListPost(false);
   };
+  const { user } = useContext(UserContext)
+  console.log(user)
   return (
     <div className=" my-3 flex w-full md:px-3">
-      <div className="lg:w-5/10 w-full">
+      <div className="lg:w-9/12 w-full">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4 ">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
@@ -36,7 +39,7 @@ function Network() {
         </div>
         <Posts></Posts>
       </div>
-      <div className="lg:w-4/10 hidden px-6 lg:block">
+      <div className="lg:w-3/12 min-w-3/12 hidden px-6 lg:block">
         <FriendRequest></FriendRequest>
         <Contact></Contact>
       </div>

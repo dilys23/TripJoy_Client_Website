@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { loginService } from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
 import InputType from "../../components/Input/InputType";
+import { getCurrentUser } from "../../services/getCurrentUser";
 
 function Login({ onClose, onForgetPassword, setEmailParent }) {
 
@@ -62,10 +63,11 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
         try {
             const response = await loginService(email, password);
             console.log('Login success:', response);
-            const { accessToken, refreshToken, user } = response;
+            const { accessToken, refreshToken } = response;
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
-            localStorage.setItem('userInfo', JSON.stringify(user));
+            const user = await getCurrentUser();
+            // localStorage.setItem('userInfo', JSON.stringify(user));
             login(user);
             toast.success("Đăng nhập thành công", {
                 autoClose: 1000
@@ -128,14 +130,17 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                     </div>
 
                     <input
+                        id="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         type="email"
+                        pattern=".+@example\.com"
                         onBlur={checkInputEmail}
-                        className={`h-[40px] w-[450px] rounded-[5px] border  bg-white px-3 shadow focus:border-blue-400 focus:outline-none ${emailError === "" ? "border-[#ccd0d5]" : "border-red-500"}`}
+                        size="30"
+                        className={`h-[40px] w-[450px] text-[15px] rounded-[5px] border  bg-white px-3 shadow focus:border-blue-400 focus:outline-none ${emailError === "" ? "border-[#ccd0d5]" : "border-red-500"}`}
                         placeholder="Tên đăng nhập..." />
-                    <p className="text-red-500 w-[450px] h-[20px] flex justify-start items-center text-[14px] px-2">{emailError}</p>
+                    <p className="text-red-500 w-[450px] h-[20px] flex justify-start items-center text-[11px] px-2">{emailError}</p>
 
                     <InputType
                         name="password"
