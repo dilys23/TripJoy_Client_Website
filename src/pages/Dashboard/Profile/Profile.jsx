@@ -13,8 +13,6 @@ import { getUserById } from "../../../services/getUserById";
 import { AiFillMessage } from "react-icons/ai";
 import { BsFillPersonCheckFill, BsFillPersonPlusFill, BsFillPersonXFill } from "react-icons/bs";
 import { acceptFriendRequest, declineFriendRequest, removeFriend, revokeFriendRequest, sendFriendRequest } from "../../../services/friend";
-import Tippy from '@tippyjs/react/headless';
-import 'tippy.js/dist/tippy.css';
 function Profile() {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [profile, setProfile] = useState(null);
@@ -121,7 +119,7 @@ function Profile() {
                         <div className="flex sm:gap-5 gap-2 sm:w-1/2 w-full  pt-3 justify-end sm:flex-row flex-col">
                             <Button
                                 // onClick={handle}
-                                className="lg:w-[140px] sm:w-[37px] w-full bg-[#007AFF] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150 md:text-base text-white text-[16px] px-2" hide leftIcon={<MdAdd />}>Tạo bài viết</Button>
+                                className="lg:w-[140px] sm:w-[37px] w-full bg-[#007AFF] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150 md:text-base text-white text-[16px] px-2" hide leftIcon={<MdAdd className="font-bold" />}>Tạo bài viết</Button>
                             <div className="flex gap-1">
                                 <Button
                                     onClick={() => setOpenModalEdit(true)}
@@ -184,7 +182,7 @@ function Profile() {
                 </div>
             </div>
             <Posts></Posts>
-            {openModalEdit && <ModalEditProfile handleClose={() => setOpenModalEdit(false)}></ModalEditProfile>}
+            {openModalEdit && <ModalEditProfile myId={id.id} handleClose={() => setOpenModalEdit(false)}></ModalEditProfile>}
         </div>
     );
 }

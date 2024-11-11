@@ -421,10 +421,10 @@ const Navbar1 = () => {
                           <div className="w-full min-h-[100px] rounded-lg shadow-xl bg-white mt-[-10px] py-2 flex-col flex gap-1">
                             <div
                               onClick={handleClickProfile}
-                              // to={`${config.routes.profile.replace(':id', user.userId)}`}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
-                              <MdIcons.MdOutlinePerson className=" text-[25px]" />
-                              <span className="text-[14px]">Trang cá nhân</span>
+                              {/* <MdIcons.MdOutlinePerson className=" text-[25px]" /> */}
+                              <img src={avatarDefault} alt="" className="w-[30px] h-[30px] rounded-full" />
+                              <span className="text-[14px]">{user?.profile.userName}</span>
                             </div>
                             <div className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
                               <MdIcons.MdOutlineSettings className=" text-[25px]" />

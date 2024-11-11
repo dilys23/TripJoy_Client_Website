@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AvatarDefault from "../Avatar/AvatarDefault"
 function AccountItem({ account }) {
     const navigate = useNavigate();
-    console.log(account)
     const handleToProfile = () => {
         navigate(`/profile/${account.id}`);
         window.location.reload();
