@@ -24,7 +24,7 @@ const InputButton = () => {
           color="white"
         />
         Gửi OTP
-      </button> 
+      </button>
     </form>
   );
 };
