@@ -47,8 +47,11 @@ function FriendRequest() {
     return (
         <div className="w-full">
             <div className="flex w-full justify-between">
-                <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold ">LỜI MỜI KẾT BẠN</span>
-                <span className="rounded-90 bg-[#007AFF] text-white font-bold lg:w-[22px] w-[15px] lg:h-[22px] h-[15px] lg:text-[14px] text-[12px] text-center cursor-pointer ">{countFriendRequest}</span>
+                <div className="flex gap-2">
+                    <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold ">LỜI MỜI KẾT BẠN</span>
+                    <span className="rounded-90 bg-[#007AFF] text-white font-bold lg:w-[22px] w-[15px] lg:h-[22px] h-[15px] lg:text-[14px] text-[12px] text-center cursor-pointer ">{countFriendRequest}</span>
+                </div>
+                <a href="#" className="text-[#aeaeae] cursor-pointer">Tất cả</a>
             </div>
             <div className="w-full h-[215px]">
                 {listFriend.map((item, index) => (

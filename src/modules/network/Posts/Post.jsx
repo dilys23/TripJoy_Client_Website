@@ -2,16 +2,14 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import * as MdIcons from "react-icons/md";
 import { FaRegComment } from "react-icons/fa";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { FaMapMarkedAlt, FaCalendarDay, FaMoneyCheckAlt } from "react-icons/fa";
-import { MdGroups } from "react-icons/md";
-import imgmap from "../../../assets/images/map.png"
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
 function Post({ data }) {
     const numImage = data.image.length
     // console.log(numImage)
     const [showFullText, setShowFullText] = useState(false)
-    const truncatedText = data.descrip.length > 140 && !showFullText
-        ? `${data.descrip.slice(0, 140)}...`
+    const truncatedText = data.descrip.length > 80 && !showFullText
+        ? `${data.descrip.slice(0, 80)}...`
         : data.descrip;
 
     const [isLiked, setIsLike] = useState(data.isLiked);
@@ -28,17 +26,16 @@ function Post({ data }) {
     return (
         <div className="w-full bg-white  lg:h-auto rounded-20 pt-5 mb-16">
             <div className='w-full flex md:flex-row flex-col'>
-                <div className='md:w-3/5'>
+                <div className='w-full'>
                     <div className="flex justify-between px-5 ">
                         <div className="flex gap-3 text-center cursor-pointer items-center">
-                            <img src={data.image[0]} alt="" className='w-[60px] h-[60px] object-cover' />
                             <div className='flex flex-col'>
                                 <div className='nunito-text md:text-[24px] text-[16px] md:leading-[32px] leading-[18px] font-extrabold text-start'>Hai ngày một đêm ở Hà Giang</div>
                                 <div className='flex gap-2 items-center'>
                                     <img src={data.avatar} alt="" className='rounded-90 w-[40px] h-[40px]' />
                                     <div className='block text-start'>
                                         <div className='font-bold md:text-base text-[12px] nunito-text leading-4'>{data.name}</div>
-                                        <div className='text-[##979797] text-xs italic md:text-base text-[12px] leading-4'>{data.time}</div>
+                                        <div className='text-[#979797] text-xs italic leading-4'>{data.time}</div>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +44,7 @@ function Post({ data }) {
                     <div className="mt-4  whitespace-pre-line md:text-base text-[13px] px-5 " >
                         <div className='font-bold text-[20px]'>{data.title}</div>
                         {truncatedText}
-                        {data.descrip.length > 140 && !showFullText && (
+                        {data.descrip.length > 80 && !showFullText && (
                             <button
                                 onClick={() => setShowFullText(!showFullText)}
                                 className='text-[#161823b0] md:[13px] text-[13px] italic'>...xem tiếp</button>
@@ -55,91 +52,97 @@ function Post({ data }) {
 
 
                     </div>
+                    <div className={`grid w-full h-[250px] gap-1 mt-3
+                     ${numImage < 3 ? (numImage === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
+                    `}>
+                        {data.image.length === 1 && (
+                            <img src={data.image[0]} alt="Post image 1"
+                                className="w-full h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                        )}
+
+                        {data.image.length === 2 && (
+                            <>
+                                <img src={data.image[0]} alt="Post image 1"
+                                    className="w-full h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                                <img src={data.image[1]} alt="Post image 2"
+                                    className="w-full  h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                            </>
+                        )}
+                        {data.image.length >= 3 && (
+                            <>
+                                <img src={data.image[0]} alt="Post image 1"
+                                    className="w-full h-[250px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                <img src={data.image[1]} alt="Post image 2"
+                                    className="w-full h-[250px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                {data.image.length > 3 ? (
+                                    <div className="relative w-full h-[250px] col-span-2 cursor-pointer">
+                                        <img src={data.image[2]} alt="Post image 3"
+                                            className="w-full h-[250px] rounded-[7px] object-cover" />
+                                        <div className="absolute top-0 left-0 w-full h-[250px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
+                                            <span className="text-white text-[24px] font-bold">+{data.image.length - 3}</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <img src={data.image[2]} alt="Post image 3"
+                                        className="w-full h-[250px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
+                                )}
+                            </>
+                        )}
+
+                    </div>
 
 
-                    <div className={`grid w-full h-[430px] gap-1 mt-3
-                        ${numImage === 1 ? "grid-cols-1" :
-                            numImage === 2 ? "grid-cols-2" :
-                                numImage === 3 ? "grid-cols-2 grid-rows-2" :
-                                    numImage === 4 ? "grid-cols-2 grid-rows-2" : ""}
-                            }`}>
-                        {data.image.length >= 5 && (
-                            <div className='w-full min-h-[430px]'>
-                                <div className="grid grid-cols-2 gap-1 h-1/2">
-                                    <img src={data.image[0]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                                    <img src={data.image[1]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                                </div>
-                                <div className="grid grid-cols-3 gap-1 h-1/2">
-                                    <img src={data.image[2]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                                    <img src={data.image[3]} alt="" className="w-full h-full rounded-10 object-cover cursor-pointer" />
-                                    {data.image.length > 5 ?
-                                        <div className='relative w-full h-full cursor-pointer'>
-                                            <div className='absolute w-full h-full bg-opacity-50 bg-black items-center flex justify-center'>
-                                                <span className=' text-white text-[30px]'>+{data.image.length - 5}</span>
-                                            </div>
-                                            <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
-                                        </div> :
-                                        <img src={data.image[4]} alt="" className="w-full h-full rounded-10 object-cover" />
-                                    }
-                                </div>
-                            </div>)
-                        }
+                </div>
 
-                        {data.image.length < 5 && data.image.slice(0, 3).map((img, idx) => (
-                            <img key={idx} src={img} alt={`Post image ${idx + 1}`} className={`w-full h-full max-h-[430px] rounded-10 object-cover cursor-pointer
-                                ${numImage === 3 && idx === 0 ? "row-span-2" : ""}
-                                ${numImage > 1 ? "rounded-[7px] " : ""}
-                                ${numImage === 5 && idx < 2 ? "row-span-1" : ""}`
-                            } />
-                        ))}
+            </div>
+            <div className='flex pt-3 px-2 justify-around'>
+                <div className='flex gap-2'>
+                    <MdIcons.MdLocationOn className='text-[40px] text-[#134563]' />
+                    <div>
+                        <div className='font-medium text-[14px]'>Địa điểm</div>
+                        <div className='text-[14px]'>Hà Giang</div>
                     </div>
                 </div>
-                <div className='md:w-2/5 md:px-5 flex md:flex-col flex-row '>
-                    <div className='justify-end md:flex hidden'><MdIcons.MdMoreHoriz className='text-[#979797] text-xl cursor-pointer' /></div>
-                    <div className='flex flex-col gap-4 px-5 md:mt-0 mt-4'>
-                        <div className='flex gap-3 items-center'>
-                            <FaMapMarkedAlt className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-red-500 text-[27px]'></FaMapMarkedAlt>
-                            <p className='nunito-text font-bold md:text-[15px] text-[13px]'>Lủng Cú, Hà Giang </p>
-                        </div>
-                        <div className='flex gap-3 items-center'>
-                            <FaCalendarDay className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#4979d1] text-[27px]'></FaCalendarDay>
-                            <p className='nunito-text font-bold md:text-[15px] text-[13px] '>13/7 - 20/7/2024</p>
-                        </div>
-                        <div className='flex gap-3 items-center'>
-                            <FaMoneyCheckAlt className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#96c362] text-[27px]'></FaMoneyCheckAlt>
-                            <p className='nunito-text font-bold md:text-[15px] text-[13px] text-[#e48055]'>1.500.000 đ</p>
-                        </div>
-                        <div className='flex gap-3 items-center'>
-                            <MdGroups className='md:w-[35px] md:h-[28px] w-[25px] h-[18px] text-[#4979d1] text-[27px]'></MdGroups>
-                            <p className='flex gap-1 nunito-text font-medium md:text-[15px] text-[13px] '>
-                                <p>3</p>
-                                <p>thành viên</p>
-                            </p>
-                        </div>
+                <div className='flex gap-2'>
+                    <MdIcons.MdCalendarMonth className='text-[40px] text-[#134563]' />
+                    <div>
+                        <div className='font-medium text-[14px]'>Thời gian</div>
+                        <div className='text-[14px]'>20/12 đến 25/12</div>
                     </div>
-                    <div className='w-full md:h-[400px] mt-3'>
-                        <img src={imgmap} alt="" className='md:w-full md:h-full w-full h-[250px] object-cover' />
+                </div>
+                <div className='flex gap-2'>
+                    <MdIcons.MdFlight className='text-[40px] text-[#134563]' />
+                    <div>
+                        <div className='font-medium text-[14px]'>Phương tiện</div>
+                        <div className='text-[14px]'>Xe máy</div>
+                    </div>
+                </div>
+                <div className='flex gap-2'>
+                    <FaMoneyCheckDollar className='text-[40px] text-[#134563]' />
+                    <div>
+                        <div className='font-medium text-[14px]'>Kinh phí</div>
+                        <div className='text-[14px]'>1.500.000đ</div>
                     </div>
                 </div>
             </div>
-            {/* <hr className='my-2 text-[#979797]' /> */}
-            <div className='flex py-3 w-full justify-center gap-14 pt-5'>
+            <hr className='my-2 text-[#979797] w-[90%] mx-auto mt-2' />
+            <div className='flex  w-full justify-center gap-14'>
                 <div className='flex gap-2 items-center w-[100px]'>
                     {isLiked ?
-                        <AiFillLike
+                        <AiFillHeart
                             onClick={handleUnLiked}
-                            className="text-[#0566ff] text-[20px] cursor-pointer"></AiFillLike>
-                        : <AiOutlineLike
+                            className="text-[#eb3223] text-[20px] cursor-pointer"></AiFillHeart>
+                        : <AiOutlineHeart
                             onClick={handleLikes}
-                            className="text-[#3a3a3a] text-[20px] cursor-pointer"></AiOutlineLike>}
-                    <span className={`${isLiked ? 'text-[#0566ff]' : 'text-[#3a3a3a]'}`}>{numLikes || 0}</span>
+                            className="text-[#3a3a3a] text-[20px] cursor-pointer"></AiOutlineHeart>}
+                    <span className={`${isLiked ? 'text-[#eb3223]' : 'text-[#3a3a3a]'}`}>{numLikes || 0}</span>
                 </div>
                 <div className='flex gap-2 items-center cursor-pointer'>
                     <FaRegComment className='text-[#3a3a3a]' />
                     <span className='text-[#3a3a3a]'>{data.numComments || 0}</span>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 Post.propTypes = {

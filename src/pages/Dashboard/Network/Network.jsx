@@ -35,6 +35,13 @@ function Network() {
       time: "20/12 đến 25/12",
       numberMember: 3,
     },
+    {
+      id: 3,
+      title: "Vịnh Hạ Long",
+      image: anh4,
+      time: "20/12 đến 25/12",
+      numberMember: 2,
+    },
   ];
   const dataPost = [
     {
@@ -43,7 +50,7 @@ function Network() {
       time: '12 tieng truoc',
       title: 'Măng Đen hôm đó nhiều mây',
       descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-      image: [anh1, anh2, anh3, anh4, anh1, anh2, anh3],
+      image: [anh2, anh1, anh4, anh4],
       isLiked: true,
       numLikes: 100,
       numComments: 8
@@ -60,7 +67,7 @@ function Network() {
     }
   ]
   return (
-    <div className=" my-3 flex w-full md:px-3 px-2 gap-5">
+    <div className=" my-3 flex w-full md:px-3 px-2 gap-8">
       <div className="lg:w-2/12  flex-col md:flex hidden gap-5">
         <div className="bg-white h-[130px] rounded-xl p-3">
           <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col p-3 gap-2">
@@ -82,7 +89,7 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="lg:w-8/12 ">
+      <div className="lg:w-7/12 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4 ">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
@@ -96,7 +103,7 @@ function Network() {
           </div>
           <div
             onClick={() => setShowModalListPost(!showModalListPost)}
-            className=" rounded-20 flex h-[30px] md:w-[120px] cursor-pointer items-center gap-3 border-none bg-[#007AFF] px-2">
+            className=" rounded-20 flex h-[30px] md:w-[120px] cursor-pointer items-center gap-3 border-none bg-[#FF8642] px-2">
             <MdIcons.FaLink className="text-sm text-white" />
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
@@ -114,7 +121,7 @@ function Network() {
         <FriendRequest></FriendRequest>
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3">NHÓM GỢI Ý</span>
         <div className="flex gap-3 lg:flex-row flex-col">
-          {listRecommendationPlan.map((plan) => (
+          {listRecommendationPlan.slice(0, 2).map((plan) => (
             <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
           ))}
         </div>
