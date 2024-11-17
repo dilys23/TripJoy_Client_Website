@@ -21,7 +21,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
             <div className='flex gap-3 justify-center px-2'>
                 <button
                     onClick={onAcceptRequest}
-                    className='bg-[#007AFF] text-white rounded-20 lg:w-[111px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Chấp nhận</button>
+                    className='bg-[#FF8744] text-white rounded-20 lg:w-[111px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Chấp nhận</button>
                 <button
                     onClick={onDeclineRequest}
                     className='border border-[#CCD0D5] text-[#0F3E4A] rounded-20 lg:w-[93px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Xoá</button>
