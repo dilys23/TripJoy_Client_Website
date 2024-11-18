@@ -155,3 +155,34 @@
 .list-address::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.swiper-button-prev.custom-prev,
+.swiper-button-next.custom-next {
+  position: absolute;
+  z-index: 10;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  color: white; /* Màu chữ */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-radius: 50%;  */
+  cursor: pointer;
+}
+
+.swiper-button-prev.custom-prev {
+  top: 10px; /* Vị trí trên */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-button-next.custom-next {
+  bottom: 10px; /* Vị trí dưới */
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* 
+.swiper-button-prev.custom-prev:hover,
+.swiper-button-next.custom-next:hover { */
+/* background-color: rgba(0, 0, 0, 0.8);  */

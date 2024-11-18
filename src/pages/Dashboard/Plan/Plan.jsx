@@ -5,7 +5,64 @@ import PlanCard from "../../../modules/trips/PlanCard";
 import RecommendationPlan from "../../../modules/trips/RecommendationPlan";
 import { Link } from "react-router-dom";
 import config from "../../../config";
+import { useState } from "react";
+import { DatePicker } from "antd";
+import moment from "moment";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+// import "antd/dist/antd.css";
 function Plan() {
+  const [startDestination, setStartDestination] = useState("");
+  const [endDestination, setEndDestination] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [budget, setBudget] = useState("");
+  const [visibility, setVisibility] = useState(true);
+  const dateFormat = "DD-MM-YYYY";
+  const [errors, setErrors] = useState({
+    startDestination: "",
+    endDestination: "",
+    startDate: "",
+    endDate: "",
+    budget: ""
+  })
+  const validateForm = () => {
+    let formIsValid = true;
+    let errors = {
+      startDestination: "",
+      endDestination: "",
+      startDate: "",
+      endDate: "",
+      budget: ""
+    };
+
+    if (!startDestination) {
+      formIsValid = false;
+      errors.startDestination = "Vui lòng điền điểm bắt đầu";
+    }
+
+    if (!endDestination) {
+      formIsValid = false;
+      errors.endDestination = "Vui lòng điền điểm kết thúc";
+    }
+    if (!startDate) {
+      formIsValid = false;
+      errors.startDate = "Vui lòng ngày bắt đầu";
+    }
+    if (!endDate) {
+      formIsValid = false;
+      errors.endDate = "Vui lòng ngày kết thúc";
+    }
+    if (!budget) {
+      formIsValid = false;
+      errors.budget = "Vui lòng điền ngân sách";
+    }
+    setErrors(errors);
+    return formIsValid;
+  };
   const listPlan = [
     {
       id: 1,
@@ -46,6 +103,40 @@ function Plan() {
       time: "2 ngày 1 đêm",
     },
   ];
+
+  const handleStartDateChange = (date) => {
+    if (date) {
+      setStartDate(date);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        startDate: null,
+      }))
+    }
+  };
+
+  const handleEndDateChange = (date) => {
+    if (startDate && date && date.isBefore(startDate)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        endDate: "Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!",
+      }));
+      return;
+    }
+    setEndDate(date);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      endDate: "",
+    }));
+  };
+  const handleAddPlan = (e) => {
+    if (e) e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
+
+  }
+
 
   return (
     <div className="my-1 flex w-full flex-col md:px-3">
@@ -102,55 +193,110 @@ function Plan() {
             <div className="flex gap-10">
               <div className="flex w-1/2 flex-col gap-2">
                 <span className="text-base font-normal text-[#979797]">
-                  Điểm bắt đầu
+                  Điểm bắt đầu<span className="text-[red] ml-1 text-[15px]">*</span>
                 </span>
-                <select className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none">
-                  <option value="Đà Nẵng">Đà Nẵng</option>
-                </select>
+                <input
+                  value={startDestination}
+                  onChange={(e) => setStartDestination(e.target.value)}
+                  placeholder="Đà Nẵng"
+                  required
+                  type="text"
+                  className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
+                />
+                {!startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
               </div>
               <div className="flex w-1/2 flex-col gap-2">
                 <span className="text-base font-normal text-[#979797]">
-                  Điểm kết thúc
+                  Điểm kết thúc<span className="text-[red] ml-1 text-[15px]">*</span>
                 </span>
-                <select className="rounded-mds h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none">
-                  <option value="Đà Lạt">Đà Lạt</option>
-                </select>
+                <input
+                  value={endDestination}
+                  onChange={(e) => setEndDestination(e.target.value)}
+                  placeholder="Đà Lạt"
+                  required
+                  type="text"
+                  className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
+                />
+                {!endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
               </div>
             </div>
             <div className="flex w-full flex-col gap-2">
-              <span className="text-base font-normal text-[#979797]">
-                Thời gian bắt đầu
-              </span>
-              <select className="rounded-mds h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"></select>
+              <label htmlFor="date-input" className="text-base font-normal text-[#979797]">
+                Thời gian bắt đầu<span className="text-[red] ml-1 text-[15px]">*</span>
+              </label>
+              <DatePicker
+                value={startDate}
+                onChange={handleStartDateChange}
+                format={dateFormat}
+                placeholder="dd-mm-yyyy"
+                className="rounded-md w-full h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"
+                disabledDate={(current) => current && current < moment().startOf("day")}
+              />
+              <span className="text-[12px] font-normal text-red-500">{errors?.startDate}</span>
             </div>
             <div className="flex w-full flex-col gap-2">
               <span className="text-base font-normal text-[#979797]">
-                Thời gian kết thúc
+                Thời gian kết thúc<span className="text-[red] ml-1 text-[15px]">*</span>
               </span>
-              <select className="rounded-mds h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"></select>
+              <DatePicker
+                value={endDate}
+                onChange={handleEndDateChange}
+                format={dateFormat}
+                placeholder="dd-mm-yyyy"
+                className="rounded-md w-full h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"
+                disabledDate={(current) => current && current < moment().startOf("day")}
+              />
+              <span className="text-[12px] font-normal text-red-500">{errors?.endDate}</span>
             </div>
             <div className="flex gap-10">
               <div className="flex w-3/5 flex-col gap-2">
                 <span className="text-base font-normal text-[#979797]">
-                  Kinh phí dự tính
+                  Kinh phí dự tính<span className="text-[red] ml-1 text-[15px]">*</span>
                 </span>
                 <input
+                  required
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value.replace(/[^0-9]/g, ""))}
                   type="text"
                   className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
                 />
+                {!budget && <span className="text-[12px] font-normal text-red-500">{errors?.budget}</span>}
               </div>
               <div className="flex w-2/5 flex-col gap-2">
                 <span className="text-base font-normal text-[#979797]">
-                  Phương tiện
+                  Chế độ<span className="text-[red] ml-1 text-[15px]">*</span>
                 </span>
-                <select className="rounded-mds h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none">
-                  <option value="Xe máy">Xe máy</option>
-                </select>
+                <div className="flex gap-4 items-center">
+                  <label className="flex items-center cursor-pointer sm:text-base text-[13px]">
+                    <input
+                      type="radio"
+                      value={true}
+                      name="visibility"
+                      className="mr-2"
+                      checked={visibility === true}
+                      onChange={() => setVisibility(true)}
+                    />
+                    Công khai
+                  </label>
+                  <label className="flex items-center cursor-pointer sm:text-base text-[13px]">
+                    <input
+                      type="radio"
+                      name="visibility"
+                      value={false}
+                      checked={visibility === false}
+                      className="mr-2"
+                      onChange={() => setVisibility(false)}
+                    />
+                    Cá nhân
+                  </label>
+                </div>
               </div>
             </div>
             <div className="mt-3 flex w-full justify-end">
               {" "}
-              <button className="flex h-[33px] w-[85px] items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
+              <button
+                onClick={handleAddPlan}
+                className="flex h-[33px] w-[85px] items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
                 Tạo mới
               </button>
             </div>

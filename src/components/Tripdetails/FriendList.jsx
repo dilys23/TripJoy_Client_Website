@@ -8,9 +8,9 @@ const FriendList = () => {
     >
       {/* <div className="p-4 max-w-md bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"> */}
       <div className="mt-4 mb-2 flex items-center justify-between">
-      <p className="text-gray-900 text-base font-medium leading-tight tracking-tight">
-              Danh sách địa điểm
-            </p>
+        <p className="text-gray-900 text-base font-medium leading-tight tracking-tight">
+          Danh sách địa điểm
+        </p>
         <a
           href="#"
           className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
@@ -41,7 +41,7 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+                <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1" />
 
               </div>
             </div>
@@ -64,7 +64,7 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+                <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1" />
 
               </div>
             </div>
@@ -87,7 +87,7 @@ const FriendList = () => {
                 </p>
               </div>
               <div class="text-gray-900 inline-flex items-center text-base font-semibold dark:text-white">
-              <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1"/>
+                <img width="24" height="24" src="https://img.icons8.com/fluency/24/speech-bubble-with-dots--v1.png" alt="speech-bubble-with-dots--v1" />
 
               </div>
             </div>

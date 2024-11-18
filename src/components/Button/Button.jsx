@@ -9,6 +9,7 @@ function Button({
     primary,
     secondary,
     tertiary,
+    normalBtn,
     onClick,
     to,
     hide = false,
@@ -18,10 +19,11 @@ function Button({
         <button
             onClick={onClick}
             style={{ width, height }}
-            className={`flex items-center gap-2 cursor-pointer shadow outline-none justify-center transition-all duration-300 text-start 
-            ${primary ? 'bg-[#ff7224]  font-semibold  hover:bg-[#ff7124fc] transition-all duration-150    text-white' : ''}
-            ${secondary ? 'bg-[#007AFF]  font-semibold  w-[85px] h-[37px] text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150 px-2' : ''}
-            ${tertiary ? 'bg-[#B3B3B3]  font-semibold  sm:w-[85px] sm:h-[37px] w-[70px] h-[25px] sm:text-base text-[13px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
+            className={`flex items-center gap-2 cursor-pointer font-semibold shadow outline-none justify-center text-start 
+            ${primary ? 'bg-[#ff7224] font-semibold  hover:bg-[#ff7124fc] transition-all duration-150 text-white px-2 py-1' : ''}
+            ${secondary ? 'bg-[#007AFF]  font-semibold  px-2 py-1 text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}
+            ${tertiary ? 'bg-[#B3B3B3]  font-semibold  sm:w-[85px] px-2 py-1 sm:text-base text-[13px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
+            ${normalBtn ? 'bg-white hover:bg-[#faf9f9]  font-medium  text-[13px] rounded-lg px-2 py-1 transition-all duration-150 text-[#0F3E4A] border border-[#CCD0D5]' : ''}
             ${className}`}
         >
             {leftIcon && <span>{leftIcon}</span>}

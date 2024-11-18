@@ -1,29 +1,41 @@
 import { MdClose } from "react-icons/md";
 import ava from "../../assets/images/ava.jpg"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditProfileIcon } from "../../components/Icons/Icons";
-import { Input } from "../../components/Input/Input.jsx"
 import Button from "../../components/Button/Button.jsx";
+import { getCurrentUser } from "../../services/getCurrentUser.js";
 function ModalEditProfile({ handleClose }) {
-    const initialState = {
-        avatar: ava,
-        name: "Van Thi Bach Duong",
-        email: "bachduongvan0402@gmail.com",
-        phone: "0956487458",
-        dob: "2003-04-02",
-        gender: "female",
-        address: "Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng",
-    };
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
+    const [formData, setFormData] = useState(null);
+
+    const fetchUser = async () => {
+        const res = await getCurrentUser();
+        setFormData(res.user.profile);
+        console.log(res.user.profile)
+    }
+    useEffect(() => {
+        fetchUser();
+    }, [])
+
+
     const [isChange, setIsChange] = useState(false);
-    const [formData, setFormData] = useState(initialState);
+
     const [avatar, setAvatar] = useState(ava)
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData({ ...formData, [name]: name === "gender" ? Number(value) : value });
         setIsChange(
-            value !== initialState[name] ||
-            formData.avatar !== initialState.avatar
+            value !== formData[name] ||
+            formData.avatar !== formData.avatar
         );
+        console.log(formData);
     };
     const handleFileChange = (e) => {
         const [file] = e.target.files;
@@ -39,6 +51,10 @@ function ModalEditProfile({ handleClose }) {
             toast.error('Định dạng file không hợp lệ!', { autoClose: 3000 });
         }
     };
+    const handleSubmit = () => {
+        const { email, ...submitData } = formData;
+        console.log("Submitting data:", submitData);
+    }
 
     return (
         <>
@@ -84,7 +100,7 @@ function ModalEditProfile({ handleClose }) {
                                 type="text"
                                 name="name"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                value={formData.name}
+                                value={formData?.userName}
                                 onChange={handleInputChange}
                             ></input>
                         </div>
@@ -94,17 +110,17 @@ function ModalEditProfile({ handleClose }) {
                                 type="text"
                                 name="email"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f5fbff] rounded-md border-[#55B7FF] border cursor-pointer sm:text-base text-[13px]"
-                                value={formData.email}
+                                value={formData?.email}
                                 onChange={handleInputChange}
                                 disabled></input>
                         </div>
                         <div className="w-full flex px-2">
                             <div className="w-1/4 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Số điện thoại</div>
                             <input
-                                name="phone"
+                                name="phoneNumber"
                                 type="text"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                value={formData.phone}
+                                value={formData?.phoneNumber}
                                 onChange={handleInputChange}></input>
                         </div>
                         <div className="w-full flex px-2">
@@ -113,7 +129,7 @@ function ModalEditProfile({ handleClose }) {
                                 name="dob"
                                 type="date"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                value={formData.dob}
+                                value={formData?.dateOfBirth}
                                 onChange={handleInputChange}
                             ></input>
                         </div>
@@ -124,9 +140,9 @@ function ModalEditProfile({ handleClose }) {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="male"
+                                        value="1"
                                         className="mr-2"
-                                        checked={formData.gender === "male"}
+                                        checked={formData?.gender === 1}
                                         onChange={handleInputChange}
                                     />
                                     Nam
@@ -135,9 +151,9 @@ function ModalEditProfile({ handleClose }) {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        value="female"
+                                        value="2"
                                         className="mr-2"
-                                        checked={formData.gender === "female"}
+                                        checked={formData?.gender === 2}
                                         onChange={handleInputChange}
                                     />
                                     Nữ
@@ -150,11 +166,11 @@ function ModalEditProfile({ handleClose }) {
                                 type="text"
                                 name="address"
                                 className="w-3/4 outline-none px-3 sm:h-[60px] h-auto bg-[#f1f1f2] rounded-md pt-1 sm:text-base text-[13px]"
-                                value={formData.address}
+                                value={formData?.address}
                                 onChange={handleInputChange}></textarea>
                         </div>
                         <div className="w-full justify-end flex pt-1">
-                            <Button secondary={isChange} tertiary={!isChange}>
+                            <Button onClick={handleSubmit} secondary={isChange} tertiary={!isChange}>
                                 Lưu
                             </Button>
                         </div>
