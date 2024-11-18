@@ -24,7 +24,7 @@ function Post({ data }) {
     }
 
     return (
-        <div className="w-full bg-white  lg:h-auto rounded-20 pt-5 mb-16">
+        <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-16">
             <div className='w-full flex md:flex-row flex-col'>
                 <div className='w-full'>
                     <div className="flex justify-between px-5 ">
@@ -96,32 +96,32 @@ function Post({ data }) {
 
             </div>
             <div className='flex pt-3 px-2 justify-around'>
-                <div className='flex gap-2'>
-                    <MdIcons.MdLocationOn className='text-[40px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px]'>
+                    <MdIcons.MdLocationOn className='sm:text-[40px] text-[25px] text-[#134563]' />
                     <div>
-                        <div className='font-medium text-[14px]'>Địa điểm</div>
-                        <div className='text-[14px]'>Hà Giang</div>
+                        <div className='font-medium sm:text-[14px] text-[10px]'>Địa điểm</div>
+                        <div className='sm:text-[14px] text-[10px]'>Hà Giang</div>
                     </div>
                 </div>
-                <div className='flex gap-2'>
-                    <MdIcons.MdCalendarMonth className='text-[40px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px]'>
+                    <MdIcons.MdCalendarMonth className='sm:text-[40px] text-[25px] text-[#134563]' />
                     <div>
-                        <div className='font-medium text-[14px]'>Thời gian</div>
-                        <div className='text-[14px]'>20/12 đến 25/12</div>
+                        <div className='font-medium sm:text-[14px] text-[10px]'>Thời gian</div>
+                        <div className='sm:text-[14px] text-[10px]'>20/12 đến 25/12</div>
                     </div>
                 </div>
-                <div className='flex gap-2'>
-                    <MdIcons.MdFlight className='text-[40px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px]'>
+                    <MdIcons.MdFlight className='sm:text-[40px] text-[25px] text-[#134563]' />
                     <div>
-                        <div className='font-medium text-[14px]'>Phương tiện</div>
-                        <div className='text-[14px]'>Xe máy</div>
+                        <div className='font-medium sm:text-[14px] text-[10px]'>Phương tiện</div>
+                        <div className='sm:text-[14px] text-[10px]'>Xe máy</div>
                     </div>
                 </div>
-                <div className='flex gap-2'>
-                    <FaMoneyCheckDollar className='text-[40px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px]'>
+                    <FaMoneyCheckDollar className='sm:text-[40px] text-[25px] text-[#134563]' />
                     <div>
-                        <div className='font-medium text-[14px]'>Kinh phí</div>
-                        <div className='text-[14px]'>1.500.000đ</div>
+                        <div className='font-medium sm:text-[14px] text-[10px]'>Kinh phí</div>
+                        <div className='sm:text-[14px] text-[10px]'>1.500.000đ</div>
                     </div>
                 </div>
             </div>
