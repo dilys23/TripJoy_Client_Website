@@ -4,7 +4,7 @@ import ava2 from "../../assets/images/anh3.jpg";
 import { Avatar } from "antd";
 function RecommendationPlanItem({ plan }) {
     return (
-        <div className="flex w-[170px] h-[215px] rounded-md flex-col bg-white shadow-lg">
+        <div className="flex w-[200px] h-[215px] rounded-md flex-col bg-white shadow-lg">
             <div className="w-full h-[167px] rounded-s-md relative cursor-pointer">
                 <img src={plan.image} alt="" className="w-full h-full rounded-s-md " />
                 <div className="absolute top-0 left-0 w-full h-full bg-black opacity-25">

@@ -67,9 +67,9 @@ function Network() {
     }
   ]
   return (
-    <div className=" my-3 flex w-full md:px-3 px-2 gap-8">
-      <div className="lg:w-2/12  flex-col md:flex hidden gap-5">
-        <div className="bg-white h-[130px] rounded-xl p-3">
+    <div className=" my-3 flex w-full md:px-3 px-2 gap-10">
+      <div className="lg:w-2/12 flex-col md:flex hidden gap-5 fixed left-0 top-[80px] h-full p-3">
+        <div className="bg-white h-[130px] rounded-xl p-3 border border-[#CCD0D5]">
           <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col p-3 gap-2">
             <div className="flex gap-3  items-center">
               <Avatar src={ava} alt="avatar" className="w-10 h-10 rounded-full"></Avatar>
@@ -89,8 +89,8 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="lg:w-7/12 ">
-        <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4 ">
+      <div className="lg:w-8/12 ml-[calc(16.6667%)] mr-[calc(16.6667%)]">
+        <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
               src={ava}
@@ -117,11 +117,11 @@ function Network() {
           ))}
         </div>
       </div>
-      <div className="lg:w-3/12  flex-col md:flex hidden">
+      <div className="lg:w-2/12  flex-col md:flex hidden fixed top-[80px] right-0 h-screen p-3 overflow-y-auto custom-scrollbar pb-[120px]">
         <FriendRequest></FriendRequest>
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3">NHÓM GỢI Ý</span>
-        <div className="flex gap-3 lg:flex-row flex-col">
-          {listRecommendationPlan.slice(0, 2).map((plan) => (
+        <div className="flex gap-3 lg:flex-row flex-col justify-center ">
+          {listRecommendationPlan.slice(0, 1).map((plan) => (
             <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
           ))}
         </div>

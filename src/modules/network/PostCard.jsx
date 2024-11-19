@@ -4,7 +4,7 @@ import config from "../../config";
 import Button from "../../components/Button/Button";
 function PostCard({ post }) {
     return (
-        <div className="w-[662px] h-[140px] border border-[#ccd0d5] shadow-sm rounded-[15px] flex">
+        <div className="w-[600px] h-[140px] border border-[#ccd0d5] shadow-sm rounded-[15px] flex">
             <img src={post.image || noImage} alt="" className="h-full w-[140px] rounded-[15px]" />
             <div className="w-full py-3 flex flex-col gap-3">
                 <div className="flex justify-between w-full px-5">
@@ -22,7 +22,7 @@ function PostCard({ post }) {
                     )}
                 </div>
                 <div className="flex gap-3 justify-between px-5">
-                    <div className="text-[24px] font-bold leading-7">{post.title}</div>
+                    <div className="text-[20px] font-bold leading-7">{post.title}</div>
                     <Button to={config.routes.sharepost} className="text-[14px] px-2 py-1 rounded-[5px] bg-[#ff7324] text-white">Chia sẻ</Button>
                 </div>
             </div>

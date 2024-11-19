@@ -64,13 +64,13 @@ function ModalEditProfile({ handleClose }) {
                 onClick={handleClose}
             >
                 <div
-                    className="modal sm:w-[600px] w-4/5 h-4/5 flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center px-3 py-3"
+                    className="modal sm:w-[600px] w-4/5 h-4/5 flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="w-full justify-end flex">
+                    <div className="w-full justify-end flex sm:px-0 px-2">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
-                    <div className="flex flex-col justify-start w-full sm:gap-4 pb-3 gap-3 px-6 pt-3">
+                    <div className="flex flex-col justify-start w-full sm:gap-4 pb-3 gap-3 sm:px-6 px-3 pt-3">
                         <span className="sm:text-[20px] text-base font-semibold text-start">Chỉnh sửa thông tin cá nhân</span>
                         <div className="w-full h-[96px] flex  px-2">
                             <div className="w-1/3 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ảnh đại diện</div>

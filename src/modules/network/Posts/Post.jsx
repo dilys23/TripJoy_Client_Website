@@ -41,8 +41,8 @@ function Post({ data }) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4  whitespace-pre-line md:text-base text-[13px] px-5 " >
-                        <div className='font-bold text-[20px]'>{data.title}</div>
+                    <div className="sm:mt-4 mt-1 whitespace-pre-line md:text-base text-[13px] px-5 " >
+                        <div className='font-bold text-[15px]'>{data.title}</div>
                         {truncatedText}
                         {data.descrip.length > 80 && !showFullText && (
                             <button
@@ -52,39 +52,39 @@ function Post({ data }) {
 
 
                     </div>
-                    <div className={`grid w-full h-[250px] gap-1 mt-3
+                    <div className={`grid w-full sm:h-[250px] h-[150px] gap-1 mt-3
                      ${numImage < 3 ? (numImage === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
                     `}>
                         {data.image.length === 1 && (
                             <img src={data.image[0]} alt="Post image 1"
-                                className="w-full h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                                className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
                         )}
 
                         {data.image.length === 2 && (
                             <>
                                 <img src={data.image[0]} alt="Post image 1"
-                                    className="w-full h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
                                 <img src={data.image[1]} alt="Post image 2"
-                                    className="w-full  h-[250px] rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full  sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
                             </>
                         )}
                         {data.image.length >= 3 && (
                             <>
                                 <img src={data.image[0]} alt="Post image 1"
-                                    className="w-full h-[250px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full sm:h-[250px] h-[150px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
                                 <img src={data.image[1]} alt="Post image 2"
-                                    className="w-full h-[250px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full sm:h-[250px] h-[150px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
                                 {data.image.length > 3 ? (
-                                    <div className="relative w-full h-[250px] col-span-2 cursor-pointer">
+                                    <div className="relative w-full sm:h-[250px] h-[150px] col-span-2 cursor-pointer">
                                         <img src={data.image[2]} alt="Post image 3"
-                                            className="w-full h-[250px] rounded-[7px] object-cover" />
-                                        <div className="absolute top-0 left-0 w-full h-[250px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
+                                            className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover" />
+                                        <div className="absolute top-0 left-0 w-full sm:h-[250px] h-[150px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
                                             <span className="text-white text-[24px] font-bold">+{data.image.length - 3}</span>
                                         </div>
                                     </div>
                                 ) : (
                                     <img src={data.image[2]} alt="Post image 3"
-                                        className="w-full h-[250px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
+                                        className="w-full sm:h-[250px] h-[150px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
                                 )}
                             </>
                         )}
