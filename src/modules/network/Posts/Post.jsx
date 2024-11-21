@@ -4,9 +4,9 @@ import * as MdIcons from "react-icons/md";
 import { FaRegComment } from "react-icons/fa";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { FcAutomotive, FcCalendar } from "react-icons/fc";
 function Post({ data }) {
     const numImage = data.image.length
-    // console.log(numImage)
     const [showFullText, setShowFullText] = useState(false)
     const truncatedText = data.descrip.length > 80 && !showFullText
         ? `${data.descrip.slice(0, 80)}...`
@@ -30,7 +30,7 @@ function Post({ data }) {
                     <div className="flex justify-between px-5 ">
                         <div className="flex gap-3 text-center cursor-pointer items-center">
                             <div className='flex flex-col'>
-                                <div className='nunito-text md:text-[24px] text-[16px] md:leading-[32px] leading-[18px] font-extrabold text-start'>Hai ngày một đêm ở Hà Giang</div>
+                                <div className='nunito-text lg:text-[24px] md:text-[20px] text-[16px] md:leading-[32px] leading-[18px] font-extrabold text-start'>Hai ngày một đêm ở Hà Giang</div>
                                 <div className='flex gap-2 items-center'>
                                     <img src={data.avatar} alt="" className='rounded-90 w-[40px] h-[40px]' />
                                     <div className='block text-start'>
@@ -41,7 +41,7 @@ function Post({ data }) {
                             </div>
                         </div>
                     </div>
-                    <div className="sm:mt-4 mt-1 whitespace-pre-line md:text-base text-[13px] px-5 " >
+                    <div className="sm:mt-4 mt-1 whitespace-pre-line lg:text-[14px] text-[12px] px-5 " >
                         <div className='font-bold text-[15px]'>{data.title}</div>
                         {truncatedText}
                         {data.descrip.length > 80 && !showFullText && (
@@ -52,73 +52,75 @@ function Post({ data }) {
 
 
                     </div>
-                    <div className={`grid w-full sm:h-[250px] h-[150px] gap-1 mt-3
+                    <div className={`grid w-full md:h-[250px] h-[120px] gap-3 mt-3 px-5
                      ${numImage < 3 ? (numImage === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
                     `}>
                         {data.image.length === 1 && (
                             <img src={data.image[0]} alt="Post image 1"
-                                className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
+                                className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                         )}
 
                         {data.image.length === 2 && (
                             <>
                                 <img src={data.image[0]} alt="Post image 1"
-                                    className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                                 <img src={data.image[1]} alt="Post image 2"
-                                    className="w-full  sm:h-[250px] h-[150px] rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full  md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                             </>
                         )}
                         {data.image.length >= 3 && (
                             <>
                                 <img src={data.image[0]} alt="Post image 1"
-                                    className="w-full sm:h-[250px] h-[150px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
                                 <img src={data.image[1]} alt="Post image 2"
-                                    className="w-full sm:h-[250px] h-[150px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
+                                    className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
                                 {data.image.length > 3 ? (
-                                    <div className="relative w-full sm:h-[250px] h-[150px] col-span-2 cursor-pointer">
+                                    <div className="relative w-full md:h-[250px] h-[120px] col-span-2 cursor-pointer">
                                         <img src={data.image[2]} alt="Post image 3"
-                                            className="w-full sm:h-[250px] h-[150px] rounded-[7px] object-cover" />
-                                        <div className="absolute top-0 left-0 w-full sm:h-[250px] h-[150px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
+                                            className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover" />
+                                        <div className="absolute top-0 left-0 w-full md:h-[250px] h-[120px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
                                             <span className="text-white text-[24px] font-bold">+{data.image.length - 3}</span>
                                         </div>
                                     </div>
                                 ) : (
                                     <img src={data.image[2]} alt="Post image 3"
-                                        className="w-full sm:h-[250px] h-[150px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
+                                        className="w-full md:h-[250px] h-[120px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
                                 )}
                             </>
                         )}
-
                     </div>
-
-
                 </div>
-
             </div>
             <div className='flex pt-3 px-2 justify-around'>
-                <div className='flex sm:gap-2 gap-[2px]'>
-                    <MdIcons.MdLocationOn className='sm:text-[40px] text-[25px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px] items-center'>
+                    <img width="45" height="30" src="https://img.icons8.com/arcade/64/marker.png" alt="marker" className="w-[25px] h-[25px] sm:w-[30px] sm:h-[35px] lg:w-[35px] lg:h-[40px]" />
                     <div>
                         <div className='font-medium sm:text-[14px] text-[10px]'>Địa điểm</div>
                         <div className='sm:text-[14px] text-[10px]'>Hà Giang</div>
                     </div>
                 </div>
-                <div className='flex sm:gap-2 gap-[2px]'>
-                    <MdIcons.MdCalendarMonth className='sm:text-[40px] text-[25px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px] items-center'>
+                    <FcCalendar className='sm:text-[40px] text-[23px] text-[#134563]' />
                     <div>
                         <div className='font-medium sm:text-[14px] text-[10px]'>Thời gian</div>
                         <div className='sm:text-[14px] text-[10px]'>20/12 đến 25/12</div>
                     </div>
                 </div>
-                <div className='flex sm:gap-2 gap-[2px]'>
-                    <MdIcons.MdFlight className='sm:text-[40px] text-[25px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px] items-center'>
+                    <FcAutomotive className='sm:text-[40px] text-[25px] text-[#134563]' />
                     <div>
                         <div className='font-medium sm:text-[14px] text-[10px]'>Phương tiện</div>
                         <div className='sm:text-[14px] text-[10px]'>Xe máy</div>
                     </div>
                 </div>
-                <div className='flex sm:gap-2 gap-[2px]'>
-                    <FaMoneyCheckDollar className='sm:text-[40px] text-[25px] text-[#134563]' />
+                <div className='flex sm:gap-2 gap-[2px] items-center'>
+                    <img
+                        width="48"
+                        height="48"
+                        src="https://img.icons8.com/office/40/money-bag.png"
+                        alt="scooter"
+                        className="w-[25px] h-[25px] sm:w-[40px] sm:h-[40px]"
+                    />
                     <div>
                         <div className='font-medium sm:text-[14px] text-[10px]'>Kinh phí</div>
                         <div className='sm:text-[14px] text-[10px]'>1.500.000đ</div>
@@ -142,7 +144,7 @@ function Post({ data }) {
                     <span className='text-[#3a3a3a]'>{data.numComments || 0}</span>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 Post.propTypes = {

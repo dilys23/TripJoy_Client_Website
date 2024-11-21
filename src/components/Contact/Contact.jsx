@@ -14,7 +14,7 @@ function Contact() {
     ]
     return (
         <div className="w-full">
-            <div className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-3">LIÊN HỆ</div>
+            <div className="text-[#aeaeae] lg:text-base text-[12px] font-bold my-3">LIÊN HỆ</div>
             <div className="w-full h-auto bg-white rounded-20 border border-[#CCD0D5]">
                 {contactList.map((item, index) => (
                     <ContactItem key={index} contact={item}></ContactItem>

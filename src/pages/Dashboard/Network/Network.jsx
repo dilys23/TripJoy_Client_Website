@@ -67,29 +67,29 @@ function Network() {
     }
   ]
   return (
-    <div className=" my-3 flex w-full md:px-3 px-2 gap-10">
-      <div className="lg:w-2/12 flex-col md:flex hidden gap-5 fixed left-0 top-[80px] h-full p-3">
-        <div className="bg-white h-[130px] rounded-xl p-3 border border-[#CCD0D5]">
-          <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col p-3 gap-2">
-            <div className="flex gap-3  items-center">
-              <Avatar src={ava} alt="avatar" className="w-10 h-10 rounded-full"></Avatar>
-              <div className="font-medium">Bach Duong</div>
+    <div className=" my-3 flex w-full md:px-3 px-2 lg:gap-10 gap-4">
+      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-5 left-2 top-[80px] h-full lg:p-3 p-1">
+        <div className="bg-white h-fit rounded-xl p-3 border border-[#CCD0D5]">
+          <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col lg:p-3 p-1 gap-2">
+            <div className="flex lg:gap-3 gap-1  items-center">
+              <img src={ava} alt="avatar" className="lg:w-10 lg:h-10 w-5 h-5 rounded-full"></img>
+              <div className="font-medium lg:text-[16px] text-[13px]">Bach Duong</div>
             </div>
             <div className="flex gap-2 justify-around">
               <div className="flex flex-col justify-center text-center">
-                <div className="text-[15px] font-medium">2.3k</div>
-                <div className="text-[13px]">Bạn bè</div>
+                <div className="lg:text-[15px] text-[12px] font-medium">2.3k</div>
+                <div className="lg:text-[13px] text-[10px]">Bạn bè</div>
               </div>
               <div className="flex flex-col justify-center text-center">
-                <div className="text-[15px] font-medium">21</div>
-                <div className="text-[13px]">Bài đăng</div>
+                <div className="lg:text-[15px] text-[12px] font-medium">21</div>
+                <div className="lg:text-[13px] text-[10px]">Bài đăng</div>
               </div>
             </div>
           </div>
         </div>
         <Contact></Contact>
       </div>
-      <div className="lg:w-8/12 ml-[calc(16.6667%)] mr-[calc(16.6667%)]">
+      <div className="md:w-8/12 md:ml-[calc(16.6667%)] md:mr-[calc(16.6667%)] w-full lg:px-16 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
@@ -117,16 +117,16 @@ function Network() {
           ))}
         </div>
       </div>
-      <div className="lg:w-2/12  flex-col md:flex hidden fixed top-[80px] right-0 h-screen p-3 overflow-y-auto custom-scrollbar pb-[120px]">
+      <div className=" md:w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-5 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
         <FriendRequest></FriendRequest>
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3">NHÓM GỢI Ý</span>
-        <div className="flex gap-3 lg:flex-row flex-col justify-center ">
+        <div className="flex gap-3 lg:flex-row flex-col justify-start ">
           {listRecommendationPlan.slice(0, 1).map((plan) => (
             <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
           ))}
         </div>
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3 pt-3">ĐỊA ĐIỂM GỢI Ý</span>
-        <div className="flex w-full flex-col gap-3">
+        <div className="flex w-full flex-col gap-3 pb-16">
           {listRecommendationPlan.map((plan) => (
             <RecommendationAddressItem key={plan.id} plan={plan}></RecommendationAddressItem>
           ))}
