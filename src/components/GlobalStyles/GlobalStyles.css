@@ -264,7 +264,7 @@
   }
 }
 .loading-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -276,4 +276,11 @@
   background-color: rgba(255, 255, 255, 0.6);
   z-index: 9999;
   opacity: 1;
+  overflow: hidden;
 }
+/* @import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+.kanit-medium-italic {
+  font-family: "Kanit", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+} */

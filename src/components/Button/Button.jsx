@@ -33,7 +33,7 @@ function Button({
     );
 
     return to ? (
-        <Link to={to} transition-all duration-300>
+        <Link to={to} >
             {buttonContent}
         </Link>
     ) : (

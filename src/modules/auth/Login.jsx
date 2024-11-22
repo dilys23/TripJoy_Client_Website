@@ -8,6 +8,7 @@ import { UserContext } from "../../contexts/UserContext";
 import InputType from "../../components/Input/InputType";
 import { getCurrentUser } from "../../services/getCurrentUser";
 import LoadingSpinner from "../../components/Loading";
+import DialogSucess from "../../components/Notification/DialogSuccess";
 
 function Login({ onClose, onForgetPassword, setEmailParent }) {
 
@@ -15,7 +16,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-
+    const [showDialog, setShowDialog] = useState(false);
     const { login } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,13 +69,16 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             const user = await getCurrentUser();
-            // localStorage.setItem('userInfo', JSON.stringify(user));
+            localStorage.setItem('userInfo', JSON.stringify(user));
             login(user);
+            setIsLoading(false);
+            // setShowDialog(true);
             toast.success("Đăng nhập thành công", {
                 autoClose: 1000
             });
             handleClose();
             navigate('/network');
+
         } catch (error) {
             if (error.response && error.response.data) {
                 const { errors } = error.response.data;
@@ -168,7 +172,12 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                         </button>
                     </div>
                 </div>
+                {/* {showDialog && <DialogSucess
+                    message="Đăng nhập thành công"
+                    description="Chào mừng bạn đến với TripJoy"
+                />} */}
                 {isLoading && <LoadingSpinner></LoadingSpinner>}
+
             </div>
         </>
     );

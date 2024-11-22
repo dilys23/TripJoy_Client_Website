@@ -186,7 +186,7 @@ function Register({ onClose, onSwitchToLogin }) {
                   required={true}
                   validate={validateOTP}
                   className="w-full"
-                  inputClassName="h-[40px] w-full rounded-[5px] border border-[#fffff] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none" // Class cho input
+                  inputClassName="h-[40px] w-full rounded-[5px] border border-[#fffff] bg-[#f5f6f7] px-3 shadow focus:border-blue-400 focus:outline-none"
                 />
 
                 <button

@@ -4,9 +4,7 @@ import api from "../utils/httpRequest"
 const addPlanRequest = async (formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post('travelplan-service/plan', {
-            formData
-        }, {
+        const res = await api.post('travelplan-service/plans', formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -14,7 +12,8 @@ const addPlanRequest = async (formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        console.error("Error occurred while adding plan:", error);
+        throw error;
     }
 };
 

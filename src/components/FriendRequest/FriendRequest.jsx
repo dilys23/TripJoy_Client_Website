@@ -11,16 +11,14 @@ function FriendRequest() {
         const dataFriendRequest = await getListFriendRequest();
         setCountFriendRequest(dataFriendRequest.users.count);
         setListFriend(dataFriendRequest.users.data);
-        console.log(dataFriendRequest.users.data);
     }
     useEffect(() => {
         getListFriend();
     }, [])
     const handleAcceptRequest = async (userId) => {
-        console.log(userId);
         try {
             const res = await acceptFriendRequest(userId);
-            console.log(res);
+
             setListFriend(prevList => {
                 const updatedList = prevList.filter(friend => friend.id !== userId);
                 return updatedList;
@@ -34,7 +32,7 @@ function FriendRequest() {
         console.log(userId);
         try {
             const res = await declineFriendRequest(userId);
-            console.log(res);
+
             setListFriend(prevList => {
                 const updatedList = prevList.filter(friend => friend.id !== userId);
                 return updatedList;

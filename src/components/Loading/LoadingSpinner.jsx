@@ -14,8 +14,9 @@ const LoadingSpinner = () => {
     };
 
     return (
-        <div className="loading-container">
+        <div className="loading-container flex flex-col">
             <Lottie options={defaultOptions} height={150} width={150} />
+            {/* <span className='kanit-medium-italic text-[20px]'>Chờ một xí...</span> */}
         </div>
     );
 };

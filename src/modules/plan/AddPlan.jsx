@@ -1,10 +1,13 @@
-import { DatePicker, Space } from 'antd';
+import { Button, DatePicker, Space } from 'antd';
 const { RangePicker } = DatePicker;
 import InputWithLabel from "../../components/Input/InputWithLabel";
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { MdAdd } from 'react-icons/md';
-import { addLocationRequest } from '../../services/locationRequest';
+import toast from 'react-hot-toast';
+import { notification } from 'antd';
+
+import { addPlanRequest } from '../../services/plan';
 
 function AddPlan() {
     const [namePlan, setNamePlan] = useState("");
@@ -14,6 +17,14 @@ function AddPlan() {
     const [endDate, setEndDate] = useState(null);
     const [budget, setBudget] = useState("");
     const [selectedItems, setSelectedItems] = useState();
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type) => {
+        api[type]({
+            message: 'Thông báo',
+            description:
+                'Tạo kế hoạch thành công.',
+        });
+    };
     const [errors, setErrors] = useState({
         namePlan: "",
         startDestination: "",
@@ -66,22 +77,51 @@ function AddPlan() {
         setErrors(errors);
         return formIsValid;
     };
+    const handelClear = () => {
+        setNamePlan("");
+        setStartDestination("");
+        setEndDestination("");
+        setStartDate(null);
+        setEndDate(null);
+        setBudget("");
+        setSelectedItems(null);
 
+        // Reset validation errors
+        setErrors({
+            namePlan: "",
+            startDestination: "",
+            endDestination: "",
+            startDate: "",
+            endDate: "",
+            budget: ""
+        });
+    }
     const handleAddPlan = async (e) => {
         if (e) e.preventDefault();
         if (!validateForm()) {
             return;
         }
-        try {
-            const response = await addLocationRequest();
-            if (response.status === 200) {
-
+        const planData = {
+            Plan: {
+                Title: namePlan,
+                Avatar: "http://gfsasdsdfd.jpg",
+                StartDate: dayjs(startDate).format("YYYY-MM-DD"),
+                EndDate: dayjs(endDate).format("YYYY-MM-DD"),
+                EstimatedBudget: budget,
+                Method: 0,
+                ProvinceStartId: startDestination,
+                ProvinceEndId: endDestination,
+                Vehicle: selectedItems
             }
+        };
+        console.log(planData)
+        try {
+            const response = await addPlanRequest(planData);
+            handelClear();
+            openNotificationWithIcon('success');
         } catch (error) {
             console.error(error);
         }
-
-
     }
 
     const handleClick = (index) => {
@@ -90,12 +130,13 @@ function AddPlan() {
     const disabledDate = (current) => {
         return current && current < dayjs().startOf("day");
     };
+
     return (
         <div className="flex h-fit  flex-col rounded-md border-[0.4px] border-[#CCD0D5] bg-white shadow-md">
             <div className="flex py-3 w-[90%] mx-auto items-center justify-center border-b-2 border-[#DEDFDF] lg:text-[20px] font-bold">
                 Bạn đã có chuyến đi của mình chưa ?
             </div>
-            <div className="flex flex-col gap-3 px-5 py-4 text-start">
+            <div className="flex flex-col gap-2 px-5 py-4 text-start">
                 <InputWithLabel
                     label="Tên chuyến đi"
                     placeholder="Tên chuyến đi"
@@ -103,13 +144,13 @@ function AddPlan() {
                     onChange={(e) => setNamePlan(e.target.value)}
                 />
                 {!namePlan && errors.namePlan && <span className="text-[12px] font-normal text-red-500 h-[5px]">{errors?.namePlan}</span>}
-                <div className="flex gap-10">
+                <div className="flex gap-10  pt-4">
                     <div className="flex w-1/2 flex-col gap-2">
                         <InputWithLabel
                             label="Điểm bắt đầu"
                             placeholder="Điểm bắt đầu"
                             value={startDestination}
-                            onChange={(e) => setStartDestination(e.target.value)}
+                            onChange={(value) => setStartDestination(value)}
                             isDropdown={true}
                         />
                         {!startDestination && errors.startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
@@ -119,7 +160,7 @@ function AddPlan() {
                             label="Điểm kết thúc"
                             placeholder="Điểm kết thúc"
                             value={endDestination}
-                            onChange={(e) => setEndDestination(e.target.value)}
+                            onChange={(value) => setEndDestination(value)}
                             isDropdown={true}
                         />
                         {!endDestination && errors.endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
@@ -131,17 +172,26 @@ function AddPlan() {
                         placeholder={["Bắt đầu", "Kết thúc"]}
                         style={{ width: "100%", height: "39px" }}
                         disabledDate={disabledDate}
+                        format="DD-MM-YYYY"
+                        allowClear={true}
+                        value={startDate && endDate ? [dayjs(startDate), dayjs(endDate)] : []}
                         onChange={(dates) => {
-                            setStartDate(dates ? dates[0] : null);
-                            setEndDate(dates ? dates[1] : null);
+                            if (dates) {
+                                setStartDate(dates[0]);
+                                setEndDate(dates[1]);
+                            } else {
+                                setStartDate(null);
+                                setEndDate(null);
+                            }
                         }}
                     />
                 </Space>
+
                 {!startDate && errors.startDate && (
                     <span className="text-[12px] font-normal text-red-500 ">{errors?.startDate}</span>
                 )}
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 pt-1">
                     <InputWithLabel
                         label="Kinh phí dự tính"
                         placeholder="Kinh phí dự tính"
@@ -204,6 +254,7 @@ function AddPlan() {
                 </button>
 
             </div>
+            {contextHolder}
         </div>
     );
 }

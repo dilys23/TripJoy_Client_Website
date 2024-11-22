@@ -19,7 +19,7 @@ function Network() {
     setShowModalListPost(false);
   };
   const { user } = useContext(UserContext)
-  console.log(user);
+
   const listRecommendationPlan = [
     {
       id: 1,
