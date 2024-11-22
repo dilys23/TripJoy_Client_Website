@@ -119,7 +119,7 @@ function Plan() {
               <input
                 type="text"
                 placeholder="Tìm kiếm chuyến đi"
-                className="h-full  w-4/6 lg:py-3 py-2 rounded-md border-[0.4px] border-[#CCD0D5] bg-white px-3 md:text-[14px] text-[10px] shadow-md outline-none"
+                className="h-full w-4/6 lg:py-3 py-2 rounded-md border-[0.4px] border-[#CCD0D5] bg-white px-3 md:text-[14px] text-[10px] shadow-md outline-none"
               ></input>
               <input
                 type="date"
@@ -136,7 +136,7 @@ function Plan() {
                 </Dropdown>
               </div>
             </div>
-            <div className="w-full justify-end flex">
+            <div className="sm:hidden flex w-full justify-end ">
               <button
                 className="sm:hidden w-1/4 h-[30px] flex border border-[#ff7124fc] text-[10px] text-[#ff7124fc] bg-white rounded-md hover:bg-[#ff7124fc] hover:text-white duration-200 font-bold items-center justify-center"
               >
@@ -161,7 +161,7 @@ function Plan() {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 

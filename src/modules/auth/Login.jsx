@@ -7,6 +7,7 @@ import { loginService } from "../../services/login";
 import { UserContext } from "../../contexts/UserContext";
 import InputType from "../../components/Input/InputType";
 import { getCurrentUser } from "../../services/getCurrentUser";
+import LoadingSpinner from "../../components/Loading";
 
 function Login({ onClose, onForgetPassword, setEmailParent }) {
 
@@ -163,11 +164,11 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                         <button
                             onClick={() => handleLogin()}
                             className="disabled:bg-gray-400 h-[45px] w-[140px] rounded-[5px] border border-[#ccd0d5] bg-[#ff7224] text-sm font-medium text-white shadow focus:border-blue-400 focus:outline-none">
-                            {isLoading ? "Đang Đăng nhập..." : "Đăng nhập"}
+                            Đăng nhập
                         </button>
                     </div>
                 </div>
-
+                {isLoading && <LoadingSpinner></LoadingSpinner>}
             </div>
         </>
     );

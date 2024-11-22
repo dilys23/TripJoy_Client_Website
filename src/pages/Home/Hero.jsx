@@ -13,7 +13,7 @@ function Hero() {
       {/* style={{ backgroundImage: `url(${backgroundImage})` }} */}
       {/* <img src={plane} alt="" className='lg:block hidden absolute bottom-0 right-16' />
       <img src={plane2} alt="" className='lg:block hidden absolute top-0 left-0' /> */}
-      <div className="mx-auto max-w-[1400px] items-center justify-between px-3 pt-12 lg:flex">
+      <div className="mx-auto max-w-[1400px] items-center justify-between pt-12 lg:flex">
         <div className="lg:w-2/5">
           <h2 className="mb-5 text-center text-4xl font-bold lg:text-left lg:text-5xl lg:leading-snug xl:text-[4rem]">
             Khám phá những

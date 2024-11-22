@@ -4,6 +4,7 @@ import InputWithLabel from "../../components/Input/InputWithLabel";
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { MdAdd } from 'react-icons/md';
+import { addLocationRequest } from '../../services/locationRequest';
 
 function AddPlan() {
     const [namePlan, setNamePlan] = useState("");
@@ -12,7 +13,7 @@ function AddPlan() {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [budget, setBudget] = useState("");
-    const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState();
     const [errors, setErrors] = useState({
         namePlan: "",
         startDestination: "",
@@ -66,23 +67,25 @@ function AddPlan() {
         return formIsValid;
     };
 
-    const handleAddPlan = (e) => {
+    const handleAddPlan = async (e) => {
         if (e) e.preventDefault();
         if (!validateForm()) {
             return;
+        }
+        try {
+            const response = await addLocationRequest();
+            if (response.status === 200) {
+
+            }
+        } catch (error) {
+            console.error(error);
         }
 
 
     }
 
     const handleClick = (index) => {
-        setSelectedItems((prevSelected) => {
-            if (prevSelected.includes(index)) {
-                return prevSelected.filter((item) => item !== index);
-            } else {
-                return [...prevSelected, index];
-            }
-        });
+        setSelectedItems(index);
     };
     const disabledDate = (current) => {
         return current && current < dayjs().startOf("day");
@@ -107,6 +110,7 @@ function AddPlan() {
                             placeholder="Điểm bắt đầu"
                             value={startDestination}
                             onChange={(e) => setStartDestination(e.target.value)}
+                            isDropdown={true}
                         />
                         {!startDestination && errors.startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
                     </div>
@@ -116,6 +120,7 @@ function AddPlan() {
                             placeholder="Điểm kết thúc"
                             value={endDestination}
                             onChange={(e) => setEndDestination(e.target.value)}
+                            isDropdown={true}
                         />
                         {!endDestination && errors.endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
                     </div>
@@ -149,43 +154,42 @@ function AddPlan() {
                     <span className="text-[#a7a5b4] px-1">Phương tiện</span>
                     <ul className="flex gap-4 flex-wrap">
                         <li
-                            className={`flex border justify-center items-center border-[#E3E6E8] lg:p-3 md:p-2 p-1 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(0) ? "bg-blue-300 text-white" : ""
+                            className={`flex border justify-center items-center border-[#E3E6E8] lg:p-3 md:p-2 p-1 rounded-xl shadow-md cursor-pointer ${selectedItems === 0 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(0)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/scooter.png" alt="scooter" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(1) ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 1 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(1)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/color/48/car--v1.png" alt="car--v1" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(2) ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 2 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(2)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/emoji/48/train-emoji.png" alt="train-emoji" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(3) ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 3 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(3)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/clouds/100/airport.png" alt="airport" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(4) ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 4 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(4)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/sailing-ship-medium.png" alt="sailing-ship-medium" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems.includes(4) ? "bg-blue-300 text-white" : ""
-                                }`}
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer `}
 
                         >
                             <MdAdd className='text-[#f2cca2] w-[48px] h-[48px]' />

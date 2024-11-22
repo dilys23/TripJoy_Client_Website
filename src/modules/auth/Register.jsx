@@ -69,13 +69,13 @@ function Register({ onClose, onSwitchToLogin }) {
   const validatePassword = (value) => {
     if (!value) return "Mật khẩu không được để trống";
     if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự";
-    if (!/^[a-zA-Z0-9]+$/.test(value)) return "Mật khẩu không hợp lệ";
+    // if (!/^[a-zA-Z0-9]+$/.test(value)) return "Mật khẩu không hợp lệ";
     return "";
   };
 
   const validateConfirmPassword = (value) => {
     if (!value) return "Xác nhận mật khẩu không được để trống";
-    if (value !== password) return "Mật khẩu không trùng khớp";
+    if (value !== formData.password) return "Mật khẩu không trùng khớp";
     return "";
   };
   const validateOTP = (value) => {
