@@ -2,16 +2,18 @@ import { FaSearch } from "react-icons/fa";
 import PlanCard from "../../../modules/trips/PlanCard";
 import { Link } from "react-router-dom";
 import config from "../../../config";
-
 import RecommendationPlanItem from "../../../components/RecommendationPlan";
-
 import anh1 from "../../../assets/images/anh1.jpg"
 import anh2 from "../../../assets/images/anh2.jpg"
 import anh3 from "../../../assets/images/anh3.jpg"
 import anh4 from "../../../assets/images/anh4.jpg"
 import AddPlan from "../../../modules/plan/AddPlan";
 import { MdFilterAlt } from "react-icons/md";
-import { Dropdown } from 'antd';
+import { DatePicker, Dropdown, Skeleton } from 'antd';
+import { useEffect, useState } from "react";
+import { getMyPlanRequest, searchMyPlanByTitleRequest } from "../../../services/plan";
+import useDebounce from "../../../hooks/useDebounce";
+import dayjs from "dayjs";
 function Plan() {
   const items = [
     {
@@ -39,32 +41,80 @@ function Plan() {
       ),
     },
   ];
-  const listPlan = [
-    {
-      id: 1,
-      title: "Hai ngày một đêm ở Hà Giang",
-      state: false,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
-    },
-    {
-      id: 2,
-      title: "Chinh phục cột cờ Lủng Cú",
-      state: true,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
-    },
-    {
-      id: 3,
-      title: "Khám phá hang Sơn Đòong",
-      state: true,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
-    },
-  ];
+
+  const [loading, setLoading] = useState(false);
+  const [listMyPlan, setListMyPlan] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedValue = useDebounce(searchValue, 200);
+  const [isPlanAdded, setIsPlanAdded] = useState(false);
+  const [dateSelect, setDateSelect] = useState(null);
+  const fetchPlans = async () => {
+    try {
+      setLoading(true);
+      const data = await getMyPlanRequest(0, 10);
+      setListMyPlan(data.plans.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchPlans();
+  }, [])
+
+
+  const handleChange = (e) => {
+    const searchInput = e.target.value;
+    if (!searchInput.startsWith(' ')) {
+      setSearchValue(searchInput);
+    }
+  };
+  const fetchFilteredPlans = async () => {
+    try {
+      setLoading(true);
+      if (!debouncedValue.trim() && !dateSelect) {
+        await fetchPlans();
+      } else {
+        if (dateSelect) {
+          const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue, dateSelect);
+          setListMyPlan(data.plans.data);
+        }
+        else {
+          const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue, dateSelect);
+          setListMyPlan(data.plans.data);
+        }
+
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchFilteredPlans();
+  }, [debouncedValue, dateSelect]);
+  // const fetchFilteredPlans = async () => {
+  //   try {
+  //     if (!debouncedValue.trim()) {
+  //       await fetchPlans();
+  //     } else {
+  //       setLoading(true);
+  //       const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue);
+  //       setListMyPlan(data.plans.data);
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchFilteredPlans();
+  // }, [debouncedValue]);
+
+  useEffect(() => {
+    fetchPlans();
+  }, [isPlanAdded]);
   const listRecommendationPlan = [
     {
       id: 1,
@@ -117,15 +167,28 @@ function Plan() {
           <div className="mb-5 flex md:h-[42px] w-full sm:gap-3 gap-3 sm:justify-normal justify-end sm:flex-row flex-col" >
             <div className="flex w-full gap-1 md:h-[42px] h-[30px]">
               <input
-                type="text"
+                value={searchValue}
+                onChange={(e) => handleChange(e)}
+                type="search"
                 placeholder="Tìm kiếm chuyến đi"
                 className="h-full w-4/6 lg:py-3 py-2 rounded-md border-[0.4px] border-[#CCD0D5] bg-white px-3 md:text-[14px] text-[10px] shadow-md outline-none"
               ></input>
-              <input
-                type="date"
+              <DatePicker
+                format="DD-MM-YYYY"
+                value={dateSelect ? dayjs(dateSelect, "YYYY-MM-DD") : null}
+                onChange={(date, dateString) => {
+                  // Lưu ngày dưới định dạng YYYY-MM-DD cho API
+                  setDateSelect(date ? date.format("YYYY-MM-DD") : null);
+                }}
+              />
+              {/* <input
+                type="text"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                placeholder="Select Date"
                 value={new Date()}
                 className="h-full  w-1/6 rounded-md border-[0.4px] border-[#CCD0D5] px-3 md:text-[14px] text-[10px] shadow-md outline-none"
-              />
+              /> */}
               <div className="h-full w-1/6">
                 <Dropdown menu={{ items }} placement="bottom">
                   <button
@@ -145,14 +208,22 @@ function Plan() {
             </div>
 
           </div>
-          <div className="flex flex-col gap-5">
-            {listPlan.map((plan) => (
-              <PlanCard key={plan.id} plan={plan}></PlanCard>
-            ))}
-          </div>
+          {loading ? (
+            <div className="w-full flex flex-col gap-2">
+              <Skeleton active />
+              <Skeleton active />
+            </div>
+
+          ) : (
+            <div className="flex flex-col gap-5">
+              {listMyPlan.map((plan) => (
+                <PlanCard key={plan.id} plan={plan}></PlanCard>
+              ))}
+            </div>
+          )}
         </div>
         <div className=" flex-col gap-1 sm:w-2/5 sm:flex hidden">
-          <AddPlan />
+          <AddPlan onAddSuccess={() => setIsPlanAdded((prev) => !prev)} />
           <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-2">NHÓM GỢI Ý</span>
           <div className="flex gap-8 lg:flex-row flex-col justify-start mb-2">
             {listRecommendationPlan.slice(0, 2).map((plan) => (
@@ -161,7 +232,7 @@ function Plan() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

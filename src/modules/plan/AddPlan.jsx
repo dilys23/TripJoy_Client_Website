@@ -9,7 +9,7 @@ import { notification } from 'antd';
 
 import { addPlanRequest } from '../../services/plan';
 
-function AddPlan() {
+function AddPlan({ onAddSuccess }) {
     const [namePlan, setNamePlan] = useState("");
     const [startDestination, setStartDestination] = useState("");
     const [endDestination, setEndDestination] = useState("");
@@ -118,6 +118,9 @@ function AddPlan() {
         try {
             const response = await addPlanRequest(planData);
             handelClear();
+            if (onAddSuccess) {
+                onAddSuccess();
+            }
             openNotificationWithIcon('success');
         } catch (error) {
             console.error(error);
