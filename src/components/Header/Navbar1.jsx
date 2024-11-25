@@ -18,12 +18,14 @@ import { logoutService } from "../../services/login";
 
 import Search from "./Search";
 import avatarDefault from "../../assets/images/avatarDefault.png"
+import LoadingSpinner from "../Loading/LoadingSpinner";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const isLogin = localStorage.getItem('isLogin');
+  const [loading, setLoading] = useState(false);
   // Hàm xử lý khi nhấn vào nút
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen); // Đảo ngược trạng thái hiển thị menu
@@ -97,12 +99,14 @@ const Navbar1 = () => {
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       const res = await logoutService();
       console.log("error:", res);
       console.log("User logged out");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       logout();
+      setLoading(false);
       navigate("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -167,54 +171,28 @@ const Navbar1 = () => {
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
                     />
-                    {/* <div className="flex h-[25px] w-[146px]">
-                      <span
-                        className="text-[25px] font-normal leading-[17px] tracking-[3.36px]"
-                        style={{
-                          color: "#13c892",
-                          fontFamily: "Leckerli One, cursive",
-                        }}
-                      >
-                        Trip
-                      </span>
-                      <span
-                        className="text-[28px] font-normal leading-[17px] tracking-[3.36px]"
-                        style={{
-                          color: "#ff7224",
-                          fontFamily: "Leckerli One, cursive",
-                        }}
-                      >
-                        Joy
-                      </span>
-                    </div> */}
                   </div>
                 </div>
               </div>
               <Search></Search>
 
-              <ul class="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
+              {/* <ul class="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
                 <li class="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
+                    href="/network"
                     class="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 511 511.999"
-                      fill="currentColor"
-                      class="h-6 w-6"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511 511.999" fill="currentColor" className="h-6 w-6"                    >
                       <path
                         d="M498.7 222.695c-.016-.011-.028-.027-.04-.039L289.805 13.81C280.902 4.902 269.066 0 256.477 0c-12.59 0-24.426 4.902-33.332 13.809L14.398 222.55c-.07.07-.144.144-.21.215-18.282 18.386-18.25 48.218.09 66.558 8.378 8.383 19.44 13.235 31.273 13.746.484.047.969.07 1.457.07h8.32v153.696c0 30.418 24.75 55.164 55.168 55.164h81.711c8.285 0 15-6.719 15-15V376.5c0-13.879 11.293-25.168 25.172-25.168h48.195c13.88 0 25.168 11.29 25.168 25.168V497c0 8.281 6.715 15 15 15h81.711c30.422 0 55.168-24.746 55.168-55.164V303.14h7.719c12.586 0 24.422-4.903 33.332-13.813 18.36-18.367 18.367-48.254.027-66.633zm-21.243 45.422a17.03 17.03 0 0 1-12.117 5.024h-22.72c-8.285 0-15 6.714-15 15v168.695c0 13.875-11.289 25.164-25.168 25.164h-66.71V376.5c0-30.418-24.747-55.168-55.169-55.168H232.38c-30.422 0-55.172 24.75-55.172 55.168V482h-66.71c-13.876 0-25.169-11.29-25.169-25.164V288.14c0-8.286-6.715-15-15-15H48a13.9 13.9 0 0 0-.703-.032c-4.469-.078-8.66-1.851-11.8-4.996-6.68-6.68-6.68-17.55 0-24.234.003 0 .003-.004.007-.008l.012-.012L244.363 35.02A17.003 17.003 0 0 1 256.477 30c4.574 0 8.875 1.781 12.113 5.02l208.8 208.796.098.094c6.645 6.692 6.633 17.54-.031 24.207zm0 0"
                         data-original="#000000"
                       />
                     </svg>
-                    {/* Home */}
                   </a>
                 </li>
                 <li class="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
+                    href="/plan"
                     class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
@@ -228,7 +206,7 @@ const Navbar1 = () => {
                         data-original="#000000"
                       />
                     </svg>
-                    {/* Dashboard */}
+
                   </a>
                 </li>
                 <li class="px-3 max-lg:border-b max-lg:py-3">
@@ -247,7 +225,7 @@ const Navbar1 = () => {
                         data-original="#000000"
                       ></path>
                     </svg>
-                    {/* Profile */}
+
                   </a>
                 </li>
                 <li class="mt-[-3px] px-3 max-lg:border-b max-lg:py-3">
@@ -266,10 +244,9 @@ const Navbar1 = () => {
                       <path d="M 13.1875 3 L 13.03125 3.8125 L 12.4375 6.78125 C 11.484375 7.15625 10.625 7.683594 9.84375 8.3125 L 6.9375 7.3125 L 6.15625 7.0625 L 5.75 7.78125 L 3.75 11.21875 L 3.34375 11.9375 L 3.9375 12.46875 L 6.1875 14.4375 C 6.105469 14.949219 6 15.460938 6 16 C 6 16.539063 6.105469 17.050781 6.1875 17.5625 L 3.9375 19.53125 L 3.34375 20.0625 L 3.75 20.78125 L 5.75 24.21875 L 6.15625 24.9375 L 6.9375 24.6875 L 9.84375 23.6875 C 10.625 24.316406 11.484375 24.84375 12.4375 25.21875 L 13.03125 28.1875 L 13.1875 29 L 18.8125 29 L 18.96875 28.1875 L 19.5625 25.21875 C 20.515625 24.84375 21.375 24.316406 22.15625 23.6875 L 25.0625 24.6875 L 25.84375 24.9375 L 26.25 24.21875 L 28.25 20.78125 L 28.65625 20.0625 L 28.0625 19.53125 L 25.8125 17.5625 C 25.894531 17.050781 26 16.539063 26 16 C 26 15.460938 25.894531 14.949219 25.8125 14.4375 L 28.0625 12.46875 L 28.65625 11.9375 L 28.25 11.21875 L 26.25 7.78125 L 25.84375 7.0625 L 25.0625 7.3125 L 22.15625 8.3125 C 21.375 7.683594 20.515625 7.15625 19.5625 6.78125 L 18.96875 3.8125 L 18.8125 3 Z M 14.8125 5 L 17.1875 5 L 17.6875 7.59375 L 17.8125 8.1875 L 18.375 8.375 C 19.511719 8.730469 20.542969 9.332031 21.40625 10.125 L 21.84375 10.53125 L 22.40625 10.34375 L 24.9375 9.46875 L 26.125 11.5 L 24.125 13.28125 L 23.65625 13.65625 L 23.8125 14.25 C 23.941406 14.820313 24 15.402344 24 16 C 24 16.597656 23.941406 17.179688 23.8125 17.75 L 23.6875 18.34375 L 24.125 18.71875 L 26.125 20.5 L 24.9375 22.53125 L 22.40625 21.65625 L 21.84375 21.46875 L 21.40625 21.875 C 20.542969 22.667969 19.511719 23.269531 18.375 23.625 L 17.8125 23.8125 L 17.6875 24.40625 L 17.1875 27 L 14.8125 27 L 14.3125 24.40625 L 14.1875 23.8125 L 13.625 23.625 C 12.488281 23.269531 11.457031 22.667969 10.59375 21.875 L 10.15625 21.46875 L 9.59375 21.65625 L 7.0625 22.53125 L 5.875 20.5 L 7.875 18.71875 L 8.34375 18.34375 L 8.1875 17.75 C 8.058594 17.179688 8 16.597656 8 16 C 8 15.402344 8.058594 14.820313 8.1875 14.25 L 8.34375 13.65625 L 7.875 13.28125 L 5.875 11.5 L 7.0625 9.46875 L 9.59375 10.34375 L 10.15625 10.53125 L 10.59375 10.125 C 11.457031 9.332031 12.488281 8.730469 13.625 8.375 L 14.1875 8.1875 L 14.3125 7.59375 Z M 16 11 C 13.25 11 11 13.25 11 16 C 11 18.75 13.25 21 16 21 C 18.75 21 21 18.75 21 16 C 21 13.25 18.75 11 16 11 Z M 16 13 C 17.667969 13 19 14.332031 19 16 C 19 17.667969 17.667969 19 16 19 C 14.332031 19 13 17.667969 13 16 C 13 14.332031 14.332031 13 16 13 Z"></path>
                     </svg>
 
-                    {/* Settings */}
                   </a>
                 </li>
-              </ul>
+              </ul> */}
               <ul
                 className="list-style-none mr-5 ms-auto flex flex-row items-center ps-0 md:ps-4"
                 data-twe-navbar-nav-ref
@@ -627,6 +604,7 @@ const Navbar1 = () => {
           )}
         </div>
       </nav>
+      {loading && <LoadingSpinner></LoadingSpinner>}
     </div>
   );
 };

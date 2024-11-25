@@ -13,7 +13,14 @@ function ModalEditProfile({ handleClose }) {
         };
     }, []);
 
-    const [formData, setFormData] = useState(null);
+    const [formData, setFormData] = useState({
+        userName: '',
+        phoneNumber: '',
+        dateOfBirth: '',
+        avatar: { Url: '', Format: 1 },
+        address: { district: '', ward: '', province: '' },
+        gender: null
+    });
 
     const fetchUser = async () => {
         const res = await getCurrentUser();
@@ -28,15 +35,26 @@ function ModalEditProfile({ handleClose }) {
     const [isChange, setIsChange] = useState(false);
 
     const [avatar, setAvatar] = useState(ava)
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({ ...formData, [name]: name === "gender" ? Number(value) : value });
+    //     setIsChange(
+    //         value !== formData[name] ||
+    //         formData.avatar !== formData.avatar
+    //     );
+    //     console.log(formData);
+    // };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: name === "gender" ? Number(value) : value });
-        setIsChange(
-            value !== formData[name] ||
-            formData.avatar !== formData.avatar
-        );
-        console.log(formData);
+        // Cập nhật dữ liệu với đúng tên thuộc tính trong formData
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: name === "gender" ? Number(value) : value
+        }));
+        setIsChange(value !== formData[name] || formData.avatar.Url !== formData.avatar.Url);
     };
+
     const handleFileChange = (e) => {
         const [file] = e.target.files;
 
@@ -45,7 +63,10 @@ function ModalEditProfile({ handleClose }) {
         const types = ['image/jpeg', 'image/jpg', 'image/png'];
         if (types.includes(file.type)) {
             file.url = URL.createObjectURL(file);
-            setAvatar(file);
+            setFormData(prevState => ({
+                ...prevState,
+                Avatar: { ...prevState.Avatar, Url: file.url }
+            }));
             setIsChange(true);
         } else {
             toast.error('Định dạng file không hợp lệ!', { autoClose: 3000 });
@@ -64,13 +85,13 @@ function ModalEditProfile({ handleClose }) {
                 onClick={handleClose}
             >
                 <div
-                    className="modal sm:w-[600px] w-4/5 h-4/5 flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center px-3 py-3"
+                    className="modal sm:w-[600px] w-4/5 h-fit flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="w-full justify-end flex">
+                    <div className="w-full justify-end flex sm:px-0 px-2">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
-                    <div className="flex flex-col justify-start w-full sm:gap-4 pb-3 gap-3 px-6 pt-3">
+                    <div className="flex flex-col justify-start w-full sm:gap-4 pb-3 gap-3 sm:px-6 px-3 pt-3">
                         <span className="sm:text-[20px] text-base font-semibold text-start">Chỉnh sửa thông tin cá nhân</span>
                         <div className="w-full h-[96px] flex  px-2">
                             <div className="w-1/3 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ảnh đại diện</div>
@@ -162,17 +183,60 @@ function ModalEditProfile({ handleClose }) {
                         </div>
                         <div className="w-full flex px-2">
                             <div className="w-1/4 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Địa chỉ</div>
-                            <textarea
-                                type="text"
-                                name="address"
-                                className="w-3/4 outline-none px-3 sm:h-[60px] h-auto bg-[#f1f1f2] rounded-md pt-1 sm:text-base text-[13px]"
-                                value={formData?.address}
-                                onChange={handleInputChange}></textarea>
+                            <div className="flex flex-col w-3/4 gap-2">
+                                <input
+                                    type="text"
+                                    name="province"
+                                    placeholder="Tỉnh"
+                                    className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"></input>
+                                <input
+                                    type="text"
+                                    name="district"
+                                    placeholder="Quận"
+                                    className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
+
+                                />
+                                <input
+                                    type="text"
+                                    name="ward"
+                                    placeholder="Phường"
+                                    className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
+
+                                />
+                                {/* <input
+                                    type="text"
+                                    name="province"
+                                    placeholder="Tỉnh"
+                                    className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
+                                    value={formData.address.province}
+                                    onChange={handleInputChange}
+                                />
+                                {formData.address.province && (
+                                    <>
+                                        <input
+                                            type="text"
+                                            name="district"
+                                            placeholder="Quận"
+                                            className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
+                                            value={formData.address.district}
+                                            onChange={handleInputChange}
+                                        />
+                                        <input
+                                            type="text"
+                                            name="ward"
+                                            placeholder="Phường"
+                                            className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
+                                            value={formData.address.ward}
+                                            onChange={handleInputChange}
+                                        />
+                                    </>
+                                )} */}
+                            </div>
                         </div>
                         <div className="w-full justify-end flex pt-1">
-                            <Button onClick={handleSubmit} secondary={isChange} tertiary={!isChange}>
-                                Lưu
-                            </Button>
+                            <button onClick={handleSubmit}
+                                disabled={!isChange}
+                                className={`flex items-center gap-2 cursor-pointer shadow outline-none justify-center text-start  ${isChange ? "bg-[#007AFF] hover:bg-[#006ee6]" : "bg-[#B3B3B3] hover:bg-[#B3B3B3]"} font-semibold  sm:w-[85px] px-2 py-1 sm:text-base text-[13px] rounded-lg  transition-all duration-150 text-white`}>Lưu</button>
                         </div>
                     </div>
                 </div>

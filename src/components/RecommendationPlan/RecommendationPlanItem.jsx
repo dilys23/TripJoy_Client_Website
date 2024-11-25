@@ -4,15 +4,15 @@ import ava2 from "../../assets/images/anh3.jpg";
 import { Avatar } from "antd";
 function RecommendationPlanItem({ plan }) {
     return (
-        <div className="flex w-[170px] h-[215px] rounded-md flex-col bg-white shadow-lg">
-            <div className="w-full h-[167px] rounded-s-md relative cursor-pointer">
-                <img src={plan.image} alt="" className="w-full h-full rounded-s-md " />
-                <div className="absolute top-0 left-0 w-full h-full bg-black opacity-25">
+        <div className="flex w-full max-w-[200px] h-[215px] rounded-md flex-col bg-white shadow-lg">
+            <div className="w-full h-4/5 rounded-s-md relative cursor-pointer">
+                <img src={plan.image} alt="" className="w-full h-full rounded-t-md " />
+                <div className="absolute top-0 left-0 w-full h-full bg-black opacity-25 rounded-t-md">
                 </div>
-                <div className="absolute top-0 left-0 w-full h-full px-3 pt-5">
-                    <div className="text-white text-[18px] font-bold cursor-pointer">{plan.title}</div>
+                <div className="absolute top-0 left-0 w-full h-full px-3 lg:pt-5 pt-2">
+                    <div className="text-white lg:text-[18px] font-bold cursor-pointer">{plan.title}</div>
                     <div className="text-white text-[11px]">{plan.time}</div>
-                    <button className="rounded-[5px] mt-8 hover:bg-[#FF7324] px-4 py-[6px] text-sm font-medium text-[#ff6600] transition-all duration-300 ease-in-out bg-white hover:text-white">Tham gia</button>
+                    <button className="rounded-[5px] mt-8 hover:bg-[#FF7324] lg:px-4 px-2 lg:py-[6px] py-1 lg:text-sm text-[12px] font-medium text-[#ff6600] transition-all duration-300 ease-in-out bg-white hover:text-white">Tham gia</button>
                 </div>
 
             </div>

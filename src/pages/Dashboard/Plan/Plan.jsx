@@ -1,320 +1,238 @@
 import { FaSearch } from "react-icons/fa";
-// Kiểm tra cách bạn import hình ảnh
-
 import PlanCard from "../../../modules/trips/PlanCard";
-import RecommendationPlan from "../../../modules/trips/RecommendationPlan";
 import { Link } from "react-router-dom";
 import config from "../../../config";
-import { useState } from "react";
-import { DatePicker } from "antd";
-import moment from "moment";
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-dayjs.extend(utc);
-dayjs.extend(timezone);
-// import "antd/dist/antd.css";
+import RecommendationPlanItem from "../../../components/RecommendationPlan";
+import anh1 from "../../../assets/images/anh1.jpg"
+import anh2 from "../../../assets/images/anh2.jpg"
+import anh3 from "../../../assets/images/anh3.jpg"
+import anh4 from "../../../assets/images/anh4.jpg"
+import AddPlan from "../../../modules/plan/AddPlan";
+import { MdFilterAlt } from "react-icons/md";
+import { DatePicker, Dropdown, Skeleton } from 'antd';
+import { useEffect, useState } from "react";
+import { getMyPlanRequest, searchMyPlanByTitleRequest } from "../../../services/plan";
+import useDebounce from "../../../hooks/useDebounce";
+import dayjs from "dayjs";
 function Plan() {
-  const [startDestination, setStartDestination] = useState("");
-  const [endDestination, setEndDestination] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [budget, setBudget] = useState("");
-  const [visibility, setVisibility] = useState(true);
-  const dateFormat = "DD-MM-YYYY";
-  const [errors, setErrors] = useState({
-    startDestination: "",
-    endDestination: "",
-    startDate: "",
-    endDate: "",
-    budget: ""
-  })
-  const validateForm = () => {
-    let formIsValid = true;
-    let errors = {
-      startDestination: "",
-      endDestination: "",
-      startDate: "",
-      endDate: "",
-      budget: ""
-    };
-
-    if (!startDestination) {
-      formIsValid = false;
-      errors.startDestination = "Vui lòng điền điểm bắt đầu";
-    }
-
-    if (!endDestination) {
-      formIsValid = false;
-      errors.endDestination = "Vui lòng điền điểm kết thúc";
-    }
-    if (!startDate) {
-      formIsValid = false;
-      errors.startDate = "Vui lòng ngày bắt đầu";
-    }
-    if (!endDate) {
-      formIsValid = false;
-      errors.endDate = "Vui lòng ngày kết thúc";
-    }
-    if (!budget) {
-      formIsValid = false;
-      errors.budget = "Vui lòng điền ngân sách";
-    }
-    setErrors(errors);
-    return formIsValid;
-  };
-  const listPlan = [
+  const items = [
     {
-      id: 1,
-      title: "Hai ngày một đêm ở Hà Giang",
-      state: false,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
+      key: '1',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="#">
+          Tất cả
+        </a>
+      ),
     },
     {
-      id: 2,
-      title: "Chinh phục cột cờ Lủng Cú",
-      state: true,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
+      key: '2',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="#">
+          Đang diễn ra
+        </a>
+      ),
     },
     {
-      id: 3,
-      title: "Khám phá hang Sơn Đòong",
-      state: true,
-      time: "2 ngày 1 đêm",
-      vehicle: "Motor",
-      budget: "2.000.000đ",
+      key: '3',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="#">
+          Đã diễn ra
+        </a>
+      ),
     },
   ];
+
+  const [loading, setLoading] = useState(false);
+  const [listMyPlan, setListMyPlan] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedValue = useDebounce(searchValue, 200);
+  const [isPlanAdded, setIsPlanAdded] = useState(false);
+  const [dateSelect, setDateSelect] = useState(null);
+  const fetchPlans = async () => {
+    try {
+      setLoading(true);
+      const data = await getMyPlanRequest(0, 10);
+      setListMyPlan(data.plans.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchPlans();
+  }, [])
+
+
+  const handleChange = (e) => {
+    const searchInput = e.target.value;
+    if (!searchInput.startsWith(' ')) {
+      setSearchValue(searchInput);
+    }
+  };
+  const fetchFilteredPlans = async () => {
+    try {
+      setLoading(true);
+      if (!debouncedValue.trim() && !dateSelect) {
+        await fetchPlans();
+      } else {
+        if (dateSelect) {
+          const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue, dateSelect);
+          setListMyPlan(data.plans.data);
+        }
+        else {
+          const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue, dateSelect);
+          setListMyPlan(data.plans.data);
+        }
+
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchFilteredPlans();
+  }, [debouncedValue, dateSelect]);
+  // const fetchFilteredPlans = async () => {
+  //   try {
+  //     if (!debouncedValue.trim()) {
+  //       await fetchPlans();
+  //     } else {
+  //       setLoading(true);
+  //       const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue);
+  //       setListMyPlan(data.plans.data);
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchFilteredPlans();
+  // }, [debouncedValue]);
+
+  useEffect(() => {
+    fetchPlans();
+  }, [isPlanAdded]);
   const listRecommendationPlan = [
     {
       id: 1,
-      title: "Phượt Đà Lạt",
-      state: false,
-      time: "2 ngày 1 đêm",
+      title: "Cù Lao Chàm",
+      image: anh1,
+      time: "20/12 đến 25/12",
+      numberMember: 5,
     },
     {
       id: 2,
-      title: "Phượt Đà Lạt",
-      state: false,
-      time: "2 ngày 1 đêm",
+      title: "Lủng Cú",
+      image: anh2,
+      time: "20/12 đến 25/12",
+      numberMember: 3,
+    },
+    {
+      id: 3,
+      title: "Vịnh Hạ Long",
+      image: anh4,
+      time: "20/12 đến 25/12",
+      numberMember: 2,
     },
   ];
 
-  const handleStartDateChange = (date) => {
-    if (date) {
-      setStartDate(date);
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        startDate: null,
-      }))
-    }
-  };
-
-  const handleEndDateChange = (date) => {
-    if (startDate && date && date.isBefore(startDate)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        endDate: "Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!",
-      }));
-      return;
-    }
-    setEndDate(date);
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      endDate: "",
-    }));
-  };
-  const handleAddPlan = (e) => {
-    if (e) e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-
-
-  }
-
 
   return (
-    <div className="my-1 flex w-full flex-col md:px-3">
-      <div className="flex h-[75px] w-full items-center justify-between rounded-[7px] border-[0.4px] border-[#CCD0D5] bg-white px-4 py-2 shadow-md">
+    <div className="my-1 flex w-full flex-col lg:px-10 md:px-5 sm:px-3 px-3">
+      <div className="flex h-[75px] w-full items-center justify-between rounded-[7px] border-[0.4px] border-[#CCD0D5] bg-white md:px-4 px-2 py-2 shadow-md">
         <div className="flex flex-col">
           <div className="flex items-center">
-            <div className="nunito-text text-[25px] font-semibold">
+            <div className="nunito-text lg:text-[25px] font-semibold">
               Hora, Dilysnguyen
             </div>
           </div>
-          <div className="text-[13px]">
+          <div className="md:text-[13px] text-[10px]">
             Hãy bắt đầu chuyến đi mới đầy thú vị nhé !
           </div>
         </div>
-        <div className="flex cursor-pointer items-center gap-1 pr-5">
+        <div className="flex cursor-pointer items-center gap-1 lg:pr-5">
           <Link
             to={config.routes.planAI}
-            className="text-[16px] font-bold text-[#0023FE]"
+            className="lg:text-[16px] md:text-[13px] text-[10px] font-bold text-[#0023FE] flex items-center"
           >
-            Tạo chuyến đi mới với AI{" "}
+            Tạo chuyến đi mới với AI<img width="30" height="30" src="https://img.icons8.com/plasticine/100/light-on.png" alt="light-on" className="w-[25px] h-[25px] lg:w-[30px] lg:h-[30px]" />
           </Link>
         </div>
       </div>
-      <div className="mt-8 flex h-full w-full gap-6">
-        <div className="w-3/5">
-          <div className="mb-5 flex h-[42px] w-full gap-3">
-            <input
-              type="text"
-              placeholder="Tìm kiếm chuyến đi"
-              className="h-full w-3/5 rounded-md border-[0.4px] border-[#CCD0D5] bg-white px-3 text-[14px] shadow-md outline-none"
-            ></input>
-            <input
-              type="month"
-              value={new Date().toISOString().slice(0, 7)}
-              className="h-full w-1/5 rounded-md border-[0.4px] border-[#CCD0D5] px-3 text-[14px] shadow-md outline-none"
-            />
-            <button className="flex h-full w-1/5 items-center justify-center gap-3 rounded-md bg-[#007AFF] shadow-md">
-              <FaSearch className="text-white" />
-              <span className="text-[14px] text-white">Tìm kiếm</span>
-            </button>
+      <div className="mt-8 flex h-full w-full lg:gap-16 md:gap-10 sm:gap-6">
+        <div className="sm:w-3/5">
+          <div className="mb-5 flex md:h-[42px] w-full sm:gap-3 gap-3 sm:justify-normal justify-end sm:flex-row flex-col" >
+            <div className="flex w-full gap-1 md:h-[42px] h-[30px]">
+              <input
+                value={searchValue}
+                onChange={(e) => handleChange(e)}
+                type="search"
+                placeholder="Tìm kiếm chuyến đi"
+                className="h-full w-4/6 lg:py-3 py-2 rounded-md border-[0.4px] border-[#CCD0D5] bg-white px-3 md:text-[14px] text-[10px] shadow-md outline-none"
+              ></input>
+              <DatePicker
+                format="DD-MM-YYYY"
+                value={dateSelect ? dayjs(dateSelect, "YYYY-MM-DD") : null}
+                onChange={(date, dateString) => {
+                  // Lưu ngày dưới định dạng YYYY-MM-DD cho API
+                  setDateSelect(date ? date.format("YYYY-MM-DD") : null);
+                }}
+              />
+              {/* <input
+                type="text"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+                placeholder="Select Date"
+                value={new Date()}
+                className="h-full  w-1/6 rounded-md border-[0.4px] border-[#CCD0D5] px-3 md:text-[14px] text-[10px] shadow-md outline-none"
+              /> */}
+              <div className="h-full w-1/6">
+                <Dropdown menu={{ items }} placement="bottom">
+                  <button
+                    className="h-full w-full flex items-center justify-center rounded-md bg-[#007AFF] shadow-md text-white md:text-[14px] text-[10px]">
+                    <MdFilterAlt className="md:text-[20px] text-white" />
+                    Bộ lọc
+                  </button>
+                </Dropdown>
+              </div>
+            </div>
+            <div className="sm:hidden flex w-full justify-end ">
+              <button
+                className="sm:hidden w-1/4 h-[30px] flex border border-[#ff7124fc] text-[10px] text-[#ff7124fc] bg-white rounded-md hover:bg-[#ff7124fc] hover:text-white duration-200 font-bold items-center justify-center"
+              >
+                Lên kế hoạch
+              </button>
+            </div>
+
           </div>
-          <div className="flex flex-col gap-5">
-            {listPlan.map((plan) => (
-              <PlanCard key={plan.id} plan={plan}></PlanCard>
+          {loading ? (
+            <div className="w-full flex flex-col gap-2">
+              <Skeleton active />
+              <Skeleton active />
+            </div>
+
+          ) : (
+            <div className="flex flex-col gap-5">
+              {listMyPlan.map((plan) => (
+                <PlanCard key={plan.id} plan={plan}></PlanCard>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className=" flex-col gap-1 sm:w-2/5 sm:flex hidden">
+          <AddPlan onAddSuccess={() => setIsPlanAdded((prev) => !prev)} />
+          <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-2">NHÓM GỢI Ý</span>
+          <div className="flex gap-8 lg:flex-row flex-col justify-start mb-2">
+            {listRecommendationPlan.slice(0, 2).map((plan) => (
+              <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
             ))}
           </div>
         </div>
-        <div className="flex h-auto w-2/5 flex-col rounded-md border-[0.4px] border-[#CCD0D5] bg-white shadow-md">
-          <div className="flex h-[70px] w-full items-center justify-center border-b-2 border-[#DEDFDF] text-[20px] font-bold">
-            Bạn đã có chuyến đi của mình chưa ?
-          </div>
-          <div className="flex flex-col gap-3 px-5 py-5 text-start">
-            <span className="text-[20px] font-bold">Tạo kế hoạch </span>
-            <div className="flex gap-10">
-              <div className="flex w-1/2 flex-col gap-2">
-                <span className="text-base font-normal text-[#979797]">
-                  Điểm bắt đầu<span className="text-[red] ml-1 text-[15px]">*</span>
-                </span>
-                <input
-                  value={startDestination}
-                  onChange={(e) => setStartDestination(e.target.value)}
-                  placeholder="Đà Nẵng"
-                  required
-                  type="text"
-                  className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
-                />
-                {!startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
-              </div>
-              <div className="flex w-1/2 flex-col gap-2">
-                <span className="text-base font-normal text-[#979797]">
-                  Điểm kết thúc<span className="text-[red] ml-1 text-[15px]">*</span>
-                </span>
-                <input
-                  value={endDestination}
-                  onChange={(e) => setEndDestination(e.target.value)}
-                  placeholder="Đà Lạt"
-                  required
-                  type="text"
-                  className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
-                />
-                {!endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
-              </div>
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <label htmlFor="date-input" className="text-base font-normal text-[#979797]">
-                Thời gian bắt đầu<span className="text-[red] ml-1 text-[15px]">*</span>
-              </label>
-              <DatePicker
-                value={startDate}
-                onChange={handleStartDateChange}
-                format={dateFormat}
-                placeholder="dd-mm-yyyy"
-                className="rounded-md w-full h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"
-                disabledDate={(current) => current && current < moment().startOf("day")}
-              />
-              <span className="text-[12px] font-normal text-red-500">{errors?.startDate}</span>
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="text-base font-normal text-[#979797]">
-                Thời gian kết thúc<span className="text-[red] ml-1 text-[15px]">*</span>
-              </span>
-              <DatePicker
-                value={endDate}
-                onChange={handleEndDateChange}
-                format={dateFormat}
-                placeholder="dd-mm-yyyy"
-                className="rounded-md w-full h-[39px] border border-[#CCD0D5] px-3 shadow-md outline-none"
-                disabledDate={(current) => current && current < moment().startOf("day")}
-              />
-              <span className="text-[12px] font-normal text-red-500">{errors?.endDate}</span>
-            </div>
-            <div className="flex gap-10">
-              <div className="flex w-3/5 flex-col gap-2">
-                <span className="text-base font-normal text-[#979797]">
-                  Kinh phí dự tính<span className="text-[red] ml-1 text-[15px]">*</span>
-                </span>
-                <input
-                  required
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value.replace(/[^0-9]/g, ""))}
-                  type="text"
-                  className="h-[39px] rounded-md border border-[#CCD0D5] px-3 shadow-md outline-none"
-                />
-                {!budget && <span className="text-[12px] font-normal text-red-500">{errors?.budget}</span>}
-              </div>
-              <div className="flex w-2/5 flex-col gap-2">
-                <span className="text-base font-normal text-[#979797]">
-                  Chế độ<span className="text-[red] ml-1 text-[15px]">*</span>
-                </span>
-                <div className="flex gap-4 items-center">
-                  <label className="flex items-center cursor-pointer sm:text-base text-[13px]">
-                    <input
-                      type="radio"
-                      value={true}
-                      name="visibility"
-                      className="mr-2"
-                      checked={visibility === true}
-                      onChange={() => setVisibility(true)}
-                    />
-                    Công khai
-                  </label>
-                  <label className="flex items-center cursor-pointer sm:text-base text-[13px]">
-                    <input
-                      type="radio"
-                      name="visibility"
-                      value={false}
-                      checked={visibility === false}
-                      className="mr-2"
-                      onChange={() => setVisibility(false)}
-                    />
-                    Cá nhân
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="mt-3 flex w-full justify-end">
-              {" "}
-              <button
-                onClick={handleAddPlan}
-                className="flex h-[33px] w-[85px] items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
-                Tạo mới
-              </button>
-            </div>
-          </div>
-          <div className="flex w-full flex-col px-5 pb-4 text-start">
-            <div className="text-[20px] font-bold">Các nhóm gợi ý</div>
-            <div className="mt-2 flex w-full flex-col gap-3 px-2">
-              {listRecommendationPlan.map((plan) => (
-                <RecommendationPlan
-                  key={plan.id}
-                  plan={plan}
-                ></RecommendationPlan>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
+    </div >
   );
 }
 

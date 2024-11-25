@@ -7,17 +7,19 @@ import { UserProvider } from "./contexts/UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "./components/GlobalStyles/GlobalStyles.jsx";
+import ScrollToTopButton from "./components/ScrollToTopButton/ScrollToTopButton.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <>
-  
+
     <UserProvider>
       <GlobalStyles>
         <ToastContainer className="justify-center" />
         <App />
+        <ScrollToTopButton />
       </GlobalStyles>
     </UserProvider>
- {/* </React.StrictMode> */}
+    {/* </React.StrictMode> */}
   </>
 );

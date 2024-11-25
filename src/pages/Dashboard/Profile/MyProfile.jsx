@@ -167,7 +167,7 @@ function MyProfile() {
     return (
         <div className="w-full min-h-screen flex h-auto flex-col sm:px-10 pb-5 nunito-text">
             <div className="w-full bg-white border border-[#CCD0D5] sm:h-[380px] h-[520px] flex relative rounded-md sm:justify-normal justify-center">
-                <img src={null || coverPhoto} alt="" className="w-full sm:h-2/3 h-1/3 object-cover absolute top-0 rounded-md" />
+                <img src={null || coverPhoto} alt="" className="w-full sm:h-2/3 h-1/3 object-cover absolute top-0 rounded-t-md" />
                 <div className="flex sm:justify-between flex-col sm:flex-row  w-full absolute sm:top-[130px] top-[100px] lg:px-10 px-4 items-center">
                     <div className="flex sm:w-3/4 sm:flex-row flex-col items-center sm:gap-2">
                         <div className="flex justify-center items-center relative lg:w-[212px] lg:h-[212px] sm:w-[160px] sm:h-[160px] w-[178px] h-[178px] bg-white rounded-full">
@@ -310,7 +310,7 @@ function MyProfile() {
 
                 <div className="sm:w-7/12 w-full flex flex-col gap-5">
                     {/* Chia sẻ bài viết */}
-                    <div className="w-full bg-white border border-[#CCD0D5] h-[150px] rounded-md px-3 gap-1 flex flex-col">
+                    <div className="w-full bg-white border border-[#CCD0D5] h-[155px] rounded-md px-3 gap-1 flex flex-col">
                         <div className="flex justify-between  pt-3">
                             <div className="flex gap-2">
                                 <div className="flex px-3 text-[#0F3E4A] bg-[#FFEDE8] border border-[#FDDFDF] hover:bg-[#fee5de] duration-200 text-[12px] font-bold rounded-[20px] py-1 cursor-pointer">Trạng thái</div>
@@ -329,8 +329,8 @@ function MyProfile() {
                                 Kể về chuyến đi của bạn nào Bach Duong!
                             </span>
                         </div>
-                        <hr className='border border-[#EFEFEF] w-[90%] mx-auto ' />
-                        <div className="flex justify-between px-2">
+                        <hr className='border border-[#EFEFEF] w-[90%] mx-auto  ' />
+                        <div className="flex justify-between px-2 sm:pt-1 pt-2">
                             <div className="flex gap-2 items-center">
                                 <img src={location} alt="" className="" />
                                 <div className="text-[#0F3E4A] text-[13px] cursor-pointer font-bold">Chọn chuyến đi</div>

@@ -7,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://192.168.4.11:8080",
+        target: "https://192.168.1.11:8080",
         changeOrigin: true,
-        secure: false, // Bỏ qua kiểm tra SSL
+        secure: false,
       },
     },
   },

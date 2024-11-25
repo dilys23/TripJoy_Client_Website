@@ -11,9 +11,9 @@ const InputField = ({
   validate,
   errorMessage,
   onBlur,
-  className, // Prop để nhận class từ bên ngoài
-  inputClassName, // Prop để chỉ định class cho input
-  errorClassName // Prop để tùy chỉnh class cho thông báo lỗi
+  className,
+  inputClassName,
+  errorClassName
 }) => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ const InputField = ({
         required={required}
         autoComplete="off"
         className={`${inputClassName} mb-4 h-[40px] w-full rounded-[5px] px-3 shadow focus:outline-none ${error ? 'border-red-500' : 'border-[#ccd0d5] bg-[#f5f6f7] focus:border-blue-400'
-          }`} 
+          }`}
         placeholder={placeholder}
       />
       {type === 'password' && (
