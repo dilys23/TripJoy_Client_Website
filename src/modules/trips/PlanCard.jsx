@@ -48,7 +48,8 @@ function PlanCard({ plan }) {
                         </div>
                     </div>
                     <span className={` text-white font-bold lg:text-base text-[12px] py-1 lg:px-3 px-2 flex justify-center rounded-md cursor-pointer ${plan.state ? 'bg-[#FF2424]' : 'bg-[#46E8A5]'}`}>
-                        {plan.state ? 'Đã diễn ra' : 'Đang diễn ra'}
+                        {/* {plan.state ? 'Đã diễn ra' : 'Đang diễn ra'} */}
+                        Chưa diễn ra
                     </span>
 
                 </div>

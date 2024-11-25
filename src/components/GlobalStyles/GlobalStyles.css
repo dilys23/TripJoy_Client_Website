@@ -284,3 +284,7 @@
   font-weight: 700;
   font-style: italic;
 } */
+
+.border-evaluation {
+  border-bottom-left-radius: 45px;
+}

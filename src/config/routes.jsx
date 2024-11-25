@@ -9,7 +9,8 @@ const routes = {
     generatePlan: '/generate-plan',
     detailGeneratePlan: '/detail-generate-plan',
     detailTrip: '/detail-trip',
-    detailPlanAi: '/detail-plan-ai:id'
+    detailPlanAi: '/detail-plan-ai:id',
+    detailPlan: '/detail-plan:id'
 };
 
 export default routes;

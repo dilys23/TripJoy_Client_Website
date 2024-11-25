@@ -10,6 +10,7 @@ import GeneratePlan from "../pages/Dashboard/Plan/GeneratePlan";
 import DetailsTrip from "../modules/trips/DetailsTrip";
 import DetailPlanAI from "../modules/planAI/DetailPlanAI";
 import MyProfile from "../pages/Dashboard/Profile/MyProfile";
+import DetailPlan from "../pages/Dashboard/Plan/DetailPlan";
 const publicRoutes = [
   { path: "/", component: Home, layout: Fragment },
   { path: "/network", component: Network, layout: DefaultLayout },
@@ -20,7 +21,7 @@ const publicRoutes = [
   { path: "/generate-plan", component: GeneratePlan, layout: DefaultLayout },
   { path: "/detail-trip", component: DetailsTrip, layout: DefaultLayout },
   { path: "/detail-plan-ai", component: DetailPlanAI, layout: DefaultLayout },
-
+  { path: "/detail-plan", component: DetailPlan, layout: DefaultLayout },
 
 ];
 const privateRoutes = [];
