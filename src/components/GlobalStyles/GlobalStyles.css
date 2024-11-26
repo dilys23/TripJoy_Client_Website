@@ -288,3 +288,7 @@
 .border-evaluation {
   border-bottom-left-radius: 45px;
 }
+.no-border-select .ant-select-selector {
+  border: none !important;
+  box-shadow: none !important;
+}

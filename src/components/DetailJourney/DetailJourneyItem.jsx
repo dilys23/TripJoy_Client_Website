@@ -1,7 +1,9 @@
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaBars, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Button from "../Button/Button";
+import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+import { EditLocationIcon } from "../Icons/Icons";
 
-function DetailJourneyItem({ journey, index, toggleDetail }) {
+function DetailJourneyItem({ isEdit, journey, index, toggleDetail }) {
     const dashStyle = journey.status === 0
         ?
         'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
@@ -28,16 +30,24 @@ function DetailJourneyItem({ journey, index, toggleDetail }) {
     };
     return (
         <div className="w-full md:gap-5 gap-2 flex h-[171px]" >
-            <div className="flex w-[25px] h-full relative">
-                <div className={`w-full h-[25px] rounded-full  text-white font-bold flex cursor-pointer justify-center items-center text-[14px]`}
-                    style={{ backgroundColor: circleBgColor }}
-                >{journey.status === 2 ? '✔' : index + 1}</div>
-                <div className={`absolute left-1/2 top-[25px] h-full w-[1px]  border-dashed  transform -translate-x-1/2`}
-                    style={{
-                        backgroundImage: dashStyle,
-                        backgroundSize: '2px 10px',
-                    }}></div>
-            </div>
+            {
+                !isEdit ? (
+                    <div className="flex w-[25px] h-full relative">
+                        <div className={`w-full h-[25px] rounded-full  text-white font-bold flex cursor-pointer justify-center items-center text-[14px]`}
+                            style={{ backgroundColor: circleBgColor }}
+                        >{journey.status === 2 ? '✔' : index + 1}</div>
+                        <div className={`absolute left-1/2 top-[25px] h-full w-[1px]  border-dashed  transform -translate-x-1/2`}
+                            style={{
+                                backgroundImage: dashStyle,
+                                backgroundSize: '2px 10px',
+                            }}></div>
+                    </div>
+                ) : (
+                    <div className="flex w-[25px] h-full justify-center items-center text-[20px]">
+                        <MdOutlineRemoveCircleOutline className="text-red-400" />
+                    </div>
+                )
+            }
             <div className="flex flex-col w-full h-full">
                 <span className="font-semibold md:text-[14px] text-[12px] gap-1">{journey?.hour}</span>
                 <div className="flex w-full md:h-[150px] h-[130px] bg-white rounded-xl shadow-lg border border-[#CCD0D5] px-2 py-2 md:gap-3 gap-[6px]">
@@ -45,13 +55,18 @@ function DetailJourneyItem({ journey, index, toggleDetail }) {
                     <div className="flex w-5/6 flex-col md:px-2 gap-1">
                         <div className="flex justify-between ">
                             <span className="md:text-[21px] text-[14px] nunito-text font-bold text-[#333333]">{journey.title}</span>
-                            <Button
-                                secondary={journey.status === 2} primary={journey.status !== 2}
-                                className="md:text-[15px] text-[8px] rounded-lg"
-                                onClick={() => toggleDetail(journey.id)}
-                            >
-                                {journey.status === 2 ? "Chi tiết" : "Thêm chi tiết"}
-                            </Button>
+                            {
+                                !isEdit ? (
+                                    <Button
+                                        secondary
+                                        className="md:text-[15px] text-[8px] rounded-lg"
+                                        onClick={() => toggleDetail(journey.id)}
+                                    >
+                                        Chi tiết
+                                    </Button>
+                                )
+                                    : <></>
+                            }
                         </div>
                         <span className="nunito-text font-normal text-[#333333] md:text-[14px] text-[10px]">{journey.address}</span>
                         <div className="w-full flex md:gap-5">
@@ -71,6 +86,13 @@ function DetailJourneyItem({ journey, index, toggleDetail }) {
                     </div>
                 </div>
             </div>
+            {
+                !isEdit ?
+                    <></> :
+                    <div className="flex w-[25px] h-full justify-center items-center text-[20px]">
+                        <EditLocationIcon />
+                    </div>
+            }
         </div>
     );
 }

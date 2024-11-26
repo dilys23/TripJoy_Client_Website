@@ -11,15 +11,15 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
     const [scrollPosition, setScrollPosition] = useState(0);
 
     const fetchProvinces = async () => {
-        if (loading || !hasMore) return;  // Prevent fetching if already loading or no more data
+        if (loading || !hasMore) return;
         setLoading(true);
         try {
-            const data = await getProvinces(pageIndex, 10); // pageIndex and pageSize
+            const data = await getProvinces(pageIndex, 10);
             const newProvinces = data?.provinces.data || [];
             console.log("tinhhhhh", newProvinces)
             setProvinces((prevProvinces) => [...prevProvinces, ...newProvinces]);
             if (newProvinces.length < 10) {
-                setHasMore(false);  // No more data to fetch
+                setHasMore(false);
             }
             setPageIndex((prevIndex) => prevIndex + 1);
         } catch (error) {
@@ -31,7 +31,7 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
 
     useEffect(() => {
         if (isDropdown) {
-            fetchProvinces();  // Initial fetch of provinces when dropdown is shown
+            fetchProvinces();
         }
     }, [isDropdown]);
 
@@ -39,7 +39,7 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
         const { target } = event;
         setScrollPosition(target.scrollTop);
         if (target.scrollTop + target.clientHeight >= target.scrollHeight - 5 && !loading && hasMore) {
-            fetchProvinces();  // Load more provinces when scrolling to the bottom
+            fetchProvinces();
         }
     };
 
