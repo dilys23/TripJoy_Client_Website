@@ -55,39 +55,25 @@ function DetailJourney() {
     }
     const onDragEnd = (result) => {
         const { source, destination } = result;
-
-        // Không thực hiện gì nếu không có đích
         if (!destination) return;
 
-        const sourceDate = source.droppableId; // Ngày bắt đầu
-        const destinationDate = destination.droppableId; // Ngày kết thúc
-
-        // Nếu cùng ngày
+        const sourceDate = source.droppableId;
+        const destinationDate = destination.droppableId;
         if (sourceDate === destinationDate) {
-            const items = Array.from(groupedJourneys[sourceDate]);
-            const [movedItem] = items.splice(source.index, 1);
-            items.splice(destination.index, 0, movedItem);
-
-            setListItemJourney((prev) =>
-                prev.map((item) =>
-                    item.time === sourceDate
-                        ? { ...item, order: items.findIndex((i) => i.id === item.id) }
-                        : item
-                )
-            );
+            const items = Array.from(listItemJourney);
+            const [reorderedItem] = items.splice(source.index, 1);
+            items.splice(destination.index, 0, reorderedItem);
+            setListItemJourney(items);
         } else {
-            // Nếu khác ngày
             const sourceItems = Array.from(groupedJourneys[sourceDate]);
             const destinationItems = Array.from(groupedJourneys[destinationDate]);
-
-            const [movedItem] = sourceItems.splice(source.index, 1); // Xóa khỏi nguồn
-            movedItem.time = destinationDate; // Cập nhật ngày mới
-            destinationItems.splice(destination.index, 0, movedItem); // Thêm vào đích
-
+            const [movedItem] = sourceItems.splice(source.index, 1);
+            movedItem.time = destinationDate;
+            destinationItems.splice(destination.index, 0, movedItem);
             setListItemJourney((prev) =>
                 prev.map((item) => {
                     if (item.id === movedItem.id) {
-                        return { ...item, time: destinationDate };
+                        return { ...item, time: destinationDate }; // Update the time
                     }
                     return item;
                 })
@@ -95,14 +81,6 @@ function DetailJourney() {
         }
     };
 
-    // const onDragEnd = (result) => {
-    //     const { destination, source } = result;
-    //     if (!destination) return;
-    //     const items = Array.from(listItemJourney);
-    //     const [reorderedItem] = items.splice(source.index, 1);
-    //     items.splice(destination.index, 0, reorderedItem);
-    //     setListItemJourney(items);
-    // };
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex justify-end w-full mt-[-30px] mb-5">
