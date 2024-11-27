@@ -54,13 +54,55 @@ function DetailJourney() {
         setIsEdit((prev) => !prev)
     }
     const onDragEnd = (result) => {
-        const { destination, source } = result;
+        const { source, destination } = result;
+
+        // Không thực hiện gì nếu không có đích
         if (!destination) return;
-        const items = Array.from(listItemJourney);
-        const [reorderedItem] = items.splice(source.index, 1);
-        items.splice(destination.index, 0, reorderedItem);
-        setListItemJourney(items);
+
+        const sourceDate = source.droppableId; // Ngày bắt đầu
+        const destinationDate = destination.droppableId; // Ngày kết thúc
+
+        // Nếu cùng ngày
+        if (sourceDate === destinationDate) {
+            const items = Array.from(groupedJourneys[sourceDate]);
+            const [movedItem] = items.splice(source.index, 1);
+            items.splice(destination.index, 0, movedItem);
+
+            setListItemJourney((prev) =>
+                prev.map((item) =>
+                    item.time === sourceDate
+                        ? { ...item, order: items.findIndex((i) => i.id === item.id) }
+                        : item
+                )
+            );
+        } else {
+            // Nếu khác ngày
+            const sourceItems = Array.from(groupedJourneys[sourceDate]);
+            const destinationItems = Array.from(groupedJourneys[destinationDate]);
+
+            const [movedItem] = sourceItems.splice(source.index, 1); // Xóa khỏi nguồn
+            movedItem.time = destinationDate; // Cập nhật ngày mới
+            destinationItems.splice(destination.index, 0, movedItem); // Thêm vào đích
+
+            setListItemJourney((prev) =>
+                prev.map((item) => {
+                    if (item.id === movedItem.id) {
+                        return { ...item, time: destinationDate };
+                    }
+                    return item;
+                })
+            );
+        }
     };
+
+    // const onDragEnd = (result) => {
+    //     const { destination, source } = result;
+    //     if (!destination) return;
+    //     const items = Array.from(listItemJourney);
+    //     const [reorderedItem] = items.splice(source.index, 1);
+    //     items.splice(destination.index, 0, reorderedItem);
+    //     setListItemJourney(items);
+    // };
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex justify-end w-full mt-[-30px] mb-5">
@@ -80,7 +122,7 @@ function DetailJourney() {
                             />
                         </div>
                         {expandedGroups.includes(date) && (
-                            <Droppable droppableId={date}>
+                            <Droppable droppableId={date} key={date}>
                                 {(provided) => (
                                     <div
                                         className="flex flex-col gap-5 mt-2 duration-200 transition-all py-2"
@@ -93,7 +135,6 @@ function DetailJourney() {
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
-                                                        {...(isEdit ? provided.dragHandleProps : {})}
                                                         className="journey-item"
                                                     >
                                                         <DetailJourneyItem
@@ -102,7 +143,7 @@ function DetailJourney() {
                                                             index={index}
                                                             toggleDetail={toggleDetail}
                                                             expandedEvaluationItems={expandedEvaluationItems}
-                                                            dragHandleProps={provided.dragHandleProps} // Truyền props vào component
+                                                            dragHandleProps={provided.dragHandleProps}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.id) && (
                                                             <EvaluationJourneyItem journey={journey} />
@@ -119,7 +160,7 @@ function DetailJourney() {
                     </div>
                 ))}
             </div>
-        </DragDropContext >
+        </DragDropContext>
 
     );
 }
