@@ -68,13 +68,11 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
                     notFoundContent={loading ? <Spin size="small" /> : "Không tìm thấy dữ liệu"
                     }
                 >
-                    {
-                        provinces.map((province) => (
-                            <Select.Option key={province.id} value={province.id}>
-                                {province.name}
-                            </Select.Option>
-                        ))
-                    }
+                    {provinces.map((province, index) => (
+                        <Select.Option key={index} value={province.id}>
+                            {province.name}
+                        </Select.Option>
+                    ))}
                 </Select>
             ) : (
                 <input

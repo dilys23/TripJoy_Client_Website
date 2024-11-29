@@ -1,7 +1,7 @@
 import { FaBars, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-import Button from "../Button/Button";
+import Button from "../../../components/Button/Button";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
-import { EditLocationIcon } from "../Icons/Icons";
+import { EditLocationIcon } from "../../../components/Icons/Icons";
 function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps }) {
     const dashStyle = journey.status === 0
         ? 'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'

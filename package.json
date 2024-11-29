@@ -12,6 +12,7 @@
     "start": "vite"
   },
   "dependencies": {
+    "@ant-design/plots": "^2.3.2",
     "@babel/runtime": "^7.26.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",

@@ -3,12 +3,12 @@ import { FaStar } from "react-icons/fa";
 import { FcMoneyTransfer } from "react-icons/fc";
 import { MdGroups } from "react-icons/md";
 import { Select, Spin } from 'antd';
-import RatingStar from "../../assets/Rate";
-import ava from "../../assets/images/ava.jpg";
-import ava1 from "../../assets/images/anh2.jpg";
-import ava2 from "../../assets/images/anh3.jpg";
-import TextArea from "../Input/TextArea";
-import ImageUploader from "../Image/ImageUpload";
+import RatingStar from "../../../components/Rate";
+import ava from "../../../assets/images/ava.jpg";
+import ava1 from "../../../assets/images/anh2.jpg";
+import ava2 from "../../../assets/images/anh3.jpg";
+import TextArea from "../../../components/Input/TextArea";
+import ImageUploader from "../../../components/Image/ImageUpload";
 function EvaluationJourneyItem({ journey }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedValues, setSelectedValues] = useState(["Tất cả"]);

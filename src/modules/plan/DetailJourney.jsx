@@ -1,11 +1,11 @@
 import image from "../../assets/images/anh1.jpg"
 import Hue from "../../assets/images/Hue.jpg"
 import HoiAn from "../../assets/images/hoian.png"
-import DetailJourneyItem from "../../components/DetailJourney/DetailJourneyItem"
+import DetailJourneyItem from "./DetailJourney/DetailJourneyItem"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useState } from "react"
 import Button from "../../components/Button/Button"
-import EvaluationJourneyItem from "../../components/DetailJourney/EvaluationJourneyItem"
+import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 function DetailJourney() {
 
@@ -83,7 +83,7 @@ function DetailJourney() {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex justify-end w-full mt-[-30px] mb-5">
+            <div className="flex justify-end w-full mt-[-20px] mb-5">
                 <Button onClick={handleEdit} tertiary={isEdit} primary={!isEdit} className="md:text-[15px] text-[8px] rounded-lg px-8">
                     {!isEdit ? "Edit" : "Save"}
                 </Button>

@@ -176,11 +176,11 @@ const Navbar1 = () => {
               </div>
               <Search></Search>
 
-              {/* <ul class="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+              <ul className="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
                     href="/network"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511 511.999" fill="currentColor" className="h-6 w-6"                    >
                       <path
@@ -190,15 +190,15 @@ const Navbar1 = () => {
                     </svg>
                   </a>
                 </li>
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
                     href="/plan"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
-                      class="h-6 w-6"
+                      className="h-6 w-6"
                       viewBox="0 0 32 32"
                     >
                       <path
@@ -209,15 +209,15 @@ const Navbar1 = () => {
 
                   </a>
                 </li>
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
-                      class="h-6 w-6"
+                      className="h-6 w-6"
                       viewBox="0 0 512 512"
                     >
                       <path
@@ -228,10 +228,10 @@ const Navbar1 = () => {
 
                   </a>
                 </li>
-                <li class="mt-[-3px] px-3 max-lg:border-b max-lg:py-3">
+                <li className="mt-[-3px] px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +246,7 @@ const Navbar1 = () => {
 
                   </a>
                 </li>
-              </ul> */}
+              </ul>
               <ul
                 className="list-style-none mr-5 ms-auto flex flex-row items-center ps-0 md:ps-4"
                 data-twe-navbar-nav-ref
@@ -442,7 +442,7 @@ const Navbar1 = () => {
             </div>
 
           ) : (
-            <div class="flex w-full flex-wrap items-center justify-between gap-5">
+            <div className="flex w-full flex-wrap items-center justify-between gap-5">
               <div className="flex flex-col gap-y-4">
                 <div className="flex items-center gap-x-3">
                   {/* <img
@@ -486,11 +486,11 @@ const Navbar1 = () => {
               >
                 <button
                   id="toggleClose"
-                  class="fixed right-4 top-2 z-[100] rounded-full bg-white p-3 lg:hidden"
+                  className="fixed right-4 top-2 z-[100] rounded-full bg-white p-3 lg:hidden"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 fill-black"
+                    className="w-4 fill-black"
                     viewBox="0 0 320.591 320.591"
                   >
                     <path
@@ -504,35 +504,35 @@ const Navbar1 = () => {
                   </svg>
                 </button>
 
-                <ul class="z-50 gap-x-5 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-1/2 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-white max-lg:p-6 max-lg:shadow-md lg:flex">
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                <ul className="z-50 gap-x-5 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-1/2 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-white max-lg:p-6 max-lg:shadow-md lg:flex">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0)"
-                      class="divide block text-[17px] font-medium text-[#007bff] hover:text-[#007bff]"
+                      href="#"
+                      className="divide block text-[17px] font-medium text-[#007bff] hover:text-[#007bff]"
                     >
                       Trang chủ
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Thịnh hành
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Tính năng
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Liên hệ
                     </a>
@@ -540,9 +540,9 @@ const Navbar1 = () => {
                 </ul>
               </div>
 
-              <div class="mr-10 flex space-x-3 max-lg:ml-auto">
+              <div className="mr-10 flex space-x-3 max-lg:ml-auto">
                 <button
-                  class="rounded-full border-2 border-[#007bff] bg-[#007bff] px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
+                  className="rounded-full border-2 border-[#007bff] bg-[#007bff] px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
                   onClick={handleLoginOpen}
                 >
                   Đăng nhập
@@ -572,7 +572,7 @@ const Navbar1 = () => {
                   />
                 )}
                 <button
-                  class="rounded-full border-2 border-[#ff6600] bg-[#FF7324] px-5 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
+                  className="rounded-full border-2 border-[#ff6600] bg-[#FF7324] px-5 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
                   onClick={handleRegister}
                 >
                   Đăng kí
@@ -584,9 +584,9 @@ const Navbar1 = () => {
                   />
                 )}
 
-                <button id="toggleOpen" class="lg:hidden" onClick={handleClick}>
+                <button id="toggleOpen" className="lg:hidden" onClick={handleClick}>
                   <svg
-                    class="h-7 w-7"
+                    className="h-7 w-7"
                     fill="#000"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"

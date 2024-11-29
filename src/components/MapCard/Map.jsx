@@ -13,7 +13,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
   const [currentPosition, setCurrentPosition] = useState(null); // GPS position
   const [distance, setDistance] = useState(null);
 
-  const [markers, setMarkers] = useState([    {
+  const [markers, setMarkers] = useState([{
     lat: 16.467,
     lng: 107.59,
     icon: L.icon({
@@ -23,7 +23,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
     }),
   },
   {
-    lat:16.054,
+    lat: 16.054,
     lng: 108.202,
     icon: L.icon({
       iconUrl: "https://img.icons8.com/arcade/44/marker.png",
@@ -31,44 +31,44 @@ const Map = ({ className, waypoints, setWaypoints }) => {
       iconAnchor: [20, 40],
     }),
   },]);
-/*
- const updateWaypoints = (lat, lng) => {
-    setWaypoints((previewPoints)=>
-    {
-      const updatedWaypoints = [...previewpoints];
-      updatedWaypoints.splice(previewPoints.length -1, 0, {lat: lat, lng: lng});
-      console.log("Cập nhật waypoints", updatedWaypoints);
-      return updatedWaypoints
-    })
+  /*
+   const updateWaypoints = (lat, lng) => {
+      setWaypoints((previewPoints)=>
+      {
+        const updatedWaypoints = [...previewpoints];
+        updatedWaypoints.splice(previewPoints.length -1, 0, {lat: lat, lng: lng});
+        console.log("Cập nhật waypoints", updatedWaypoints);
+        return updatedWaypoints
+      })
+    };
+      const updatedMarkers = (lat, lng) => {
+        const newMarker = L.marker([lat, lng], {
+          icon: L.icon({
+              iconUrl: "https://img.icons8.com/arcade/44/marker.png",
+              iconSize: [40, 40],
+              iconAnchor: [20, 40],
+          }),
+      }).addTo(mapInstance);
+        setMarkers((prevMarkers) => {
+          const updatedMarkers = [...prevMarkers];
+          updatedMarkers.splice(prevMarkers.length -1, 0, newMarker);
+          console.log("Cập nhật markers", updatedMarkers);
+          return updatedMarkers; // Trả về mảng mới
+        });}
+  
+  
+      
+    };
+  
+    const handleMapClick = (event) => {
+      const { lat, lng } = event.latlng;
+      console.log("Clicked position:", lat, lng);
+      updateWaypoints(lat, lng);
+      updateMarkers(lat, lng);
+      calculateRoute();
   };
-    const updatedMarkers = (lat, lng) => {
-      const newMarker = L.marker([lat, lng], {
-        icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-        }),
-    }).addTo(mapInstance);
-      setMarkers((prevMarkers) => {
-        const updatedMarkers = [...prevMarkers];
-        updatedMarkers.splice(prevMarkers.length -1, 0, newMarker);
-        console.log("Cập nhật markers", updatedMarkers);
-        return updatedMarkers; // Trả về mảng mới
-      });}
-
-
-    
-  };
-
-  const handleMapClick = (event) => {
-    const { lat, lng } = event.latlng;
-    console.log("Clicked position:", lat, lng);
-    updateWaypoints(lat, lng);
-    updateMarkers(lat, lng);
-    calculateRoute();
-};
-
-*/  
+  
+  */
   useEffect(() => {
     // Initialize map
     const mapInstance = L.map("map").setView([16.054, 108.202], 12); // Da Nang coords
@@ -98,16 +98,16 @@ const Map = ({ className, waypoints, setWaypoints }) => {
         mapInstance.setView([y, x], 13);
 
         setWaypoints((prevWaypoints) => {
-        let position = prevWaypoints.length - 1; // Tính vị trí n-1
+          let position = prevWaypoints.length - 1; // Tính vị trí n-1
 
-        // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
-        const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
-        updatedWaypoints.splice(position, 0, { lat: y, lng: x }); // Chèn phần tử mới
+          // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
+          const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
+          updatedWaypoints.splice(position, 0, { lat: y, lng: x }); // Chèn phần tử mới
 
-        console.log("Cập nhật waypoints", updatedWaypoints);
-       
-        return updatedWaypoints; // Trả về mảng đã cập nhật
-      });
+          console.log("Cập nhật waypoints", updatedWaypoints);
+
+          return updatedWaypoints; // Trả về mảng đã cập nhật
+        });
         calculateRoute();
       } else {
         console.error("Không thể xác định vị trí tìm kiếm.");
@@ -149,7 +149,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
       console.log("1234", lat, lng);
       const start = { lat: 10.762, lng: 106.659 }; // Điểm bắt đầu
       const end = { lat: 10.763, lng: 106.661 }; // Điểm kết thúc
-      const updateWaypoint =setWaypoints((prevWaypoints) => {
+      const updateWaypoint = setWaypoints((prevWaypoints) => {
         let position = prevWaypoints.length - 1; // Tính vị trí n-1
 
         // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
@@ -157,7 +157,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
         updatedWaypoints.splice(position, 0, { lat, lng }); // Chèn phần tử mới
 
         console.log("Cập nhật waypoints", updatedWaypoints);
-       
+
         return updatedWaypoints; // Trả về mảng đã cập nhật
       });
       console.log("handle map", waypoints);
@@ -174,7 +174,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
         return updatedMarkers; // Trả về mảng mới
       });
       calculateRoute(updateWaypoint);
-     
+
     };
     mapInstance.on("click", handleMapClick);
     return () => {
@@ -211,11 +211,11 @@ const Map = ({ className, waypoints, setWaypoints }) => {
             iconAnchor: [20, 40],
           }),
         });
-       console.log("qua control");
+        console.log("qua control");
         marker.bindPopup(
           `<div>
             <p>Location: (${waypoint.latLng.lat.toFixed(3)}, ${waypoint.latLng.lng.toFixed(3)})</p>
-            <button id="remove-${i}" class="remove-btn">Remove</button>
+            <button id="remove-${i}" className="remove-btn">Remove</button>
           </div>`,
         );
 
@@ -285,7 +285,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
     <div className={`relative ${className}`}>
       <div
         id="map"
-        className={`padding-5 relative h-[420px] w-full rounded-[10px] border border-slate-300`}
+        className={`padding-5 relative h-[600px] w-full rounded-[10px] border border-slate-300`}
       ></div>
       <div className="absolute left-3 top-16 z-[1200] mt-[60px] flex space-x-2">
         <button

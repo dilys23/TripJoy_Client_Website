@@ -21,7 +21,7 @@ const publicRoutes = [
   { path: "/generate-plan", component: GeneratePlan, layout: DefaultLayout },
   { path: "/detail-trip", component: DetailsTrip, layout: DefaultLayout },
   { path: "/detail-plan-ai", component: DetailPlanAI, layout: DefaultLayout },
-  { path: "/detail-plan", component: DetailPlan, layout: DefaultLayout },
+  { path: "/detail-plan/:id", component: DetailPlan, layout: DefaultLayout },
 
 ];
 const privateRoutes = [];

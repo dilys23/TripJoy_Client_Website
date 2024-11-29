@@ -4,7 +4,15 @@ import { MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
 import { useState } from "react";
 import DetailJourney from "../../../modules/plan/DetailJourney.jsx";
+import DetailMember from "../../../modules/plan/DetailMember.jsx";
+import DetailBudget from "../../../modules/plan/DetailBudget.jsx"
+import Button from "../../../components/Button/Button.jsx";
+import { useParams } from "react-router-dom";
+import Map from "../../../components/MapCard/Map.jsx";
 function DetailPlan() {
+    const id = useParams();
+    const planId = id.id;
+    console.log(planId);
     const [activeTab, setActiveTab] = useState("hanhTrinh");
     const date = {
         dateStart: "2024-12-02",
@@ -42,25 +50,28 @@ function DetailPlan() {
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-10">
-                    <button
-                        className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh" ? "border-b-4 border-black font-bold" : ""}`}
-                        onClick={() => setActiveTab("hanhTrinh")}
-                    >
-                        Hành trình
-                    </button>
-                    <button
-                        className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thuChi" ? "border-b-4 border-black font-bold" : ""}`}
-                        onClick={() => setActiveTab("thuChi")}
-                    >
-                        Thu chi
-                    </button>
-                    <button
-                        className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thanhVien" ? "border-b-4 border-black font-bold" : ""}`}
-                        onClick={() => setActiveTab("thanhVien")}
-                    >
-                        Thành viên
-                    </button>
+                <div className=" flex w-full justify-between items-center">
+                    <div className="flex gap-10">
+                        <button
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh" ? "border-b-4 border-black font-bold" : ""}`}
+                            onClick={() => setActiveTab("hanhTrinh")}
+                        >
+                            Hành trình
+                        </button>
+                        <button
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thuChi" ? "border-b-4 border-black font-bold" : ""}`}
+                            onClick={() => setActiveTab("thuChi")}
+                        >
+                            Thu chi
+                        </button>
+                        <button
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thanhVien" ? "border-b-4 border-black font-bold" : ""}`}
+                            onClick={() => setActiveTab("thanhVien")}
+                        >
+                            Thành viên
+                        </button>
+                    </div>
+                    <Button secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
                 </div>
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
@@ -70,19 +81,20 @@ function DetailPlan() {
                     )}
                     {activeTab === "thuChi" && (
                         <div>
-                            <span className="font-normal text-xl">Nội dung thu chi </span>
+                            <DetailBudget></DetailBudget>
 
                         </div>
                     )}
                     {activeTab === "thanhVien" && (
                         <div>
-                            <span className="font-normal text-xl">Nội dung thành viên </span>
+                            <DetailMember></DetailMember>
                         </div>
                     )}
                 </div>
 
             </div>
-            <img src={map} alt="" className="w-1/3 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" />
+            <Map className="w-1/3 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            {/* <img src={map} alt="" className="w-1/3 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" /> */}
         </div>
     );
 }

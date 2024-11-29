@@ -72,7 +72,7 @@ function PlanCard({ plan }) {
                         <span className="lg:text-[14px] text-[12px] text-[#FF7324] leading-4 font-normal"> {formatCurrency(plan.estimatedBudget)}</span>
                     </div>
                     <div className="w-3/12 justify-center flex items-center">
-                        <Button to={config.routes.detailTrip} secondary className=" rounded-[5px] text-white bg-[#007AFF] flex items-center justify-center lg:text-[14px] text-[12px] ">Chi tiết</Button>
+                        <Button to={`/detail-plan/${plan.id}`} secondary className=" rounded-[5px] text-white bg-[#007AFF] flex items-center justify-center lg:text-[14px] text-[12px] ">Chi tiết</Button>
                     </div>
                 </div>
             </div>
