@@ -240,7 +240,6 @@ function ModalEditProfile({ handleClose }) {
                         </div>
                     </div>
                 </div>
-
             </div>
         </>
     );

@@ -12,7 +12,7 @@ function DetailJourney() {
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const [listItemJourney, setListItemJourney] = useState([
-        { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 2, rating: 5 },
+        { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 1, rating: 5 },
         { id: 1, title: "Mỳ Quảng bà Mua", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 1, image: HoiAn, time: "2024-12-02", hour: '7:15 PM', status: 1, rating: 4.2 },
         { id: 2, title: "Cầu rồng", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image: Hue, time: "2024-12-03", hour: '8:15 PM', status: 0, rating: 4.5 },
     ]);
