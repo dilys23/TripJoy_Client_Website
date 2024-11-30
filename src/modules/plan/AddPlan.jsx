@@ -8,15 +8,28 @@ import toast from 'react-hot-toast';
 import { notification } from 'antd';
 
 import { addPlanRequest } from '../../services/plan';
+import { UploadIconPage } from '../../components/Icons/Icons';
 
 function AddPlan({ onAddSuccess }) {
-    const [namePlan, setNamePlan] = useState("");
-    const [startDestination, setStartDestination] = useState("");
-    const [endDestination, setEndDestination] = useState("");
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [budget, setBudget] = useState("");
-    const [selectedItems, setSelectedItems] = useState();
+    const [formData, setFormData] = useState({
+        namePlan: "",
+        startDestination: "",
+        endDestination: "",
+        startDate: null,
+        endDate: null,
+        budget: "",
+        method: 0,
+        avatar: null,
+        vehicle: null,
+    });
+    // const [namePlan, setNamePlan] = useState("");
+    // const [startDestination, setStartDestination] = useState("");
+    // const [endDestination, setEndDestination] = useState("");
+    // const [selectedImage, setSelectedImage] = useState(null);
+    // const [startDate, setStartDate] = useState(null);
+    // const [endDate, setEndDate] = useState(null);
+    // const [budget, setBudget] = useState("");
+    // const [selectedItems, setSelectedItems] = useState();
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type) => {
         api[type]({
@@ -31,92 +44,83 @@ function AddPlan({ onAddSuccess }) {
         endDestination: "",
         startDate: "",
         endDate: "",
-        budget: ""
+        budget: "",
+        avatar: ""
     })
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
     const validateForm = () => {
-        let formIsValid = true;
-        let errors = {
-            namePlan: "",
-            startDestination: "",
-            endDestination: "",
-            startDate: "",
-            endDate: "",
-            budget: ""
-        };
-        if (!namePlan) {
-            formIsValid = false;
-            errors.namePlan = "Vui lòng điền tên chuyến đi";
-        }
-
-        if (!startDestination) {
-            formIsValid = false;
-            errors.startDestination = "Vui lòng điền điểm bắt đầu";
-        }
-
-        if (!endDestination) {
-            formIsValid = false;
-            errors.endDestination = "Vui lòng điền điểm kết thúc";
-        }
-        if (!startDate) {
-            formIsValid = false;
-            errors.startDate = "Vui lòng nhập ngày bắt đầu và ngày kết thúc";
-        }
-        if (!endDate) {
-            formIsValid = false;
-            errors.endDate = "Vui lòng ngày kết thúc";
-        }
-        if (startDate && endDate && dayjs(startDate).isAfter(dayjs(endDate))) {
-            formIsValid = false;
+        const errors = {};
+        if (!formData.namePlan) errors.namePlan = "Vui lòng điền tên chuyến đi";
+        if (!formData.startDestination) errors.startDestination = "Vui lòng điền điểm bắt đầu";
+        if (!formData.endDestination) errors.endDestination = "Vui lòng điền điểm kết thúc";
+        if (!formData.startDate) errors.startDate = "Vui lòng nhập ngày bắt đầu";
+        if (!formData.endDate) errors.endDate = "Vui lòng nhập ngày kết thúc";
+        if (formData.startDate && formData.endDate && dayjs(formData.startDate).isAfter(dayjs(formData.endDate))) {
             errors.startDate = "Ngày bắt đầu không được sau ngày kết thúc";
             errors.endDate = "Ngày kết thúc không được trước ngày bắt đầu";
         }
-        if (!budget) {
-            formIsValid = false;
-            errors.budget = "Vui lòng điền ngân sách";
-        }
-        setErrors(errors);
-        return formIsValid;
-    };
-    const handelClear = () => {
-        setNamePlan("");
-        setStartDestination("");
-        setEndDestination("");
-        setStartDate(null);
-        setEndDate(null);
-        setBudget("");
-        setSelectedItems(null);
+        if (!formData.budget) errors.budget = "Vui lòng điền ngân sách";
+        if (!formData.avatar) errors.avatar = "Vui lòng chọn ảnh bìa";
 
-        // Reset validation errors
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handelClear = () => {
+        setFormData({
+            namePlan: "",
+            startDestination: "",
+            endDestination: "",
+            startDate: null,
+            endDate: null,
+            budget: "",
+            method: 0,
+            avatar: null,
+            vehicle: null,
+        });
         setErrors({
             namePlan: "",
             startDestination: "",
             endDestination: "",
             startDate: "",
             endDate: "",
-            budget: ""
+            budget: "",
+            avatar: "",
         });
-    }
+    };
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
     const handleAddPlan = async (e) => {
         if (e) e.preventDefault();
         if (!validateForm()) {
             return;
         }
-        const planData = {
-            Plan: {
-                Title: namePlan,
-                Avatar: "http://gfsasdsdfd.jpg",
-                StartDate: dayjs(startDate).format("YYYY-MM-DD"),
-                EndDate: dayjs(endDate).format("YYYY-MM-DD"),
-                EstimatedBudget: budget,
-                Method: 0,
-                ProvinceStartId: startDestination,
-                ProvinceEndId: endDestination,
-                Vehicle: selectedItems
-            }
-        };
-        console.log(planData)
+        const data = new FormData();
+        data.append('Plan.Avatar', formData.avatar);
+        data.append('Plan.Title', formData.namePlan);
+        data.append('Plan.StartDate', formatDate(formData.startDate));
+        data.append('Plan.EndDate', formatDate(formData.endDate));
+        data.append('Plan.EstimatedBudget', formData.budget);
+        data.append('Plan.Method', formData.method);
+        data.append('Plan.ProvinceStartId', formData.startDestination);
+        data.append('Plan.ProvinceEndId', formData.endDestination);
+        data.append('Plan.Vehicle', formData.vehicle);
+
+        console.log(formData)
+        console.log(data)
+        data.forEach((value, key) => {
+            console.log(key, value);
+        });
+
         try {
-            const response = await addPlanRequest(planData);
+            const response = await addPlanRequest(data);
             handelClear();
             if (onAddSuccess) {
                 onAddSuccess();
@@ -128,10 +132,31 @@ function AddPlan({ onAddSuccess }) {
     }
 
     const handleClick = (index) => {
-        setSelectedItems(index);
+        handleInputChange('vehicle', index);
     };
     const disabledDate = (current) => {
         return current && current < dayjs().startOf("day");
+    };
+
+    const handleImageChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+
+            handleInputChange("avatar", e.target.files[0]);
+        }
+    };
+    const handleStartDestinationChange = (e) => {
+        console.log(e)
+        setFormData((prev) => ({
+            ...prev,
+            startDestination: e
+        }));
+    };
+    const handleEndDestinationChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            endDestination: e
+        }));
     };
 
     return (
@@ -139,34 +164,59 @@ function AddPlan({ onAddSuccess }) {
             <div className="flex py-3 w-[90%] mx-auto items-center justify-center border-b-2 border-[#DEDFDF] lg:text-[20px] font-bold">
                 Bạn đã có chuyến đi của mình chưa ?
             </div>
-            <div className="flex flex-col gap-2 px-5 py-4 text-start">
+            <div className="flex flex-col gap-2 px-5 py-4 text-start ">
+                <div className='w-full flex flex-col  justify-center '>
+                    <span className='text-[#a7a5b4] px-1 lg:text-base text-[14px]'>Chọn ảnh bìa
+                        <span className="text-[red] ml-1 text-[15px]">*</span></span>
+                    <div className='w-full flex justify-center'>
+                        <label htmlFor="upload-image" className="w-[200px] h-[80px] border-dashed border-[#00000026] border-[1px] bg-[#f8f8f8] items-center justify-center flex flex-col cursor-pointer rounded-[6px]">
+                            {formData.avatar ? (
+                                <img src={URL.createObjectURL(formData.avatar)} alt="preview" className="h-full w-full object-cover rounded-[6px]" />
+                            ) : (
+                                <UploadIconPage />
+                            )}
+                        </label>
+                        <input
+                            id="upload-image"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleImageChange(e)}
+                        />
+                    </div>
+                    {!formData.avatar && errors.avatar && <span className="text-[12px] font-normal text-red-500 h-[5px]">{errors?.avatar}</span>}
+                </div>
                 <InputWithLabel
                     label="Tên chuyến đi"
                     placeholder="Tên chuyến đi"
-                    value={namePlan}
-                    onChange={(e) => setNamePlan(e.target.value)}
+                    value={formData.namePlan}
+                    onChange={(e) => handleInputChange("namePlan", e.target.value)}
                 />
-                {!namePlan && errors.namePlan && <span className="text-[12px] font-normal text-red-500 h-[5px]">{errors?.namePlan}</span>}
+                {!formData.namePlan && errors.namePlan && <span className="text-[12px] font-normal text-red-500 h-[5px]">{errors?.namePlan}</span>}
                 <div className="flex gap-10  pt-4">
                     <div className="flex w-1/2 flex-col gap-2">
                         <InputWithLabel
                             label="Điểm bắt đầu"
                             placeholder="Điểm bắt đầu"
-                            value={startDestination}
-                            onChange={(value) => setStartDestination(value)}
+                            value={formData.startDestination}
+                            // onChange={(e) => handleInputChange("startDestination", e.target.value)}
+                            onChange={(e) => handleStartDestinationChange(e)}
                             isDropdown={true}
+                        // uniqueKey="start"
                         />
-                        {!startDestination && errors.startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
+                        {!formData.startDestination && errors.startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
                     </div>
                     <div className="flex w-1/2 flex-col gap-2">
                         <InputWithLabel
                             label="Điểm kết thúc"
                             placeholder="Điểm kết thúc"
-                            value={endDestination}
-                            onChange={(value) => setEndDestination(value)}
+                            value={formData.endDestination}
+                            onChange={(e) => handleEndDestinationChange(e)}
+                            // onChange={(e) => handleInputChange("endDestination", e.target.value)}
                             isDropdown={true}
+                        // uniqueKey="end"
                         />
-                        {!endDestination && errors.endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
+                        {!formData.endDestination && errors.endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
                     </div>
                 </div>
                 <span className="text-[#a7a5b4] px-1 lg:text-base text-[14px]">Thời gian</span>
@@ -177,20 +227,20 @@ function AddPlan({ onAddSuccess }) {
                         disabledDate={disabledDate}
                         format="DD-MM-YYYY"
                         allowClear={true}
-                        value={startDate && endDate ? [dayjs(startDate), dayjs(endDate)] : []}
+                        value={formData.startDate && formData.endDate ? [dayjs(formData.startDate), dayjs(formData.endDate)] : []}
                         onChange={(dates) => {
                             if (dates) {
-                                setStartDate(dates[0]);
-                                setEndDate(dates[1]);
+                                handleInputChange("startDate", dates[0]);
+                                handleInputChange("endDate", dates[1]);
                             } else {
-                                setStartDate(null);
-                                setEndDate(null);
+                                handleInputChange("startDate", null);
+                                handleInputChange("endDate", null);
                             }
                         }}
                     />
                 </Space>
 
-                {!startDate && errors.startDate && (
+                {!formData.startDate && errors.startDate && (
                     <span className="text-[12px] font-normal text-red-500 ">{errors?.startDate}</span>
                 )}
 
@@ -198,44 +248,44 @@ function AddPlan({ onAddSuccess }) {
                     <InputWithLabel
                         label="Kinh phí dự tính"
                         placeholder="Kinh phí dự tính"
-                        value={budget}
-                        onChange={(e) => setBudget(e.target.value.replace(/[^0-9]/g, ""))}
+                        value={formData.budget}
+                        onChange={(e) => handleInputChange("budget", e.target.value.replace(/[^0-9]/g, ""))}
                     />
-                    {!budget && errors.budget && <span className="text-[12px] font-normal text-red-500">{errors?.budget}</span>}
+                    {!formData.budget && errors.budget && <span className="text-[12px] font-normal text-red-500">{errors?.budget}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <span className="text-[#a7a5b4] px-1">Phương tiện</span>
                     <ul className="flex gap-4 flex-wrap">
                         <li
-                            className={`flex border justify-center items-center border-[#E3E6E8] lg:p-3 md:p-2 p-1 rounded-xl shadow-md cursor-pointer ${selectedItems === 0 ? "bg-blue-300 text-white" : ""
+                            className={`flex border justify-center items-center border-[#E3E6E8] lg:p-3 md:p-2 p-1 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 0 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(0)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/scooter.png" alt="scooter" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 1 ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 1 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(1)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/color/48/car--v1.png" alt="car--v1" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 2 ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 2 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(2)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/emoji/48/train-emoji.png" alt="train-emoji" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 3 ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 3 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(3)}
                         >
                             <img width="48" height="48" src="https://img.icons8.com/clouds/100/airport.png" alt="airport" />
                         </li>
                         <li
-                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${selectedItems === 4 ? "bg-blue-300 text-white" : ""
+                            className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 4 ? "bg-blue-300 text-white" : ""
                                 }`}
                             onClick={() => handleClick(4)}
                         >

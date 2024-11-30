@@ -1,306 +1,175 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-routing-machine";
-import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
-import icon from "./constants";
-import "leaflet-geosearch/dist/geosearch.css";
-import { act } from "react";
+import axios from "axios";
+import { MdCheckCircleOutline } from "react-icons/md";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { IoCloseCircle } from "react-icons/io5"; // Import close icon
 
-const Map = ({ className, waypoints, setWaypoints }) => {
-  const [map, setMap] = useState(null);
-  const [routingControl, setRoutingControl] = useState(null);
-  const [currentPosition, setCurrentPosition] = useState(null); // GPS position
-  const [distance, setDistance] = useState(null);
-
-  const [markers, setMarkers] = useState([    {
-    lat: 16.467,
-    lng: 107.59,
-    icon: L.icon({
-      iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    }),
-  },
-  {
-    lat:16.054,
-    lng: 108.202,
-    icon: L.icon({
-      iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    }),
-  },]);
-/*
- const updateWaypoints = (lat, lng) => {
-    setWaypoints((previewPoints)=>
-    {
-      const updatedWaypoints = [...previewpoints];
-      updatedWaypoints.splice(previewPoints.length -1, 0, {lat: lat, lng: lng});
-      console.log("Cập nhật waypoints", updatedWaypoints);
-      return updatedWaypoints
-    })
-  };
-    const updatedMarkers = (lat, lng) => {
-      const newMarker = L.marker([lat, lng], {
-        icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-        }),
-    }).addTo(mapInstance);
-      setMarkers((prevMarkers) => {
-        const updatedMarkers = [...prevMarkers];
-        updatedMarkers.splice(prevMarkers.length -1, 0, newMarker);
-        console.log("Cập nhật markers", updatedMarkers);
-        return updatedMarkers; // Trả về mảng mới
-      });}
-
-
-    
-  };
-
-  const handleMapClick = (event) => {
-    const { lat, lng } = event.latlng;
-    console.log("Clicked position:", lat, lng);
-    updateWaypoints(lat, lng);
-    updateMarkers(lat, lng);
-    calculateRoute();
-};
-
-*/  
+const Map = ({ className }) => {
+  const [mapInstance, setMapInstance] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
+  const [marker, setMarker] = useState(null);
+  const [locations, setLocations] = useState([]); // Lưu danh sách địa điểm tìm được
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Hiển thị dropdown
+  const [province, setProvince] = useState('Đà Nẵng')
   useEffect(() => {
-    // Initialize map
-    const mapInstance = L.map("map").setView([16.054, 108.202], 12); // Da Nang coords
+    // Khởi tạo bản đồ
+    const map = L.map("map", {
+      center: [16.054, 108.202], // Đà Nẵng
+      zoom: 12,
+      zoomControl: false,
+    });
+
     L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
       subdomains: ["mt0", "mt1", "mt2", "mt3"],
-    }).addTo(mapInstance);
+    }).addTo(map);
 
-    setMap(mapInstance);
+    L.control
+      .zoom({
+        position: "bottomleft",
+      })
+      .addTo(map);
 
-    const provider = new OpenStreetMapProvider();
-    const searchControl = new GeoSearchControl({
-      provider,
-      marker: {
-        icon,
-      },
-      style: "button",
-      autoComplete: true,
-      autoCompleteDelay: 250,
-      keepResult: true,
-      updateMap: false,
-    });
+    // Lưu instance của bản đồ
+    setMapInstance(map);
 
-    mapInstance.addControl(searchControl);
-    mapInstance.on("geosearch/showlocation", async (result) => {
-      if (result.location) {
-        const { x, y } = result.location;
-        mapInstance.setView([y, x], 13);
-
-        setWaypoints((prevWaypoints) => {
-        let position = prevWaypoints.length - 1; // Tính vị trí n-1
-
-        // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
-        const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
-        updatedWaypoints.splice(position, 0, { lat: y, lng: x }); // Chèn phần tử mới
-
-        console.log("Cập nhật waypoints", updatedWaypoints);
-       
-        return updatedWaypoints; // Trả về mảng đã cập nhật
-      });
-        calculateRoute();
-      } else {
-        console.error("Không thể xác định vị trí tìm kiếm.");
-      }
-    });
-
-    // Get current position via GPS
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentPosition([latitude, longitude]);
-
-          // Add marker for current position
-          L.marker([latitude, longitude], {
-            icon: L.icon({
-              iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-              iconSize: [40, 40],
-              iconAnchor: [20, 40],
-            }),
-          }).addTo(mapInstance);
-
-          mapInstance.setView([latitude, longitude], 13); // Zoom to current location
-        },
-        (error) => {
-          console.error("Error getting location: ", error);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0,
-        },
-      );
-    }
-
-    const handleMapClick = async (event) => {
-      const { lat, lng } = event.latlng;
-      const clickedPoint = { lat, lng }; // Tọa độ của điểm được nhấp
-      console.log("1234", lat, lng);
-      const start = { lat: 10.762, lng: 106.659 }; // Điểm bắt đầu
-      const end = { lat: 10.763, lng: 106.661 }; // Điểm kết thúc
-      const updateWaypoint =setWaypoints((prevWaypoints) => {
-        let position = prevWaypoints.length - 1; // Tính vị trí n-1
-
-        // Tạo một bản sao của prevWaypoints và thêm phần tử mới vào vị trí n-1
-        const updatedWaypoints = [...prevWaypoints]; // Sao chép mảng trước đó
-        updatedWaypoints.splice(position, 0, { lat, lng }); // Chèn phần tử mới
-
-        console.log("Cập nhật waypoints", updatedWaypoints);
-       
-        return updatedWaypoints; // Trả về mảng đã cập nhật
-      });
-      console.log("handle map", waypoints);
-      const newMarker = L.marker([lat, lng], {
-        icon: L.icon({
-          iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-        }),
-      }).addTo(mapInstance);
-      const updateMarker = setMarkers((prevMarkers) => {
-        const updatedMarkers = [...prevMarkers, newMarker];
-        console.log("Cập nhật markers", updatedMarkers);
-        return updatedMarkers; // Trả về mảng mới
-      });
-      calculateRoute(updateWaypoint);
-     
-    };
-    mapInstance.on("click", handleMapClick);
     return () => {
-      mapInstance.off("click", handleMapClick);
-      mapInstance.remove();
+      map.remove();
     };
   }, []);
 
-  const calculateRoute = (newWaypoints = []) => {
-    console.log("vào hàm calculateRoute");
-    console.log("routingControl", routingControl);
-
-    if (routingControl) {
-      routingControl.remove(); // Xoá lộ trình cũ nếu có
-    }
-    const waypointsToUse =
-      Array.isArray(newWaypoints) && newWaypoints.length > 0
-        ? newWaypoints
-        : waypoints;
-    console.log("in ra way mới", waypointsToUse);
-    // markers.forEach((marker) => map.removeLayer(marker));
-
-    // Sử dụng các điểm dừng trong `waypoints` để tính lộ trình
-    const control = L.Routing.control({
-      waypoints: waypointsToUse.map((point) => L.latLng(point.lat, point.lng)),
-      routeWhileDragging: true,
-      show: false,
-      createMarker: (i, waypoint, n) => {
-        console.log('vào hàm createrMarker', i, waypoint);
-        const marker = L.marker(waypoint.latLng, {
-          icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-          }),
-        });
-       console.log("qua control");
-        marker.bindPopup(
-          `<div>
-            <p>Location: (${waypoint.latLng.lat.toFixed(3)}, ${waypoint.latLng.lng.toFixed(3)})</p>
-            <button id="remove-${i}" class="remove-btn">Remove</button>
-          </div>`,
-        );
-
-        marker.on("popupopen", () => {
-          // Thêm sự kiện `click` vào nút "Remove"
-          document
-            .getElementById(`remove-${i}`)
-            .addEventListener("click", () => {
-              removeWaypoint(i); // Gọi hàm `removeWaypoint` với chỉ số `i`
-            });
-        });
-
-        return marker;
-      },
-    }).addTo(map);
-
-    control.on("routesfound", function (e) {
-      const routes = e.routes;
-      const summary = routes[0].summary;
-      const totalDistance = (summary.totalDistance / 1000).toFixed(2); // Chuyển đổi sang km
-      setDistance(totalDistance);
-
-      const midPoint =
-        routes[0].coordinates[Math.floor(routes[0].coordinates.length / 2)];
-      L.popup()
-        .setLatLng(midPoint)
-        .setContent(`Distance: ${totalDistance} km`)
-        .openOn(map);
-    });
-    setRoutingControl(control);
-  };
-
-  const removeWaypoint = (index) => {
-    console.log("remove click");
-
-    // Update waypoints and markers
-    setWaypoints((prevWaypoints) => {
-      const newWaypoints = prevWaypoints.filter((_, i) => i !== index); // Remove the waypoint
-      console.log("waypoints after remove", newWaypoints);
-
-      setMarkers((prevMarkers) => {
-        const newMarkers = prevMarkers.filter((_, i) => i !== index); // Remove the marker from state
-
-        // Remove the marker from the map
-        if (prevMarkers[index]) {
-          console.log("xóa marker ", prevMarkers[index]);
-          map.removeLayer(prevMarkers[index]); // Ensure the marker is removed from the map
-        }
-
-        console.log("markers after remove", newMarkers);
-        return newMarkers; // Update markers state
-      });
-
-      // Remove the routing control and re-calculate the route
-      if (routingControl) {
-        console.log(routingControl);
-        routingControl.remove(); // Remove the existing route
+  const handleSearch = useCallback(
+    async (query) => {
+      if (!query.trim()) {
+        setLocations([]);
+        setIsDropdownVisible(false);
+        return;
       }
 
-      // Recalculate the route with the updated waypoints
-      calculateRoute(newWaypoints); // Use updated waypoints
-      return newWaypoints; // Update waypoints state
-    });
+      try {
+        // Gọi API Geocoding của OpenStreetMap (Nominatim) với giới hạn tìm kiếm trong Việt Nam
+        const response = await axios.get(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=VN`
+        );
+
+        setLocations(response.data); // Lưu danh sách kết quả
+        setIsDropdownVisible(true); // Hiển thị dropdown
+      } catch (error) {
+        console.error("Lỗi khi tìm kiếm địa điểm:", error);
+      }
+    },
+    []
+  );
+
+  // Debounce logic để trì hoãn API call
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      handleSearch(searchQuery);
+    }, 500); // Trì hoãn 500ms
+
+    return () => clearTimeout(delayDebounce); // Hủy bỏ timeout nếu searchQuery thay đổi
+  }, [searchQuery, handleSearch]);
+
+  const handleLocationSelect = (location) => {
+    const { lat, lon, display_name } = location;
+
+    if (mapInstance) {
+      // Di chuyển bản đồ tới vị trí mới
+      mapInstance.setView([lat, lon], 14);
+
+      // Xóa marker cũ nếu có
+      if (marker) {
+        marker.remove();
+      }
+
+      // Thêm marker mới
+      const newMarker = L.marker([lat, lon]).addTo(mapInstance);
+      newMarker.bindPopup(display_name).openPopup();
+
+      setMarker(newMarker);
+    }
+
+    setSearchQuery(display_name); // Cập nhật giá trị input
+    setIsDropdownVisible(false); // Ẩn dropdown
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery(""); // Xóa nội dung tìm kiếm
+    setLocations([]); // Xóa danh sách địa điểm
+    setIsDropdownVisible(false); // Ẩn dropdown
   };
 
   return (
     <div className={`relative ${className}`}>
-      <div
-        id="map"
-        className={`padding-5 relative h-[420px] w-full rounded-[10px] border border-slate-300`}
-      ></div>
-      <div className="absolute left-3 top-16 z-[1200] mt-[60px] flex space-x-2">
-        <button
-          onClick={calculateRoute}
-          className="rounded bg-blue-500 p-1 text-sm text-white"
-        >
-          Calculate
-        </button>
-      </div>
+      <div id="map" className="h-[600px] w-full rounded-[10px] border border-slate-300 z-10"></div>
 
-      {distance && (
-        <div className="absolute bottom-4 left-4 z-[1200] rounded bg-white p-2 shadow-md">
-          <span>Total Distance: {distance} km</span>
+      <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
+        <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-2 py-1 gap-1 relative">
+          <div className="w-6/12 flex flex-col relative">
+            <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm</span>
+            <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 border-none  outline-none  text-[12px] h-[25.6px]"
+              />
+              {/* Clear button */}
+              {searchQuery && (
+                <button
+                  onClick={handleClearSearch}
+                  className="ml-2 text-[#1270B0] text-md"
+                >
+                  <IoCloseCircle />
+                </button>
+              )}
+            </div>
+
+
+            <div
+              className={`absolute top-[40px] w-full bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
+                }`}
+            >
+              {locations.map((location, index) => (
+                <React.Fragment key={index}>
+                  <div
+                    onClick={() => handleLocationSelect(location)}
+                    className="px-1 py-1 hover:bg-gray-200 cursor-pointer text-[12px] flex items-center "
+                  >
+                    <FaMapMarkerAlt className="mr-1 text-[#1270B0] flex items-center" /> {/* Icon location */}
+                    <div className="truncate w-full" title={location.display_name}>
+                      {location.display_name}
+                    </div>
+                  </div>
+                  {index < locations.length - 1 && <hr className="border-t border-gray-300 my-1" />}
+                </React.Fragment>
+              ))}
+
+            </div>
+          </div>
+          <div className="w-3/12 flex flex-col">
+            <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính</span>
+            <input
+              type="date"
+              className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
+            />
+          </div>
+          <div className="w-2/12 flex flex-col">
+            <span className="text-[12px] text-[#1270B0] font-semibold">Giờ</span>
+            <input
+              type="time"
+              className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
+            />
+          </div>
+          <div className="w-1/12 flex flex-col min-w-[25.6px] items-center">
+            <div className="h-[18px]"></div>
+            <div className="w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center cursor-pointer">
+              <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

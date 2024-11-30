@@ -136,13 +136,13 @@ function Profile() {
                                     <div className="relative inline-block">
                                         <Button onClick={handleButtonClick} className="lg:w-[100px] sm:w-[37px] w-full bg-[#007AFF] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150 md:text-base text-white text-[16px] px-2" hide leftIcon={<BsFillPersonCheckFill />}>Bạn bè</Button>
                                         {showTooltip &&
-                                            <div id="dropdownInformation" class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-md border border-[#E4E6EB] w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-10">
-                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
+                                            <div id="dropdownInformation" className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-md border border-[#E4E6EB] w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-10">
+                                                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
                                                     <li className=" hover:bg-[#E4E6EB] w-full">
-                                                        <button onClick={handleRemoveFriend} class="w-full text-start block px-4 py-2 hover:bg-gray-200 ">Huỷ kết bạn</button>
+                                                        <button onClick={handleRemoveFriend} className="w-full text-start block px-4 py-2 hover:bg-gray-200 ">Huỷ kết bạn</button>
                                                     </li>
                                                     <li className=" hover:bg-[#E4E6EB] w-full">
-                                                        <button class=" w-full text-start block px-4 py-2 ">Bỏ theo dõi</button>
+                                                        <button className=" w-full text-start block px-4 py-2 ">Bỏ theo dõi</button>
                                                     </li>
                                                 </ul>
                                             </div>}
@@ -154,13 +154,13 @@ function Profile() {
                                     <div className="relative inline-block">
                                         <Button onClick={handleButtonResponseClick} className="lg:w-[130px] sm:w-[37px] w-full bg-[#007AFF] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150 md:text-base text-white text-[16px] px-2" hide leftIcon={<BsFillPersonCheckFill />}>Phản hồi</Button>
                                         {showResponse &&
-                                            <div id="dropdownInformation" class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-md border border-[#E4E6EB] w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-10">
-                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
+                                            <div id="dropdownInformation" className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-md border border-[#E4E6EB] w-44 dark:bg-gray-700 dark:divide-gray-600 absolute top-10">
+                                                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
                                                     <li className=" hover:bg-[#E4E6EB] w-full">
-                                                        <button onClick={handleAcceptFriend} class="w-full text-start block px-4 py-2 hover:bg-gray-200 ">Chấp nhận lời mời</button>
+                                                        <button onClick={handleAcceptFriend} className="w-full text-start block px-4 py-2 hover:bg-gray-200 ">Chấp nhận lời mời</button>
                                                     </li>
                                                     <li className=" hover:bg-[#E4E6EB] w-full">
-                                                        <button onClick={handleDeclineFriend} class=" w-full text-start block px-4 py-2 ">Xoá lời mời</button>
+                                                        <button onClick={handleDeclineFriend} className=" w-full text-start block px-4 py-2 ">Xoá lời mời</button>
                                                     </li>
                                                 </ul>
                                             </div>}

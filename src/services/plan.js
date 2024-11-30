@@ -68,15 +68,38 @@ const addPlanRequest = async (formData) => {
         const res = await api.post('travelplan-service/plans', formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
+                // 'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data'
+
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Update Profile error:', {
+            status: error.response.status,
+            data: error.response.data, // Look here for the server error details
+            headers: error.response.headers,
+        });
+        console.error("Error occurred while adding plan:", error);
+        throw error;
+    }
+};
+// GET DETAIL PLAN
+const getPlanByIDRequest = async (id) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             }
         });
         return res.data;
     } catch (error) {
-        console.error("Error occurred while adding plan:", error);
-        throw error;
+        throw error
     }
 };
+
 
 // UPDATE PLAN 
 const updatePlanRequest = async (id, formData) => {
@@ -113,4 +136,4 @@ const editNoteRequest = async (id, note) => {
         throw error
     }
 }
-export { getMyPlanRequest, addPlanRequest, updatePlanRequest, editNoteRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest }
+export { getMyPlanRequest, addPlanRequest, updatePlanRequest, editNoteRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }

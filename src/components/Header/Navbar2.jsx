@@ -207,17 +207,17 @@ const Navbar1 = () => {
                 </div>
               </form>
 
-              <ul class="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+              <ul className="z-50 ml-[170px] mt-2 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-2/3 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-[#151d20] max-lg:px-10 max-lg:py-4 max-lg:shadow-md lg:!flex lg:gap-x-12">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 511 511.999"
                       fill="currentColor"
-                      class="h-6 w-6"
+                      className="h-6 w-6"
                     >
                       <path
                         d="M498.7 222.695c-.016-.011-.028-.027-.04-.039L289.805 13.81C280.902 4.902 269.066 0 256.477 0c-12.59 0-24.426 4.902-33.332 13.809L14.398 222.55c-.07.07-.144.144-.21.215-18.282 18.386-18.25 48.218.09 66.558 8.378 8.383 19.44 13.235 31.273 13.746.484.047.969.07 1.457.07h8.32v153.696c0 30.418 24.75 55.164 55.168 55.164h81.711c8.285 0 15-6.719 15-15V376.5c0-13.879 11.293-25.168 25.172-25.168h48.195c13.88 0 25.168 11.29 25.168 25.168V497c0 8.281 6.715 15 15 15h81.711c30.422 0 55.168-24.746 55.168-55.164V303.14h7.719c12.586 0 24.422-4.903 33.332-13.813 18.36-18.367 18.367-48.254.027-66.633zm-21.243 45.422a17.03 17.03 0 0 1-12.117 5.024h-22.72c-8.285 0-15 6.714-15 15v168.695c0 13.875-11.289 25.164-25.168 25.164h-66.71V376.5c0-30.418-24.747-55.168-55.169-55.168H232.38c-30.422 0-55.172 24.75-55.172 55.168V482h-66.71c-13.876 0-25.169-11.29-25.169-25.164V288.14c0-8.286-6.715-15-15-15H48a13.9 13.9 0 0 0-.703-.032c-4.469-.078-8.66-1.851-11.8-4.996-6.68-6.68-6.68-17.55 0-24.234.003 0 .003-.004.007-.008l.012-.012L244.363 35.02A17.003 17.003 0 0 1 256.477 30c4.574 0 8.875 1.781 12.113 5.02l208.8 208.796.098.094c6.645 6.692 6.633 17.54-.031 24.207zm0 0"
@@ -227,15 +227,15 @@ const Navbar1 = () => {
                     {/* Home */}
                   </a>
                 </li>
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
-                      class="h-6 w-6"
+                      className="h-6 w-6"
                       viewBox="0 0 32 32"
                     >
                       <path
@@ -246,15 +246,15 @@ const Navbar1 = () => {
                     {/* Dashboard */}
                   </a>
                 </li>
-                <li class="px-3 max-lg:border-b max-lg:py-3">
+                <li className="px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
-                      class="h-6 w-6"
+                      className="h-6 w-6"
                       viewBox="0 0 512 512"
                     >
                       <path
@@ -265,10 +265,10 @@ const Navbar1 = () => {
                     {/* Profile */}
                   </a>
                 </li>
-                <li class="mt-[-3px] px-3 max-lg:border-b max-lg:py-3">
+                <li className="mt-[-3px] px-3 max-lg:border-b max-lg:py-3">
                   <a
-                    href="javascript:void(0)"
-                    class="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                    href="#"
+                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -439,20 +439,20 @@ const Navbar1 = () => {
               </ul>
               {/* <div
                   id="userDropdown"
-                  class="divide-gray-100 dark:bg-gray-700 dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
+                  className="divide-gray-100 dark:bg-gray-700 dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
                 >
-                  <div class="text-gray-900 px-4 py-3 text-sm dark:text-white">
+                  <div className="text-gray-900 px-4 py-3 text-sm dark:text-white">
                     <div>Bonnie Green</div>
-                    <div class="truncate font-medium">name@flowbite.com</div>
+                    <div className="truncate font-medium">name@flowbite.com</div>
                   </div>
                   <ul
-                    class="text-gray-700 dark:text-gray-200 py-2 text-sm"
+                    className="text-gray-700 dark:text-gray-200 py-2 text-sm"
                     aria-labelledby="avatarButton"
                   >
                     <li>
                       <a
                         href="#"
-                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                        className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
                       >
                         Dashboard
                       </a>
@@ -460,7 +460,7 @@ const Navbar1 = () => {
                     <li>
                       <a
                         href="#"
-                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                        className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
                       >
                         Settings
                       </a>
@@ -468,16 +468,16 @@ const Navbar1 = () => {
                     <li>
                       <a
                         href="#"
-                        class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+                        className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
                       >
                         Earnings
                       </a>
                     </li>
                   </ul>
-                  <div class="py-1">
+                  <div className="py-1">
                     <a
                       href="#"
-                      class="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
+                      className="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
                     >
                       Sign out
                     </a>
@@ -485,7 +485,7 @@ const Navbar1 = () => {
                 </div> */}
             </div>
           ) : (
-            <div class="flex w-full flex-wrap items-center justify-between gap-5">
+            <div className="flex w-full flex-wrap items-center justify-between gap-5">
               <div className="flex flex-col gap-y-4">
                 <div className="flex items-center gap-x-3">
                   {/* <img
@@ -530,11 +530,11 @@ const Navbar1 = () => {
               >
                 <button
                   id="toggleClose"
-                  class="fixed right-4 top-2 z-[100] rounded-full bg-white p-3 lg:hidden"
+                  className="fixed right-4 top-2 z-[100] rounded-full bg-white p-3 lg:hidden"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 fill-black"
+                    className="w-4 fill-black"
                     viewBox="0 0 320.591 320.591"
                   >
                     <path
@@ -548,35 +548,35 @@ const Navbar1 = () => {
                   </svg>
                 </button>
 
-                <ul class="z-50 gap-x-5 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-1/2 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-white max-lg:p-6 max-lg:shadow-md lg:flex">
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                <ul className="z-50 gap-x-5 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-1/2 max-lg:min-w-[300px] max-lg:space-y-3 max-lg:overflow-auto max-lg:bg-white max-lg:p-6 max-lg:shadow-md lg:flex">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0)"
-                      class="divide block text-[17px] font-medium text-[#007bff] hover:text-[#007bff]"
+                      href="#"
+                      className="divide block text-[17px] font-medium text-[#007bff] hover:text-[#007bff]"
                     >
                       Trang chủ
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Thịnh hành
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Tính năng
                     </a>
                   </li>
-                  <li class="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
+                  <li className="border-gray-300 px-3 max-lg:border-b max-lg:py-3">
                     <a
-                      href="javascript:void(0) "
-                      class="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
+                      href="# "
+                      className="text-gray-500 block text-[17px] font-medium hover:text-[#007bff]"
                     >
                       Liên hệ
                     </a>
@@ -584,9 +584,9 @@ const Navbar1 = () => {
                 </ul>
               </div>
 
-              <div class="mr-10 flex space-x-3 max-lg:ml-auto">
+              <div className="mr-10 flex space-x-3 max-lg:ml-auto">
                 <button
-                  class="rounded-full border-2 border-[#007bff] bg-[#007bff] px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
+                  className="rounded-full border-2 border-[#007bff] bg-[#007bff] px-4 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
                   onClick={handleLoginOpen}
                 >
                   Đăng nhập
@@ -616,7 +616,7 @@ const Navbar1 = () => {
                   />
                 )}
                 <button
-                  class="rounded-full border-2 border-[#ff6600] bg-[#FF7324] px-5 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
+                  className="rounded-full border-2 border-[#ff6600] bg-[#FF7324] px-5 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-transparent hover:text-[#007bff]"
                   onClick={handleRegister}
                 >
                   Đăng kí
@@ -628,9 +628,9 @@ const Navbar1 = () => {
                   />
                 )}
 
-                <button id="toggleOpen" class="lg:hidden" onClick={handleClick}>
+                <button id="toggleOpen" className="lg:hidden" onClick={handleClick}>
                   <svg
-                    class="h-7 w-7"
+                    className="h-7 w-7"
                     fill="#000"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -650,20 +650,20 @@ const Navbar1 = () => {
       </nav>
       <div
         id="userDropdown"
-        class="divide-gray-100 dark:bg-gray-700 hidden dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
+        className="divide-gray-100 dark:bg-gray-700 hidden dark:divide-gray-600 z-10 mt-[100px] w-44 divide-y rounded-lg bg-white shadow"
       >
-        <div class="text-gray-900 px-4 py-3 text-sm dark:text-white">
+        <div className="text-gray-900 px-4 py-3 text-sm dark:text-white">
           <div>Bonnie Green</div>
-          <div class="truncate font-medium">name@flowbite.com</div>
+          <div className="truncate font-medium">name@flowbite.com</div>
         </div>
         <ul
-          class="text-gray-700 dark:text-gray-200 py-2 text-sm"
+          className="text-gray-700 dark:text-gray-200 py-2 text-sm"
           aria-labelledby="avatarButton"
         >
           <li>
             <a
               href="#"
-              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+              className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
             >
               Dashboard
             </a>
@@ -671,7 +671,7 @@ const Navbar1 = () => {
           <li>
             <a
               href="#"
-              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+              className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
             >
               Settings
             </a>
@@ -679,16 +679,16 @@ const Navbar1 = () => {
           <li>
             <a
               href="#"
-              class="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
+              className="hover:bg-gray-100 dark:hover:bg-gray-600 block px-4 py-2 dark:hover:text-white"
             >
               Earnings
             </a>
           </li>
         </ul>
-        <div class="py-1">
+        <div className="py-1">
           <a
             href="#"
-            class="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
+            className="text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 block px-4 py-2 text-sm dark:hover:text-white"
           >
             Sign out
           </a>

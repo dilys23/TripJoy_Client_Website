@@ -20,7 +20,7 @@ const Details = ({ className, username }) => {
 
       <div className="relative ml-[80px] h-[90px] w-[80%]">
         <div className="absolute left-0 top-0 flex h-full w-full rounded-[17px] border border-[#ccd0d5] bg-white">
-          {/* <img class="w-[26px] h-[15px]" src="https://via.placeholder.com/26x15" /> */}
+          {/* <img className="w-[26px] h-[15px]" src="https://via.placeholder.com/26x15" /> */}
           <div className="ml-5 mt-2">
             <h3 className="text-sm text-black">Thời gian</h3>
             <div className="flex">
