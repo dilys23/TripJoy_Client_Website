@@ -1,5 +1,5 @@
 import { MdClose } from "react-icons/md";
-import ava from "../../assets/images/ava.jpg"
+import ava from "../../assets/images/avatarDefault.png"
 import { useEffect, useState } from "react";
 import { EditProfileIcon } from "../../components/Icons/Icons";
 import Button from "../../components/Button/Button.jsx";
@@ -17,9 +17,12 @@ function ModalEditProfile({ handleClose }) {
         userName: '',
         phoneNumber: '',
         dateOfBirth: '',
-        avatar: { Url: '', Format: 1 },
-        address: { district: '', ward: '', province: '' },
-        gender: null
+        avatar: null,
+        district: '',
+        ward: '',
+        province: '',
+        gender: null,
+        country: 'Việt Nam'
     });
 
     const fetchUser = async () => {
@@ -34,44 +37,35 @@ function ModalEditProfile({ handleClose }) {
 
     const [isChange, setIsChange] = useState(false);
 
-    const [avatar, setAvatar] = useState(ava)
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({ ...formData, [name]: name === "gender" ? Number(value) : value });
-    //     setIsChange(
-    //         value !== formData[name] ||
-    //         formData.avatar !== formData.avatar
-    //     );
-    //     console.log(formData);
-    // };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        // Cập nhật dữ liệu với đúng tên thuộc tính trong formData
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: name === "gender" ? Number(value) : value
-        }));
-        setIsChange(value !== formData[name] || formData.avatar.Url !== formData.avatar.Url);
+    
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
     };
-
     const handleFileChange = (e) => {
-        const [file] = e.target.files;
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
 
-        if (!file) return;
-
-        const types = ['image/jpeg', 'image/jpg', 'image/png'];
-        if (types.includes(file.type)) {
-            file.url = URL.createObjectURL(file);
-            setFormData(prevState => ({
-                ...prevState,
-                Avatar: { ...prevState.Avatar, Url: file.url }
-            }));
-            setIsChange(true);
-        } else {
-            toast.error('Định dạng file không hợp lệ!', { autoClose: 3000 });
+            handleInputChange("avatar", e.target.files[0]);
         }
     };
+
+    // const handleFileChange = (e) => {
+    //     const [file] = e.target.files;
+
+    //     if (!file) return;
+
+    //     const types = ['image/jpeg', 'image/jpg', 'image/png'];
+    //     if (types.includes(file.type)) {
+    //         file.url = URL.createObjectURL(file);
+    //         setFormData(prevState => ({
+    //             ...prevState,
+    //             Avatar: { ...prevState.Avatar, Url: file.url }
+    //         }));
+    //         setIsChange(true);
+    //     } else {
+    //         toast.error('Định dạng file không hợp lệ!', { autoClose: 3000 });
+    //     }
+    // };
     const handleSubmit = () => {
         const { email, ...submitData } = formData;
         console.log("Submitting data:", submitData);
@@ -97,7 +91,12 @@ function ModalEditProfile({ handleClose }) {
                             <div className="w-1/3 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ảnh đại diện</div>
                             <div className="sm:w-[190px] w-[100px] flex sm:justify-end justify-center">
                                 <div className="relative sm:w-[96px] sm:h-[96px] w-[70px] h-[70px]">
-                                    <img src={avatar} alt="" className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full" />
+                                    <img
+                                        src={formData?.avatar instanceof File ? URL.createObjectURL(formData.avatar) : ava}
+                                        alt=""
+                                        className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full"
+                                    />
+                                    {/* <img src={URL.createObjectURL(formData?.avatar) || ava} alt="" className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full" /> */}
                                     <div className="absolute bottom-0 right-0 ">
                                         <div className="sm:w-[32px] sm:h-[32px] w-[25px] h-[25px] bg-white cursor-pointer border border-[#d0d0d3] rounded-full flex items-center justify-center">
                                             <label htmlFor="avatar-upload">
@@ -108,7 +107,7 @@ function ModalEditProfile({ handleClose }) {
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                onChange={handleFileChange}
+                                                onChange={(e) => handleFileChange(e)}
                                             />
                                         </div>
                                     </div>
@@ -122,7 +121,7 @@ function ModalEditProfile({ handleClose }) {
                                 name="name"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
                                 value={formData?.userName}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange('userName', e.target.value)}
                             ></input>
                         </div>
                         <div className="w-full flex px-2">
@@ -132,7 +131,7 @@ function ModalEditProfile({ handleClose }) {
                                 name="email"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f5fbff] rounded-md border-[#55B7FF] border cursor-pointer sm:text-base text-[13px]"
                                 value={formData?.email}
-                                onChange={handleInputChange}
+                                // onChange={(e)=> handleInputChange('email')}
                                 disabled></input>
                         </div>
                         <div className="w-full flex px-2">
@@ -142,7 +141,7 @@ function ModalEditProfile({ handleClose }) {
                                 type="text"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
                                 value={formData?.phoneNumber}
-                                onChange={handleInputChange}></input>
+                                onChange={(e) => handleInputChange('phoneNumber', e.target.value)}></input>
                         </div>
                         <div className="w-full flex px-2">
                             <div className="w-1/4 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ngày sinh</div>

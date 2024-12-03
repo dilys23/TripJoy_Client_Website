@@ -3,8 +3,10 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import { MdCheckCircleOutline } from "react-icons/md";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaBed, FaMapMarkerAlt } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5"; // Import close icon
+import { FaBowlRice, FaBuildingColumns } from "react-icons/fa6";
+import Button from "../Button/Button";
 
 const Map = ({ className }) => {
   const [mapInstance, setMapInstance] = useState(null);
@@ -99,6 +101,17 @@ const Map = ({ className }) => {
     setLocations([]); // Xóa danh sách địa điểm
     setIsDropdownVisible(false); // Ẩn dropdown
   };
+  const [selectedOption, setSelectedOption] = useState("Địa điểm du lịch");
+  const [isOpen, setIsOpen] = useState(false);
+  const options = [
+    { label: "Địa điểm du lịch", icon: <FaBuildingColumns /> },
+    { label: "Quán ăn", icon: <FaBowlRice /> },
+    { label: "Nơi ở", icon: <FaBed /> },
+  ];
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
 
   return (
     <div className={`relative ${className}`}>
@@ -106,7 +119,7 @@ const Map = ({ className }) => {
 
       <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
         <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-2 py-1 gap-1 relative">
-          <div className="w-6/12 flex flex-col relative">
+          <div className="w-5/12 flex flex-col relative">
             <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm</span>
             <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
               <input
@@ -119,7 +132,7 @@ const Map = ({ className }) => {
               {searchQuery && (
                 <button
                   onClick={handleClearSearch}
-                  className="ml-2 text-[#1270B0] text-md"
+                  className="ml-1 text-[#1270B0] text-md absolute right-0 "
                 >
                   <IoCloseCircle />
                 </button>
@@ -128,7 +141,7 @@ const Map = ({ className }) => {
 
 
             <div
-              className={`absolute top-[40px] w-full bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
+              className={`absolute top-[50px] w-[300px] bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
                 }`}
             >
               {locations.map((location, index) => (
@@ -146,6 +159,27 @@ const Map = ({ className }) => {
                 </React.Fragment>
               ))}
 
+            </div>
+          </div>
+          <div className="w-1/12 flex flex-col">
+            <div className="h-[18px]"></div>
+            <div
+              className="w-full h-[25.6px] rounded-md justify-center mx-auto flex items-center cursor-pointer relative">
+              <Button className="h-full flex justify-center w-full items-center " hide onClick={() => setIsOpen(!isOpen)} normalBtn leftIcon={selectedOption === "Địa điểm du lịch" ? <FaBuildingColumns /> : selectedOption === "Quán ăn" ? <FaBowlRice /> : <FaBed />}></Button>
+              {isOpen && (
+                <ul className="absolute top-full left-0 mt-2 w-[100px] bg-white border border-[#CCD0D5] rounded-md shadow-lg z-10">
+                  {options.map((option, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleOptionClick(option.label)}
+                      className="px-1 py-2 cursor-pointer hover:bg-gray-100 text-[10px] flex items-center space-x-2"
+                    >
+                      <span >{option.icon}</span>
+                      <span>{option.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
           <div className="w-3/12 flex flex-col">

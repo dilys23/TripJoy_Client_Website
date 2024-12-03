@@ -33,7 +33,7 @@ function ModalEditPlan({ handleClose }) {
         api[type]({
             message: 'Thông báo',
             description:
-                'Tạo kế hoạch thành công.',
+                'Cập nhật kế hoạch thành công.',
         });
     };
     const [errors, setErrors] = useState({

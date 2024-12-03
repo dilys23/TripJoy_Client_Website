@@ -9,6 +9,7 @@ import { notification } from 'antd';
 
 import { addPlanRequest } from '../../services/plan';
 import { UploadIconPage } from '../../components/Icons/Icons';
+import LoadingSpinner from '../../components/Loading';
 
 function AddPlan({ onAddSuccess }) {
     const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ function AddPlan({ onAddSuccess }) {
         avatar: null,
         vehicle: null,
     });
+    const [loading, setLoading] = useState(false);
     // const [namePlan, setNamePlan] = useState("");
     // const [startDestination, setStartDestination] = useState("");
     // const [endDestination, setEndDestination] = useState("");
@@ -87,7 +89,7 @@ function AddPlan({ onAddSuccess }) {
             startDate: "",
             endDate: "",
             budget: "",
-            avatar: "",
+            avatar: ""
         });
     };
     const formatDate = (date) => {
@@ -118,7 +120,10 @@ function AddPlan({ onAddSuccess }) {
         data.forEach((value, key) => {
             console.log(key, value);
         });
-
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false); // Tắt loading sau 2 giây
+        }, 2000);
         try {
             const response = await addPlanRequest(data);
             handelClear();
@@ -128,6 +133,8 @@ function AddPlan({ onAddSuccess }) {
             openNotificationWithIcon('success');
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -302,12 +309,18 @@ function AddPlan({ onAddSuccess }) {
 
                 <button
                     onClick={handleAddPlan}
+                    disabled={loading}
                     className="flex w-full py-[10px] mt-5 items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
-                    Bắt đầu
+                    {loading ? (
+                        <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" />
+                    ) : (
+                        'Bắt đầu'
+                    )}
                 </button>
 
             </div>
             {contextHolder}
+            {/* {loading && <LoadingSpinner></LoadingSpinner>} */}
         </div>
     );
 }

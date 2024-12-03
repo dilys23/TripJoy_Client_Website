@@ -14,7 +14,7 @@ function EvaluationJourneyItem({ journey }) {
     const [selectedValues, setSelectedValues] = useState(["Tất cả"]);
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState("");
-    const names = ["Quỹ", "Bach Duong", "Phương Anh", "Bao Chau", "Le Nguyen", "Hong Nhung"];
+    const names = ["Bach Duong", "Phương Anh", "Bao Chau", "Le Nguyen", "Hong Nhung"];
     const [images, setImages] = useState([]);
     const toggleDropdown = () => {
         setIsDropdownOpen(prevState => !prevState);

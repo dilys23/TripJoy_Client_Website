@@ -2,7 +2,7 @@ import map from "../../../assets/images/map.png"
 import hoian from "../../../assets/images/hoian.png"
 import { MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DetailJourney from "../../../modules/plan/DetailJourney.jsx";
 import DetailMember from "../../../modules/plan/DetailMember.jsx";
 import DetailBudget from "../../../modules/plan/DetailBudget.jsx"
@@ -12,6 +12,7 @@ import Map from "../../../components/MapCard/Map.jsx";
 import ModalEditPlan from "../../../modules/plan/ModalEditPlan.jsx";
 import ModalInviteMember from "../../../modules/plan/ModalInviteMember.jsx";
 import { AiFillMessage } from "react-icons/ai";
+import { getPlanLocation } from "../../../services/planLocation.jsx";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -19,18 +20,40 @@ function DetailPlan() {
     const [activeTab, setActiveTab] = useState("hanhTrinh");
     const [openModalEditPlan, setOpenModalEditPlan] = useState(false);
     const [openModalInviteMember, setOpenModalInviteMember] = useState(false);
+    const [plan, setPlan] = useState({});
     const date = {
         dateStart: "2024-12-02",
         dateEnd: "2024-12-05",
     }
+    const fetchPlanLocation = async () => {
+        try {
+            const data = await getPlanLocation(planId, 0, 10);
+            console.log(data);
+            setPlan(data.plan);
+
+        } catch (error) {
+            console.log("Da co loi xay ra")
+        }
+    }
+    function formatDateRange(estimatedStartDate, estimatedEndDate) {
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+
+        const startDate = new Date(estimatedStartDate).toLocaleDateString('vi-VN', options);
+        const endDate = new Date(estimatedEndDate).toLocaleDateString('vi-VN', options);
+
+        return `${startDate} đến ${endDate}`;
+    }
+    useEffect(() => {
+        fetchPlanLocation();
+    }, [])
     return (
-        <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
+        <div className="flex w-full lg:px-16 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
             {/* <button className="fixed right-[120px] bottom-2 z-10">
                 <img width="30" height="30" src="https://img.icons8.com/fluency/48/facebook-messenger--v1.png" alt="facebook-messenger--v1" />
             </button> */}
-            <div className="lg:w-3/5 w-full flex flex-col gap-8">
+            <div className="lg:w-2/3 w-full flex flex-col gap-8">
                 <div className="w-full h-[230px] relative">
-                    <img src={hoian} alt="" className="w-full h-full object-cover rounded-lg" />
+                    <img src={plan?.avatar || hoian} alt="" className="w-full h-full object-cover rounded-lg" />
                     <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
                     <div className="absolute top-4 right-5 flex gap-3">
                         <button
@@ -49,15 +72,15 @@ function DetailPlan() {
                         </button>
                     </div>
                     <div className="absolute bottom-4 left-5 flex flex-col gap-2">
-                        <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">Hai ngày một đêm ở Hội An</span>
+                        <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">{plan?.title}</span>
                         <div className="flex md:flex-row flex-col md:gap-10 gap-1">
                             <div className="flex gap-2 text-white  items-center md:text-[18px] text-[14px]">
                                 <BsCalendar2Week className="font-bold" />
-                                <span className="text-white font-bold ">14th11 đến 16th11</span>
+                                <span className="text-white font-bold ">{formatDateRange(plan?.estimatedStartDate, plan?.estimatedEndDate)}</span>
                             </div>
                             <div className="flex gap-2 text-white  items-center  md:text-[18px] text-[14px]">
                                 <BsFillPinMapFill className="font-bold" />
-                                <span className="text-white font-bold ">Hội An, Quảng Nam</span>
+                                <span className="text-white font-bold ">{plan?.provinceEnd?.provinceName}</span>
                             </div>
                         </div>
                     </div>
@@ -105,7 +128,7 @@ function DetailPlan() {
                 </div>
 
             </div>
-            <Map className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            <Map className="w-1/3 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
             {openModalEditPlan && <ModalEditPlan handleClose={() => setOpenModalEditPlan(false)}></ModalEditPlan>}
             {openModalInviteMember && <ModalInviteMember handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
         </div>

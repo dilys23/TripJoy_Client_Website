@@ -1,6 +1,6 @@
 import api from "../utils/httpRequest"
 
-//GET PLAN
+//GET ALL MY PLAN
 const getMyPlanRequest = async (pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
