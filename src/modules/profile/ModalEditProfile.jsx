@@ -37,7 +37,7 @@ function ModalEditProfile({ handleClose }) {
 
     const [isChange, setIsChange] = useState(false);
 
-    
+
     const handleInputChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };

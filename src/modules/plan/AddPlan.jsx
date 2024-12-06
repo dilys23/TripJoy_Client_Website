@@ -121,9 +121,7 @@ function AddPlan({ onAddSuccess }) {
             console.log(key, value);
         });
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false); // Tắt loading sau 2 giây
-        }, 2000);
+
         try {
             const response = await addPlanRequest(data);
             handelClear();
@@ -310,7 +308,7 @@ function AddPlan({ onAddSuccess }) {
                 <button
                     onClick={handleAddPlan}
                     disabled={loading}
-                    className="flex w-full py-[10px] mt-5 items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
+                    className="flex w-full h-[44px] mt-5 items-center justify-center rounded-[5px] bg-[#007AFF] text-white">
                     {loading ? (
                         <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" />
                     ) : (

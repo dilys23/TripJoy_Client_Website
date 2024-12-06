@@ -30,7 +30,7 @@ import 'swiper/css/pagination';
 import { Mousewheel, Pagination } from 'swiper/modules';
 import { useParams } from "react-router-dom";
 import { getUserById } from "../../../services/getUserById";
-import { acceptFriendRequest, declineFriendRequest, removeFriend, revokeFriendRequest, sendFriendRequest } from "../../../services/friend";
+import { acceptFriendRequest, declineFriendRequest, getMyFriend, removeFriend, revokeFriendRequest, sendFriendRequest } from "../../../services/friend";
 function MyProfile() {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [profile, setProfile] = useState(null);
@@ -38,11 +38,12 @@ function MyProfile() {
     const [showResponse, setShowResponse] = useState(false);
     const id = useParams();
     const [stateFriend, setStateFriend] = useState(4);
+    const [listMyFriend, setListMyFriend] = useState([]);
     const fetchUser = async () => {
         const res = await getUserById(id.id);
         setProfile(res.user);
         setStateFriend(res.user.status);
-        console.log(res.user);
+        console.log(res);
     }
     useEffect(() => {
         fetchUser();
@@ -111,6 +112,19 @@ function MyProfile() {
     const handleButtonResponseClick = () => {
         setShowResponse(!showResponse);
     }
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const listFriend = await getMyFriend();
+                // console.log(listFriend.users.data);
+                setListMyFriend(listFriend.users.data);
+            } catch (error) {
+                console.log('Error while getting my friend request:', error);
+            }
+        };
+
+        fetchFriends();
+    }, []);
     const dataPost = [
         {
             avatar: ava,
@@ -124,23 +138,23 @@ function MyProfile() {
             numComments: 8
         }
     ]
-    const listFriend = [
-        {
-            id: 1,
-            name: 'Le Nguyen',
-            avatar: ava,
-        },
-        {
-            id: 2,
-            name: 'Hong Nhung',
-            avatar: ava1
-        },
-        {
-            id: 3,
-            name: 'Bao Chau',
-            avatar: ava2
-        },
-    ]
+    // const listFriend = [
+    //     {
+    //         id: 1,
+    //         name: 'Le Nguyen',
+    //         avatar: ava,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Hong Nhung',
+    //         avatar: ava1
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Bao Chau',
+    //         avatar: ava2
+    //     },
+    // ]
     const albums = [
         {
             id: 1,
@@ -297,19 +311,22 @@ function MyProfile() {
                         </div>
                     </div>
                     {/* Danh sách bạn bè */}
-                    <div className="w-full bg-white border border-[#CCD0D5] h-auto py-2 rounded-md flex flex-col" >
-                        <div className="flex w-full justify-between px-5 pt-2">
-                            <span className="text-[#757575]">Bạn bè</span>
-                            <a href="#" className="text-[#1270B0] cursor-pointer font-medium text-[14px]">Danh sách</a>
+                    {stateFriend === 4 &&
+                        <div className="w-full bg-white border border-[#CCD0D5] h-auto py-2 rounded-md flex flex-col" >
+                            <div className="flex w-full justify-between px-5 pt-2">
+                                <span className="text-[#757575]">Bạn bè</span>
+                                <a href="#" className="text-[#1270B0] cursor-pointer font-medium text-[14px]">Danh sách</a>
+                            </div>
+                            <div className="grid grid-cols-3 w-full px-4 ">
+                                {
+                                    listMyFriend.slice(0, 6).map((friend) => (
+                                        <Friend friend={friend} key={friend.id}></Friend>
+                                    ))
+                                }
+                            </div>
                         </div>
-                        <div className="grid grid-cols-3 w-full px-4 ">
-                            {
-                                listFriend.slice(0, 6).map((friend) => (
-                                    <Friend friend={friend} key={friend.id}></Friend>
-                                ))
-                            }
-                        </div>
-                    </div>
+                    }
+
                 </div>
 
                 <div className="sm:w-7/12 w-full flex flex-col gap-5">

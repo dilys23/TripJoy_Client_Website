@@ -1,7 +1,34 @@
 import { MdClose } from "react-icons/md";
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
-function ModalInviteMember({ handleClose }) {
+import avatarDefault from "../../assets/images/avatarDefault.png"
+import { useEffect, useState } from "react";
+import { getMyFriend } from "../../services/friend";
+import { getMemberByPlanId, inviteMemberRequest } from "../../services/member";
+function ModalInviteMember({ planId, handleClose }) {
+    const [listMyFriend, setListMyFriend] = useState([]);
+    const [listMember, setListMember] = useState([]);
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const listFriend = await getMyFriend();
+                const listMember = await getMemberByPlanId(planId);
+                setListMyFriend(listFriend.users.data);
+                setListMember(listMember.members.data);
+                console.log(listFriend.users.data);
+            } catch (error) {
+                console.log('Error while getting my friend request:', error);
+            }
+        };
+        fetchFriends();
+    }, []);
+    const handleInviteMember = async (userId) => {
+        console.log('day la id', planId, userId);
+        try {
+            const res = await inviteMemberRequest(planId, userId);
+        } catch (error) {
+            console.log('Error while inviting member:', error);
+        }
+    }
     return (
         <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
@@ -21,24 +48,19 @@ function ModalInviteMember({ handleClose }) {
                     </div>
                     <div className="w-full flex flex-col text-start">
                         <div className="flex flex-col gap-2">
-                            <div className="w-full justify-between flex px-5 py-2 ">
-                                <div className="flex gap-3 items-center cursor-pointer">
-                                    <img src={Hue} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
-                                    <span className="text-[14px] font-semibold">Bao Anh</span>
+                            {listMyFriend.map((friend) => (
+                                <div className="w-full justify-between flex px-5 py-2 ">
+                                    <div className="flex gap-3 items-center cursor-pointer">
+                                        <img src={friend.avatar || avatarDefault} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
+                                        <span className="text-[14px] font-semibold">{friend.userName}</span>
+                                    </div>
+                                    <button
+                                        onClick={(e) => handleInviteMember(friend.id)}
+                                        className="text-[14px] font-semibold text-[#007AFF] outline-none">Mời tham gia</button>
                                 </div>
-                                <button className="text-[14px] font-semibold text-[#007AFF] outline-none">Mời tham gia</button>
-                            </div>
-                            {/* <hr className=" w-[80%] flex justify-center mx-auto" /> */}
-                            <div className="w-full justify-between flex px-5 py-2">
-                                <div className="flex gap-3 items-center cursor-pointer">
-                                    <img src={HoiAn} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
-                                    <span className="text-[14px] font-semibold">Phuong Anh</span>
-                                </div>
-                                <button className="text-[14px] font-semibold text-[#007AFF] outline-none">Mời tham gia</button>
-                            </div>
+                            ))}
                         </div>
                     </div>
-
                 </div>
             </div>
 

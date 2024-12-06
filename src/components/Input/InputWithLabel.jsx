@@ -14,9 +14,8 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
         if (loading || !hasMore) return;
         setLoading(true);
         try {
-            const data = await getProvinces(pageIndex, 10);
+            const data = await getProvinces(pageIndex, 63);
             const newProvinces = data?.provinces.data || [];
-            console.log("tinhhhhh", newProvinces)
             setProvinces((prevProvinces) => [...prevProvinces, ...newProvinces]);
             if (newProvinces.length < 10) {
                 setHasMore(false);

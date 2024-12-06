@@ -78,8 +78,8 @@ function EvaluationJourneyItem({ journey }) {
                 style={{ borderColor: colorBorder, borderWidth: '1px' }}
                 className="w-full h-full flex flex-col border bg-white rounded-lg shadow-md py-4 gap-2">
                 <div className="w-full h-full flex flex-col px-4 gap-2">
-                    <div className="w-full flex gap-4 ">
-                        <div className="w-1/2 flex gap-1 items-center">
+                    <div className="w-full flex gap-0 ">
+                        <div className="w-7/12 flex gap-1 items-center">
                             <MdGroups className="text-[#34A853] text-[30px]" />
                             <span className="text-[15px] text-[#333333] font-medium w-[70px]">Tham gia</span>
                             <div className="relative h-[30px]">
@@ -134,20 +134,15 @@ function EvaluationJourneyItem({ journey }) {
                                 <img src={ava} alt="" className="w-[32px] h-[32px] rounded-full -ml-3" />
                             </div>
                         </div>
-                        <div className="w-1/2 flex gap-2 items-center pl-5">
+                        <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
                             <img width="25" height="25" src="https://img.icons8.com/fluency/48/price-tag--v1.png" alt="price-tag--v1" className="md:w-[30px] md:h-[30px] w-[20px] h-[20px]" />
                             <span className="text-[15px] text-[#333333] font-medium w-[65px]">Giá</span>
                             <input type="text" className="shadow w-[150px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 text-[14px]" />
                         </div>
                     </div>
 
-                    <div className="w-full flex gap-4">
-                        <div className="w-1/2 flex gap-1 items-center">
-                            <FaStar className="text-yellow-500 text-[25px] w-[30px]" ></FaStar>
-                            <span className="text-[15px] text-[#333333] font-medium w-[70px]">Đánh giá</span>
-                            <RatingStar />
-                        </div>
-                        <div className="w-1/2 flex gap-2 items-center pl-5">
+                    <div className="w-full flex gap-0">
+                        <div className="w-7/12 flex gap-2 items-center ">
                             <FcMoneyTransfer className="text-[30px]" />
                             <span className="text-[15px] text-[#333333] font-medium w-[65px]">Người trả</span>
                             <Select
@@ -172,9 +167,15 @@ function EvaluationJourneyItem({ journey }) {
                             </Select>
                             <img src={ava1} alt="" className="w-[32px] h-[32px] rounded-full" />
                         </div>
+                        <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
+                            <FaStar className="text-yellow-500 text-[25px] w-[30px]" ></FaStar>
+                            <span className="text-[15px] text-[#333333] font-medium w-[70px]">Đánh giá</span>
+                            <RatingStar />
+                        </div>
+
                     </div>
                     <div className="w-full flex gap-4">
-                        <div className="w-1/2 flex flex-col gap-2">
+                        <div className="w-6/12 flex flex-col gap-2">
                             <div className="flex gap-3 items-center">
                                 <img width="30" height="30" src="https://img.icons8.com/color/48/note.png" alt="note" />
                                 <span className="text-[15px] text-[#333333] font-medium w-[70px]">Ghi chú</span>

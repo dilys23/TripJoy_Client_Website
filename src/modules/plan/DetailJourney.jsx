@@ -3,19 +3,32 @@ import Hue from "../../assets/images/Hue.jpg"
 import HoiAn from "../../assets/images/hoian.png"
 import DetailJourneyItem from "./DetailJourney/DetailJourneyItem"
 import { MdKeyboardArrowDown } from "react-icons/md"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Button from "../../components/Button/Button"
 import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-function DetailJourney() {
-
+import { format, addDays, eachDayOfInterval } from "date-fns";
+function DetailJourney({ plan, planLocation }) {
+    // console.log('plan', plan);
+    // console.log('planlocation', planLocation);
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
-    const [listItemJourney, setListItemJourney] = useState([
-        { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 1, rating: 5 },
-        { id: 1, title: "Mỳ Quảng bà Mua", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 1, image: HoiAn, time: "2024-12-02", hour: '7:15 PM', status: 1, rating: 4.2 },
-        { id: 2, title: "Cầu rồng", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image: Hue, time: "2024-12-03", hour: '8:15 PM', status: 0, rating: 4.5 },
-    ]);
+    // const [plan, setPlan] = useState(planData);
+    // const [listItemJourney, setListItemJourney] = useState([
+    //     { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 1, rating: 5 },
+    //     { id: 1, title: "Mỳ Quảng bà Mua", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 1, image: HoiAn, time: "2024-12-02", hour: '7:15 PM', status: 1, rating: 4.2 },
+    //     { id: 2, title: "Cầu rồng", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image: Hue, time: "2024-12-03", hour: '8:15 PM', status: 0, rating: 4.5 },
+    // ]);
+    const [listItemJourney, setListItemJourney] = useState([]);
+    // useEffect(() => {
+    //     if (planData) {
+    //         setPlan(planData);
+    //     }
+    // }, []);
+    useEffect(() => {
+        setListItemJourney(planLocation);
+    }, [])
+    // console.log('plan', plan);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const dayOfWeek = date.toLocaleString('vi-VN', { weekday: 'long' });
@@ -25,13 +38,36 @@ function DetailJourney() {
 
         return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}, ngày ${day}/${month}/${year}`;
     };
-    const groupedJourneys = listItemJourney.reduce((acc, journey) => {
-        if (!acc[journey.time]) {
-            acc[journey.time] = [];
-        }
-        acc[journey.time].push(journey);
-        return acc;
-    }, {});
+    // const groupedJourneys = listItemJourney.reduce((acc, journey) => {
+    //     const dateKey = journey.estimatedStartDate;
+    //     if (!acc[dateKey]) acc[dateKey] = [];
+    //     acc[dateKey].push(journey);
+    //     return acc;
+    // }, {});
+    const generateDateList = (startDate, endDate) => {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        return eachDayOfInterval({ start, end }).map((date) =>
+            format(date, "yyyy-MM-dd")
+        );
+    };
+
+    const groupedJourneys = useMemo(() => {
+        if (!plan?.estimatedStartDate || !plan?.estimatedEndDate) return {};
+
+        const dates = generateDateList(plan.estimatedStartDate, plan.estimatedEndDate);
+
+        const grouped = dates.reduce((acc, date) => {
+            acc[date] = planLocation.filter((location) =>
+                format(new Date(location.estimatedStartDate), "yyyy-MM-dd") === date
+            );
+            return acc;
+        }, {});
+
+        return grouped;
+    }, [planLocation, plan?.estimatedStartDate, plan?.estimatedEndDate]);
+
     const [expandedGroups, setExpandedGroups] = useState([Object.keys(groupedJourneys)[0]]);
 
     const toggleGroup = (date) => {
@@ -91,7 +127,10 @@ function DetailJourney() {
             <div className="flex flex-col w-full min-h-[800px]">
                 {Object.keys(groupedJourneys).map((date) => (
                     <div key={date} className="mb-4">
-                        <div className="w-full flex justify-between items-center cursor-pointer" onClick={() => toggleGroup(date)}>
+                        <div
+                            className="w-full flex justify-between items-center cursor-pointer"
+                            onClick={() => toggleGroup(date)}
+                        >
                             <span className="font-bold md:text-[21px] text-[18px]">
                                 {formatDate(date)}
                             </span>
@@ -108,11 +147,11 @@ function DetailJourney() {
                                         {...provided.droppableProps}
                                     >
                                         {groupedJourneys[date].map((journey, index) => (
-                                            <Draggable key={journey.id} draggableId={journey.id.toString()} index={index}>
+                                            <Draggable key={journey.planLocationId} draggableId={journey.planLocationId} index={index}>
                                                 {(provided) => (
                                                     <div
                                                         ref={provided.innerRef}
-                                                        {...provided.draggableProps}
+                                                        {...provided.draggableProps} s
                                                         className="journey-item"
                                                     >
                                                         <DetailJourneyItem
@@ -123,7 +162,7 @@ function DetailJourney() {
                                                             expandedEvaluationItems={expandedEvaluationItems}
                                                             dragHandleProps={provided.dragHandleProps}
                                                         />
-                                                        {expandedEvaluationItems.includes(journey.id) && (
+                                                        {expandedEvaluationItems.includes(journey.planLocationId) && (
                                                             <EvaluationJourneyItem journey={journey} />
                                                         )}
                                                     </div>

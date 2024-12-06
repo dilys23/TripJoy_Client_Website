@@ -91,4 +91,21 @@ const revokeFriendRequest = async (UserId) => {
         throw error;
     }
 }
-export { sendFriendRequest, acceptFriendRequest, declineFriendRequest, removeFriend, revokeFriendRequest }
+
+// GET FRIEND
+const getMyFriend = async () => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get('useraccess-service/users/friends/friends', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        return res.data;
+
+    } catch (error) {
+        throw error;
+    }
+}
+export { sendFriendRequest, acceptFriendRequest, declineFriendRequest, removeFriend, revokeFriendRequest, getMyFriend }

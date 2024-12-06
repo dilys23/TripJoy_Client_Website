@@ -1,31 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardMember from "./members/CardMember";
 import image from "../../assets/images/anh1.jpg"
 import Hue from "../../assets/images/Hue.jpg"
 import HoiAn from "../../assets/images/hoian.png"
 import ModalEditRole from "./members/ModalEditRole";
+import { getMemberByPlanId } from "../../services/member";
 
-function DetailMember() {
-    const [listMember, setListMember] = useState([
-        {
-            id: 0,
-            avatar: image,
-            name: 'Bach Duong',
-            responsible: 0
-        },
-        {
-            id: 1,
-            avatar: Hue,
-            name: 'Le Nguyen',
-            responsible: 1
-        },
-        {
-            id: 2,
-            avatar: HoiAn,
-            name: 'Bao Chau',
-            responsible: 2
+function DetailMember({ planId }) {
+    const [listMember, setListMember] = useState([]);
+    useEffect(() => {
+        const fetchMember = async () => {
+            try {
+                const res = await getMemberByPlanId(planId);
+                // setListMember(res.data);
+                console.log('hiiiii', res);
+            } catch (error) {
+                console.log(error);
+            }
         }
-    ])
+        fetchMember();
+    })
+    // const [listMember, setListMember] = useState([
+    //     {
+    //         id: 0,
+    //         avatar: image,
+    //         name: 'Bach Duong',
+    //         responsible: 0
+    //     },
+    //     {
+    //         id: 1,
+    //         avatar: Hue,
+    //         name: 'Le Nguyen',
+    //         responsible: 1
+    //     },
+    //     {
+    //         id: 2,
+    //         avatar: HoiAn,
+    //         name: 'Bao Chau',
+    //         responsible: 2
+    //     }
+    // ])
+
     const [openModalEditRole, setOpenModalEditRole] = useState(false);
     const handleOpenModalEdit = () => {
         setOpenModalEditRole(true);

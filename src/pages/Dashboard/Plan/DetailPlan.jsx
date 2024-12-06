@@ -1,5 +1,4 @@
-import map from "../../../assets/images/map.png"
-import hoian from "../../../assets/images/hoian.png"
+import hoian from "../../../assets/images/noImages.jpg"
 import { MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -21,15 +20,13 @@ function DetailPlan() {
     const [openModalEditPlan, setOpenModalEditPlan] = useState(false);
     const [openModalInviteMember, setOpenModalInviteMember] = useState(false);
     const [plan, setPlan] = useState({});
-    const date = {
-        dateStart: "2024-12-02",
-        dateEnd: "2024-12-05",
-    }
+    const [planLocation, setPlanLocation] = useState([]);
     const fetchPlanLocation = async () => {
         try {
             const data = await getPlanLocation(planId, 0, 10);
             console.log(data);
             setPlan(data.plan);
+            setPlanLocation(data.planLocations.data);
 
         } catch (error) {
             console.log("Da co loi xay ra")
@@ -47,44 +44,46 @@ function DetailPlan() {
         fetchPlanLocation();
     }, [])
     return (
-        <div className="flex w-full lg:px-16 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
+        <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
             {/* <button className="fixed right-[120px] bottom-2 z-10">
                 <img width="30" height="30" src="https://img.icons8.com/fluency/48/facebook-messenger--v1.png" alt="facebook-messenger--v1" />
             </button> */}
-            <div className="lg:w-2/3 w-full flex flex-col gap-8">
-                <div className="w-full h-[230px] relative">
-                    <img src={plan?.avatar || hoian} alt="" className="w-full h-full object-cover rounded-lg" />
-                    <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
-                    <div className="absolute top-4 right-5 flex gap-3">
-                        <button
-                            onClick={() => setOpenModalInviteMember(true)}
-                            className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
-                            <BsFillPersonPlusFill />
-                            <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
-                        </button>
-                        <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                            <BsShare />
-                        </button>
-                        <button
-                            onClick={() => setOpenModalEditPlan(true)}
-                            className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                            <MdOutlineSettings />
-                        </button>
-                    </div>
-                    <div className="absolute bottom-4 left-5 flex flex-col gap-2">
-                        <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">{plan?.title}</span>
-                        <div className="flex md:flex-row flex-col md:gap-10 gap-1">
-                            <div className="flex gap-2 text-white  items-center md:text-[18px] text-[14px]">
-                                <BsCalendar2Week className="font-bold" />
-                                <span className="text-white font-bold ">{formatDateRange(plan?.estimatedStartDate, plan?.estimatedEndDate)}</span>
-                            </div>
-                            <div className="flex gap-2 text-white  items-center  md:text-[18px] text-[14px]">
-                                <BsFillPinMapFill className="font-bold" />
-                                <span className="text-white font-bold ">{plan?.provinceEnd?.provinceName}</span>
+            <div className="lg:w-3/5 w-full flex flex-col gap-8">
+                {!plan ?
+                    <Skeleton.Image style={{ width: '100%', height: '100%', borderRadius: '8px' }} active />
+                    : <div className="w-full h-[230px] relative">
+                        <img src={plan?.avatar || hoian} alt="" className="w-full h-full object-cover rounded-lg" />
+                        <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
+                        <div className="absolute top-4 right-5 flex gap-3">
+                            <button
+                                onClick={() => setOpenModalInviteMember(true)}
+                                className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
+                                <BsFillPersonPlusFill />
+                                <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
+                            </button>
+                            <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                                <BsShare />
+                            </button>
+                            <button
+                                onClick={() => setOpenModalEditPlan(true)}
+                                className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                                <MdOutlineSettings />
+                            </button>
+                        </div>
+                        <div className="absolute bottom-4 left-5 flex flex-col gap-2">
+                            <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">{plan?.title}</span>
+                            <div className="flex md:flex-row flex-col md:gap-10 gap-1">
+                                <div className="flex gap-2 text-white  items-center md:text-[18px] text-[14px]">
+                                    <BsCalendar2Week className="font-bold" />
+                                    <span className="text-white font-bold ">{formatDateRange(plan?.estimatedStartDate, plan?.estimatedEndDate)}</span>
+                                </div>
+                                <div className="flex gap-2 text-white  items-center  md:text-[18px] text-[14px]">
+                                    <BsFillPinMapFill className="font-bold" />
+                                    <span className="text-white font-bold ">{plan?.provinceEnd?.provinceName}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>}
                 <div className=" flex w-full justify-between items-center">
                     <div className="flex gap-10">
                         <button
@@ -111,7 +110,7 @@ function DetailPlan() {
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
                         <div>
-                            <DetailJourney date={date}></DetailJourney>
+                            <DetailJourney plan={plan} planLocation={planLocation}></DetailJourney>
                         </div>
                     )}
                     {activeTab === "thuChi" && (
@@ -122,15 +121,15 @@ function DetailPlan() {
                     )}
                     {activeTab === "thanhVien" && (
                         <div>
-                            <DetailMember></DetailMember>
+                            <DetailMember planId={planId}></DetailMember>
                         </div>
                     )}
                 </div>
 
             </div>
-            <Map className="w-1/3 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
-            {openModalEditPlan && <ModalEditPlan handleClose={() => setOpenModalEditPlan(false)}></ModalEditPlan>}
-            {openModalInviteMember && <ModalInviteMember handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
+            <Map plan={plan} planId={planId} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            {openModalEditPlan && <ModalEditPlan plan={plan} handleClose={() => setOpenModalEditPlan(false)}></ModalEditPlan>}
+            {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
         </div>
     );
 }

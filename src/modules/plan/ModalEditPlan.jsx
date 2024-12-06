@@ -2,33 +2,45 @@ import { MdClose } from "react-icons/md";
 import { DatePicker, Space } from 'antd';
 const { RangePicker } = DatePicker;
 import InputWithLabel from "../../components/Input/InputWithLabel";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { MdAdd } from 'react-icons/md';
 import { notification } from 'antd';
 
 import { UploadIconPage } from '../../components/Icons/Icons';
-function ModalEditPlan({ handleClose }) {
+function ModalEditPlan({ plan, handleClose }) {
+    console.log(plan);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        namePlan: "",
-        startDestination: "",
-        endDestination: "",
-        startDate: null,
-        endDate: null,
-        budget: "",
+        namePlan: plan?.title || "",
+        startDestination: plan?.provinceStart.provinceName,
+        endDestination: plan?.provinceEnd.provinceName,
+        startDate: plan?.estimatedStartDate || null,
+        endDate: plan?.estimatedEndDate || null,
+        budget: plan?.estimatedBudget || 0,
         method: 0,
         avatar: null,
-        vehicle: null,
+        vehicle: plan?.vehicle,
     });
-    // const [namePlan, setNamePlan] = useState("");
-    // const [startDestination, setStartDestination] = useState("");
-    // const [endDestination, setEndDestination] = useState("");
-    // const [selectedImage, setSelectedImage] = useState(null);
-    // const [startDate, setStartDate] = useState(null);
-    // const [endDate, setEndDate] = useState(null);
-    // const [budget, setBudget] = useState("");
-    // const [selectedItems, setSelectedItems] = useState();
     const [api, contextHolder] = notification.useNotification();
+    useEffect(() => {
+        if (plan?.avatar) {
+            const fetchAvatar = async () => {
+                try {
+                    const res = await fetch(plan.avatar);
+                    const blob = await res.blob();
+                    const file = new File([blob], "avatar.jpg", { type: blob.type });
+                    setFormData((prev) => ({
+                        ...prev,
+                        avatar: file,
+                    }));
+                } catch (error) {
+                    console.log("Error fetching avatar:", error);
+                }
+            };
+            fetchAvatar();
+        }
+    }, []);
     const openNotificationWithIcon = (type) => {
         api[type]({
             message: 'Thông báo',
@@ -122,6 +134,45 @@ function ModalEditPlan({ handleClose }) {
             endDestination: e
         }));
     };
+    const handleUpdatePlan = async (e) => {
+        if (e) e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
+        const data = new FormData();
+        if (formData.avatar instanceof File) {
+            // Nếu là file mới, thêm file vào FormData
+            data.append('Plan.Avatar', formData.avatar);
+        } else {
+            // Nếu là URL cũ, chỉ thêm URL như một trường thông thường
+            data.append('Plan.AvatarUrl', formData.avatar);
+        }
+        // data.append('Plan.Avatar', formData.avatar);
+        data.append('Plan.Title', formData.namePlan);
+        data.append('Plan.StartDate', formatDate(formData.startDate));
+        data.append('Plan.EndDate', formatDate(formData.endDate));
+        data.append('Plan.EstimatedBudget', formData.budget);
+        data.append('Plan.Method', formData.method);
+        data.append('Plan.ProvinceStartId', formData.startDestination);
+        data.append('Plan.ProvinceEndId', formData.endDestination);
+        data.append('Plan.Vehicle', formData.vehicle);
+        console.log('formData', formData)
+        console.log(data)
+        data.forEach((value, key) => {
+            console.log(key, value);
+        });
+        setLoading(true);
+
+        try {
+            // const response = await addPlanRequest(data);
+            // handelClear();
+            openNotificationWithIcon('success');
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <>
@@ -141,15 +192,17 @@ function ModalEditPlan({ handleClose }) {
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
                     <div className="w-full flex flex-col text-start">
-                        <div className='w-full flex flex-col  justify-center '>
+                        <div className='w-full flex flex-col  justify-center gap-1'>
                             <span className='text-[#a7a5b4] px-1 lg:text-base text-[14px]'>Chọn ảnh bìa
                                 <span className="text-[red] ml-1 text-[15px]">*</span></span>
                             <div className='w-full flex justify-center'>
                                 <label htmlFor="upload-image" className="w-[200px] h-[80px] border-dashed border-[#00000026] border-[1px] bg-[#f8f8f8] items-center justify-center flex flex-col cursor-pointer rounded-[6px]">
-                                    {formData.avatar ? (
-                                        <img src={URL.createObjectURL(formData.avatar)} alt="preview" className="h-full w-full object-cover rounded-[6px]" />
-                                    ) : (
-                                        <UploadIconPage />
+                                    {formData.avatar && (
+                                        <img
+                                            src={URL.createObjectURL(formData.avatar)}
+                                            alt="Avatar Preview"
+                                            className="h-full w-full object-cover rounded-[6px]"
+                                        />
                                     )}
                                 </label>
                                 <input
@@ -277,7 +330,7 @@ function ModalEditPlan({ handleClose }) {
                         </div>
                         <div className="w-full flex justify-end">
                             <button
-                                // onClick={handleAddPlan}
+                                onClick={handleUpdatePlan}
                                 className="flex w-[100px] py-[10px] mt-5 items-center justify-center rounded-[5px] bg-[#46E8A5] text-white ">
                                 Cập nhật
                             </button>
