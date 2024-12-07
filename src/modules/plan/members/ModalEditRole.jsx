@@ -1,6 +1,35 @@
 import { MdClose } from "react-icons/md";
 import iconChange from "../../../assets/images/cahge.png"
-function ModalEditRole({ handleClose }) {
+import { changePermissionService } from "../../../services/member";
+
+function ModalEditRole({ planId, member, handleClose, onSuccess }) {
+
+    const getRoleChangeMessage = () => {
+        if (member?.role === 2) {
+            return "Bạn muốn thay đổi quyền của thành viên này từ Thành viên sang Phó đoàn?";
+        }
+        if (member?.role === 1) {
+            return "Bạn muốn thay đổi quyền của thành viên này từ Phó đoàn sang Thành viên?";
+        }
+        return "Không thể thay đổi quyền cho vai trò hiện tại.";
+    };
+
+    const handleChangePermission = async () => {
+
+        console.log(planId, member?.userId);
+        try {
+
+            const res = await changePermissionService(planId, member?.userId);
+            if (res) {
+                onSuccess();
+                handleClose();
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
@@ -24,14 +53,10 @@ function ModalEditRole({ handleClose }) {
                     </div>
                     <div className="w-full justify-center flex flex-col gap-1">
                         <span className="text-[20px] font-bold">Thay đổi quyền</span>
-                        <span className="">Bạn muốn thay đổi quyền của thành viên này ? </span>
-                        <select name="roles" id="roles" class="border border-gray-300 rounded px-2 py-2 w-[150px] flex justify-center items-center mx-auto text-center outline-none bg-[#13C892] text-white">
-                            <option value="member" className="bg-white text-black">Thành viên</option>
-                            <option value="vice-leader" className="bg-white text-black">Phó đoàn</option>
-                        </select>
+                        <span className="w-[80%] mx-auto">{getRoleChangeMessage()}</span>
                         <div className="flex gap-10 mx-auto pt-5">
-                            <button className="w-[100px] bg-[#ECEBEB] text-[15px] rounded h-[37px]">Huỷ</button>
-                            <button className="w-[100px] bg-[#17A1FA] text-white text-[15px] rounded h-[37px]">Xác nhận</button>
+                            <button onClick={handleClose} className="w-[100px] bg-[#ECEBEB] text-[15px] rounded h-[37px]">Huỷ</button>
+                            <button onClick={handleChangePermission} className="w-[100px] bg-[#17A1FA] text-white text-[15px] rounded h-[37px]">Xác nhận</button>
                         </div>
                     </div>
                 </div>

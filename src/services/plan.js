@@ -105,12 +105,11 @@ const getPlanByIDRequest = async (id) => {
 const updatePlanRequest = async (id, formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plan/${id}`, {
-            formData
-        }, {
+        const res = await api.put(`travelplan-service/plans/${id}`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data'
+
             }
         });
         return res.data;

@@ -25,6 +25,7 @@ function ModalInviteMember({ planId, handleClose }) {
         console.log('day la id', planId, userId);
         try {
             const res = await inviteMemberRequest(planId, userId);
+            console.log(res);
         } catch (error) {
             console.log('Error while inviting member:', error);
         }

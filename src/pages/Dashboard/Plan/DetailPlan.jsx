@@ -10,8 +10,8 @@ import { useParams } from "react-router-dom";
 import Map from "../../../components/MapCard/Map.jsx";
 import ModalEditPlan from "../../../modules/plan/ModalEditPlan.jsx";
 import ModalInviteMember from "../../../modules/plan/ModalInviteMember.jsx";
-import { AiFillMessage } from "react-icons/ai";
 import { getPlanLocation } from "../../../services/planLocation.jsx";
+import { notification } from "antd";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -20,6 +20,7 @@ function DetailPlan() {
     const [openModalEditPlan, setOpenModalEditPlan] = useState(false);
     const [openModalInviteMember, setOpenModalInviteMember] = useState(false);
     const [plan, setPlan] = useState({});
+    const [api, contextHolder] = notification.useNotification();
     const [planLocation, setPlanLocation] = useState([]);
     const fetchPlanLocation = async () => {
         try {
@@ -42,7 +43,21 @@ function DetailPlan() {
     }
     useEffect(() => {
         fetchPlanLocation();
-    }, [])
+    }, []);
+    const refreshPlanLocations = async (mode) => {
+        await fetchPlanLocation();
+        if (mode === 'edit') {
+            openNotificationWithIcon('success');
+        }
+
+    };
+    const openNotificationWithIcon = (type) => {
+        api[type]({
+            message: 'Thông báo',
+            description:
+                'Cập nhật kế hoạch thành công.',
+        });
+    };
     return (
         <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
             {/* <button className="fixed right-[120px] bottom-2 z-10">
@@ -127,8 +142,9 @@ function DetailPlan() {
                 </div>
 
             </div>
-            <Map plan={plan} planId={planId} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
-            {openModalEditPlan && <ModalEditPlan plan={plan} handleClose={() => setOpenModalEditPlan(false)}></ModalEditPlan>}
+            {contextHolder}
+            <Map plan={plan} planId={planId} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
             {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
         </div>
     );

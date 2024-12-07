@@ -8,27 +8,18 @@ import Button from "../../components/Button/Button"
 import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
+import { resetServerContext } from "react-beautiful-dnd"
 function DetailJourney({ plan, planLocation }) {
     // console.log('plan', plan);
     // console.log('planlocation', planLocation);
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
-    // const [plan, setPlan] = useState(planData);
-    // const [listItemJourney, setListItemJourney] = useState([
-    //     { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 1, rating: 5 },
-    //     { id: 1, title: "Mỳ Quảng bà Mua", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 1, image: HoiAn, time: "2024-12-02", hour: '7:15 PM', status: 1, rating: 4.2 },
-    //     { id: 2, title: "Cầu rồng", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image: Hue, time: "2024-12-03", hour: '8:15 PM', status: 0, rating: 4.5 },
-    // ]);
+    const [expandedGroups, setExpandedGroups] = useState([]);
     const [listItemJourney, setListItemJourney] = useState([]);
-    // useEffect(() => {
-    //     if (planData) {
-    //         setPlan(planData);
-    //     }
-    // }, []);
+
     useEffect(() => {
         setListItemJourney(planLocation);
     }, [])
-    // console.log('plan', plan);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const dayOfWeek = date.toLocaleString('vi-VN', { weekday: 'long' });
@@ -38,12 +29,7 @@ function DetailJourney({ plan, planLocation }) {
 
         return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}, ngày ${day}/${month}/${year}`;
     };
-    // const groupedJourneys = listItemJourney.reduce((acc, journey) => {
-    //     const dateKey = journey.estimatedStartDate;
-    //     if (!acc[dateKey]) acc[dateKey] = [];
-    //     acc[dateKey].push(journey);
-    //     return acc;
-    // }, {});
+
     const generateDateList = (startDate, endDate) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
@@ -68,14 +54,16 @@ function DetailJourney({ plan, planLocation }) {
         return grouped;
     }, [planLocation, plan?.estimatedStartDate, plan?.estimatedEndDate]);
 
-    const [expandedGroups, setExpandedGroups] = useState([Object.keys(groupedJourneys)[0]]);
-
+    useEffect(() => {
+        if (Object.keys(groupedJourneys).length > 0) {
+            setExpandedGroups([Object.keys(groupedJourneys)[0]]);
+        }
+    }, [groupedJourneys]);
     const toggleGroup = (date) => {
         if (expandedGroups.includes(date)) {
 
             setExpandedGroups(expandedGroups.filter((d) => d !== date));
         } else {
-
             setExpandedGroups([...expandedGroups, date]);
         }
     };
@@ -151,7 +139,8 @@ function DetailJourney({ plan, planLocation }) {
                                                 {(provided) => (
                                                     <div
                                                         ref={provided.innerRef}
-                                                        {...provided.draggableProps} s
+                                                        {...provided.dragHandleProps}
+                                                        {...provided.draggableProps}
                                                         className="journey-item"
                                                     >
                                                         <DetailJourneyItem

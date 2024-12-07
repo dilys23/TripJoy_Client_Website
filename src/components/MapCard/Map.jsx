@@ -7,12 +7,11 @@ import { FaBed, FaMapMarkerAlt } from "react-icons/fa";
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
 import { IoCloseCircle } from "react-icons/io5"; // Import close icon
 import { FaBowlRice, FaBuildingColumns } from "react-icons/fa6";
-import Button from "../Button/Button";
-import { DatePicker, notification } from "antd";
+import { notification } from "antd";
 import moment from "moment/moment";
 import dayjs from 'dayjs';
 import { addPlanLocation } from "../../services/planLocation";
-const Map = ({ className, plan, planId }) => {
+const Map = ({ className, plan, planId, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
   const [marker, setMarker] = useState(null);
@@ -201,6 +200,7 @@ const Map = ({ className, plan, planId }) => {
       if (res) {
         openNotificationWithIcon('success', 'Thông báo', 'Thêm một địa điểm thành công', true);
       }
+      if (onLocationAdded) onLocationAdded();
       handleClearSearch();
       setFormData({});
     }
@@ -304,6 +304,7 @@ const Map = ({ className, plan, planId }) => {
           <div className="w-1/12 flex flex-col min-w-[25.6px] items-center">
             <div className="h-[18px]"></div>
             <div
+              disabled={loading}
               onClick={handleAddPlanLocation}
               className="w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center cursor-pointer">
               {loading ? <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" /> : <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />}

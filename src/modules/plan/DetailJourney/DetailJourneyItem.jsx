@@ -100,7 +100,7 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                 </div>
             </div>
             {isEdit && (
-                <div className="flex w-[25px] h-full justify-center items-center text-[20px]" {...dragHandleProps}>
+                <div className="flex w-[25px] h-full justify-center items-center text-[20px] " {...dragHandleProps}>
                     <EditLocationIcon className="w-full h-[25px]" />
                 </div>
             )}

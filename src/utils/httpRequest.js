@@ -21,7 +21,10 @@ export const put = async (path, body = {}, options = {}) => {
     const response = await api.put(path, body, options);
     return response.data;
 };
-
+export const patch = async (path, body = {}, options = {}) => {
+    const response = await api.patch(path, body, options);
+    return response.data;
+};
 export const DELETE = async (path, options = {}) => {
     const response = await httpRequest.delete(path, options)
     return response.data

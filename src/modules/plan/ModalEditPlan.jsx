@@ -6,15 +6,17 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { MdAdd } from 'react-icons/md';
 import { notification } from 'antd';
+import { updatePlanRequest } from "../../services/plan";
 
-import { UploadIconPage } from '../../components/Icons/Icons';
-function ModalEditPlan({ plan, handleClose }) {
+function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
     console.log(plan);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         namePlan: plan?.title || "",
         startDestination: plan?.provinceStart.provinceName,
+        idStartDestination: plan?.provinceStart.provinceId,
         endDestination: plan?.provinceEnd.provinceName,
+        idEndDestination: plan?.provinceEnd.provinceId,
         startDate: plan?.estimatedStartDate || null,
         endDate: plan?.estimatedEndDate || null,
         budget: plan?.estimatedBudget || 0,
@@ -22,7 +24,7 @@ function ModalEditPlan({ plan, handleClose }) {
         avatar: null,
         vehicle: plan?.vehicle,
     });
-    const [api, contextHolder] = notification.useNotification();
+
     useEffect(() => {
         if (plan?.avatar) {
             const fetchAvatar = async () => {
@@ -41,13 +43,7 @@ function ModalEditPlan({ plan, handleClose }) {
             fetchAvatar();
         }
     }, []);
-    const openNotificationWithIcon = (type) => {
-        api[type]({
-            message: 'Thông báo',
-            description:
-                'Cập nhật kế hoạch thành công.',
-        });
-    };
+
     const [errors, setErrors] = useState({
         namePlan: "",
         startDestination: "",
@@ -100,13 +96,25 @@ function ModalEditPlan({ plan, handleClose }) {
             avatar: "",
         });
     };
-    const formatDate = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+    function formatDate(date) {
+        if (!date) return null; // Nếu không có giá trị, trả về null
+        if (typeof date === 'string' && !isNaN(Date.parse(date))) {
+            // Nếu là chuỗi ISO hợp lệ
+            return new Date(date).toISOString();
+        }
+        if (date instanceof Date) {
+            // Nếu là đối tượng Date
+            return date.toISOString();
+        }
+        throw new Error("Invalid date format"); // Nếu không hợp lệ, báo lỗi
+    }
+    // const formatDate = (date) => {
+    //     const d = new Date(date);
+    //     const year = d.getFullYear();
+    //     const month = String(d.getMonth() + 1).padStart(2, '0');
+    //     const day = String(d.getDate()).padStart(2, '0');
+    //     return `${year}-${month}-${day}`;
+    // };
     const handleClick = (index) => {
         handleInputChange('vehicle', index);
     };
@@ -145,7 +153,7 @@ function ModalEditPlan({ plan, handleClose }) {
             data.append('Plan.Avatar', formData.avatar);
         } else {
             // Nếu là URL cũ, chỉ thêm URL như một trường thông thường
-            data.append('Plan.AvatarUrl', formData.avatar);
+            data.append('Plan.Avatar', formData.avatar);
         }
         // data.append('Plan.Avatar', formData.avatar);
         data.append('Plan.Title', formData.namePlan);
@@ -153,10 +161,10 @@ function ModalEditPlan({ plan, handleClose }) {
         data.append('Plan.EndDate', formatDate(formData.endDate));
         data.append('Plan.EstimatedBudget', formData.budget);
         data.append('Plan.Method', formData.method);
-        data.append('Plan.ProvinceStartId', formData.startDestination);
-        data.append('Plan.ProvinceEndId', formData.endDestination);
+        data.append('Plan.ProvinceStartId', formData.idStartDestination);
+        data.append('Plan.ProvinceEndId', formData.idEndDestination);
         data.append('Plan.Vehicle', formData.vehicle);
-        console.log('formData', formData)
+        // console.log('formData', formData)
         console.log(data)
         data.forEach((value, key) => {
             console.log(key, value);
@@ -164,9 +172,10 @@ function ModalEditPlan({ plan, handleClose }) {
         setLoading(true);
 
         try {
-            // const response = await addPlanRequest(data);
-            // handelClear();
-            openNotificationWithIcon('success');
+            const response = await updatePlanRequest(planId, data);
+            handelClear();
+            handleClose();
+            OnSuccess();
         } catch (error) {
             console.error(error);
         } finally {
