@@ -77,4 +77,36 @@ const getExpenseOfEachMemberByPlanId = async (planId, memberId) => {
         throw error
     }
 }
-export { addFeePlanLocation, getExpenseByPlanId, getMyExpenseByPlanId, getExpenseOfMembersByPlanId, getExpenseOfEachMemberByPlanId }
+
+
+// ADD IMAGE of PLAN
+const addImageIntoPlan = async (planLocationId, image) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/add`, image, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+}
+// DELETE IMAGE of PLAN
+const removeImageIntoPlan = async (planLocationId, image) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove/${image}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export { addFeePlanLocation, getExpenseByPlanId, getMyExpenseByPlanId, getExpenseOfMembersByPlanId, getExpenseOfEachMemberByPlanId, addImageIntoPlan, removeImageIntoPlan }
