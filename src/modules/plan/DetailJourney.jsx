@@ -3,19 +3,23 @@ import Hue from "../../assets/images/Hue.jpg"
 import HoiAn from "../../assets/images/hoian.png"
 import DetailJourneyItem from "./DetailJourney/DetailJourneyItem"
 import { MdKeyboardArrowDown } from "react-icons/md"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Button from "../../components/Button/Button"
 import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-function DetailJourney() {
-
+import { format, addDays, eachDayOfInterval } from "date-fns";
+import { resetServerContext } from "react-beautiful-dnd"
+function DetailJourney({ plan, planLocation }) {
+    // console.log('plan', plan);
+    // console.log('planlocation', planLocation);
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
-    const [listItemJourney, setListItemJourney] = useState([
-        { id: 0, title: "Đỉnh bàn cờ Sơn Trà", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image, time: "2024-12-02", hour: '2:15 PM', status: 1, rating: 5 },
-        { id: 1, title: "Mỳ Quảng bà Mua", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 1, image: HoiAn, time: "2024-12-02", hour: '7:15 PM', status: 1, rating: 4.2 },
-        { id: 2, title: "Cầu rồng", address: "100 Nguyễn Lương Bằng, Đà Nẵng", category: 0, image: Hue, time: "2024-12-03", hour: '8:15 PM', status: 0, rating: 4.5 },
-    ]);
+    const [expandedGroups, setExpandedGroups] = useState([]);
+    const [listItemJourney, setListItemJourney] = useState([]);
+
+    useEffect(() => {
+        setListItemJourney(planLocation);
+    }, [])
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const dayOfWeek = date.toLocaleString('vi-VN', { weekday: 'long' });
@@ -25,21 +29,41 @@ function DetailJourney() {
 
         return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}, ngày ${day}/${month}/${year}`;
     };
-    const groupedJourneys = listItemJourney.reduce((acc, journey) => {
-        if (!acc[journey.time]) {
-            acc[journey.time] = [];
-        }
-        acc[journey.time].push(journey);
-        return acc;
-    }, {});
-    const [expandedGroups, setExpandedGroups] = useState([Object.keys(groupedJourneys)[0]]);
 
+    const generateDateList = (startDate, endDate) => {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        return eachDayOfInterval({ start, end }).map((date) =>
+            format(date, "yyyy-MM-dd")
+        );
+    };
+
+    const groupedJourneys = useMemo(() => {
+        if (!plan?.estimatedStartDate || !plan?.estimatedEndDate) return {};
+
+        const dates = generateDateList(plan.estimatedStartDate, plan.estimatedEndDate);
+
+        const grouped = dates.reduce((acc, date) => {
+            acc[date] = planLocation.filter((location) =>
+                format(new Date(location.estimatedStartDate), "yyyy-MM-dd") === date
+            );
+            return acc;
+        }, {});
+
+        return grouped;
+    }, [planLocation, plan?.estimatedStartDate, plan?.estimatedEndDate]);
+
+    useEffect(() => {
+        if (Object.keys(groupedJourneys).length > 0) {
+            setExpandedGroups([Object.keys(groupedJourneys)[0]]);
+        }
+    }, [groupedJourneys]);
     const toggleGroup = (date) => {
         if (expandedGroups.includes(date)) {
 
             setExpandedGroups(expandedGroups.filter((d) => d !== date));
         } else {
-
             setExpandedGroups([...expandedGroups, date]);
         }
     };
@@ -91,7 +115,10 @@ function DetailJourney() {
             <div className="flex flex-col w-full min-h-[800px]">
                 {Object.keys(groupedJourneys).map((date) => (
                     <div key={date} className="mb-4">
-                        <div className="w-full flex justify-between items-center cursor-pointer" onClick={() => toggleGroup(date)}>
+                        <div
+                            className="w-full flex justify-between items-center cursor-pointer"
+                            onClick={() => toggleGroup(date)}
+                        >
                             <span className="font-bold md:text-[21px] text-[18px]">
                                 {formatDate(date)}
                             </span>
@@ -108,10 +135,11 @@ function DetailJourney() {
                                         {...provided.droppableProps}
                                     >
                                         {groupedJourneys[date].map((journey, index) => (
-                                            <Draggable key={journey.id} draggableId={journey.id.toString()} index={index}>
+                                            <Draggable key={journey.planLocationId} draggableId={journey.planLocationId} index={index}>
                                                 {(provided) => (
                                                     <div
                                                         ref={provided.innerRef}
+                                                        {...provided.dragHandleProps}
                                                         {...provided.draggableProps}
                                                         className="journey-item"
                                                     >
@@ -123,7 +151,7 @@ function DetailJourney() {
                                                             expandedEvaluationItems={expandedEvaluationItems}
                                                             dragHandleProps={provided.dragHandleProps}
                                                         />
-                                                        {expandedEvaluationItems.includes(journey.id) && (
+                                                        {expandedEvaluationItems.includes(journey.planLocationId) && (
                                                             <EvaluationJourneyItem journey={journey} />
                                                         )}
                                                     </div>

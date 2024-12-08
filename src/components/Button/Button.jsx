@@ -23,7 +23,7 @@ function Button({
             ${primary ? 'bg-[#ff7224] font-semibold  hover:bg-[#ff7124fc] transition-all duration-150 text-white px-2 py-1' : ''}
             ${secondary ? 'bg-[#007AFF]  font-semibold px-3 py-1 text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}
             ${tertiary ? 'bg-[#B3B3B3]  font-semibold  sm:w-[85px] px-2 py-1 sm:text-base text-[13px] rounded-lg hover:bg-[#B3B3B3] transition-all duration-150 text-white' : ''}
-            ${normalBtn ? 'bg-white hover:bg-[#faf9f9]  font-medium  text-[13px] rounded-lg px-2 py-1 transition-all duration-150 text-[#0F3E4A] border border-[#CCD0D5]' : ''}
+            ${normalBtn ? 'bg-white hover:bg-[#faf9f9]  font-medium  text-[13px] rounded-lg  py-1 transition-all duration-150 text-[#0F3E4A] border border-[#CCD0D5]' : ''}
             ${className}`}
         >
             {leftIcon && <span>{leftIcon}</span>}

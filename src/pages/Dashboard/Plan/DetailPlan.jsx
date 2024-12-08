@@ -1,8 +1,7 @@
-import map from "../../../assets/images/map.png"
-import hoian from "../../../assets/images/hoian.png"
+import hoian from "../../../assets/images/noImages.jpg"
 import { MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DetailJourney from "../../../modules/plan/DetailJourney.jsx";
 import DetailMember from "../../../modules/plan/DetailMember.jsx";
 import DetailBudget from "../../../modules/plan/DetailBudget.jsx"
@@ -11,17 +10,89 @@ import { useParams } from "react-router-dom";
 import Map from "../../../components/MapCard/Map.jsx";
 import ModalEditPlan from "../../../modules/plan/ModalEditPlan.jsx";
 import ModalInviteMember from "../../../modules/plan/ModalInviteMember.jsx";
-import { AiFillMessage } from "react-icons/ai";
+import { getPlanLocation } from "../../../services/planLocation.jsx";
+import { notification } from "antd";
+import { endPlanService, startPlanService } from "../../../services/statusPlanService.js";
+import { getMemberByPlanId } from "../../../services/member.js";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
-    console.log(planId);
     const [activeTab, setActiveTab] = useState("hanhTrinh");
     const [openModalEditPlan, setOpenModalEditPlan] = useState(false);
     const [openModalInviteMember, setOpenModalInviteMember] = useState(false);
-    const date = {
-        dateStart: "2024-12-02",
-        dateEnd: "2024-12-05",
+    const [plan, setPlan] = useState({});
+    const [api, contextHolder] = notification.useNotification();
+    const [listMember, setListMember] = useState([]);
+    const [planLocation, setPlanLocation] = useState([]);
+    const [role, setRole] = useState(null);
+    const fetchPlanLocation = async () => {
+        try {
+            const data = await getPlanLocation(planId, 0, 10);
+            const res = await getMemberByPlanId(planId);
+            setListMember(res.members.data);
+            console.log(data);
+            setPlan(data.plan);
+            setRole(data.plan.role);
+            setPlanLocation(data.planLocations.data);
+
+        } catch (error) {
+            console.log("Da co loi xay ra")
+        }
+    }
+    // const fetchMember = async () => {
+    //     try {
+    //         const res = await getMemberByPlanId(planId);
+    //         setListMember(res.members.data);
+    //         // console.log('hiiiii', res.members.data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     fetchMember();
+    // }, [])
+    function formatDateRange(estimatedStartDate, estimatedEndDate) {
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+
+        const startDate = new Date(estimatedStartDate).toLocaleDateString('vi-VN', options);
+        const endDate = new Date(estimatedEndDate).toLocaleDateString('vi-VN', options);
+
+        return `${startDate} đến ${endDate}`;
+    }
+    useEffect(() => {
+        fetchPlanLocation();
+    }, []);
+    const refreshPlanLocations = async (mode) => {
+        await fetchPlanLocation();
+        if (mode === 'edit') {
+            openNotificationWithIcon('success', 'Cập nhật kế hoạch thành công.');
+        }
+    };
+    const openNotificationWithIcon = (type, description) => {
+        api[type]({
+            message: 'Thông báo',
+            description: description
+        });
+    };
+    const handleStartPlan = async () => {
+        try {
+            const response = await startPlanService(planId);
+            if (response) {
+                openNotificationWithIcon('success', 'Chúc bạn có chuyến hành trình vui vẻ !');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handlePausePlan = async () => {
+        try {
+            const response = await endPlanService(planId);
+            if (response) {
+                openNotificationWithIcon('success', 'Hãy chia sẻ chuyến đi của bạn với mọi ngưỜi');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
     return (
         <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
@@ -29,39 +100,41 @@ function DetailPlan() {
                 <img width="30" height="30" src="https://img.icons8.com/fluency/48/facebook-messenger--v1.png" alt="facebook-messenger--v1" />
             </button> */}
             <div className="lg:w-3/5 w-full flex flex-col gap-8">
-                <div className="w-full h-[230px] relative">
-                    <img src={hoian} alt="" className="w-full h-full object-cover rounded-lg" />
-                    <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
-                    <div className="absolute top-4 right-5 flex gap-3">
-                        <button
-                            onClick={() => setOpenModalInviteMember(true)}
-                            className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
-                            <BsFillPersonPlusFill />
-                            <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
-                        </button>
-                        <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                            <BsShare />
-                        </button>
-                        <button
-                            onClick={() => setOpenModalEditPlan(true)}
-                            className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                            <MdOutlineSettings />
-                        </button>
-                    </div>
-                    <div className="absolute bottom-4 left-5 flex flex-col gap-2">
-                        <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">Hai ngày một đêm ở Hội An</span>
-                        <div className="flex md:flex-row flex-col md:gap-10 gap-1">
-                            <div className="flex gap-2 text-white  items-center md:text-[18px] text-[14px]">
-                                <BsCalendar2Week className="font-bold" />
-                                <span className="text-white font-bold ">14th11 đến 16th11</span>
-                            </div>
-                            <div className="flex gap-2 text-white  items-center  md:text-[18px] text-[14px]">
-                                <BsFillPinMapFill className="font-bold" />
-                                <span className="text-white font-bold ">Hội An, Quảng Nam</span>
+                {!plan ?
+                    <Skeleton.Image style={{ width: '100%', height: '100%', borderRadius: '8px' }} active />
+                    : <div className="w-full h-[230px] relative">
+                        <img src={plan?.avatar || hoian} alt="" className="w-full h-full object-cover rounded-lg" />
+                        <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
+                        <div className="absolute top-4 right-5 flex gap-3">
+                            <button
+                                onClick={() => setOpenModalInviteMember(true)}
+                                className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
+                                <BsFillPersonPlusFill />
+                                <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
+                            </button>
+                            <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                                <BsShare />
+                            </button>
+                            <button
+                                onClick={() => setOpenModalEditPlan(true)}
+                                className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                                <MdOutlineSettings />
+                            </button>
+                        </div>
+                        <div className="absolute bottom-4 left-5 flex flex-col gap-2">
+                            <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">{plan?.title}</span>
+                            <div className="flex md:flex-row flex-col md:gap-10 gap-1">
+                                <div className="flex gap-2 text-white  items-center md:text-[18px] text-[14px]">
+                                    <BsCalendar2Week className="font-bold" />
+                                    <span className="text-white font-bold ">{formatDateRange(plan?.estimatedStartDate, plan?.estimatedEndDate)}</span>
+                                </div>
+                                <div className="flex gap-2 text-white  items-center  md:text-[18px] text-[14px]">
+                                    <BsFillPinMapFill className="font-bold" />
+                                    <span className="text-white font-bold ">{plan?.provinceEnd?.provinceName}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>}
                 <div className=" flex w-full justify-between items-center">
                     <div className="flex gap-10">
                         <button
@@ -83,12 +156,14 @@ function DetailPlan() {
                             Thành viên
                         </button>
                     </div>
-                    <Button secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
+                    <Button
+                        onClick={handleStartPlan}
+                        secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
                 </div>
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
                         <div>
-                            <DetailJourney date={date}></DetailJourney>
+                            <DetailJourney plan={plan} planLocation={planLocation}></DetailJourney>
                         </div>
                     )}
                     {activeTab === "thuChi" && (
@@ -99,15 +174,16 @@ function DetailPlan() {
                     )}
                     {activeTab === "thanhVien" && (
                         <div>
-                            <DetailMember></DetailMember>
+                            <DetailMember role={role} planId={planId} listMember={listMember}></DetailMember>
                         </div>
                     )}
                 </div>
 
             </div>
-            <Map className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
-            {openModalEditPlan && <ModalEditPlan handleClose={() => setOpenModalEditPlan(false)}></ModalEditPlan>}
-            {openModalInviteMember && <ModalInviteMember handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
+            {contextHolder}
+            <Map plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
+            {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
         </div>
     );
 }

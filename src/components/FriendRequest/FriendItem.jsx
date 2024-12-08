@@ -10,7 +10,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
         window.location.reload();
     }
     return (
-        <div className="w-full h-[100px] bg-white rounded-20 my-3 px-5 ">
+        <div className="w-full h-[100px] bg-white rounded-20 my-3 px-1 ">
             <div onClick={handleToProfile} className="flex gap-3 items-center px-2 py-1 ">
                 <AvatarDefault src={null} alt=""></AvatarDefault>
                 <div>
@@ -21,10 +21,10 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
             <div className='flex gap-3 justify-center px-2'>
                 <button
                     onClick={onAcceptRequest}
-                    className='bg-[#FF8744] text-white rounded-20 lg:w-[111px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Chấp nhận</button>
+                    className='bg-[#FF8744] text-white rounded-20 lg:w-[111px] lg:h-[30px] w-[80px] h-[25px] lg:text-base text-[13px] font-bold'>Chấp nhận</button>
                 <button
                     onClick={onDeclineRequest}
-                    className='border border-[#CCD0D5] text-[#0F3E4A] rounded-20 lg:w-[93px] lg:h-[33px] w-[80px] h-[28px] lg:text-base text-[13px] font-bold'>Xoá</button>
+                    className='border border-[#CCD0D5] text-[#0F3E4A] rounded-20 lg:w-[93px] lg:h-[30px] w-[80px] h-[25px] lg:text-base text-[13px] font-bold'>Xoá</button>
             </div>
         </div>
     );

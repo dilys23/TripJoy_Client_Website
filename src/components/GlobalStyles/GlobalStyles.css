@@ -292,3 +292,11 @@
   border: none !important;
   box-shadow: none !important;
 }
+.icons8-change {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: url("data:image/svg+xml;base64,[NEW_BASE64_ENCODED_SVG]") 50% 50%
+    no-repeat;
+  background-size: 100%;
+}
