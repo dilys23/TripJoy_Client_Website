@@ -2,30 +2,50 @@ import { MdClose } from "react-icons/md";
 import avatarDefault from "../../assets/images/avatarDefault.png"
 import { useEffect, useState } from "react";
 import { getMyFriend } from "../../services/friend";
-import { getMemberByPlanId, inviteMemberRequest } from "../../services/member";
+import { getMemberByPlanId, inviteMemberRequest, revokeMemberRequest } from "../../services/member";
+import { getPlanInvitationAvailable } from "../../services/plan";
 function ModalInviteMember({ planId, handleClose }) {
     const [listMyFriend, setListMyFriend] = useState([]);
-    const [listMember, setListMember] = useState([]);
-
-    useEffect(() => {
-        const fetchFriends = async () => {
-            try {
-                const listFriend = await getMyFriend();
-                const listMember = await getMemberByPlanId(planId);
-                setListMyFriend(listFriend.users.data);
-                setListMember(listMember.members.data);
-                console.log(listFriend.users.data);
-            } catch (error) {
-                console.log('Error while getting my friend request:', error);
-            }
-        };
-        fetchFriends();
-    }, []);
-    const handleInviteMember = async (userId) => {
-        console.log('day la id', planId, userId);
+    // const [listMember, setListMember] = useState([]);
+    const fetchFriends = async () => {
         try {
-            const res = await inviteMemberRequest(planId, userId);
-            console.log(res);
+            const listFriend = await getPlanInvitationAvailable(planId);
+            // Lọc danh sách bạn bè chỉ giữ các bạn có status = 0 hoặc 3
+            const filteredFriends = listFriend.users.data.filter(
+                (friend) => friend.status === 0 || friend.status === 3
+            );
+
+            // Đưa các phần tử có status = 3 lên đầu danh sách
+            const sortedFriends = filteredFriends.sort((a, b) => {
+                if (a.status === 3 && b.status !== 3) return -1; // Đưa status = 3 lên đầu
+                if (a.status !== 3 && b.status === 3) return 1;  // Đưa các phần khác xuống sau
+                return 0; // Giữ nguyên thứ tự nếu cả hai cùng status
+            });
+
+            // Cập nhật danh sách bạn bè vào state
+            setListMyFriend(sortedFriends);
+            // const listFriend = await getMyFriend();
+            // const listMember = await getMemberByPlanId(planId);
+            // setListMyFriend(listFriend.users.data);
+            // setListMember(listMember.members.data);
+            console.log(sortedFriends);
+        } catch (error) {
+            console.log('Error while getting my friend request:', error);
+        }
+    };
+    useEffect(() => {
+        fetchFriends();
+    }, [planId]);
+    const handleInviteMember = async (friend) => {
+        console.log('day la id', friend.status, planId, friend.userId);
+        try {
+            if (friend.status === 3) {
+                const res = await inviteMemberRequest(planId, friend?.userId);
+            } else if (friend.status === 0) {
+                const res = await revokeMemberRequest(planId, friend?.userId);
+            }
+            // console.log(res);
+            await fetchFriends();
         } catch (error) {
             console.log('Error while inviting member:', error);
         }
@@ -56,8 +76,8 @@ function ModalInviteMember({ planId, handleClose }) {
                                         <span className="text-[14px] font-semibold">{friend.userName}</span>
                                     </div>
                                     <button
-                                        onClick={(e) => handleInviteMember(friend.id)}
-                                        className="text-[14px] font-semibold text-[#007AFF] outline-none">Mời tham gia</button>
+                                        onClick={(e) => handleInviteMember(friend)}
+                                        className="text-[14px] font-semibold text-[#007AFF] outline-none">{friend?.status === 3 ? 'Mời tham gia' : friend.status === 0 ? 'Đã mời' : ''}</button>
                                 </div>
                             ))}
                         </div>

@@ -157,7 +157,7 @@ function EvaluationJourneyItem({ journey }) {
                                     option.children.toLowerCase().includes(input.toLowerCase())
                                 }
                                 optionFilterProp="children"
-                                showArrow={false}
+                            // showArrow={false}
                             >
                                 {names.map((name, index) => (
                                     <Option key={index} value={name} className="text-[12px]">

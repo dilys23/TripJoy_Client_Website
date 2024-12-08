@@ -223,7 +223,7 @@ function MyProfile() {
                             <div className="flex gap-1">
                                 <Button
                                     onClick={() => setOpenModalEdit(true)}
-                                    className="lg:w-[250px] sm:w-[37px]  w-full bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black px-2" hide leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
+                                    className="lg:w-[250px] sm:w-[37px]  w-full  h-[37px] rounded-lg bg-[#E4E6EB] hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black px-2" hide leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
                                 <Button className="w-[37px] bg-[#E4E6EB] h-[37px] transition-all duration-150 md:text-base text-[16px] text-black rounded-lg block sm:hidden"> <MdKeyboardArrowDown /></Button>
                             </div>
                         </div>

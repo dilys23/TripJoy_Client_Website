@@ -12,27 +12,45 @@ import ModalEditPlan from "../../../modules/plan/ModalEditPlan.jsx";
 import ModalInviteMember from "../../../modules/plan/ModalInviteMember.jsx";
 import { getPlanLocation } from "../../../services/planLocation.jsx";
 import { notification } from "antd";
+import { endPlanService, startPlanService } from "../../../services/statusPlanService.js";
+import { getMemberByPlanId } from "../../../services/member.js";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
-    console.log(planId);
     const [activeTab, setActiveTab] = useState("hanhTrinh");
     const [openModalEditPlan, setOpenModalEditPlan] = useState(false);
     const [openModalInviteMember, setOpenModalInviteMember] = useState(false);
     const [plan, setPlan] = useState({});
     const [api, contextHolder] = notification.useNotification();
+    const [listMember, setListMember] = useState([]);
     const [planLocation, setPlanLocation] = useState([]);
+    const [role, setRole] = useState(null);
     const fetchPlanLocation = async () => {
         try {
             const data = await getPlanLocation(planId, 0, 10);
+            const res = await getMemberByPlanId(planId);
+            setListMember(res.members.data);
             console.log(data);
             setPlan(data.plan);
+            setRole(data.plan.role);
             setPlanLocation(data.planLocations.data);
 
         } catch (error) {
             console.log("Da co loi xay ra")
         }
     }
+    // const fetchMember = async () => {
+    //     try {
+    //         const res = await getMemberByPlanId(planId);
+    //         setListMember(res.members.data);
+    //         // console.log('hiiiii', res.members.data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     fetchMember();
+    // }, [])
     function formatDateRange(estimatedStartDate, estimatedEndDate) {
         const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
 
@@ -47,17 +65,35 @@ function DetailPlan() {
     const refreshPlanLocations = async (mode) => {
         await fetchPlanLocation();
         if (mode === 'edit') {
-            openNotificationWithIcon('success');
+            openNotificationWithIcon('success', 'Cập nhật kế hoạch thành công.');
         }
-
     };
-    const openNotificationWithIcon = (type) => {
+    const openNotificationWithIcon = (type, description) => {
         api[type]({
             message: 'Thông báo',
-            description:
-                'Cập nhật kế hoạch thành công.',
+            description: description
         });
     };
+    const handleStartPlan = async () => {
+        try {
+            const response = await startPlanService(planId);
+            if (response) {
+                openNotificationWithIcon('success', 'Chúc bạn có chuyến hành trình vui vẻ !');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handlePausePlan = async () => {
+        try {
+            const response = await endPlanService(planId);
+            if (response) {
+                openNotificationWithIcon('success', 'Hãy chia sẻ chuyến đi của bạn với mọi ngưỜi');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
             {/* <button className="fixed right-[120px] bottom-2 z-10">
@@ -120,7 +156,9 @@ function DetailPlan() {
                             Thành viên
                         </button>
                     </div>
-                    <Button secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
+                    <Button
+                        onClick={handleStartPlan}
+                        secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
                 </div>
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
@@ -136,14 +174,14 @@ function DetailPlan() {
                     )}
                     {activeTab === "thanhVien" && (
                         <div>
-                            <DetailMember planId={planId}></DetailMember>
+                            <DetailMember role={role} planId={planId} listMember={listMember}></DetailMember>
                         </div>
                     )}
                 </div>
 
             </div>
             {contextHolder}
-            <Map plan={plan} planId={planId} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            <Map plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
             {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
             {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
         </div>

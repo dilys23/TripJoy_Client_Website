@@ -11,7 +11,7 @@ import { notification } from "antd";
 import moment from "moment/moment";
 import dayjs from 'dayjs';
 import { addPlanLocation } from "../../services/planLocation";
-const Map = ({ className, plan, planId, onLocationAdded }) => {
+const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
   const [marker, setMarker] = useState(null);
@@ -34,6 +34,7 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
     Address: '',
     EstimatedStartDate: plan?.estimatedStartDate ? dayjs(plan.estimatedStartDate).format('YYYY-MM-DD') : null
   })
+  console.log('planlocation', planLocation);
   const [api, contextHolder] = notification.useNotification();
   const openNotificationWithIcon = (type, message, description, isHappy = false) => {
     const icon = isHappy ? (
@@ -56,7 +57,6 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
     });
   };
   useEffect(() => {
-
     const map = L.map("map", {
       center: [16.054, 108.202],
       zoom: 12,
@@ -72,6 +72,72 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
         position: "bottomleft",
       })
       .addTo(map);
+    planLocation.forEach((location) => {
+      const { latitude, longitude, locationName } = location;
+      const customIcon = L.divIcon({
+        className: "custom-marker-icon",
+        html: `
+            <img 
+              src="http:
+              class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" 
+              alt="Marker" 
+              tabindex="0" 
+              role="button" 
+              style="margin-left: -12px; margin-top: -41px; width: 25px; height: 41px;"
+            />
+          `,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+      });
+
+
+      L.marker([latitude, longitude], {
+        icon: customIcon,
+      })
+        .addTo(map)
+        .bindPopup(`<b>${locationName}</b>`);
+    });
+
+
+    map.on("click", async (e) => {
+      const { lat, lng } = e.latlng;
+
+      try {
+        // Gọi API ngược để lấy thông tin địa chỉ từ tọa độ
+        const response = await axios.get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+        );
+
+        if (response.data) {
+          const { display_name } = response.data;
+          const [name, ...addressParts] = display_name.split(", ");
+          const address = addressParts.join(", ");
+
+          // Cập nhật formData và ô tìm kiếm
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            Longitude: lng,
+            Latitude: lat,
+            Name: name,
+            Address: address,
+          }));
+
+          setSearchQuery(display_name);
+
+          // Thêm marker trên bản đồ
+          if (marker) {
+            marker.remove();
+          }
+          const newMarker = L.marker([lat, lng]).addTo(map);
+          newMarker.bindPopup(display_name).openPopup();
+          setMarker(newMarker);
+
+          setState(true);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin địa điểm:", error);
+      }
+    });
 
     setMapInstance(map);
 
@@ -79,6 +145,31 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
       map.remove();
     };
   }, []);
+
+  // useEffect(() => {
+
+  //   const map = L.map("map", {
+  //     center: [16.054, 108.202],
+  //     zoom: 12,
+  //     zoomControl: false,
+  //   });
+
+  //   L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
+  //     subdomains: ["mt0", "mt1", "mt2", "mt3"],
+  //   }).addTo(map);
+
+  //   L.control
+  //     .zoom({
+  //       position: "bottomleft",
+  //     })
+  //     .addTo(map);
+
+  //   setMapInstance(map);
+
+  //   return () => {
+  //     map.remove();
+  //   };
+  // }, []);
 
   const handleSearch = useCallback(
     async (query) => {
@@ -217,20 +308,20 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
 
       <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
         <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-2 py-1 gap-1 relative">
-          <div className="w-5/12 flex flex-col relative">
+          <div className="w-6/12 flex flex-col relative">
             <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm<span className="text-[red] ml-1 text-[10px]">*</span></span>
             <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="flex-1 border-none  outline-none  text-[12px] h-[25.6px]"
+                className="flex-1 border-none outline-none  text-[12px] h-[25.6px] pr-3"
               />
               {/* Clear button */}
               {searchQuery && (
                 <button
                   onClick={handleClearSearch}
-                  className="ml-1 text-[#1270B0] text-md absolute right-0 "
+                  className="ml-2  text-[#1270B0] text-md absolute right-0 "
                 >
                   <IoCloseCircle />
                 </button>
@@ -259,7 +350,7 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
 
             </div>}
           </div>
-          <div className="w-1/12 flex flex-col">
+          {/* <div className="w-1/12 flex flex-col">
             <div className="h-[18px]"></div>
             <div
               className="w-full h-[25.6px] rounded-md justify-center mx-auto flex items-center cursor-pointer relative">
@@ -281,8 +372,8 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
                 </ul>
               )}
             </div>
-          </div>
-          <div className="w-3/12 flex flex-col">
+          </div> */}
+          <div className="w-4/12 flex flex-col">
             <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính<span className="text-[red] ml-1 text-[10px]">*</span></span>
             <input
               id="start-date"
@@ -294,19 +385,19 @@ const Map = ({ className, plan, planId, onLocationAdded }) => {
               className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
             />
           </div>
-          <div className="w-2/12 flex flex-col">
+          {/* <div className="w-2/12 flex flex-col">
             <span className="text-[12px] text-[#1270B0] font-semibold">Giờ</span>
             <input
               type="time"
               className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
             />
-          </div>
-          <div className="w-1/12 flex flex-col min-w-[25.6px] items-center">
+          </div> */}
+          <div className="w-2/12 flex flex-col min-w-[25.6px] items-center">
             <div className="h-[18px]"></div>
             <div
               disabled={loading}
               onClick={handleAddPlanLocation}
-              className="w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center cursor-pointer">
+              className={`w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center ${loading ? '' : 'cursor-pointer'}`}>
               {loading ? <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" /> : <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />}
             </div>
           </div>

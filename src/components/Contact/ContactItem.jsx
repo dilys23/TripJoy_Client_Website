@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { AiFillMessage } from 'react-icons/ai';
 import avatarDefault from "../../assets/images/avatarDefault.png"
 function ContactItem({ contact }) {
@@ -19,10 +18,5 @@ function ContactItem({ contact }) {
         </div>
     );
 }
-ContactItem.propTypes = {
-    contact: PropTypes.shape({
-        ava: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired
-    }).isRequired
-};
+
 export default ContactItem;
