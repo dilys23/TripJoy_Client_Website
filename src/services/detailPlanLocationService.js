@@ -10,6 +10,7 @@ const addFeePlanLocation = async (planLocationId, PlanLocationExpense) => {
                 'Content-Type': 'application/json',
             }
         });
+        console.log('thanh cong ne', res);
         return res.data;
     } catch (error) {
         throw error
@@ -89,6 +90,7 @@ const addImageIntoPlan = async (planLocationId, image) => {
                 'Content-Type': 'multipart/form-data'
             }
         });
+        console.log(res);
         return res.data;
     } catch (error) {
         throw error;
@@ -98,10 +100,10 @@ const addImageIntoPlan = async (planLocationId, image) => {
 const removeImageIntoPlan = async (planLocationId, image) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove/${image}`, {
+        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove/${image}`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'multipart/form-data'
+                // 'Content-Type': 'multipart/form-data'
             }
         });
         return res.data;

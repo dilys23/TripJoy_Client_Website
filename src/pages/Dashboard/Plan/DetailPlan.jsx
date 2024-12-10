@@ -34,23 +34,23 @@ function DetailPlan() {
             setPlan(data.plan);
             setRole(data.plan.role);
             setPlanLocation(data.planLocations.data);
-
         } catch (error) {
             console.log("Da co loi xay ra")
         }
     }
-    // const fetchMember = async () => {
-    //     try {
-    //         const res = await getMemberByPlanId(planId);
-    //         setListMember(res.members.data);
-    //         // console.log('hiiiii', res.members.data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // useEffect(() => {
-    //     fetchMember();
-    // }, [])
+    const fetchMember = async () => {
+        try {
+            const res = await getMemberByPlanId(planId);
+            setListMember(res.members.data);
+            // console.log('hiiiii', res.members.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        fetchMember();
+        fetchPlanLocation();
+    }, [])
     function formatDateRange(estimatedStartDate, estimatedEndDate) {
         const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
 
@@ -59,9 +59,9 @@ function DetailPlan() {
 
         return `${startDate} đến ${endDate}`;
     }
-    useEffect(() => {
-        fetchPlanLocation();
-    }, []);
+    // useEffect(() => {
+
+    // }, []);
     const refreshPlanLocations = async (mode) => {
         await fetchPlanLocation();
         if (mode === 'edit') {
@@ -163,7 +163,7 @@ function DetailPlan() {
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
                         <div>
-                            <DetailJourney plan={plan} planLocation={planLocation}></DetailJourney>
+                            <DetailJourney planId={planId} plan={plan} planLocation={planLocation} listMember={listMember} onSuccess={fetchPlanLocation}></DetailJourney>
                         </div>
                     )}
                     {activeTab === "thuChi" && (
@@ -174,7 +174,7 @@ function DetailPlan() {
                     )}
                     {activeTab === "thanhVien" && (
                         <div>
-                            <DetailMember role={role} planId={planId} listMember={listMember}></DetailMember>
+                            <DetailMember role={role} planId={planId} listMember={listMember} fetchMember={fetchMember}></DetailMember>
                         </div>
                     )}
                 </div>

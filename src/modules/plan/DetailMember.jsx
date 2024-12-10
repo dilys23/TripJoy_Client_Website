@@ -9,7 +9,7 @@ import { SmileOutlined } from '@ant-design/icons';
 import { notification } from "antd";
 import ModalRemoveMember from "./members/ModalRemoveMember";
 
-function DetailMember({ role, planId, listMember }) {
+function DetailMember({ role, planId, listMember, fetchMember }) {
     // const [listMember, setListMember] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
     const [openModalEditRole, setOpenModalEditRole] = useState(false);

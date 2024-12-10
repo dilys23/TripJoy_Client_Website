@@ -15,8 +15,7 @@ export const UserProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('isLogin');
-        localStorage.removeItem('userInfo');
+     
     };
     useEffect(() => {
         setLoading(true)

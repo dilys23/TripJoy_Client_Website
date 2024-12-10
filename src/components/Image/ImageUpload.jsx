@@ -1,26 +1,52 @@
 import React, { useState } from "react";
+import { addImageIntoPlan, removeImageIntoPlan } from "../../services/detailPlanLocationService";
 
-function ImageUploader({ images, setImages }) {
+function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
 
     const maxImages = 10;
 
-    const handleAddImage = (event) => {
-        const files = event.target.files;
-        if (files && images.length < maxImages) {
-            const newImages = [...images];
-            Array.from(files).forEach((file) => {
-                const imageUrl = URL.createObjectURL(file);
-                newImages.push(imageUrl);
-            });
-            setImages(newImages.slice(0, maxImages));
+    const handleAddImage = async (e) => {
+        const file = e.target.files[0];
+        if (file && images.length < maxImages) {
+            console.log(file);
+            const newImages = new FormData();
+            newImages.append("image", file);
+            for (let [key, value] of newImages.entries()) {
+                console.log(key, value);
+            }
+            try {
+                console.log(newImages);
+                const res = await addImageIntoPlan(planLocationId, newImages);
+                if (onSuccess) {
+                    console.log('co tim thay');
+                    onSuccess();
+                } else {
+                    console.log('i dont know');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+    };
+    const handleRemoveImage = async (image, index) => {
+        // console.log(image);
+        // console.log(planLocationId);
+        const updatedImages = images.filter((_, i) => i !== index);
+        try {
+            await removeImageIntoPlan(planLocationId, image);
+            setImages(updatedImages);
+        } catch (error) {
+            console.log('Error removing image:', error);
         }
     };
+    // const handleRemoveImage = (index) => {
+    //     const updatedImages = images.filter((_, i) => i !== index);
 
-    const handleRemoveImage = (index) => {
-        const updatedImages = images.filter((_, i) => i !== index);
-        setImages(updatedImages);
-    };
+    //     setImages(updatedImages);
+    // };
 
+    // console.log(images)
     return (
         <div className="w-1/2 flex flex-col gap-2 pl-5 ">
             <label
@@ -51,12 +77,12 @@ function ImageUploader({ images, setImages }) {
                 {images.map((image, index) => (
                     <div key={index} className="relative w-[45px] h-[45px]">
                         <img
-                            src={image}
+                            src={image.url}
                             alt={`uploaded-${index}`}
                             className="w-full h-full rounded-[5px] object-cover"
                         />
                         <button
-                            onClick={() => handleRemoveImage(index)}
+                            onClick={() => handleRemoveImage(image, index)}
                             className="absolute top-[-5px] right-[-5px] bg-[#34A853] text-white text-[8px] w-[15px] h-[15px] flex items-center justify-center rounded-full"
                         >
                             X

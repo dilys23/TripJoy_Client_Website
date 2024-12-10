@@ -17,7 +17,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [marker, setMarker] = useState(null);
   const [locations, setLocations] = useState([]); // Lưu danh sách địa điểm tìm được
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Hiển thị dropdown
-  const [province, setProvince] = useState('Đà Nẵng');
+  const [province, setProvince] = useState('');
   const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Địa điểm du lịch");
@@ -34,7 +34,12 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     Address: '',
     EstimatedStartDate: plan?.estimatedStartDate ? dayjs(plan.estimatedStartDate).format('YYYY-MM-DD') : null
   })
-  console.log('planlocation', planLocation);
+  // useEffect(() => {
+  //   if (plan) {
+  //     setProvince(plan?.provinceEnd.provinceName)
+  //   }
+  // }, [])
+  // console.log('planlocation', plan);
   const [api, contextHolder] = notification.useNotification();
   const openNotificationWithIcon = (type, message, description, isHappy = false) => {
     const icon = isHappy ? (

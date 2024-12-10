@@ -9,9 +9,8 @@ import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
 import { resetServerContext } from "react-beautiful-dnd"
-function DetailJourney({ plan, planLocation }) {
-    // console.log('plan', plan);
-    // console.log('planlocation', planLocation);
+function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
+
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const [expandedGroups, setExpandedGroups] = useState([]);
@@ -152,7 +151,7 @@ function DetailJourney({ plan, planLocation }) {
                                                             dragHandleProps={provided.dragHandleProps}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem journey={journey} />
+                                                            <EvaluationJourneyItem planId={planId} journey={journey} onSuccess={onSuccess} />
                                                         )}
                                                     </div>
                                                 )}
