@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { FcMoneyTransfer } from "react-icons/fc";
-import { MdGroups } from "react-icons/md";
+import { MdExpandMore, MdGroups } from "react-icons/md";
 import { Select, Spin } from 'antd';
 import RatingStar from "../../../components/Rate";
 import ava from "../../../assets/images/ava.jpg";
@@ -12,51 +12,49 @@ import ImageUploader from "../../../components/Image/ImageUpload";
 import { getMemberByPlanId } from "../../../services/member";
 import useDebounce from "../../../hooks/useDebounce";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
-function EvaluationJourneyItem({ planId, journey, onSuccess }) {
+import { editNotePlanLocation } from "../../../services/noteService";
+function EvaluationJourneyItem({ planId, journey, listMember }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    // const [members, setMembers] = useState(listMember);
+    // const [loading, setLoading] = useState(false);
+    // const [note, setNote] = useState(journey?.note);
+    // const [images, setImages] = useState(journey.images);
     const [members, setMembers] = useState([]);
-    const [selectedValues, setSelectedValues] = useState(["all"]);
     const [loading, setLoading] = useState(false);
-    const [planLocationExpense, setPlanLocationExpense] = useState({
-        userSpenderIds: [],
-        payerId: '',
-        amount: 0
-    })
-    const debouncedPlanLocationExpense = useDebounce(planLocationExpense, 2000);
-    const fetchMember = async () => {
-        try {
-            const res = await getMemberByPlanId(planId);
-            setMembers(res.members.data);
-            // console.log(res.members.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        fetchMember();
-    }, [])
-    useEffect(() => {
-        const callApi = async () => {
-            try {
-                if (debouncedPlanLocationExpense.payerId || debouncedPlanLocationExpense.amount) {
-                    console.log('journey', journey.planLocationId);
-                    console.log(debouncedPlanLocationExpense);
-                    await addFeePlanLocation(journey.planLocationId, { planLocationExpense: debouncedPlanLocationExpense });
-                    console.log("API Called with:", { planLocationExpense: debouncedPlanLocationExpense });
-                }
-            } catch (error) {
-                console.error("Error calling API:", error);
-            }
-        };
-
-        callApi();
-    }, [debouncedPlanLocationExpense]);
-    const handleInputChange = (field, value) => {
-        setPlanLocationExpense((prev) => ({ ...prev, [field]: value }));
-    };
-
-    const [note, setNote] = useState('');
+    const [note, setNote] = useState("");
     const [images, setImages] = useState([]);
+
+
+    useEffect(() => {
+        setMembers(listMember || []);
+    }, [listMember]);
+
+    useEffect(() => {
+        setNote(journey?.note || "");
+        setImages(journey?.images || []);
+    }, [journey]);
+    console.log(journey);
+    const [planLocationExpense, setPlanLocationExpense] = useState({
+        userSpenderIds: journey.userSpenders || [],
+        payerId: journey.payerId || null,
+        amount: journey.amount || null
+    })
+    const colorBorder = journey.status === 0
+        ? '#FF7324'
+        : journey.status === 1
+            ? '#46E8A5'
+            : '#007AFF';
+    const dashStyle = journey.status === 0
+        ?
+        'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
+        : journey.status === 1 ?
+            'linear-gradient(to bottom, #46E8A5 40%, transparent 40%)'
+            : 'linear-gradient(to bottom, #007AFF 40%, transparent 40%)';
+
+
+    const handleInputChange = useCallback((field, value) => {
+        setPlanLocationExpense((prev) => ({ ...prev, [field]: value }));
+    }, []);
     const toggleDropdown = () => {
         setIsDropdownOpen(prevState => !prevState);
     };
@@ -65,6 +63,66 @@ function EvaluationJourneyItem({ planId, journey, onSuccess }) {
         const member = members.find((member) => member.userId === id);
         return member ? member.name : "";
     };
+
+    const handleCheckboxChange = (userId) => {
+        setPlanLocationExpense((prevExpense) => {
+            let updatedUserSpenderIds;
+            if (userId === "all") {
+                updatedUserSpenderIds = prevExpense.userSpenderIds.some(
+                    (spender) => spender.userId === "all"
+                )
+                    ? []
+                    : members.map((member) => ({ userId: member.userId }));
+            } else {
+                const filtered = prevExpense.userSpenderIds.filter(
+                    (spender) => spender.userId !== "all"
+                );
+                if (filtered.some((spender) => spender.userId === userId)) {
+                    updatedUserSpenderIds = filtered.filter(
+                        (spender) => spender.userId !== userId
+                    );
+                } else {
+                    updatedUserSpenderIds = [...filtered, { userId }];
+                }
+            }
+
+            return {
+                ...prevExpense,
+                userSpenderIds: updatedUserSpenderIds,
+            };
+        });
+    };
+
+    useEffect(() => {
+        setPlanLocationExpense((prevExpense) => ({
+            ...prevExpense,
+            userSpenderIds: journey.userSpenders.some((spender) => spender.userId === "all")
+                ? members.map((member) => ({ userId: member.userId }))
+                : journey.userSpenders.map((spender) => ({ userId: spender.userSpenderId })),
+        }));
+    }, [journey.userSpenders, members]);
+
+    const handleNoteChange = useCallback((e) => {
+        setNote(e.target.value);
+    }, [])
+
+    const callApi = async () => {
+        try {
+            if (planLocationExpense.payerId || planLocationExpense.amount || planLocationExpense.userSpenderIds.length > 0) {
+                // console.log('journey', journey.planLocationId);
+                // console.log(planLocationExpense);
+                console.log(note);
+                await addFeePlanLocation(journey.planLocationId, { planLocationExpense: planLocationExpense });
+                await editNotePlanLocation(journey.planLocationId, { note: note });
+                // console.log("API Called with:", { planLocationExpense: planLocationExpense });
+            }
+        } catch (error) {
+            console.error("Error calling API:", error);
+        }
+    };
+    const handleSubmit = async () => {
+        callApi();
+    }
     // console.log('journey', journey);
     // const handleCheckboxChange = (userId) => {
     //     setSelectedValues((prev) => {
@@ -81,69 +139,23 @@ function EvaluationJourneyItem({ planId, journey, onSuccess }) {
     //     });
 
     // };
-    const handleCheckboxChange = (userId) => {
-        setSelectedValues((prev) => {
-            let updatedValues;
-            if (userId === "all") {
-                if (prev.includes("all")) {
-                    // Nếu "Tất cả" đã được chọn, bỏ chọn tất cả
-                    updatedValues = [];
-                } else {
-                    // Nếu chưa chọn "Tất cả", chọn tất cả các userId
-                    updatedValues = ["all"];
-                }
-            } else {
-                // Xử lý khi chọn hoặc bỏ chọn userId cụ thể
-                const filteredPrev = prev.filter((item) => item !== "all");
-                if (filteredPrev.includes(userId)) {
-                    updatedValues = filteredPrev.filter((item) => item !== userId);
-                } else {
-                    updatedValues = [...filteredPrev, userId];
-                }
-            }
 
-            // Cập nhật giá trị vào planLocationExpense.userSpenderIds
-            setPlanLocationExpense((prevExpense) => ({
-                ...prevExpense,
-                UserSpenderIds: updatedValues.includes("all")
-                    ? members.map((member) => ({ UserId: member.userId })) // Chuyển đổi tất cả userId thành dạng đối tượng
-                    : updatedValues.map((id) => ({ UserId: id })), // Chuyển đổi selectedValues thành dạng đối tượng
-            }));
+    // useEffect(() => {
 
-            return updatedValues;
-        });
-    };
-
-    console.log(selectedValues);
-    const fetchData = async () => {
-        try {
-            setImages(journey.images)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    useEffect(() => {
-        fetchData();
-    }, [journey])
-    const handleChange = (value) => {
-        handleInputChange("amount", value);
-    };
-    const colorBorder = journey.status === 0
-        ? '#FF7324'
-        : journey.status === 1
-            ? '#46E8A5'
-            : '#007AFF';
-    const dashStyle = journey.status === 0
-        ?
-        'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
-        : journey.status === 1 ?
-            'linear-gradient(to bottom, #46E8A5 40%, transparent 40%)'
-            : 'linear-gradient(to bottom, #007AFF 40%, transparent 40%)';
-
-    const handleSubmit = async () => {
-
-    }
-
+    // const callApi = async () => {
+    //     try {
+    //         if (debouncedPlanLocationExpense.payerId || debouncedPlanLocationExpense.amount) {
+    //             console.log('journey', journey.planLocationId);
+    //             console.log(debouncedPlanLocationExpense);
+    //             await addFeePlanLocation(journey.planLocationId, { planLocationExpense: debouncedPlanLocationExpense });
+    //             console.log("API Called with:", { planLocationExpense: debouncedPlanLocationExpense });
+    //         }
+    //     } catch (error) {
+    //         console.error("Error calling API:", error);
+    //     }
+    // };
+    //     callApi();
+    // }, [debouncedPlanLocationExpense]);
     return (
         <div className={`w-full flex ${images.length <= 5 ? "h-[300px]" : "h-[340px]"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
@@ -181,25 +193,27 @@ function EvaluationJourneyItem({ planId, journey, onSuccess }) {
                             <div className="relative h-[30px]">
                                 <button
                                     onClick={toggleDropdown}
-                                    className="shadow w-[150px] h-full rounded-[20px] border border-[#CCD0D5] text-[12px] flex px-1 items-center overflow-x-hidden"
+                                    className="shadow w-[150px] h-full rounded-[20px] border border-[#CCD0D5] text-[12px] flex px-2 items-center overflow-x-hidden"
                                     type="button"
                                 >
-                                    {selectedValues.includes("Tất cả") ? (
+                                    {planLocationExpense.userSpenderIds.length === members.length ? (
                                         <span className="bg-blue-100 text-blue-600 px-2 rounded-lg">Tất cả</span>
-                                    ) : selectedValues.length > 0 ? (
+                                    ) : planLocationExpense.userSpenderIds.length > 0 &&
+                                        planLocationExpense.userSpenderIds.length < members.length ? (
                                         <div className="flex gap-[2px]">
-                                            {selectedValues.map((value, index) => (
+                                            {planLocationExpense.userSpenderIds.map((item, index) => (
                                                 <span
                                                     key={index}
                                                     className="bg-blue-100 text-blue-600 px-2 rounded-lg truncate"
                                                 >
-                                                    {getNameFromId(value)}
+                                                    {getNameFromId(item.userId)}
                                                 </span>
                                             ))}
                                         </div>
                                     ) : (
                                         "Chọn"
                                     )}
+                                    <MdExpandMore className="text-[20px] text-gray absolute right-1" />
                                 </button>
                                 {isDropdownOpen && (
                                     <div className="z-10 absolute mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-md border border-[#CCD0D5] dark:bg-gray-700 dark:divide-gray-600">
@@ -210,11 +224,16 @@ function EvaluationJourneyItem({ planId, journey, onSuccess }) {
                                                         <input
                                                             id={`checkbox-item-${member.userId}`}
                                                             type="checkbox"
-                                                            checked={selectedValues.includes(member.userId)}
+                                                            checked={planLocationExpense.userSpenderIds.some(
+                                                                (spender) => spender.userId === member.userId
+                                                            )}
                                                             onChange={() => handleCheckboxChange(member.userId)}
                                                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                                         />
-                                                        <label htmlFor={`checkbox-item-${member}`} className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                        <label
+                                                            htmlFor={`checkbox-item-${member}`}
+                                                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                                        >
                                                             {member.name}
                                                         </label>
                                                     </div>
@@ -294,10 +313,10 @@ function EvaluationJourneyItem({ planId, journey, onSuccess }) {
                             </div>
                             <TextArea
                                 value={note}
-                                onChange={(e) => setNote(e.target.value)}
+                                onChange={handleNoteChange}
                                 width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] text-[12px]"></TextArea>
                         </div>
-                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={onSuccess}></ImageUploader>
+                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} ></ImageUploader>
                     </div>
 
                 </div>

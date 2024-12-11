@@ -84,7 +84,7 @@ const getExpenseOfEachMemberByPlanId = async (planId, memberId) => {
 const addImageIntoPlan = async (planLocationId, image) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/add`, image, {
+        const res = await api.patch(`travelplan-service/planLocations/${planLocationId}/images/add`, image, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'multipart/form-data'
@@ -100,7 +100,7 @@ const addImageIntoPlan = async (planLocationId, image) => {
 const removeImageIntoPlan = async (planLocationId, image) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove/${image}`, {}, {
+        const res = await api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove`, image, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 // 'Content-Type': 'multipart/form-data'

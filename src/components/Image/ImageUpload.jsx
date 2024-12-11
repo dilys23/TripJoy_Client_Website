@@ -1,28 +1,20 @@
 import React, { useState } from "react";
 import { addImageIntoPlan, removeImageIntoPlan } from "../../services/detailPlanLocationService";
 
-function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
+function ImageUploader({ planLocationId, images, setImages }) {
 
     const maxImages = 10;
 
     const handleAddImage = async (e) => {
         const file = e.target.files[0];
         if (file && images.length < maxImages) {
-            console.log(file);
             const newImages = new FormData();
             newImages.append("image", file);
-            for (let [key, value] of newImages.entries()) {
-                console.log(key, value);
-            }
             try {
-                console.log(newImages);
                 const res = await addImageIntoPlan(planLocationId, newImages);
-                if (onSuccess) {
-                    console.log('co tim thay');
-                    onSuccess();
-                } else {
-                    console.log('i dont know');
-                }
+                console.log(res);
+                const newImageUrl = { url: 'https://movieticketbooking.s3.amazonaws.com/42470e9e-81d4-4d56-9301-e4a0588ef39e.png' }  // Create a URL for the uploaded file
+                setImages((prevImages) => [...prevImages, newImageUrl]);
             } catch (error) {
                 console.log(error);
             }
@@ -30,8 +22,6 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
 
     };
     const handleRemoveImage = async (image, index) => {
-        // console.log(image);
-        // console.log(planLocationId);
         const updatedImages = images.filter((_, i) => i !== index);
         try {
             await removeImageIntoPlan(planLocationId, image);
@@ -40,13 +30,7 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
             console.log('Error removing image:', error);
         }
     };
-    // const handleRemoveImage = (index) => {
-    //     const updatedImages = images.filter((_, i) => i !== index);
 
-    //     setImages(updatedImages);
-    // };
-
-    // console.log(images)
     return (
         <div className="w-1/2 flex flex-col gap-2 pl-5 ">
             <label

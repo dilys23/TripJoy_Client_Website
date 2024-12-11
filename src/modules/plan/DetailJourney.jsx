@@ -138,7 +138,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
                                                 {(provided) => (
                                                     <div
                                                         ref={provided.innerRef}
-                                                        {...provided.dragHandleProps}
+                                                        // {...provided.dragHandleProps}
                                                         {...provided.draggableProps}
                                                         className="journey-item"
                                                     >
@@ -151,7 +151,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
                                                             dragHandleProps={provided.dragHandleProps}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem planId={planId} journey={journey} onSuccess={onSuccess} />
+                                                            <EvaluationJourneyItem planId={planId} journey={journey} listMember={listMember} onSuccess={onSuccess} />
                                                         )}
                                                     </div>
                                                 )}
