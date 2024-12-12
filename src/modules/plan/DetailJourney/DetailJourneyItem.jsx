@@ -3,7 +3,8 @@ import Button from "../../../components/Button/Button";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import HoiAn from "../../../assets/images/noImages.jpg"
 import { EditLocationIcon } from "../../../components/Icons/Icons";
-function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps }) {
+import { changeOrderPlanLocation, removePlanLocation } from "../../../services/planLocation";
+function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps, onSuccess }) {
     const dashStyle = journey.status === 0
         ? 'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
         : journey.status === 1
@@ -27,6 +28,16 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
         }
         return stars;
     };
+    const handleRemove = async () => {
+        console.log(journey.planLocationId);
+        try {
+            const response = await removePlanLocation(journey.planLocationId);
+            onSuccess();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+   
 
     return (
         <div className="w-full md:gap-5 gap-2 flex h-[171px]" >
@@ -47,7 +58,9 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                     ></div>
                 </div>
             ) : (
-                <div className="flex w-[25px] h-full justify-center items-center text-[20px]">
+                <div
+                    onClick={handleRemove}
+                    className="flex w-[25px] h-full justify-center items-center text-[20px]">
                     <MdOutlineRemoveCircleOutline className="text-red-400 cursor-pointer" />
                 </div>
             )}
@@ -99,11 +112,13 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                     </div>
                 </div>
             </div>
-            {isEdit && (
-                <div className="flex w-[25px] h-full justify-center items-center text-[20px] " {...dragHandleProps}>
-                    <EditLocationIcon className="w-full h-[25px]" />
-                </div>
-            )}
+            <div  {...dragHandleProps}>
+                {isEdit && (
+                    <div className="flex w-[25px] h-full justify-center items-center text-[20px] ">
+                        <EditLocationIcon className="w-full h-[25px]" />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -163,7 +163,7 @@ function DetailPlan() {
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
                         <div>
-                            <DetailJourney planId={planId} plan={plan} planLocation={planLocation} listMember={listMember} onSuccess={fetchPlanLocation}></DetailJourney>
+                            <DetailJourney planId={planId} plan={plan} planLocation={planLocation} listMember={listMember} onSuccess={refreshPlanLocations}></DetailJourney>
                         </div>
                     )}
                     {activeTab === "thuChi" && (

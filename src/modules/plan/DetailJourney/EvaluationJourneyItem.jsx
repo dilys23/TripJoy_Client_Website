@@ -332,7 +332,7 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
                 </div> */}
 
             </div>
-        </div >
+        </div>
     );
 }
 
