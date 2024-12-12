@@ -1,6 +1,6 @@
 import { AiOutlineWarning } from "react-icons/ai";
 import { MdClose } from "react-icons/md";
-import { removeMemberService } from "../../../services/member";
+import { removeMemberService } from "../../services/member";
 
 function ModalRemoveMember({ planId, member, handleClose, onSuccess }) {
 

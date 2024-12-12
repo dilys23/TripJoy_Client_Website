@@ -2,9 +2,9 @@ import hoian from "../../../assets/images/noImages.jpg"
 import { MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import DetailJourney from "../../../modules/plan/DetailJourney.jsx";
-import DetailMember from "../../../modules/plan/DetailMember.jsx";
-import DetailBudget from "../../../modules/plan/DetailBudget.jsx"
+import DetailJourney from "../../../modules/plan/DetailJourney/DetailJourney.jsx";
+import DetailMember from "../../../modules/plan/members/DetailMember.jsx";
+import DetailBudget from "../../../modules/plan/Budget/DetailBudget.jsx"
 import Button from "../../../components/Button/Button.jsx";
 import { useParams } from "react-router-dom";
 import Map from "../../../components/MapCard/Map.jsx";

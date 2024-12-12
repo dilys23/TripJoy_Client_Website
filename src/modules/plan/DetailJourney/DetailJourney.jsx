@@ -1,14 +1,14 @@
-import image from "../../assets/images/anh1.jpg"
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
-import DetailJourneyItem from "./DetailJourney/DetailJourneyItem"
+// import image from "../../assets/images/anh1.jpg"
+// import Hue from "../../assets/images/Hue.jpg"
+// import HoiAn from "../../assets/images/hoian.png"
+import DetailJourneyItem from "./DetailJourneyItem"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useEffect, useMemo, useState } from "react"
-import Button from "../../components/Button/Button"
-import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
+import Button from "../../../components/Button/Button"
+import EvaluationJourneyItem from "./EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
-import { changeOrderPlanLocation } from "../../services/planLocation"
+import { changeOrderPlanLocation } from "../../../services/planLocation"
 function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
 
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
@@ -136,7 +136,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
         //     );
         // }
     };
-   
+
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>

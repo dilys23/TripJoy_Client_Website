@@ -2,9 +2,9 @@ import { Pie } from '@ant-design/plots';
 import { FaBed, FaGasPump } from 'react-icons/fa';
 import { FaBowlRice, FaBuildingColumns } from "react-icons/fa6";
 import { MdAdd } from 'react-icons/md';
-import image from "../../assets/images/anh1.jpg"
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
+import image from "../../../assets/images/anh1.jpg"
+import Hue from "../../../assets/images/Hue.jpg"
+import HoiAn from "../../../assets/images/hoian.png"
 import { Avatar } from 'antd';
 import { useState } from 'react';
 function DetailBudget() {
