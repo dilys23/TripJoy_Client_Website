@@ -13,8 +13,8 @@ function ImageUploader({ planLocationId, images, setImages }) {
             try {
                 const res = await addImageIntoPlan(planLocationId, newImages);
                 console.log(res.url);
-                // const newImageUrl = res.url;
-                // setImages((prevImages) => [...prevImages, newImageUrl]);
+                const newImageUrl = res;
+                setImages((prevImages) => [...prevImages, newImageUrl]);
             } catch (error) {
                 console.log(error);
             }
