@@ -10,58 +10,74 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [connection, setConnection] = useState(null);
     const [onlineFriends, setOnlineFriends] = useState([]);
-    const login = async (userInfo) => {
-        setUser(userInfo.user);
-        localStorage.setItem('isLogin', true);
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
             .withUrl("http://192.168.1.127:6700/notification-hub", { withCredentials: true }) // Đổi thành URL của SignalR server
             .withAutomaticReconnect()
             .build();
 
-        // newConnection.on("OnlineFriends", (friends) => {
-        //     setOnlineFriends(friends); // Cập nhật danh sách bạn bè online
-        // });
-        // console.log('toi dang online')
-        // try {
+        hubConnection.on("OnlineFriends", (friends) => {
+            setOnlineFriends(friends);
+        });
 
-        //     await newConnection.start();
-        //     console.log("SignalR connected");
-        //     await newConnection.invoke("AddUser", userInfo.user.id); // Gửi userId lên server
-        // } catch (err) {
-        //     console.error("SignalR connection failed:", err);
-        // }
-
-        // setConnection(newConnection);
+        try {
+            await hubConnection.start();
+            console.log("SignalR connected");
+            console.log(userInfo.profile)
+            await hubConnection.invoke("AddNewUser", userInfo.profile.id); // Gửi userId lên server
+            setConnection(hubConnection);
+        } catch (err) {
+            console.error("SignalR connection failed:", err);
+        }
+    };
+    const login = async (userInfo) => {
+        setUser(userInfo.user);
+        localStorage.setItem('isLogin', true);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        await initializeSocketConnection(userInfo.user);
     };
 
     const logout = () => {
         setUser(null);
-        // if (connection) {
-        //     connection.stop();
-        //     setConnection(null);
-        // }
+        localStorage.removeItem("isLogin");
+        localStorage.removeItem("userInfo");
+
+        if (connection) {
+            connection.stop();
+            setConnection(null);
+        }
 
     };
     useEffect(() => {
         setLoading(true)
+        const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
         async function fetchApi() {
             try {
                 const currentUser = await getCurrentUser();
                 if (currentUser) {
                     setUser(currentUser.user);
-                    setLoading(false)
+                    setLoading(false);
+
+                    await initializeSocketConnection(currentUser.user);
                 }
             } catch (error) {
                 if (error.response && error.response.status === 401) {
+                    logout();
+
                 }
             }
         }
-        fetchApi();
+        if (storedUserInfo) {
+            setUser(storedUserInfo.user);
+            initializeSocketConnection(storedUserInfo.user);
+            setLoading(false);
+        } else {
+            fetchApi();
+        }
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, onlineFriends }}>
             {children}
         </UserContext.Provider>
     )

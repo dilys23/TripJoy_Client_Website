@@ -321,7 +321,13 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
       }
       if (onLocationAdded) onLocationAdded();
       handleClearSearch();
-      setFormData({});
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        Longitude: '',
+        Latitude: '',
+        Name: '',
+        Address: ''
+      }));
     }
     catch (error) {
       console.log(error);
