@@ -19,6 +19,8 @@ const getPlanLocation = async (planId, pageIndex, pageSize) => {
         throw error
     }
 };
+
+// add plan location
 const addPlanLocation = async (planId, newFormData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
@@ -38,4 +40,43 @@ const addPlanLocation = async (planId, newFormData) => {
     }
 }
 
-export { getPlanLocation, addPlanLocation }
+// remove the plan location
+const removePlanLocation = async (planLocationId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.delete(`travelplan-service/planLocations/${planLocationId}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    // 'Content-Type': 'application/json',
+                }
+            });
+        return res.data;
+    } catch (error) {
+
+        throw error;
+    }
+}
+
+// Change order of the plan location
+const changeOrderPlanLocation = async (planId, planLocationIdFirst, planLocationIdSecond) => {
+    try {
+        console.log(planId, planLocationIdFirst, planLocationIdSecond)
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.patch(`travelplan-service/plans/${planId}/planLocations/changeOrder`,
+            {
+                planLocationIdFirst,
+                planLocationIdSecond
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    // 'Content-Type': 'application/json',
+                }
+            });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+}
+export { getPlanLocation, addPlanLocation, removePlanLocation, changeOrderPlanLocation }

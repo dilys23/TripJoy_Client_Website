@@ -2,12 +2,31 @@ import { Pie } from '@ant-design/plots';
 import { FaBed, FaGasPump } from 'react-icons/fa';
 import { FaBowlRice, FaBuildingColumns } from "react-icons/fa6";
 import { MdAdd } from 'react-icons/md';
-import image from "../../assets/images/anh1.jpg"
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
+import image from "../../../assets/images/anh1.jpg"
+import Hue from "../../../assets/images/Hue.jpg"
+import HoiAn from "../../../assets/images/hoian.png"
 import { Avatar } from 'antd';
-import { useState } from 'react';
-function DetailBudget() {
+import { useEffect, useState } from 'react';
+import CardExpense from '../../../components/Card/CardExpense';
+import { getExpense, getMemberExpense } from '../../../services/budget';
+function DetailBudget({ planId }) {
+    // const [listMember, setListMember] = useState([]);
+
+    const fetchExpense = async () => {
+        const pageIndex = 1;
+        const pageSize = 5;
+        try {
+            const data = await getExpense(planId, pageIndex, pageSize);
+            const memberData = await getMemberExpense(planId, pageIndex, pageSize);
+            console.log(memberData);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        fetchExpense();
+    }, [])
     const [listMember, setListMember] = useState([
         {
             id: 0,
@@ -73,7 +92,7 @@ function DetailBudget() {
                         {...config} className="w-full" />
                 </div>
             </div>
-            <div className="w-full h-fit bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex  px-8 py-3 flex-col gap-2">
+            {/* <div className="w-full h-fit bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex  px-8 py-3 flex-col gap-2">
                 <span className='font-semibold'>Dịch vụ</span>
                 <div className='flex items-center gap-5 flex-wrap'>
                     <div className='bg-[#D7FFF1] rounded-[10px] w-[60px] h-[60px] flex justify-center items-center cursor-pointer'>
@@ -92,52 +111,23 @@ function DetailBudget() {
                         <MdAdd className='text-[#f2cca2] w-[48px] h-[48px]' />
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className='w-full flex gap-8'>
                 <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-3 py-3 gap-2'>
-                    <div className='flex items-center justify-between'>
-                        <span className='font-semibold '>Cá nhân</span>
-                        <span className='text-[21px] font-semibold text-[#557AFF]'> 750.000 đ </span>
-                    </div>
-                    <hr className='w-[90%] text-[#CCD0D5] mx-auto' />
-                    <div className='w-full flex flex-col gap-3'>
-                        <div className='w-full justify-between flex px-2 items-center'>
-                            <div className='flex flex-col gap-2'>
-                                <span className='font-medium'>Ăn uống</span>
-                                <div className='w-[150px] bg-[#FFD8C7] rounded-md h-[10px]'>
-                                    <div className='w-1/2 bg-[#FF7324] h-full rounded-md'></div>
-                                </div>
-                            </div>
-                            <div className='font-semibold text-[18px]'>-150.000 đ</div>
-                        </div>
-                        <div className='w-full justify-between flex px-2 items-center'>
-                            <div className='flex flex-col gap-2'>
-                                <span className='font-medium'>Nơi ở</span>
-                                <div className='w-[150px] bg-[#CDECFF] rounded-md h-[10px]'>
-                                    <div className='w-1/3 bg-[#4285F4] h-full rounded-md'></div>
-                                </div>
-                            </div>
-                            <div className='font-semibold text-[18px]'>-300.000 đ</div>
-                        </div>
-                        <div className='w-full justify-between flex px-2 items-center'>
-                            <div className='flex flex-col gap-2'>
-                                <span className='font-medium'>Địa điểm du lịch</span>
-                                <div className='w-[150px] bg-[#B6F09C] rounded-md h-[10px]'>
-                                    <div className='w-1/4 bg-[#34A853] h-full rounded-md'></div>
-                                </div>
-                            </div>
-                            <div className='font-semibold text-[18px]'>-100.000 đ</div>
-                        </div>
-                        <div className='w-full justify-between flex px-2 items-center'>
-                            <div className='flex flex-col gap-2'>
-                                <span className='font-medium'>Xăng xe</span>
-                                <div className='w-[150px] bg-[#FFEFC0] rounded-md h-[10px]'>
-                                    <div className='w-1/2 bg-[#f7c805] h-full rounded-md'></div>
-                                </div>
-                            </div>
-                            <div className='font-semibold text-[18px]'>-200.000 đ</div>
-                        </div>
-                    </div>
+                    <CardExpense
+
+                        icon={
+                            <img
+                                width="28"
+                                height="28"
+                                src="https://img.icons8.com/fluency/28/map-pin.png"
+                                alt="map-pin"
+                            />
+                        }
+                    />
+
+
+
                 </div>
                 <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-4 py-3 gap-2'>
                     <div className='flex items-center justify-between '>

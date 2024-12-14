@@ -1,6 +1,6 @@
 import { MdClose } from "react-icons/md";
-import iconChange from "../../../assets/images/cahge.png"
-import { changePermissionService } from "../../../services/member";
+import iconChange from "../../assets/images/cahge.png"
+import { changePermissionService } from "../../services/member";
 
 function ModalEditRole({ planId, member, handleClose, onSuccess }) {
 
@@ -38,7 +38,7 @@ function ModalEditRole({ planId, member, handleClose, onSuccess }) {
                 onClick={handleClose}
             >
                 <div
-                    className="relative sm:w-[450px] w-4/5 h-[300px] flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3 gap-2"
+                    className="relative sm:w-[450px] w-4/5 h-fit pb-5 flex  border-2 border-none rounded-xl shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3 gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="w-full justify-center flex">

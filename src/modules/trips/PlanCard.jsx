@@ -6,6 +6,7 @@ import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { getUserById } from "../../services/getUserById";
 function PlanCard({ plan }) {
+    console.log(plan);
     const [leader, setLeader] = useState(null);
     const fetchLeader = async () => {
         try {
@@ -47,9 +48,11 @@ function PlanCard({ plan }) {
                             <div className="text-[10px] text-[#AEAEAE] font-normal leading-3">Hôm nay, 6/9/2024</div>
                         </div>
                     </div>
-                    <span className={` text-white font-bold lg:text-base text-[12px] py-1 lg:px-3 px-2 flex justify-center rounded-md cursor-pointer ${plan.state ? 'bg-[#FF2424]' : 'bg-[#46E8A5]'}`}>
-                        {/* {plan.state ? 'Đã diễn ra' : 'Đang diễn ra'} */}
-                        Chưa diễn ra
+                    <span className={`  font-bold lg:text-base text-[12px] py-1 lg:px-3 px-2 flex justify-center rounded-md cursor-pointer ${plan.status === 0 ? 'bg-[#46E8A5] text-white' : plan.status === 1 ? 'bg-[#FF8744] text-white' : plan.status === 2 ? 'bg-[#FF2424] text-white' : 'bg-[#E4E6EB]'}`}>
+                        {plan.status === 0 ? ' Chưa diễn ra' :
+                            plan.status === 1 ? 'Đang diễn ra' :
+                                plan.status === 2 ? 'Đã hoàn thành' :
+                                    'Đã huỷ'}
                     </span>
 
                 </div>

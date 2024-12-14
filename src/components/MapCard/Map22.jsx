@@ -282,7 +282,7 @@ const Map = ({ className, waypoints, setWaypoints }) => {
     };
 
     return (
-        <div className={`relative ${className}`}>
+        <div className={`relative ${className} w-full`}>
             <div
                 id="map"
                 className={`padding-5 relative h-[600px] w-full rounded-[10px] border border-slate-300`}

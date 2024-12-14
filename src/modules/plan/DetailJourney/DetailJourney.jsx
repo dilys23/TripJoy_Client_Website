@@ -1,21 +1,21 @@
-import image from "../../assets/images/anh1.jpg"
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
-import DetailJourneyItem from "./DetailJourney/DetailJourneyItem"
+// import image from "../../assets/images/anh1.jpg"
+// import Hue from "../../assets/images/Hue.jpg"
+// import HoiAn from "../../assets/images/hoian.png"
+import DetailJourneyItem from "./DetailJourneyItem"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useEffect, useMemo, useState } from "react"
-import Button from "../../components/Button/Button"
-import EvaluationJourneyItem from "./DetailJourney/EvaluationJourneyItem"
+import Button from "../../../components/Button/Button"
+import EvaluationJourneyItem from "./EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
-import { resetServerContext } from "react-beautiful-dnd"
-function DetailJourney({ plan, planLocation }) {
-    // console.log('plan', plan);
-    // console.log('planlocation', planLocation);
+import { changeOrderPlanLocation } from "../../../services/planLocation"
+function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
+
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const [expandedGroups, setExpandedGroups] = useState([]);
     const [listItemJourney, setListItemJourney] = useState([]);
+    // console.log('planLocation', planLocation);
 
     useEffect(() => {
         setListItemJourney(planLocation);
@@ -77,33 +77,66 @@ function DetailJourney({ plan, planLocation }) {
     const handleEdit = () => {
         setIsEdit((prev) => !prev)
     }
+    const handleChangeOrder = async (planLocationIdFirst, planLocationIdSecond) => {
+        try {
+            // console.log(planLocationIdFirst, planLocationIdSecond);
+            const res = await changeOrderPlanLocation(planId, planLocationIdFirst, planLocationIdSecond);
+            onSuccess();
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const onDragEnd = (result) => {
-        const { source, destination } = result;
+        const { source, destination, draggableId } = result;
         if (!destination) return;
 
-        const sourceDate = source.droppableId;
-        const destinationDate = destination.droppableId;
-        if (sourceDate === destinationDate) {
-            const items = Array.from(listItemJourney);
-            const [reorderedItem] = items.splice(source.index, 1);
-            items.splice(destination.index, 0, reorderedItem);
-            setListItemJourney(items);
-        } else {
-            const sourceItems = Array.from(groupedJourneys[sourceDate]);
-            const destinationItems = Array.from(groupedJourneys[destinationDate]);
-            const [movedItem] = sourceItems.splice(source.index, 1);
-            movedItem.time = destinationDate;
-            destinationItems.splice(destination.index, 0, movedItem);
-            setListItemJourney((prev) =>
-                prev.map((item) => {
-                    if (item.id === movedItem.id) {
-                        return { ...item, time: destinationDate }; // Update the time
-                    }
-                    return item;
-                })
-            );
-        }
+        const planLocationIdFirst = draggableId
+        // const sourceDate = source.droppableId;
+        // const destinationDate = destination.droppableId;
+        // const sourceJourneyId = source.draggableId;
+        // const destinationJourneyId = destination.draggableId;
+        const destinationIndex = destination.index;
+        const destinationDroppableId = destination.droppableId;
+
+        // Lấy được giá trị đang đè lên trong mảng
+        const destinationJourney = groupedJourneys[destinationDroppableId][destinationIndex];
+
+        const planLocationIdSecond = destinationJourney.planLocationId
+        console.log('111', planLocationIdFirst)
+        console.log('222', planLocationIdSecond)
+        handleChangeOrder(planLocationIdFirst, planLocationIdSecond);
+        // console.log(`Đang đè lên: ${destinationJourney.planLocationId}`);
+
+        // Đổi chỗ journey.id
+        // if (sourceDate === destinationDate) {
+        //     handleChangeOrder(sourceJourneyId, destinationJourneyId);
+        // } else {
+        //     handleChangeOrder(sourceJourneyId, destinationJourneyId);
+        // }
+
+        // Thực hiện logic đổi chỗ journey.id
+        // if (sourceDate === destinationDate) {
+        //     const items = Array.from(listItemJourney);
+        //     const [reorderedItem] = items.splice(source.index, 1);
+        //     items.splice(destination.index, 0, reorderedItem);
+        //     setListItemJourney(items);
+        // } else {
+        //     const sourceItems = Array.from(groupedJourneys[sourceDate]);
+        //     const destinationItems = Array.from(groupedJourneys[destinationDate]);
+        //     const [movedItem] = sourceItems.splice(source.index, 1);
+        //     movedItem.time = destinationDate;
+        //     destinationItems.splice(destination.index, 0, movedItem);
+        //     setListItemJourney((prev) =>
+        //         prev.map((item) => {
+        //             if (item.id === movedItem.id) {
+        //                 return { ...item, time: destinationDate }; // Update the time
+        //             }
+        //             return item;
+        //         })
+        //     );
+        // }
     };
+
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -139,8 +172,8 @@ function DetailJourney({ plan, planLocation }) {
                                                 {(provided) => (
                                                     <div
                                                         ref={provided.innerRef}
-                                                        {...provided.dragHandleProps}
                                                         {...provided.draggableProps}
+
                                                         className="journey-item"
                                                     >
                                                         <DetailJourneyItem
@@ -150,9 +183,10 @@ function DetailJourney({ plan, planLocation }) {
                                                             toggleDetail={toggleDetail}
                                                             expandedEvaluationItems={expandedEvaluationItems}
                                                             dragHandleProps={provided.dragHandleProps}
+                                                            onSuccess={onSuccess}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem journey={journey} />
+                                                            <EvaluationJourneyItem planId={planId} journey={journey} listMember={listMember} onSuccess={onSuccess} />
                                                         )}
                                                     </div>
                                                 )}
@@ -167,7 +201,6 @@ function DetailJourney({ plan, planLocation }) {
                 ))}
             </div>
         </DragDropContext>
-
     );
 }
 export default DetailJourney;

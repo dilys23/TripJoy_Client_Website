@@ -6,7 +6,7 @@ import { Avatar, notification } from "antd";
 import { acceptInvitationService, declineInvitationService } from "../../services/member";
 
 function RecommendationPlanItem({ plan, onSuccess, openNotificationWithIcon }) {
-    console.log(plan);
+    // console.log(plan);
     function formatDateRange(estimatedStartDate, estimatedEndDate) {
         const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
 

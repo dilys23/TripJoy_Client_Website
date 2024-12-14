@@ -1,10 +1,12 @@
 import api from "../utils/httpRequest"
-
-// START PLAN 
-const startPlanService = async (planId) => {
+const getExpense = async (planId, pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plans/${planId}/start`, {}, {
+        const res = await api.get(`travelplan-service/plans/${planId}/expense`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -15,11 +17,14 @@ const startPlanService = async (planId) => {
         throw error
     }
 };
-// END PLAN
-const endPlanSoonService = async (planId) => {
+const getMemberExpense = async (planId, pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plans/${planId}/pause`, {}, {
+        const res = await api.get(`travelplan-service/plans/${planId}/expense/members`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -29,6 +34,7 @@ const endPlanSoonService = async (planId) => {
     } catch (error) {
         throw error
     }
-}
+};
 
-export { startPlanService, endPlanSoonService }
+
+export { getExpense, getMemberExpense }

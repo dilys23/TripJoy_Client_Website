@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
+import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
-import { MdCheckCircleOutline } from "react-icons/md";
-import { FaBed, FaMapMarkerAlt } from "react-icons/fa";
+import { MdCheckCircleOutline, MdClose, MdLocationOn } from "react-icons/md";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
-import { IoCloseCircle } from "react-icons/io5"; // Import close icon
-import { FaBowlRice, FaBuildingColumns } from "react-icons/fa6";
 import { notification } from "antd";
-import moment from "moment/moment";
+import locationProvinces from "./locations.json"
 import dayjs from 'dayjs';
+import 'leaflet-routing-machine';
 import { addPlanLocation } from "../../services/planLocation";
 const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
@@ -17,16 +17,12 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [marker, setMarker] = useState(null);
   const [locations, setLocations] = useState([]); // Lưu danh sách địa điểm tìm được
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Hiển thị dropdown
-  const [province, setProvince] = useState('Đà Nẵng');
+  const [province, setProvince] = useState('');
+  const [coordinates, setCoordinates] = useState({ latitude: 16.054, longitude: 108.202 });
   const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Địa điểm du lịch");
-  const [isOpen, setIsOpen] = useState(false);
-  const options = [
-    { label: "Địa điểm du lịch", icon: <FaBuildingColumns /> },
-    { label: "Quán ăn", icon: <FaBowlRice /> },
-    { label: "Nơi ở", icon: <FaBed /> },
-  ];
+  const [api, contextHolder] = notification.useNotification();
+
   const [formData, setFormData] = useState({
     Longitude: '',
     Latitude: '',
@@ -34,8 +30,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     Address: '',
     EstimatedStartDate: plan?.estimatedStartDate ? dayjs(plan.estimatedStartDate).format('YYYY-MM-DD') : null
   })
-  console.log('planlocation', planLocation);
-  const [api, contextHolder] = notification.useNotification();
+
   const openNotificationWithIcon = (type, message, description, isHappy = false) => {
     const icon = isHappy ? (
       <SmileOutlined
@@ -56,10 +51,27 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
       icon: icon,
     });
   };
+  console.log(planLocation)
+
+  useEffect(() => {
+    if (plan) {
+      const provinceName = plan?.provinceEnd?.provinceName;
+      setProvince(provinceName);
+      const location = locationProvinces.find((loc) => loc.name === provinceName);
+      if (location) {
+        setCoordinates({
+          latitude: location.latitude,
+          longitude: location.longitude,
+        });
+      }
+
+    }
+  }, [plan])
+
   useEffect(() => {
     const map = L.map("map", {
-      center: [16.054, 108.202],
-      zoom: 12,
+      center: [coordinates.latitude, coordinates.longitude],
+      zoom: 13,
       zoomControl: false,
     });
 
@@ -72,105 +84,120 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
         position: "bottomleft",
       })
       .addTo(map);
-    planLocation.forEach((location) => {
+    planLocation?.forEach((location) => {
       const { latitude, longitude, locationName } = location;
+      console.log(location);
+      const iconHtml = ReactDOMServer.renderToStaticMarkup(<MdLocationOn style={{ fontSize: '35px', color: 'red' }} />);
+
       const customIcon = L.divIcon({
         className: "custom-marker-icon",
-        html: `
-            <img 
-              src="http:
-              class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" 
-              alt="Marker" 
-              tabindex="0" 
-              role="button" 
-              style="margin-left: -12px; margin-top: -41px; width: 25px; height: 41px;"
-            />
-          `,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
+        html: `<div>${iconHtml}</div>`,
+        iconSize: [30, 50],
+        iconAnchor: [15, 50],
       });
 
-
-      L.marker([latitude, longitude], {
-        icon: customIcon,
-      })
+      L.marker([latitude, longitude], { icon: customIcon })
         .addTo(map)
         .bindPopup(`<b>${locationName}</b>`);
     });
 
-
-    map.on("click", async (e) => {
-      const { lat, lng } = e.latlng;
-
+    // Vẽ đường đi nếu có nhiều hơn 1 điểm
+    if (planLocation?.length > 1) {
+      const waypoints = planLocation.map(location => L.latLng(location.latitude, location.longitude));
+      console.log(waypoints);
       try {
-        // Gọi API ngược để lấy thông tin địa chỉ từ tọa độ
-        const response = await axios.get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-        );
+        const routingControl = L.Routing.control({
+          waypoints: waypoints,
+          createMarker: () => null,
+          routeWhileDragging: false,
+          lineOptions: {
+            styles: [{ color: "red", opacity: 0.7, weight: 4 }],
+          },
+        }).addTo(map);
 
-        if (response.data) {
-          const { display_name } = response.data;
-          const [name, ...addressParts] = display_name.split(", ");
-          const address = addressParts.join(", ");
+        routingControl.on('routesfound', function (e) {
+          console.log('Route found:', e.routes[0]);
+        });
 
-          // Cập nhật formData và ô tìm kiếm
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            Longitude: lng,
-            Latitude: lat,
-            Name: name,
-            Address: address,
-          }));
-
-          setSearchQuery(display_name);
-
-          // Thêm marker trên bản đồ
-          if (marker) {
-            marker.remove();
-          }
-          const newMarker = L.marker([lat, lng]).addTo(map);
-          newMarker.bindPopup(display_name).openPopup();
-          setMarker(newMarker);
-
-          setState(true);
-        }
+        routingControl.on('routingerror', function (e) {
+          console.error('Routing error:', e);
+          // openNotificationWithIcon('error', 'Lỗi định tuyến', 'Không thể tìm thấy tuyến đường.');
+        });
       } catch (error) {
-        console.error("Lỗi khi lấy thông tin địa điểm:", error);
+        console.error('Lỗi khi tạo Routing Control:', error);
       }
+    }
+
+
+    const existingMarkers = new Set();
+    const markersMap = new window.Map();
+
+    map.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+      handleMapClick(map, lat, lng, existingMarkers, markersMap);
     });
 
     setMapInstance(map);
 
     return () => {
+      map.off();
       map.remove();
     };
-  }, []);
+  }, [planLocation]);
 
-  // useEffect(() => {
+  // CLICK IN MAP
+  const handleMapClick = async (map, lat, lng, existingMarkers, markersMap) => {
+    const locationKey = `${lat},${lng}`;
 
-  //   const map = L.map("map", {
-  //     center: [16.054, 108.202],
-  //     zoom: 12,
-  //     zoomControl: false,
-  //   });
+    if (existingMarkers.has(locationKey)) {
+      console.log("Marker đã tồn tại tại vị trí này.");
+      return;
+    }
 
-  //   L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
-  //     subdomains: ["mt0", "mt1", "mt2", "mt3"],
-  //   }).addTo(map);
+    try {
+      // Gọi API ngược để lấy thông tin địa chỉ
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      );
 
-  //   L.control
-  //     .zoom({
-  //       position: "bottomleft",
-  //     })
-  //     .addTo(map);
+      if (response.data) {
+        const { display_name } = response.data;
+        const [name, ...addressParts] = display_name.split(", ");
+        const address = addressParts.join(", ");
 
-  //   setMapInstance(map);
+        // Cập nhật formData và ô tìm kiếm
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          Longitude: lng,
+          Latitude: lat,
+          Name: name,
+          Address: address,
+        }));
 
-  //   return () => {
-  //     map.remove();
-  //   };
-  // }, []);
+        setSearchQuery(display_name);
 
+        // Thêm marker trên bản đồ
+        const newMarker = L.marker([lat, lng]).addTo(map);
+        newMarker.bindPopup(display_name).openPopup();
+
+        // Lưu vị trí vào tập hợp và bản đồ marker
+        existingMarkers.add(locationKey);
+        markersMap.set(locationKey, newMarker);
+
+        // Đăng ký sự kiện click để xóa marker
+        newMarker.on("click", () => {
+          map.removeLayer(newMarker);
+          existingMarkers.delete(locationKey);
+          markersMap.delete(locationKey);
+          console.log(`Marker tại ${locationKey} đã bị xóa.`);
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin địa điểm:", error);
+    }
+  };
+
+  // SEARCH
   const handleSearch = useCallback(
     async (query) => {
       if (!query.trim()) {
@@ -194,14 +221,25 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     []
   );
 
-  // Debounce logic để trì hoãn API call
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       handleSearch(searchQuery);
-    }, 500); // Trì hoãn 500ms
-
-    return () => clearTimeout(delayDebounce); // Hủy bỏ timeout nếu searchQuery thay đổi
+    }, 500);
+    return () => clearTimeout(delayDebounce);
   }, [searchQuery, handleSearch]);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+
+    if (query.trim()) {
+      setIsDropdownVisible(true);
+    } else {
+      setIsDropdownVisible(false);
+    }
+  };
+
 
   const handleLocationSelect = (location) => {
     const { lat, lon, display_name } = location;
@@ -235,35 +273,25 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     setIsDropdownVisible(false); // Ẩn dropdown
 
   };
+  useEffect(() => {
+    if (mapInstance) {
+      mapInstance.setView([coordinates.latitude, coordinates.longitude], 12);
+    }
+  }, [coordinates]);
+
 
   const handleClearSearch = () => {
-    setSearchQuery(""); // Xóa nội dung tìm kiếm
-    setLocations([]); // Xóa danh sách địa điểm
-    setIsDropdownVisible(false); // Ẩn dropdown
+    setSearchQuery("");
+    setLocations([]);
+    setIsDropdownVisible(false);
     setState(false);
-  };
-
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
-  };
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-
-    // Kiểm tra nếu có query, thì hiển thị dropdown
-    if (query.trim()) {
-      setIsDropdownVisible(true);
-    } else {
-      setIsDropdownVisible(false); // Nếu không có query, ẩn dropdown
-    }
   };
 
   const handleDateChange = (event) => {
     const { value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      EstimatedStartDate: dayjs(value).format('YYYY-MM-DD'), // Cập nhật EstimatedStartDate trong formData
+      EstimatedStartDate: dayjs(value).format('YYYY-MM-DD'),
     }));
   };
 
@@ -302,12 +330,13 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     }
   }
 
+
   return (
     <div className={`relative ${className}`}>
       <div id="map" className="h-[600px] w-full rounded-[10px] border border-slate-300 z-10"></div>
 
       <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
-        <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-2 py-1 gap-1 relative">
+        <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-3 py-1 gap-3 relative">
           <div className="w-6/12 flex flex-col relative">
             <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm<span className="text-[red] ml-1 text-[10px]">*</span></span>
             <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
@@ -321,9 +350,9 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
               {searchQuery && (
                 <button
                   onClick={handleClearSearch}
-                  className="ml-2  text-[#1270B0] text-md absolute right-0 "
+                  className="ml-2 text-transparent  text-md absolute right-0 "
                 >
-                  <IoCloseCircle />
+                  <MdClose className="text-black" />
                 </button>
               )}
             </div>
@@ -350,29 +379,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
 
             </div>}
           </div>
-          {/* <div className="w-1/12 flex flex-col">
-            <div className="h-[18px]"></div>
-            <div
-              className="w-full h-[25.6px] rounded-md justify-center mx-auto flex items-center cursor-pointer relative">
-              <button className="h-full flex justify-center w-full items-center bg-white hover:bg-[#faf9f9]  font-medium  text-[13px] rounded-md  py-1 transition-all duration-150 text-[#0F3E4A] border border-[#B3B3B3]" hide onClick={() => setIsOpen(!isOpen)}>
-                {selectedOption === "Địa điểm du lịch" ? <FaBuildingColumns /> : selectedOption === "Quán ăn" ? <FaBowlRice /> : <FaBed />}
-              </button>
-              {isOpen && (
-                <ul className="absolute top-full left-0 mt-2 w-[130px] bg-white border border-[#CCD0D5] rounded-md shadow-lg z-10">
-                  {options.map((option, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleOptionClick(option.label)}
-                      className="px-1 py-2 cursor-pointer hover:bg-gray-100 text-[12px] flex items-center space-x-2"
-                    >
-                      <span >{option.icon}</span>
-                      <span>{option.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div> */}
+
           <div className="w-4/12 flex flex-col">
             <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính<span className="text-[red] ml-1 text-[10px]">*</span></span>
             <input

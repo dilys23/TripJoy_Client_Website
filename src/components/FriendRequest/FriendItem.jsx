@@ -10,7 +10,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
         window.location.reload();
     }
     return (
-        <div className="w-full h-[100px] bg-white rounded-20 my-3 px-1 ">
+        <div className="w-full h-[100px] bg-white rounded-20 my-3 px-1   border border-[#CCD0D5]">
             <div onClick={handleToProfile} className="flex gap-3 items-center px-2 py-1 ">
                 <AvatarDefault src={null} alt=""></AvatarDefault>
                 <div>

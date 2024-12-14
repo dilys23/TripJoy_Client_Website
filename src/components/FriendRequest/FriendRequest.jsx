@@ -51,8 +51,8 @@ function FriendRequest() {
                 </div>
                 <a href="#" className="text-[#aeaeae] cursor-pointer lg:text-base text-[10px]">Tất cả</a>
             </div>
-            <div className="w-full h-[180px]">
-                {listFriend.slice(0, 1).map((item, index) => (
+            <div className="w-full h-[210px]">
+                {listFriend.slice(0, 2).map((item, index) => (
                     <FriendItem key={index} info={item} onAcceptRequest={() => handleAcceptRequest(item.id)} onDeclineRequest={() => handleDeclineRequest(item.id)}></FriendItem>
                 ))}
             </div>

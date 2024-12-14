@@ -118,23 +118,6 @@ const updatePlanRequest = async (id, formData) => {
     }
 }
 
-// EDIT NOTE
-const editNoteRequest = async (id, note) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plan/${id}`, {
-            note
-        }, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        throw error
-    }
-}
 
 const getPlanInvitationAvailable = async (planId) => {
     try {
@@ -150,4 +133,4 @@ const getPlanInvitationAvailable = async (planId) => {
         throw error
     }
 }
-export { getMyPlanRequest, getPlanInvitationAvailable, addPlanRequest, updatePlanRequest, editNoteRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }
+export { getMyPlanRequest, getPlanInvitationAvailable, addPlanRequest, updatePlanRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }

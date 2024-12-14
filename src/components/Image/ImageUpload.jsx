@@ -1,24 +1,34 @@
 import React, { useState } from "react";
+import { addImageIntoPlan, removeImageIntoPlan } from "../../services/detailPlanLocationService";
 
-function ImageUploader({ images, setImages }) {
+function ImageUploader({ planLocationId, images, setImages }) {
 
     const maxImages = 10;
 
-    const handleAddImage = (event) => {
-        const files = event.target.files;
-        if (files && images.length < maxImages) {
-            const newImages = [...images];
-            Array.from(files).forEach((file) => {
-                const imageUrl = URL.createObjectURL(file);
-                newImages.push(imageUrl);
-            });
-            setImages(newImages.slice(0, maxImages));
+    const handleAddImage = async (e) => {
+        const file = e.target.files[0];
+        if (file && images.length < maxImages) {
+            const newImages = new FormData();
+            newImages.append("image", file);
+            try {
+                const res = await addImageIntoPlan(planLocationId, newImages);
+                console.log(res);
+                // const newImageUrl = { url: 'https://movieticketbooking.s3.amazonaws.com/42470e9e-81d4-4d56-9301-e4a0588ef39e.png' }  // Create a URL for the uploaded file
+                // setImages((prevImages) => [...prevImages, newImageUrl]);
+            } catch (error) {
+                console.log(error);
+            }
         }
-    };
 
-    const handleRemoveImage = (index) => {
+    };
+    const handleRemoveImage = async (image, index) => {
         const updatedImages = images.filter((_, i) => i !== index);
-        setImages(updatedImages);
+        try {
+            await removeImageIntoPlan(planLocationId, image);
+            setImages(updatedImages);
+        } catch (error) {
+            console.log('Error removing image:', error);
+        }
     };
 
     return (
@@ -51,12 +61,12 @@ function ImageUploader({ images, setImages }) {
                 {images.map((image, index) => (
                     <div key={index} className="relative w-[45px] h-[45px]">
                         <img
-                            src={image}
+                            src={image.url}
                             alt={`uploaded-${index}`}
                             className="w-full h-full rounded-[5px] object-cover"
                         />
                         <button
-                            onClick={() => handleRemoveImage(index)}
+                            onClick={() => handleRemoveImage(image, index)}
                             className="absolute top-[-5px] right-[-5px] bg-[#34A853] text-white text-[8px] w-[15px] h-[15px] flex items-center justify-center rounded-full"
                         >
                             X

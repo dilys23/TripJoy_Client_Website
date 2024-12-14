@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import CardMember from "./members/CardMember";
-import avatarDefault from "../../assets/images/avatarDefault.png"
-import Hue from "../../assets/images/Hue.jpg"
-import HoiAn from "../../assets/images/hoian.png"
-import ModalEditRole from "./members/ModalEditRole";
-import { getMemberByPlanId } from "../../services/member";
+import CardMember from "./CardMember";
+// import avatarDefault from "../../assets/images/avatarDefault.png"
+// import Hue from "../../assets/images/Hue.jpg"
+// import HoiAn from "../../assets/images/hoian.png"
+import ModalEditRole from "../../../components/Modal/ModalEditRole";
+// import { getMemberByPlanId } from "../../services/member";
 import { SmileOutlined } from '@ant-design/icons';
 import { notification } from "antd";
-import ModalRemoveMember from "./members/ModalRemoveMember";
+import ModalRemoveMember from "../../../components/Modal/ModalRemoveMember";
 
-function DetailMember({ role, planId, listMember }) {
+function DetailMember({ role, planId, listMember, fetchMember }) {
     // const [listMember, setListMember] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
     const [openModalEditRole, setOpenModalEditRole] = useState(false);
