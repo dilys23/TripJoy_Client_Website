@@ -12,8 +12,8 @@ function ImageUploader({ planLocationId, images, setImages }) {
             newImages.append("image", file);
             try {
                 const res = await addImageIntoPlan(planLocationId, newImages);
-                console.log(res);
-                // const newImageUrl = { url: 'https://movieticketbooking.s3.amazonaws.com/42470e9e-81d4-4d56-9301-e4a0588ef39e.png' }  // Create a URL for the uploaded file
+                console.log(res.url);
+                // const newImageUrl = res.url;
                 // setImages((prevImages) => [...prevImages, newImageUrl]);
             } catch (error) {
                 console.log(error);
