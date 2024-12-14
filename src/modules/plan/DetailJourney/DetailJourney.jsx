@@ -15,7 +15,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
     const [isEdit, setIsEdit] = useState(false);
     const [expandedGroups, setExpandedGroups] = useState([]);
     const [listItemJourney, setListItemJourney] = useState([]);
-    console.log('planLocation', planLocation);
+    // console.log('planLocation', planLocation);
 
     useEffect(() => {
         setListItemJourney(planLocation);

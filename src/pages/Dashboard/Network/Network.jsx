@@ -25,7 +25,7 @@ function Network() {
   const fetchInvitation = async () => {
     try {
       const data = await getPlanInvitations(0, 10);
-      console.log(data.planInvitations.data);
+      // console.log(data.planInvitations.data);
       setListRecommendationPlan(data.planInvitations.data);
     }
     catch (error) {

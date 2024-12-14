@@ -183,4 +183,4 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
     );
 }
 
-export default Login;
+export default Login;   

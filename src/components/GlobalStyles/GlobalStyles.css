@@ -300,3 +300,31 @@
     no-repeat;
   background-size: 100%;
 }
+.message-button {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  font-size: 20px;
+  background-color: #ff8642;
+  color: #fff;
+  border: none;
+  z-index: 10;
+  border-radius: 90px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+  animation: bounce 0.6s ease-in-out infinite;
+}
+/* .message-button:hover {
+  transform: translateY(-5px);
+  animation: bounce 0.6s ease-in-out;
+} */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}

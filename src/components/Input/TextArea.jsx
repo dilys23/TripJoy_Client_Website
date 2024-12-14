@@ -1,4 +1,4 @@
-import { memo } from "react";
+
 
 function TextArea({
     width,
@@ -18,4 +18,4 @@ function TextArea({
     );
 }
 
-export default memo(TextArea);
+export default TextArea;
