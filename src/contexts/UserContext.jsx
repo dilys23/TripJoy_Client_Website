@@ -19,6 +19,20 @@ export const UserProvider = ({ children }) => {
         hubConnection.on("OnlineFriends", (friends) => {
             setOnlineFriends(friends);
         });
+        hubConnection.on("FriendOnline", (friend) => {
+            setOnlineFriends((prevFriends) => {
+                if (!prevFriends.includes(friend)) {
+                    return [...prevFriends, friend];
+                }
+                return prevFriends;
+            });
+        });
+
+        hubConnection.on("FriendOffline", (friend) => {
+            setOnlineFriends((prevFriends) => {
+                return prevFriends.filter((f) => f !== friend);
+            });
+        });
 
         try {
             await hubConnection.start();

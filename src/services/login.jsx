@@ -75,7 +75,6 @@ const logoutService = async () => {
         const refreshToken = localStorage.getItem('refreshToken');
         const accessToken = localStorage.getItem('accessToken');
         const res = await api.post('identity-service/logout', {
-            accessToken,
             refreshToken,
         }, {
             headers: {
@@ -84,6 +83,7 @@ const logoutService = async () => {
             }
         }
         );
+        console.log('logout thanh cong roi nhe');
         return res.data;
     } catch (error) {
         console.log('logout error: ', error);
