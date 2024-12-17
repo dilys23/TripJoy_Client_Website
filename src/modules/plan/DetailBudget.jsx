@@ -60,7 +60,7 @@ function DetailBudget() {
                         <div className='w-[15px] h-[15px] rounded-full bg-[#17A1FA]'></div>
                         <span className='text-[#979797] font-bold'>Tổng quỹ</span>
                     </div>
-                    <span className='text-[#282828] nunito-text font-extrabold text-[20px] w-[120px]'> 1.450.000 đ </span>
+                    <span className='text-[#282828] nunito-text font-extrabold text-[20px] w-[120px]'> 3.450.000 đ </span>
                     <div className='flex gap-2 items-center w-[120px]'>
                         <div className='w-[15px] h-[15px] rounded-full bg-[#FF7324]'></div>
                         <span className='text-[#979797] font-bold'>Còn lại</span>

@@ -7,68 +7,13 @@ import icon from "./constants";
 import "leaflet-geosearch/dist/geosearch.css";
 import { act } from "react";
 
-const Map = ({ className, waypoints, setWaypoints }) => {
+const Map = ({ listLongitude, listLatitude }) => {
     const [map, setMap] = useState(null);
     const [routingControl, setRoutingControl] = useState(null);
     const [currentPosition, setCurrentPosition] = useState(null); // GPS position
     const [distance, setDistance] = useState(null);
 
-    const [markers, setMarkers] = useState([{
-        lat: 16.467,
-        lng: 107.59,
-        icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-        }),
-    },
-    {
-        lat: 16.054,
-        lng: 108.202,
-        icon: L.icon({
-            iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-        }),
-    },]);
-    /*
-     const updateWaypoints = (lat, lng) => {
-        setWaypoints((previewPoints)=>
-        {
-          const updatedWaypoints = [...previewpoints];
-          updatedWaypoints.splice(previewPoints.length -1, 0, {lat: lat, lng: lng});
-          console.log("Cập nhật waypoints", updatedWaypoints);
-          return updatedWaypoints
-        })
-      };
-        const updatedMarkers = (lat, lng) => {
-          const newMarker = L.marker([lat, lng], {
-            icon: L.icon({
-                iconUrl: "https://img.icons8.com/arcade/44/marker.png",
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-            }),
-        }).addTo(mapInstance);
-          setMarkers((prevMarkers) => {
-            const updatedMarkers = [...prevMarkers];
-            updatedMarkers.splice(prevMarkers.length -1, 0, newMarker);
-            console.log("Cập nhật markers", updatedMarkers);
-            return updatedMarkers; // Trả về mảng mới
-          });}
     
-    
-        
-      };
-    
-      const handleMapClick = (event) => {
-        const { lat, lng } = event.latlng;
-        console.log("Clicked position:", lat, lng);
-        updateWaypoints(lat, lng);
-        updateMarkers(lat, lng);
-        calculateRoute();
-    };
-    
-    */
     useEffect(() => {
         // Initialize map
         const mapInstance = L.map("map").setView([16.054, 108.202], 12); // Da Nang coords

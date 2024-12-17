@@ -1,6 +1,8 @@
 import { Avatar } from "antd";
+import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
-function CardMember({ member }) {
+function CardMember({ member, handleOpenModalEdit }) {
+
     return (
         <div className="w-full h-[80px] flex shadow-md rounded-[10px] border border-[#CCD0D5] items-center px-5 justify-between">
             <div className="flex gap-3  items-center">
@@ -8,7 +10,10 @@ function CardMember({ member }) {
                 <span className="font-bold nunito-text cursor-pointer">{member.name}</span>
             </div>
             <div className="flex gap-5 items-center">
-                {member.responsible !== 0 && <CiEdit className="text-[25px] text-[#FF2424] cursor-pointer" />}
+                {member.responsible !== 0 &&
+                    <CiEdit
+                        onClick={handleOpenModalEdit}
+                        className="text-[25px] text-[#FF2424] cursor-pointer" />}
                 {member.responsible === 0 ?
                     <div className="w-[133px] flex justify-center py-2 bg-[#FF3C3C] text-white text-[14px] rounded-md cursor-pointer">Trưởng đoàn</div>
                     :
@@ -22,6 +27,7 @@ function CardMember({ member }) {
                     <button className="w-[133px] flex justify-center py-2 bg-[#17A1FA] text-white text-[14px] rounded-md cursor-pointer">Xoá</button>
                 }
             </div>
+
         </div>
     );
 }
