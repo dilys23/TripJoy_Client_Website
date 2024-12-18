@@ -10,16 +10,19 @@ import { useEffect, useState } from 'react';
 import CardExpense from '../../../components/Card/CardExpense';
 import { getExpense, getMemberExpense } from '../../../services/budget';
 function DetailBudget({ planId }) {
-    // const [listMember, setListMember] = useState([]);
+    const [listMyExpense, setListMyExpense] = useState([])
+    const [listMember, setListMember] = useState([]);
 
     const fetchExpense = async () => {
-        const pageIndex = 1;
+        const pageIndex = 0;
         const pageSize = 5;
         try {
             const data = await getExpense(planId, pageIndex, pageSize);
             const memberData = await getMemberExpense(planId, pageIndex, pageSize);
-            console.log(memberData);
             console.log(data);
+            setListMyExpense(data.detailExpense.data);
+            setListMember(memberData.members.data)
+
         } catch (error) {
             console.log(error);
         }
@@ -27,26 +30,27 @@ function DetailBudget({ planId }) {
     useEffect(() => {
         fetchExpense();
     }, [])
-    const [listMember, setListMember] = useState([
-        {
-            id: 0,
-            avatar: image,
-            name: 'Bach Duong',
-            price: '-750.000 đ'
-        },
-        {
-            id: 1,
-            avatar: Hue,
-            name: 'Le Nguyen',
-            price: '-700.000 đ'
-        },
-        {
-            id: 2,
-            avatar: HoiAn,
-            name: 'Bao Chau',
-            price: '-800.000 đ'
-        }
-    ])
+    // console.log(listMyExpense);
+    // const [listMember, setListMember] = useState([
+    //     {
+    //         id: 0,
+    //         avatar: image,
+    //         name: 'Bach Duong',
+    //         price: '-750.000 đ'
+    //     },
+    //     {
+    //         id: 1,
+    //         avatar: Hue,
+    //         name: 'Le Nguyen',
+    //         price: '-700.000 đ'
+    //     },
+    //     {
+    //         id: 2,
+    //         avatar: HoiAn,
+    //         name: 'Bao Chau',
+    //         price: '-800.000 đ'
+    //     }
+    // ])
     const data = [
         { type: 'Category A', value: 40 },
         { type: 'Category B', value: 21 },
@@ -77,7 +81,7 @@ function DetailBudget({ planId }) {
                 <div className='w-1/3 h-full justify-center items-center flex flex-col text-start gap-1'>
                     <div className='flex gap-2 items-center w-[120px]'>
                         <div className='w-[15px] h-[15px] rounded-full bg-[#17A1FA]'></div>
-                        <span className='text-[#979797] font-bold'>Tổng quỹ</span>
+                        <span className='text-[#979797] font-bold'>Cả nhóm</span>
                     </div>
                     <span className='text-[#282828] nunito-text font-extrabold text-[20px] w-[120px]'> 3.450.000 đ </span>
                     <div className='flex gap-2 items-center w-[120px]'>
@@ -89,7 +93,8 @@ function DetailBudget({ planId }) {
                 <div className='w-1/3 h-full flex'>
                     <Pie
                         colors={['#557AFF', '#FF7324']}
-                        {...config} className="w-full" />
+                    // {...config} className="w-full"
+                    />
                 </div>
             </div>
             {/* <div className="w-full h-fit bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex  px-8 py-3 flex-col gap-2">
@@ -114,20 +119,26 @@ function DetailBudget({ planId }) {
             </div> */}
             <div className='w-full flex gap-8'>
                 <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-3 py-3 gap-2'>
-                    <CardExpense
-
-                        icon={
-                            <img
-                                width="28"
-                                height="28"
-                                src="https://img.icons8.com/fluency/28/map-pin.png"
-                                alt="map-pin"
+                    <div className='flex items-center justify-between '>
+                        <span className='font-semibold '>Cá nhân</span>
+                        <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        {listMyExpense.map((expense) => (
+                            <CardExpense
+                                key={expense.order}
+                                icon={
+                                    <img
+                                        width="28"
+                                        height="28"
+                                        src="https://img.icons8.com/fluency/28/map-pin.png"
+                                        alt="map-pin"
+                                    />
+                                }
+                                expense={expense}
                             />
-                        }
-                    />
-
-
-
+                        ))}
+                    </div>
                 </div>
                 <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-4 py-3 gap-2'>
                     <div className='flex items-center justify-between '>
@@ -136,16 +147,15 @@ function DetailBudget({ planId }) {
                     </div>
                     <hr className='w-[90%] text-[#CCD0D5] mx-auto' />
                     <div className='w-full max-h-[250px] overflow-y-hidden gap-4 flex flex-col '>
-                        {listMember.map((member) =>
+                        {/* {listMember.map((member) =>
                             <div className='w-full flex justify-between items-center'>
-                                <div className='flex gap-3 items-center cursor-pointer
-                                '>
+                                <div className='flex gap-3 items-center cursor-pointer'>
                                     <Avatar src={member.avatar} className='w-[50px] h-[50px]'></Avatar>
                                     <span className='font-medium text-[14px]'>{member.name}</span>
                                 </div>
                                 <div className='font-semibold text-[18px]'>{member.price}</div>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>

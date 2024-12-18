@@ -2,16 +2,22 @@ import ContactItem from "./ContactItem";
 import { useContext, useEffect, useState } from "react"
 import { getMyFriend } from "../../services/friend"
 import { UserContext } from "../../contexts/UserContext";
+import { createRoomChatPrivate } from "../../services/Chat";
+import Chat from "../Chat/Chat";
 function Contact() {
     const [listMyFriend, setListMyFriend] = useState([]);
     const { onlineFriends } = useContext(UserContext);
-    console.log(onlineFriends);
+    const [openChatRoom, setOpenChatRoom] = useState(false);
+    const [currentRoom, setCurrentRoom] = useState(null);
+    const [friend, setFriend] = useState(null);
+    // console.log(onlineFriends);
+
     useEffect(() => {
         const fetchFriends = async () => {
             try {
                 const listFriend = await getMyFriend();
                 setListMyFriend(listFriend.users.data);
-                console.log(listFriend.users.data)
+                // console.log(listFriend.users.data)
             } catch (error) {
                 console.log('Error while getting my friend request:', error);
             }
@@ -20,16 +26,37 @@ function Contact() {
         fetchFriends();
     }, []);
 
+    const createRoomChat = async (friend) => {
+        try {
+            // console.log(listMyFriend);
+            const res = await createRoomChatPrivate(friend.id);
+            console.log(friend.id);
+            setCurrentRoom(res.room);
+            setOpenChatRoom(true);
+            setFriend(friend);
+        } catch (error) {
+            console.log('Error while creating room chat:', error);
+        }
+    }
+
     return (
-        <div className="w-full">
-            <div className="text-[#aeaeae] lg:text-base text-[12px] font-bold my-3">LIÊN HỆ</div>
-            <div className="w-full h-auto bg-white rounded-20 border border-[#CCD0D5] min-h-[200px]">
-                {listMyFriend.map((item, index) => (
-                    <ContactItem key={index} contact={item} onlineFriends={onlineFriends}></ContactItem>
-                )
-                )}
+        <>
+            {openChatRoom && <Chat handleClose={() => setOpenChatRoom(false)} currentRoom={currentRoom} modePrivate={true} friend={friend}></Chat>}
+            <div className="w-full">
+                <div className="text-[#aeaeae] lg:text-base text-[12px] font-bold my-3">LIÊN HỆ</div>
+                <div className="w-full h-auto bg-white rounded-20 border border-[#CCD0D5] min-h-[200px]">
+                    {listMyFriend.map((item, index) => (
+                        <ContactItem
+                            key={index}
+                            contact={item}
+                            onlineFriends={onlineFriends}
+                            onClick={() => createRoomChat(item)}
+                        ></ContactItem>
+                    )
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

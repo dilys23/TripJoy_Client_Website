@@ -8,6 +8,7 @@ function ImageUploader({ planLocationId, images, setImages }) {
     const handleAddImage = async (e) => {
         const file = e.target.files[0];
         if (file && images.length < maxImages) {
+
             const newImages = new FormData();
             newImages.append("image", file);
             try {

@@ -8,7 +8,7 @@ import Button from "../../../components/Button/Button"
 import EvaluationJourneyItem from "./EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
-import { changeOrderPlanLocation } from "../../../services/planLocation"
+import { changeOrderPlanLocation, getPlanLocationByIdService } from "../../../services/planLocation"
 function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
 
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
@@ -16,10 +16,10 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
     const [expandedGroups, setExpandedGroups] = useState([]);
     const [listItemJourney, setListItemJourney] = useState([]);
     // console.log('planLocation', planLocation);
-
+    // console.log('listItemJourney', listItemJourney);
     useEffect(() => {
         setListItemJourney(planLocation);
-    }, [])
+    }, [planLocation])
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const dayOfWeek = date.toLocaleString('vi-VN', { weekday: 'long' });
@@ -45,14 +45,14 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
         const dates = generateDateList(plan.estimatedStartDate, plan.estimatedEndDate);
 
         const grouped = dates.reduce((acc, date) => {
-            acc[date] = planLocation.filter((location) =>
+            acc[date] = listItemJourney.filter((location) =>
                 format(new Date(location.estimatedStartDate), "yyyy-MM-dd") === date
             );
             return acc;
         }, {});
 
         return grouped;
-    }, [planLocation, plan?.estimatedStartDate, plan?.estimatedEndDate]);
+    }, [listItemJourney, plan?.estimatedStartDate, plan?.estimatedEndDate]);
 
     useEffect(() => {
         if (Object.keys(groupedJourneys).length > 0) {
@@ -79,7 +79,6 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
     }
     const handleChangeOrder = async (planLocationIdFirst, planLocationIdSecond) => {
         try {
-            // console.log(planLocationIdFirst, planLocationIdSecond);
             const res = await changeOrderPlanLocation(planId, planLocationIdFirst, planLocationIdSecond);
             onSuccess();
         } catch (error) {
@@ -89,54 +88,23 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
     const onDragEnd = (result) => {
         const { source, destination, draggableId } = result;
         if (!destination) return;
-
         const planLocationIdFirst = draggableId
-        // const sourceDate = source.droppableId;
-        // const destinationDate = destination.droppableId;
-        // const sourceJourneyId = source.draggableId;
-        // const destinationJourneyId = destination.draggableId;
         const destinationIndex = destination.index;
         const destinationDroppableId = destination.droppableId;
 
-        // Lấy được giá trị đang đè lên trong mảng
         const destinationJourney = groupedJourneys[destinationDroppableId][destinationIndex];
 
         const planLocationIdSecond = destinationJourney.planLocationId
-        console.log('111', planLocationIdFirst)
-        console.log('222', planLocationIdSecond)
         handleChangeOrder(planLocationIdFirst, planLocationIdSecond);
-        // console.log(`Đang đè lên: ${destinationJourney.planLocationId}`);
 
-        // Đổi chỗ journey.id
-        // if (sourceDate === destinationDate) {
-        //     handleChangeOrder(sourceJourneyId, destinationJourneyId);
-        // } else {
-        //     handleChangeOrder(sourceJourneyId, destinationJourneyId);
-        // }
-
-        // Thực hiện logic đổi chỗ journey.id
-        // if (sourceDate === destinationDate) {
-        //     const items = Array.from(listItemJourney);
-        //     const [reorderedItem] = items.splice(source.index, 1);
-        //     items.splice(destination.index, 0, reorderedItem);
-        //     setListItemJourney(items);
-        // } else {
-        //     const sourceItems = Array.from(groupedJourneys[sourceDate]);
-        //     const destinationItems = Array.from(groupedJourneys[destinationDate]);
-        //     const [movedItem] = sourceItems.splice(source.index, 1);
-        //     movedItem.time = destinationDate;
-        //     destinationItems.splice(destination.index, 0, movedItem);
-        //     setListItemJourney((prev) =>
-        //         prev.map((item) => {
-        //             if (item.id === movedItem.id) {
-        //                 return { ...item, time: destinationDate }; // Update the time
-        //             }
-        //             return item;
-        //         })
-        //     );
-        // }
     };
-
+    const updateJourneyInfo = (journeyDetail, updatedData) => {
+        setListItemJourney((prevJourneys) =>
+            prevJourneys.map((journey) =>
+                journey.planLocationId === journeyDetail.planLocationId ? { ...journey, ...updatedData } : journey
+            )
+        );
+    };
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
@@ -186,7 +154,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
                                                             onSuccess={onSuccess}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem planId={planId} journey={journey} listMember={listMember} onSuccess={onSuccess} />
+                                                            <EvaluationJourneyItem journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} />
                                                         )}
                                                     </div>
                                                 )}
