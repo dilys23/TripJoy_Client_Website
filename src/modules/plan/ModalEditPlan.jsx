@@ -7,9 +7,13 @@ import dayjs from 'dayjs';
 import { MdAdd } from 'react-icons/md';
 import { notification } from 'antd';
 import { updatePlanRequest } from "../../services/plan";
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
-    console.log(plan);
+    // console.log(plan);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         namePlan: plan?.title || "",
@@ -25,25 +29,6 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
         vehicle: plan?.vehicle,
     });
 
-    useEffect(() => {
-        if (plan?.avatar) {
-            const fetchAvatar = async () => {
-                try {
-                    const res = await fetch(plan.avatar);
-                    const blob = await res.blob();
-                    const file = new File([blob], "avatar.jpg", { type: blob.type });
-                    setFormData((prev) => ({
-                        ...prev,
-                        avatar: file,
-                    }));
-                } catch (error) {
-                    console.log("Error fetching avatar:", error);
-                }
-            };
-            fetchAvatar();
-        }
-    }, []);
-
     const [errors, setErrors] = useState({
         namePlan: "",
         startDestination: "",
@@ -53,9 +38,6 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
         budget: "",
         avatar: ""
     })
-    const handleInputChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-    };
     const validateForm = () => {
         const errors = {};
         if (!formData.namePlan) errors.namePlan = "Vui lòng điền tên chuyến đi";
@@ -73,48 +55,44 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
+    async function fetchAvatarAsFile(uri, name, type) {
+        try {
+            const response = await fetch(uri);
+            if (!response.ok) throw new Error("Failed to fetch avatar");
 
-    const handelClear = () => {
-        setFormData({
-            namePlan: "",
-            startDestination: "",
-            endDestination: "",
-            startDate: null,
-            endDate: null,
-            budget: "",
-            method: 0,
-            avatar: null,
-            vehicle: null,
-        });
-        setErrors({
-            namePlan: "",
-            startDestination: "",
-            endDestination: "",
-            startDate: "",
-            endDate: "",
-            budget: "",
-            avatar: "",
-        });
-    };
-    function formatDate(date) {
-        if (!date) return null; // Nếu không có giá trị, trả về null
-        if (typeof date === 'string' && !isNaN(Date.parse(date))) {
-            // Nếu là chuỗi ISO hợp lệ
-            return new Date(date).toISOString();
+            const blob = await response.blob(); // Convert to Blob
+            return new File([blob], name, { type }); // Tạo File object
+        } catch (error) {
+            console.error('Error converting avatar:', error);
+            return null;
         }
-        if (date instanceof Date) {
-            // Nếu là đối tượng Date
-            return date.toISOString();
-        }
-        throw new Error("Invalid date format"); // Nếu không hợp lệ, báo lỗi
     }
-    // const formatDate = (date) => {
-    //     const d = new Date(date);
-    //     const year = d.getFullYear();
-    //     const month = String(d.getMonth() + 1).padStart(2, '0');
-    //     const day = String(d.getDate()).padStart(2, '0');
-    //     return `${year}-${month}-${day}`;
-    // };
+
+    useEffect(() => {
+        async function processAvatar() {
+            if (plan?.avatar) {
+                const parts = plan.avatar.split("/");
+                const fileName = parts[parts.length - 1];
+
+                const file = await fetchAvatarAsFile(plan.avatar, fileName, "image/jpg");
+                if (file) {
+                    setFormData((prev) => ({
+                        ...prev,
+                        avatar: file, // Set avatar là một File object hợp lệ
+                    }));
+                }
+            }
+        }
+
+        processAvatar();
+    }, [plan?.avatar]);
+
+
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
+
+
     const handleClick = (index) => {
         handleInputChange('vehicle', index);
     };
@@ -125,8 +103,8 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
     const handleImageChange = (e) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-
-            handleInputChange("avatar", e.target.files[0]);
+            // console.log("Selected file:", file);
+            handleInputChange("avatar", file);
         }
     };
     const handleStartDestinationChange = (e) => {
@@ -149,16 +127,14 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
         }
         const data = new FormData();
         if (formData.avatar instanceof File) {
-            // Nếu là file mới, thêm file vào FormData
             data.append('Plan.Avatar', formData.avatar);
         } else {
-            // Nếu là URL cũ, chỉ thêm URL như một trường thông thường
-            data.append('Plan.Avatar', formData.avatar);
+            console.error('Avatar is not a valid File');
         }
-        // data.append('Plan.Avatar', formData.avatar);
+
         data.append('Plan.Title', formData.namePlan);
-        data.append('Plan.StartDate', formatDate(formData.startDate));
-        data.append('Plan.EndDate', formatDate(formData.endDate));
+        data.append('Plan.StartDate', formData.startDate);
+        data.append('Plan.EndDate', formData.endDate);
         data.append('Plan.EstimatedBudget', formData.budget);
         data.append('Plan.Method', formData.method);
         data.append('Plan.ProvinceStartId', formData.idStartDestination);
@@ -173,7 +149,8 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
 
         try {
             const response = await updatePlanRequest(planId, data);
-            handelClear();
+            // handelClear();
+            console.log(response);
             handleClose();
             OnSuccess();
         } catch (error) {
@@ -208,7 +185,7 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
                                 <label htmlFor="upload-image" className="w-[200px] h-[80px] border-dashed border-[#00000026] border-[1px] bg-[#f8f8f8] items-center justify-center flex flex-col cursor-pointer rounded-[6px]">
                                     {formData.avatar && (
                                         <img
-                                            src={URL.createObjectURL(formData.avatar)}
+                                            src={formData.avatar instanceof File ? URL.createObjectURL(formData.avatar) : formData.avatar}
                                             alt="Avatar Preview"
                                             className="h-full w-full object-cover rounded-[6px]"
                                         />
@@ -265,16 +242,21 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
                                 disabledDate={disabledDate}
                                 format="DD-MM-YYYY"
                                 allowClear={true}
-                                value={formData.startDate && formData.endDate ? [dayjs(formData.startDate), dayjs(formData.endDate)] : []}
+                                value={[
+                                    formData.startDate ? dayjs(formData.startDate) : null,
+                                    formData.endDate ? dayjs(formData.endDate) : null,
+                                ]}
                                 onChange={(dates) => {
-                                    if (dates) {
-                                        handleInputChange("startDate", dates[0]);
-                                        handleInputChange("endDate", dates[1]);
+                                    console.log("Dates selected:", dates); // Debugging
+                                    if (dates && dates.length === 2) {
+                                        handleInputChange("startDate", dayjs(dates[0]).utcOffset(7).format("YYYY-MM-DDTHH:mm:ss"));
+                                        handleInputChange("endDate", dayjs(dates[1]).utcOffset(7).format("YYYY-MM-DDTHH:mm:ss"));
                                     } else {
                                         handleInputChange("startDate", null);
                                         handleInputChange("endDate", null);
                                     }
                                 }}
+                           
                             />
                         </Space>
 

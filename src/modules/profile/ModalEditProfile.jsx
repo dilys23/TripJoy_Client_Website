@@ -12,6 +12,11 @@ function ModalEditProfile({ handleClose }) {
             document.body.style.overflow = "auto";
         };
     }, []);
+    const formatDate = (date) => {
+        if (!date) return '';
+        const [year, month, day] = date.split('-');
+        return `${day}-${month}-${year}`;
+    };
 
     const [formData, setFormData] = useState({
         userName: '',
@@ -26,16 +31,20 @@ function ModalEditProfile({ handleClose }) {
     });
 
     const fetchUser = async () => {
-        const res = await getCurrentUser();
-        setFormData(res.user.profile);
-        console.log(res.user.profile)
+        try {
+            const res = await getCurrentUser();
+            setFormData(res.user.profile);
+            console.log(res.user.profile)
+        } catch (error) {
+            console.log(error)
+        }
     }
     useEffect(() => {
         fetchUser();
     }, [])
 
 
-    const [isChange, setIsChange] = useState(false);
+    const [isChange, setIsChange] = useState(true);
 
 
     const handleInputChange = (field, value) => {
@@ -149,8 +158,8 @@ function ModalEditProfile({ handleClose }) {
                                 name="dob"
                                 type="date"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                value={formData?.dateOfBirth}
-                                onChange={handleInputChange}
+                                value={formData?.dateOfBirth ? formatDate(formData.dateOfBirth) : ''}
+                                onChange={(e) => handleInputChange("dateOfBirth", formatDate(e.target.value))}
                             ></input>
                         </div>
                         <div className="w-full flex px-2">
@@ -163,7 +172,7 @@ function ModalEditProfile({ handleClose }) {
                                         value="1"
                                         className="mr-2"
                                         checked={formData?.gender === 1}
-                                        onChange={handleInputChange}
+                                        onChange={() => handleInputChange("gender", 1)}
                                     />
                                     Nam
                                 </label>
@@ -174,9 +183,20 @@ function ModalEditProfile({ handleClose }) {
                                         value="2"
                                         className="mr-2"
                                         checked={formData?.gender === 2}
-                                        onChange={handleInputChange}
+                                        onChange={() => handleInputChange("gender", 2)}
                                     />
                                     Nữ
+                                </label>
+                                <label className="flex items-center cursor-pointer sm:text-base text-[13px]">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="3"
+                                        className="mr-2"
+                                        checked={formData?.gender === 3}
+                                        onChange={() => handleInputChange("gender", 3)}
+                                    />
+                                    Khác
                                 </label>
                             </div>
                         </div>
@@ -234,7 +254,7 @@ function ModalEditProfile({ handleClose }) {
                         </div>
                         <div className="w-full justify-end flex pt-1">
                             <button onClick={handleSubmit}
-                                disabled={!isChange}
+                                // disabled={!isChange}
                                 className={`flex items-center gap-2 cursor-pointer shadow outline-none justify-center text-start  ${isChange ? "bg-[#007AFF] hover:bg-[#006ee6]" : "bg-[#B3B3B3] hover:bg-[#B3B3B3]"} font-semibold  sm:w-[85px] px-2 py-1 sm:text-base text-[13px] rounded-lg  transition-all duration-150 text-white`}>Lưu</button>
                         </div>
                     </div>
