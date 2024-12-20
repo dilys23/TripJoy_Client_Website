@@ -10,6 +10,7 @@ function Contact() {
     const [openChatRoom, setOpenChatRoom] = useState(false);
     const [currentRoom, setCurrentRoom] = useState(null);
     const [friend, setFriend] = useState(null);
+    const [chatRooms, setChatRooms] = useState([]);
     // console.log(onlineFriends);
 
     useEffect(() => {
@@ -26,14 +27,26 @@ function Contact() {
         fetchFriends();
     }, []);
 
+    // const createRoomChat = async (friend) => {
+    //     try {
+    //         // console.log(listMyFriend);
+    //         const res = await createRoomChatPrivate(friend.id);
+    //         console.log(friend.id);
+    //         setCurrentRoom(res.room);
+    //         setOpenChatRoom(true);
+    //         setFriend(friend);
+    //     } catch (error) {
+    //         console.log('Error while creating room chat:', error);
+    //     }
+    // }
     const createRoomChat = async (friend) => {
         try {
-            // console.log(listMyFriend);
             const res = await createRoomChatPrivate(friend.id);
             console.log(friend.id);
-            setCurrentRoom(res.room);
-            setOpenChatRoom(true);
-            setFriend(friend);
+            setChatRooms((prevRooms) => [
+                ...prevRooms,
+                { room: res.room, friend: friend }
+            ]);
         } catch (error) {
             console.log('Error while creating room chat:', error);
         }
@@ -41,7 +54,18 @@ function Contact() {
 
     return (
         <>
-            {openChatRoom && <Chat handleClose={() => setOpenChatRoom(false)} currentRoom={currentRoom} modePrivate={true} friend={friend}></Chat>}
+
+            {chatRooms.map((room, index) => (
+                <Chat
+                    key={index}
+                    handleClose={() => setChatRooms((prevRooms) => prevRooms.filter((_, i) => i !== index))}
+                    currentRoom={room.room}
+                    modePrivate={true}
+                    friend={room.friend}
+                />
+            ))}
+
+            {/* {openChatRoom && <Chat handleClose={() => setOpenChatRoom(false)} currentRoom={currentRoom} modePrivate={true} friend={friend}></Chat>} */}
             <div className="w-full">
                 <div className="text-[#aeaeae] lg:text-base text-[12px] font-bold my-3">LIÊN HỆ</div>
                 <div className="w-full h-auto bg-white rounded-20 border border-[#CCD0D5] min-h-[200px]">

@@ -1,11 +1,10 @@
 import api from "../utils/httpRequest"
-// Create room chat
-const createRoomChatPrivate = async (UserId) => {
+
+// Create a post
+const createPost = async (formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post('chat-service/rooms/private', {
-            UserId
-        }, {
+        const res = await api.post(`post-service/posts`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -13,19 +12,14 @@ const createRoomChatPrivate = async (UserId) => {
         });
         return res.data;
     } catch (error) {
-        console.log('error: ', error);
-        throw error;
+        throw error
     }
 };
-
-const getMessageByRoomId = async (roomId, pageIndex, pageSize) => {
+// get post by id
+const getPostById = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`chat-service/rooms/${roomId}/messages`, {
-            params: {
-                pageIndex,
-                pageSize
-            },
+        const res = await api.get(`post-service/posts/${id}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -33,16 +27,15 @@ const getMessageByRoomId = async (roomId, pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        console.log('error: ', error);
-        throw error;
+        throw error
     }
 }
-const sendMessages = async (roomId, Message) => {
+
+// get post my home feed
+const getPostHomeFeed = async () => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`chat-service/rooms/${roomId}/messages`, {
-            Message
-        }, {
+        const res = await api.get(`post-service/posts/homefeed`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -50,21 +43,13 @@ const sendMessages = async (roomId, Message) => {
         });
         return res.data;
     } catch (error) {
-        console.log('error: ', error);
-        throw error;
+        throw error
     }
 }
-
-
-const createPlanRoomChat = async (planId, PlanName) => {
+const editPost = async (id, formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post('chat-service/rooms/plan', {
-            planId,
-            PlanName
-        }, {
-            UserId
-        }, {
+        const res = await api.put(`post-service/posts/${id}`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -72,8 +57,21 @@ const createPlanRoomChat = async (planId, PlanName) => {
         });
         return res.data;
     } catch (error) {
-        console.log('error: ', error);
-        throw error;
+        throw error
     }
 }
-export { createRoomChatPrivate, getMessageByRoomId, sendMessages, createPlanRoomChat }
+const deletePost = async (id) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.put(`post-service/posts/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+}
+export { createPost, getPostById, getPostHomeFeed, editPost, deletePost }

@@ -2,7 +2,7 @@
 import { MdCircle, MdClose } from "react-icons/md";
 import avatar from "../../assets/images/avatarDefault.png"
 import ReactDOM from 'react-dom';
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { getMessageByRoomId, sendMessages } from "../../services/Chat";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -10,14 +10,14 @@ import { UserContext } from "../../contexts/UserContext";
 function Chat({ handleClose, currentRoom, modePrivate, friend }) {
     const [listMessage, setListMessage] = useState([]);
     const { user, connection } = useContext(UserContext);
-    const myId = user?.id || '';
-    console.log(myId);
+    const myId = user?.profile.id || '';
+    const messagesEndRef = useRef(null);
     const [message, setMessage] = useState('');
+
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize] = useState(10);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
-    console.log(friend);
     const fetchMessage = async () => {
         try {
             const res = await getMessageByRoomId(currentRoom.roomId);
@@ -25,6 +25,7 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
         } catch (error) {
             console.log(error)
         }
+
     }
     useEffect(() => {
         if (currentRoom) {
@@ -32,24 +33,28 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
         }
     }, [])
     useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [listMessage]);
+
+    useEffect(() => {
         if (currentRoom && connection) {
             const handleReceiveMessage = (receivedMessage) => {
                 setListMessage((prevMessages) => [
-                    ...prevMessages,
                     receivedMessage,
+                    ...prevMessages
+
                 ]);
             };
-
             connection.on("ReceiveMessage", handleReceiveMessage);
 
             return () => {
                 connection.off("ReceiveMessage", handleReceiveMessage);
-                console.log("Unsubscribed from ReceiveMessage event");
+                // console.log("Unsubscribed from ReceiveMessage event");
             };
         }
     }, [currentRoom, connection]);
-
-    console.log(currentRoom);
     const sendMessage = async () => {
         try {
             if (message.trim() && message.length > 0 && currentRoom) {
@@ -79,8 +84,8 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
             </div>
 
 
-            <div className="w-full h-[230px] bg-[#f4f4f4] flex flex-col px-2 py-1 overflow-auto custom-scroll">
-                {[...listMessage].reverse().map((msg, index) => (
+            <div className="w-full h-[230px] bg-[#f4f4f4] flex px-2 py-1 overflow-auto custom-scroll flex-col-reverse">
+                {listMessage.map((msg, index) => (
                     msg.postedByUser === myId ? (
                         // Tin nhắn của người dùng hiện tại
                         <div key={index} className="flex flex-col w-full items-end pt-1">
@@ -131,7 +136,7 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
                     </Tippy>
                 </div>
             </div>
-        </div>,
+        </div >,
         document.body
     );
 }
