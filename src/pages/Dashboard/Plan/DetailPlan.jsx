@@ -17,6 +17,7 @@ import { getMemberByPlanId } from "../../../services/member.js";
 import ModalStartPlan from "../../../components/Modal/ModalStartPlan.jsx";
 import ModalSoonEndPlan from "../../../components/Modal/ModalSoonEndPlan.jsx";
 import MapWithRoute from "../../../components/MapCard/MapDemo.jsx";
+import Chat from "../../../components/Chat/Chat.jsx";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -30,6 +31,7 @@ function DetailPlan() {
     const [listMember, setListMember] = useState([]);
     const [planLocation, setPlanLocation] = useState([]);
     const [role, setRole] = useState(null);
+    const [isChatVisible, setIsChatVisible] = useState(false);
     const fetchPlanLocation = async () => {
         try {
             const data = await getPlanLocation(planId, 0, 10);
@@ -79,14 +81,22 @@ function DetailPlan() {
             description: description
         });
     };
+    const toggleChat = () => {
+        setIsChatVisible(!isChatVisible);
+    };
 
 
     return (
-        <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 md:pt-3 ">
-            <button className="fixed items-center justify-center right-[110px] bottom-12 z-10 bg-white rounded-full w-[55px] h-[55px] message-button">
-                {/* <img className="w-[30px] h-[30px] text-center mx-auto" src="data:image/png;base64,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" alt="speech-bubble-with-dots"></img> */}
-                {/* <img width="50" height="90" src="https://img.icons8.com/scribby/50/speech-bubble-with-dots.png" alt="speech-bubble-with-dots" className="w-[60px] h-[40px]" /> */}
+        <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 ">
+            <button
+                onClick={toggleChat}
+                className={`fixed items-center justify-center right-[110px] bottom-12 z-10 bg-white rounded-full w-[55px] h-[55px] message-button ${isChatVisible ? 'hidden' : ''}`}>
+                <img className="w-[30px] h-[30px] text-center mx-auto" src="data:image/png;base64,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" alt="speech-bubble-with-dots"></img>
             </button>
+            {
+                isChatVisible &&
+                <Chat handleClose={() => setIsChatVisible(false)}></Chat>
+            }
             <div className="lg:w-3/5 w-full flex flex-col gap-8">
                 {!plan ?
                     <Skeleton.Image style={{ width: '100%', height: '100%', borderRadius: '8px' }} active />
@@ -185,14 +195,12 @@ function DetailPlan() {
 
             </div>
             {contextHolder}
-            {/* <Map22></Map22> */}
-            {/* <MapWithRoute></MapWithRoute> */}
-            <Map plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[600px] rounded-md lg:flex  hidden sticky top-[80px]" ></Map>
+            <Map plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[630px] rounded-md lg:flex pt-2 hidden sticky top-[60px]" ></Map>
             {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
             {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
             {openModalStartPlan && <ModalStartPlan planId={planId} handleClose={() => setOpenModalStartPlan(false)} onSuccess={refreshPlanLocations} openNotificationWithIcon={openNotificationWithIcon}></ModalStartPlan>}
             {openModalSoonEndPlan && <ModalSoonEndPlan planId={planId} handleClose={() => setOpenModalSoonEndPlan(false)} onSuccess={refreshPlanLocations} openNotificationWithIcon={openNotificationWithIcon}></ModalSoonEndPlan>}
-        </div >
+        </div>
     );
 }
 

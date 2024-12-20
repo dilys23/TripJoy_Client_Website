@@ -2,10 +2,12 @@ import { AiFillMessage } from 'react-icons/ai';
 import avatarDefault from "../../assets/images/avatarDefault.png"
 import { useEffect, useState } from 'react';
 import { getUserById } from '../../services/getUserById';
-function ContactItem({ contact, onlineFriends }) {
+function ContactItem({ contact, onlineFriends, onClick }) {
     const isOnline = onlineFriends.includes(contact.id);
     return (
-        <div className='flex flex-col items-center hover:bg-[#F2F2F2] '>
+        <div
+            onClick={onClick}
+            className='flex flex-col items-center hover:bg-[#F2F2F2] '>
             <div className="flex justify-between items-center w-full lg:h-[66px] h-[50px] lg:px-4 px-2 py-5">
                 <div className='flex gap-3 items-center'>
                     <div className='relative'>

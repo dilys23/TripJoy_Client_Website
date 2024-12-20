@@ -15,8 +15,9 @@ import anh3 from "../../../assets/images/anh3.jpg"
 import anh4 from "../../../assets/images/anh4.jpg"
 import { getPlanInvitations } from "../../../services/getPlanInvitations";
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
+import ModalAddPost from "../../../modules/posts/ModalAddPost";
 function Network() {
-  const [showModalListPost, setShowModalListPost] = useState(false)
+  const [showModalListPost, setShowModalListPost] = useState(true)
   const closeModal = () => {
     setShowModalListPost(false);
   };
@@ -147,7 +148,7 @@ function Network() {
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
             </span>
-            {showModalListPost && <ModalListPost onClose={closeModal}></ModalListPost>}
+            {showModalListPost && <ModalAddPost handleClose={closeModal}></ModalAddPost>}
           </div>
         </div>
         <div className="mt-6 sm:px-0 px-1">

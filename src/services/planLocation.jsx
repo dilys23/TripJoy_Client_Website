@@ -20,6 +20,22 @@ const getPlanLocation = async (planId, pageIndex, pageSize) => {
     }
 };
 
+// get planlocation by id 
+const getPlanLocationByIdService = async (planLocationId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/planLocations/${planLocationId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+}
+
 // add plan location
 const addPlanLocation = async (planId, newFormData) => {
     try {
@@ -79,4 +95,4 @@ const changeOrderPlanLocation = async (planId, planLocationIdFirst, planLocation
         throw error
     }
 }
-export { getPlanLocation, addPlanLocation, removePlanLocation, changeOrderPlanLocation }
+export { getPlanLocation, addPlanLocation, removePlanLocation, changeOrderPlanLocation, getPlanLocationByIdService }
