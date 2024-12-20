@@ -93,7 +93,7 @@ function Profile() {
     //         .catch(error => console.error('Lỗi:', error));
     // }
     return (
-        <div className="w-full flex md:px-10 min-h-screen h-auto flex-col gap-5 ">
+        <div className="w-full flex md:px-20 min-h-screen h-auto flex-col gap-5 ">
             <div className="w-full bg-white sm:h-[340px] h-[500px] flex relative rounded-md sm:justify-normal justify-center">
                 <img src={null || avatarDefault} alt="" className="w-full sm:h-1/2 h-1/3 object-cover absolute top-0 rounded-md" />
                 <div className="opacity-50 absolute top-0 bg-black w-full sm:h-1/2 h-1/3  rounded-md"></div>

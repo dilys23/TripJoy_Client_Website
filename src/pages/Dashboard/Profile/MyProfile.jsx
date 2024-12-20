@@ -183,9 +183,9 @@ function MyProfile() {
         }
     ]
     return (
-        <div className="w-full min-h-screen flex h-auto flex-col sm:px-10 pb-5 nunito-text">
-            <div className="w-full bg-white border border-[#CCD0D5] sm:h-[380px] h-[520px] flex relative rounded-md sm:justify-normal justify-center">
-                <img src={profile?.avatar || coverPhoto} alt="" className="w-full sm:h-2/3 h-1/3 object-cover absolute top-0 rounded-t-md" />
+        <div className="w-full min-h-screen flex h-auto flex-col sm:px-20 pb-5 nunito-text">
+            <div className="w-full bg-white border border-[#CCD0D5] sm:h-[350px] h-[520px] flex relative rounded-md sm:justify-normal justify-center">
+                <img src={profile?.avatar || coverPhoto} alt="" className="w-full sm:h-[73%] h-2/3 object-cover absolute top-0 rounded-t-md" />
                 <div className="flex sm:justify-between flex-col sm:flex-row  w-full absolute sm:top-[130px] top-[100px] lg:px-10 px-4 items-center">
                     <div className="flex sm:w-3/4 sm:flex-row flex-col items-center sm:gap-2">
                         <div className="flex justify-center items-center relative lg:w-[212px] lg:h-[212px] sm:w-[160px] sm:h-[160px] w-[178px] h-[178px] bg-white rounded-full">
@@ -194,7 +194,7 @@ function MyProfile() {
                         <div className="flex flex-col items-start justify-normal sm:pt-5 sm:h-[160px]">
                             <div className="flex flex-col sm:text-start text-center mx-auto">
                                 <div className="sm:text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">{profile?.userName}</div>
-                                <div className="sm:text-white text-[20px] nunito-text ">@kwiwiwiii</div>
+                                <div className="sm:text-white text-[20px] nunito-text pt-5 mr-6">@kwiwiwiii</div>
                             </div>
                             <div className="flex gap-10 sm:pt-10 ">
                                 <div className="flex flex-col justify-center text-center">
@@ -420,7 +420,7 @@ function MyProfile() {
                                 className="h-[570px]"
                             >
                                 {albums.map((photo) => (
-                                    <SwiperSlide key={photo.id} className="flex justify-center items-center px-5">
+                                    <SwiperSlide key={photo.id} className="flex justify-center items-center px-4">
                                         <Photo photo={photo} />
                                     </SwiperSlide>
                                 ))}

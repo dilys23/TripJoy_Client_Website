@@ -7,7 +7,7 @@ import icon from "./constants";
 import "leaflet-geosearch/dist/geosearch.css";
 import { act } from "react";
 
-const Map = ({ className, waypoints, setWaypoints }) => {
+const Map = ({ listAddress, className, waypoints, setWaypoints }) => {
     const [map, setMap] = useState(null);
     const [routingControl, setRoutingControl] = useState(null);
     const [currentPosition, setCurrentPosition] = useState(null); // GPS position
