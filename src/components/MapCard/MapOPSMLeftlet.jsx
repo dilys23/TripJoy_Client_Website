@@ -23,12 +23,20 @@ const Mapbox = ({ listLongitude, listLatitude }) => {
   useEffect(() => {
     if (map && listLongitude && listLatitude) {
       // Tạo danh sách tọa độ từ longitudes và latitudes
+    
       const waypoints = listLongitude
         .map((lon, index) => ({
           latLng: L.latLng(listLatitude[index], lon),
         }))
-        .filter((point) => point.latLng.lat && point.latLng.lng); // Lọc bỏ các giá trị không hợp lệ
-
+        .filter((point) =>{
+          return (
+            point.latLng.lat>= 8.179 &&
+            point.latLng.lat<= 23.393 &&
+            point.latLng.lng>= 102.144 &&
+            point.latLng.lng<= 109.465 
+          );
+        }) ; // Lọc bỏ các giá trị không hợp lệ
+      console.log("waypoint", waypoints);
       if (waypoints.length === 0) return;
 
       // Xóa routingControl cũ nếu có
@@ -41,13 +49,15 @@ const Mapbox = ({ listLongitude, listLatitude }) => {
         waypoints: waypoints.map((point) => point.latLng),
         routeWhileDragging: true,
         createMarker: (i, waypoint) => {
-          return L.marker(waypoint.latLng, {
+          const marker = L.marker(waypoint.latLng, {
             icon: L.icon({
               iconUrl: "https://img.icons8.com/arcade/44/marker.png",
               iconSize: [40, 40],
               iconAnchor: [20, 40],
             }),
           });
+          marker.bindTooltip((i + 1).toString(), { permanent: true, direction: "right", className : " border-1 border-black w-5 h-6 transform translate-x-10 -translate-y-[10]" }).openTooltip();
+          return marker;
         },
       }).addTo(map);
 

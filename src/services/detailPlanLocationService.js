@@ -1,11 +1,26 @@
 import api from "../utils/httpRequest"
 
-// Invite member to plan 
-const inviteMemberRequest = async (planId, userId) => {
-
+// EDIT NOTE PLAN 
+const addFeePlanLocation = async (planLocationId, PlanLocationExpense) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`travelplan-service/plans/${planId}/members/invite/${userId}`, {}, {
+        const res = await api.put(`travelplan-service/planLocations/${planLocationId}/expense`, PlanLocationExpense, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log('thanh cong ne', res);
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+};
+// get expense by plan id
+const getExpenseByPlanId = async (planId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/${planId}/expense`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -17,12 +32,11 @@ const inviteMemberRequest = async (planId, userId) => {
     }
 };
 
-// Revoke member to plan 
-const revokeMemberRequest = async (planId, userId) => {
-
+// get my expense by plan id
+const getMyExpenseByPlanId = async (planId) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`travelplan-service/plans/${planId}/members/revoke/${userId}`, {}, {
+        const res = await api.get(`travelplan-service/plans/${planId}/expense/me`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -33,29 +47,14 @@ const revokeMemberRequest = async (planId, userId) => {
         throw error
     }
 };
-// Get member by id plan
-const getMemberByPlanId = async (planId) => {
+// get expense of all member by plan id 
+const getExpenseOfMembersByPlanId = async (planId) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`travelplan-service/plans/${planId}/members`, {
+        const res = await api.get(`travelplan-service/plans/${planId}/expense/members`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        throw error
-    }
-};
-// CHANG ROLE PERMISSION
-const changePermissionService = async (planId, userId) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.patch(`travelplan-service/plans/${planId}/members/${userId}/permission`, {}, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                // 'Content-Type': 'application/json',
             }
         });
         return res.data;
@@ -63,14 +62,15 @@ const changePermissionService = async (planId, userId) => {
         throw error
     }
 }
-// Remove Member
-const removeMemberService = async (planId, userId) => {
+
+// get expense of each member by plan id
+const getExpenseOfEachMemberByPlanId = async (planId, memberId) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plans/${planId}/members/${userId}/remove`, {}, {
+        const res = await api.get(`travelplan-service/plans/${planId}/expense/members/${memberId}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                // 'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             }
         });
         return res.data;
@@ -78,35 +78,37 @@ const removeMemberService = async (planId, userId) => {
         throw error
     }
 }
-// ACCEPT INVITATION
-const acceptInvitationService = async (planId) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`travelplan-service/plans/${planId}/members/accept`, {}, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        throw error
-    }
-};
-// DECLINE INVITATION
-const declineInvitationService = async (planId) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`travelplan-service/plans/${planId}/members/decline`, {}, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        throw error
-    }
-};
 
-export { inviteMemberRequest, revokeMemberRequest, getMemberByPlanId, changePermissionService, removeMemberService, acceptInvitationService, declineInvitationService }
+
+// ADD IMAGE of PLAN
+const addImageIntoPlan = async (planLocationId, image) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.patch(`travelplan-service/planLocations/${planLocationId}/images/add`, image, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        console.log(res);
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+}
+// DELETE IMAGE of PLAN
+const removeImageIntoPlan = async (planLocationId, image) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.patch(`travelplan-service/planLocations/${planLocationId}/images/remove`, image, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                // 'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export { addFeePlanLocation, getExpenseByPlanId, getMyExpenseByPlanId, getExpenseOfMembersByPlanId, getExpenseOfEachMemberByPlanId, addImageIntoPlan, removeImageIntoPlan }

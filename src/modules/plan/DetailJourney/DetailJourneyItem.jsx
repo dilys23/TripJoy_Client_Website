@@ -1,8 +1,10 @@
 import { FaBars, FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Button from "../../../components/Button/Button";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+import HoiAn from "../../../assets/images/noImages.jpg"
 import { EditLocationIcon } from "../../../components/Icons/Icons";
-function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps }) {
+import { changeOrderPlanLocation, removePlanLocation } from "../../../services/planLocation";
+function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps, onSuccess }) {
     const dashStyle = journey.status === 0
         ? 'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
         : journey.status === 1
@@ -26,6 +28,16 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
         }
         return stars;
     };
+    const handleRemove = async () => {
+        console.log(journey.planLocationId);
+        try {
+            const response = await removePlanLocation(journey.planLocationId);
+            onSuccess();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+   
 
     return (
         <div className="w-full md:gap-5 gap-2 flex h-[171px]" >
@@ -46,7 +58,9 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                     ></div>
                 </div>
             ) : (
-                <div className="flex w-[25px] h-full justify-center items-center text-[20px]">
+                <div
+                    onClick={handleRemove}
+                    className="flex w-[25px] h-full justify-center items-center text-[20px]">
                     <MdOutlineRemoveCircleOutline className="text-red-400 cursor-pointer" />
                 </div>
             )}
@@ -55,30 +69,30 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                 <span className="font-semibold md:text-[14px] text-[12px] gap-1">{journey?.hour}</span>
                 <div className="flex w-full md:h-[150px] h-[130px] bg-white rounded-xl shadow-lg border border-[#CCD0D5] px-2 py-2 md:gap-3 gap-[6px]">
                     <img
-                        src={journey.image}
+                        src={journey?.avatar || HoiAn}
                         alt=""
                         className="w-1/6 md:min-w-[120px]  min-w-[77px] object-cover md:h-full h-full rounded-xl"
                     />
                     <div className="flex w-5/6 flex-col md:px-2 gap-1">
                         <div className="flex justify-between ">
                             <span className="md:text-[21px] text-[14px] nunito-text font-bold text-[#333333]">
-                                {journey.title}
+                                {journey.locationName}
                             </span>
                             {!isEdit ? (
                                 <Button
                                     secondary
                                     className="md:text-[15px] text-[8px] rounded-lg"
-                                    onClick={() => toggleDetail(journey.id)}
+                                    onClick={() => toggleDetail(journey.planLocationId)}
                                 >
                                     Chi tiết
                                 </Button>
                             ) : null}
                         </div>
                         <span className="nunito-text font-normal text-[#333333] md:text-[14px] text-[10px]">
-                            {journey.address}
+                            {journey.locationAddress}
                         </span>
                         <div className="w-full flex md:gap-5">
-                            {journey.category === 1 && (
+                            {/* {journey.category === 1 || journey.category === null && (
                                 <div className="flex px-3 text-[#0F3E4A] bg-[#FFEDE8] border border-[#FDDFDF] hover:bg-[#fee5de] duration-200 md:text-[12px] text-[9px] font-bold rounded-[20px] py-1 cursor-pointer">
                                     Ăn uống
                                 </div>
@@ -92,17 +106,19 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                                 <div className="flex px-3 text-[#0F3E4A] bg-[#C8E7FF] border border-[#4FBAFF] hover:bg-[#bce1fe] duration-200 md:text-[12px] text-[9px]  font-bold rounded-[20px] py-1 cursor-pointer">
                                     Nơi ở
                                 </div>
-                            )}
+                            )} */}
                         </div>
-                        <div className="flex items-center gap-1 py-2">{renderStars(journey.rating)}</div>
+                        <div className="flex items-center gap-1 py-2">{renderStars(journey.rating || 5)}</div>
                     </div>
                 </div>
             </div>
-            {isEdit && (
-                <div className="flex w-[25px] h-full justify-center items-center text-[20px]" {...dragHandleProps}>
-                    <EditLocationIcon className="w-full h-[25px]" />
-                </div>
-            )}
+            <div  {...dragHandleProps}>
+                {isEdit && (
+                    <div className="flex w-[25px] h-full justify-center items-center text-[20px] ">
+                        <EditLocationIcon className="w-full h-[25px]" />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

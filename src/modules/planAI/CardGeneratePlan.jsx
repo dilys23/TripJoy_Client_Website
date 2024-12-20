@@ -45,7 +45,7 @@ function CardRecommendationPlan({
               <MdCircle className=" w-4 text-[#717171] ml-2" />
             )}
             <div className="flex w-full flex-col ml-2 mt-5 ">
-              <span className="overflow-hidden text-ellipsis text-[13px] lg:text-base">
+              <span className="overflow-hidden text-ellipsis text-[13px] font-bold lg:text-base">
                 {detail.location || "Activity not provided"}
               </span>
               <span className="overflow-hidden text-ellipsis text-[13px] lg:text-base">

@@ -67,24 +67,15 @@ function GeneratePlan() {
         </div>
         {/* Tags */}
         <div className="flex w-full flex-wrap justify-center gap-2 lg:justify-normal">
-          <Button
-            className="rounded-[20px] bg-white px-3 py-2 text-[12px] shadow-lg lg:text-base"
-            rightIcon={<MdClose />}
-          >
-            Quán ăn giá rẻ
-          </Button>
-          <Button
-            className="rounded-[20px] bg-white px-3 py-2 text-[12px] shadow-lg lg:text-base"
-            rightIcon={<MdClose />}
-          >
-            Những địa điểm nổi tiếng
-          </Button>
-          <Button
-            className="rounded-[20px] bg-white px-3 py-2 text-[12px] shadow-lg lg:text-base"
-            rightIcon={<MdClose />}
-          >
-            Những địa điểm nổi tiếng
-          </Button>
+          {plans?.map((plan, index) => (
+            <Button
+              className="rounded-[20px] bg-white px-3 py-2 text-[12px] shadow-lg lg:text-base"
+              rightIcon={<MdClose />}
+            >
+              {plan.theme}
+            </Button>
+          ))}
+         
         </div>
         {/* Cards */}
         <div className="scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 flex h-[900px] flex-col gap-3 overflow-y-auto">
@@ -125,6 +116,7 @@ function GeneratePlan() {
               parseFloat(detail.latitude),
             ) || []
           }
+          totalDistance={plans[isChoosePlan]?.total_distance_km || 0}
         />
       </div>
     </div>

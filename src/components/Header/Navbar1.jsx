@@ -101,13 +101,13 @@ const Navbar1 = () => {
     try {
       setLoading(true);
       const res = await logoutService();
-      console.log("error:", res);
-      console.log("User logged out");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      logout();
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('userInfo');
       setLoading(false);
       navigate("/");
+      logout();
     } catch (error) {
       console.error("Logout error:", error);
     }

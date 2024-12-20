@@ -1,6 +1,6 @@
 import api from "../utils/httpRequest"
 
-//GET PLAN
+//GET ALL MY PLAN
 const getMyPlanRequest = async (pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
@@ -105,12 +105,11 @@ const getPlanByIDRequest = async (id) => {
 const updatePlanRequest = async (id, formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plan/${id}`, {
-            formData
-        }, {
+        const res = await api.put(`travelplan-service/plans/${id}`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data'
+
             }
         });
         return res.data;
@@ -119,21 +118,19 @@ const updatePlanRequest = async (id, formData) => {
     }
 }
 
-// EDIT NOTE
-const editNoteRequest = async (id, note) => {
+
+const getPlanInvitationAvailable = async (planId) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`travelplan-service/plan/${id}`, {
-            note
-        }, {
+        const res = await api.get(`travelplan-service/plans/${planId}/planInvitations/available`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             }
-        });
+        })
         return res.data;
     } catch (error) {
         throw error
     }
 }
-export { getMyPlanRequest, addPlanRequest, updatePlanRequest, editNoteRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }
+export { getMyPlanRequest, getPlanInvitationAvailable, addPlanRequest, updatePlanRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }

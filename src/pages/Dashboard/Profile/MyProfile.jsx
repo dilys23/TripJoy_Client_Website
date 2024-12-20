@@ -13,7 +13,7 @@ import ModalEditProfile from "../../../modules/profile/ModalEditProfile";
 import { BsFillPersonCheckFill, BsFillPersonPlusFill, BsFillPersonXFill } from "react-icons/bs";
 import { AiFillMessage } from "react-icons/ai";
 import { MdAdd, MdEdit, MdKeyboardArrowDown, MdLocationOn, MdMoreHoriz, MdOutlineEmail } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button/Button";
 import Post from "../../../modules/network/Posts/Post";
 import Friend from "../../../components/FriendRequest/Friend";
@@ -28,21 +28,26 @@ import "swiper/css";
 import "swiper/css/navigation";
 import 'swiper/css/pagination';
 import { Mousewheel, Pagination } from 'swiper/modules';
+import { useParams } from "react-router-dom";
+import { getUserById } from "../../../services/getUserById";
+import { acceptFriendRequest, declineFriendRequest, getMyFriend, removeFriend, revokeFriendRequest, sendFriendRequest } from "../../../services/friend";
 function MyProfile() {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [profile, setProfile] = useState(null);
     const [showTooltip, setShowTooltip] = useState(false);
     const [showResponse, setShowResponse] = useState(false);
-    // const id = useParams();
+    const id = useParams();
     const [stateFriend, setStateFriend] = useState(4);
-    // const fetchUser = async () => {
-    //     const res = await getUserById(id.id);
-    //     setProfile(res.user);
-    //     setStateFriend(res.user.status);
-    // }
-    // useEffect(() => {
-    //     fetchUser();
-    // }, [id.id])
+    const [listMyFriend, setListMyFriend] = useState([]);
+    const fetchUser = async () => {
+        const res = await getUserById(id.id);
+        setProfile(res.user);
+        setStateFriend(res.user.status);
+        console.log(res);
+    }
+    useEffect(() => {
+        fetchUser();
+    }, [id.id])
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState("Công khai");
 
@@ -62,16 +67,16 @@ function MyProfile() {
             console.log(id.id)
             const res = await sendFriendRequest(id.id);
             setStateFriend(2);
-        } catch {
-            console.error('Error while sending friend request:', error);
+        } catch (error) {
+            console.log('Error while sending friend request:', error);
         }
     }
     const handleAcceptFriend = async () => {
         try {
             const res = await acceptFriendRequest(id.id);
             setStateFriend(1);
-        } catch {
-            console.error('Error while accept friend request:', error);
+        } catch (error) {
+            console.log('Error while accept friend request:', error);
         }
     }
     const handleDeclineFriend = async () => {
@@ -86,8 +91,8 @@ function MyProfile() {
         try {
             const res = await revokeFriendRequest(id.id);
             setStateFriend(0);
-        } catch {
-            console.error('Error while revoke friend request:', error);
+        } catch (error) {
+            console.log('Error while revoke friend request:', error);
         }
     }
     const handleRemoveFriend = async () => {
@@ -107,6 +112,19 @@ function MyProfile() {
     const handleButtonResponseClick = () => {
         setShowResponse(!showResponse);
     }
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const listFriend = await getMyFriend();
+                // console.log(listFriend.users.data);
+                setListMyFriend(listFriend.users.data);
+            } catch (error) {
+                console.log('Error while getting my friend request:', error);
+            }
+        };
+
+        fetchFriends();
+    }, []);
     const dataPost = [
         {
             avatar: ava,
@@ -120,23 +138,23 @@ function MyProfile() {
             numComments: 8
         }
     ]
-    const listFriend = [
-        {
-            id: 1,
-            name: 'Le Nguyen',
-            avatar: ava,
-        },
-        {
-            id: 2,
-            name: 'Hong Nhung',
-            avatar: ava1
-        },
-        {
-            id: 3,
-            name: 'Bao Chau',
-            avatar: ava2
-        },
-    ]
+    // const listFriend = [
+    //     {
+    //         id: 1,
+    //         name: 'Le Nguyen',
+    //         avatar: ava,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Hong Nhung',
+    //         avatar: ava1
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Bao Chau',
+    //         avatar: ava2
+    //     },
+    // ]
     const albums = [
         {
             id: 1,
@@ -167,15 +185,15 @@ function MyProfile() {
     return (
         <div className="w-full min-h-screen flex h-auto flex-col sm:px-10 pb-5 nunito-text">
             <div className="w-full bg-white border border-[#CCD0D5] sm:h-[380px] h-[520px] flex relative rounded-md sm:justify-normal justify-center">
-                <img src={null || coverPhoto} alt="" className="w-full sm:h-2/3 h-1/3 object-cover absolute top-0 rounded-t-md" />
+                <img src={profile?.avatar || coverPhoto} alt="" className="w-full sm:h-2/3 h-1/3 object-cover absolute top-0 rounded-t-md" />
                 <div className="flex sm:justify-between flex-col sm:flex-row  w-full absolute sm:top-[130px] top-[100px] lg:px-10 px-4 items-center">
                     <div className="flex sm:w-3/4 sm:flex-row flex-col items-center sm:gap-2">
                         <div className="flex justify-center items-center relative lg:w-[212px] lg:h-[212px] sm:w-[160px] sm:h-[160px] w-[178px] h-[178px] bg-white rounded-full">
-                            <img src={null || avatarDefault} alt="" className="lg:w-[200px] lg:h-[200px] sm:w-[150px] sm:h-[150px] w-[168px] h-[168px] rounded-full object-cover absolute cursor-pointer" />
+                            <img src={profile?.avatar || avatarDefault} alt="" className="lg:w-[200px] lg:h-[200px] sm:w-[150px] sm:h-[150px] w-[168px] h-[168px] rounded-full object-cover absolute cursor-pointer" />
                         </div>
                         <div className="flex flex-col items-start justify-normal sm:pt-5 sm:h-[160px]">
                             <div className="flex flex-col sm:text-start text-center mx-auto">
-                                <div className="sm:text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">Bach Duong</div>
+                                <div className="sm:text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">{profile?.userName}</div>
                                 <div className="sm:text-white text-[20px] nunito-text ">@kwiwiwiii</div>
                             </div>
                             <div className="flex gap-10 sm:pt-10 ">
@@ -205,14 +223,14 @@ function MyProfile() {
                             <div className="flex gap-1">
                                 <Button
                                     onClick={() => setOpenModalEdit(true)}
-                                    className="lg:w-[250px] sm:w-[37px]  w-full bg-[#E4E6EB] h-[37px] rounded-lg hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black px-2" hide leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
+                                    className="lg:w-[250px] sm:w-[37px]  w-full  h-[37px] rounded-lg bg-[#E4E6EB] hover:bg-[#CCD0D5] transition-all duration-150 md:text-base text-[16px] text-black px-2" hide leftIcon={<MdEdit />}>Chỉnh sửa thông tin cá nhân</Button>
                                 <Button className="w-[37px] bg-[#E4E6EB] h-[37px] transition-all duration-150 md:text-base text-[16px] text-black rounded-lg block sm:hidden"> <MdKeyboardArrowDown /></Button>
                             </div>
                         </div>
 
                     ) :
                         (
-                            <div className="flex sm:gap-5 gap-2 sm:w-1/2 w-full  pt-3 justify-end sm:flex-row flex-col items-end">
+                            <div className="flex sm:gap-5 gap-2 sm:w-1/2 w-full justify-end sm:flex-row flex-col items-end sm:pt-[120px] pt-5">
                                 {stateFriend === 0 &&
                                     <Button onClick={handleAddFriend} className="lg:w-[140px] sm:w-[37px] w-full bg-[#007AFF] h-[37px] rounded-lg hover:bg-[#006ee6] transition-all duration-150 md:text-base text-white text-[16px] px-2" hide leftIcon={<BsFillPersonPlusFill />}>Thêm bạn bè</Button>}
                                 {stateFriend === 1 && (
@@ -293,19 +311,22 @@ function MyProfile() {
                         </div>
                     </div>
                     {/* Danh sách bạn bè */}
-                    <div className="w-full bg-white border border-[#CCD0D5] h-auto py-2 rounded-md flex flex-col" >
-                        <div className="flex w-full justify-between px-5 pt-2">
-                            <span className="text-[#757575]">Bạn bè</span>
-                            <a href="#" className="text-[#1270B0] cursor-pointer font-medium text-[14px]">Danh sách</a>
+                    {stateFriend === 4 &&
+                        <div className="w-full bg-white border border-[#CCD0D5] h-auto py-2 rounded-md flex flex-col" >
+                            <div className="flex w-full justify-between px-5 pt-2">
+                                <span className="text-[#757575]">Bạn bè</span>
+                                <a href="#" className="text-[#1270B0] cursor-pointer font-medium text-[14px]">Danh sách</a>
+                            </div>
+                            <div className="grid grid-cols-3 w-full px-4 ">
+                                {
+                                    listMyFriend.slice(0, 6).map((friend) => (
+                                        <Friend friend={friend} key={friend.id}></Friend>
+                                    ))
+                                }
+                            </div>
                         </div>
-                        <div className="grid grid-cols-3 w-full px-4 ">
-                            {
-                                listFriend.slice(0, 6).map((friend) => (
-                                    <Friend friend={friend} key={friend.id}></Friend>
-                                ))
-                            }
-                        </div>
-                    </div>
+                    }
+
                 </div>
 
                 <div className="sm:w-7/12 w-full flex flex-col gap-5">
@@ -341,12 +362,12 @@ function MyProfile() {
                                         onClick={() => setIsOpen(!isOpen)}
                                         normalBtn leftIcon={selectedOption === "Công khai" ? <FcGlobe /> : <FcPrivacy />} rightIcon={<FaAngleDown />}>{selectedOption}</Button>
                                     {isOpen && (
-                                        <ul className="absolute top-full left-0 mt-2 w-full bg-white border border-[#CCD0D5] rounded-md shadow-lg z-10">
+                                        <ul className="absolute top-full left-0 mt-2 w-full bg-white border border-[#CCD0D5] rounded-md shadow-lg z-10 ">
                                             {options.map((option, index) => (
                                                 <li
                                                     key={index}
                                                     onClick={() => handleOptionClick(option.label)}
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 text-[12px] flex items-center space-x-2"
+                                                    className="px-1 py-2 cursor-pointer hover:bg-gray-100 text-[12px] flex items-center space-x-2"
                                                 >
                                                     <span>{option.icon}</span>
                                                     <span>{option.label}</span>

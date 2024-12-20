@@ -2,10 +2,10 @@ import ava from "../../../assets/images/ava.jpg";
 import * as MdIcons from "react-icons/fa";
 import FriendRequest from "../../../components/FriendRequest";
 import Contact from "../../../components/Contact/Contact";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalListPost from "../../../modules/network/ModalListPost";
 import { UserContext } from "../../../contexts/UserContext";
-import { Avatar } from "antd";
+import { Avatar, notification } from "antd";
 import RecommendationPlanItem from "../../../components/RecommendationPlan";
 import RecommendationAddressItem from "../../../components/RecommendationAddress";
 import Post from "../../../modules/network/Posts/Post";
@@ -13,14 +13,53 @@ import anh1 from "../../../assets/images/anh1.jpg"
 import anh2 from "../../../assets/images/anh2.jpg"
 import anh3 from "../../../assets/images/anh3.jpg"
 import anh4 from "../../../assets/images/anh4.jpg"
+import { getPlanInvitations } from "../../../services/getPlanInvitations";
+import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false)
   const closeModal = () => {
     setShowModalListPost(false);
   };
-  const { user } = useContext(UserContext)
-
-  const listRecommendationPlan = [
+  const { user } = useContext(UserContext);
+  const [listRecommendationPlan, setListRecommendationPlan] = useState([]);
+  const fetchInvitation = async () => {
+    try {
+      const data = await getPlanInvitations(0, 10);
+      // console.log(data.planInvitations.data);
+      setListRecommendationPlan(data.planInvitations.data);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchInvitation();
+  }, [])
+  const refreshInvitations = async () => {
+    await fetchInvitation();
+  }
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, message, description, isHappy = false) => {
+    const icon = isHappy ? (
+      <SmileOutlined
+        style={{
+          color: '#108ee9',
+        }}
+      />
+    ) : (
+      <FrownOutlined
+        style={{
+          color: '#108ee9',
+        }}
+      />
+    );
+    api[type]({
+      message: message || 'Thông báo',
+      description: description || 'Vui lòng điền đủ thông tin.',
+      icon: icon,
+    });
+  };
+  const listRecommendation = [
     {
       id: 1,
       title: "Cù Lao Chàm",
@@ -119,19 +158,24 @@ function Network() {
       </div>
       <div className=" md:w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-5 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
         <FriendRequest></FriendRequest>
-        <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3">NHÓM GỢI Ý</span>
-        <div className="flex gap-3 lg:flex-row flex-col justify-start ">
-          {listRecommendationPlan.slice(0, 1).map((plan) => (
-            <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
-          ))}
-        </div>
+        {listRecommendationPlan.length > 0 &&
+          <>
+            <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3">NHÓM GỢI Ý</span>
+            <div className="flex gap-3 lg:flex-row flex-col justify-start ">
+              {listRecommendationPlan.slice(0, 1).map((plan) => (
+                <RecommendationPlanItem key={plan.planId} plan={plan} onSuccess={refreshInvitations} openNotificationWithIcon={openNotificationWithIcon}></RecommendationPlanItem>
+              ))}
+            </div>
+          </>
+        }
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3 pt-3">ĐỊA ĐIỂM GỢI Ý</span>
         <div className="flex w-full flex-col gap-3 pb-16">
-          {listRecommendationPlan.map((plan) => (
+          {listRecommendation.map((plan) => (
             <RecommendationAddressItem key={plan.id} plan={plan}></RecommendationAddressItem>
           ))}
         </div>
       </div>
+      {contextHolder}
     </div>
   );
 }
