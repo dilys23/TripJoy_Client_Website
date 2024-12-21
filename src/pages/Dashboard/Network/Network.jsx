@@ -16,30 +16,13 @@ import anh4 from "../../../assets/images/anh4.jpg"
 import { getPlanInvitations } from "../../../services/getPlanInvitations";
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
 import ModalAddPost from "../../../modules/posts/ModalAddPost";
+import { getPostHomeFeed } from "../../../services/post";
 function Network() {
-  const [showModalListPost, setShowModalListPost] = useState(true)
-  const closeModal = () => {
-    setShowModalListPost(false);
-  };
+  const [showModalListPost, setShowModalListPost] = useState(false);
   const { user } = useContext(UserContext);
   const [listRecommendationPlan, setListRecommendationPlan] = useState([]);
-  const fetchInvitation = async () => {
-    try {
-      const data = await getPlanInvitations(0, 10);
-      // console.log(data.planInvitations.data);
-      setListRecommendationPlan(data.planInvitations.data);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(() => {
-    fetchInvitation();
-  }, [])
-  const refreshInvitations = async () => {
-    await fetchInvitation();
-  }
   const [api, contextHolder] = notification.useNotification();
+  const [listPostHome, setListPostHome] = useState([]);
   const openNotificationWithIcon = (type, message, description, isHappy = false) => {
     const icon = isHappy ? (
       <SmileOutlined
@@ -60,6 +43,42 @@ function Network() {
       icon: icon,
     });
   };
+
+
+  const closeModal = () => {
+    setShowModalListPost(false);
+  };
+
+  const fetchInvitation = async () => {
+    try {
+      const data = await getPlanInvitations(0, 10);
+      // console.log(data.planInvitations.data);
+      setListRecommendationPlan(data.planInvitations.data);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchInvitation();
+  }, [])
+  const refreshInvitations = async () => {
+    await fetchInvitation();
+  }
+
+  const fetchPostHome = async () => {
+    try {
+      const data = await getPostHomeFeed();
+      // console.log(data.posts.data);
+      setListPostHome(data.posts.data);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+  useEffect(() => {
+    fetchPostHome();
+  }, [])
+
   const listRecommendation = [
     {
       id: 1,
@@ -83,32 +102,32 @@ function Network() {
       numberMember: 2,
     },
   ];
-  const dataPost = [
-    {
-      avatar: ava,
-      name: 'Le Nguyen',
-      time: '12 tieng truoc',
-      title: 'Măng Đen hôm đó nhiều mây',
-      descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-      image: [anh2, anh1, anh4, anh4],
-      isLiked: true,
-      numLikes: 100,
-      numComments: 8
-    }, {
-      avatar: ava,
-      name: 'My Thuat',
-      time: '5 tieng truoc',
-      title: 'Măng Đen hôm đó nhiều mây',
-      descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-      image: [anh1, anh2, anh3],
-      isLiked: false,
-      numLikes: 50,
-      numComments: 8
-    }
-  ]
+  // const dataPost = [
+  //   {
+  //     avatar: ava,
+  //     name: 'Le Nguyen',
+  //     time: '12 tieng truoc',
+  //     title: 'Măng Đen hôm đó nhiều mây',
+  //     descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
+  //     image: [anh2, anh1, anh4, anh4],
+  //     isLiked: true,
+  //     numLikes: 100,
+  //     numComments: 8
+  //   }, {
+  //     avatar: ava,
+  //     name: 'My Thuat',
+  //     time: '5 tieng truoc',
+  //     title: 'Măng Đen hôm đó nhiều mây',
+  //     descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
+  //     image: [anh1, anh2, anh3],
+  //     isLiked: false,
+  //     numLikes: 50,
+  //     numComments: 8
+  //   }
+  // ]
   return (
-    <div className=" my-3 flex w-full md:px-3 px-2 lg:gap-10 gap-4">
-      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-5 left-2 top-[80px] h-full lg:p-3 p-1">
+    <div className=" my-3 flex w-full md:px-3 px-2">
+      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-16 left-2 top-[80px] h-full lg:p-3 p-1">
         <div className="bg-white h-fit rounded-xl p-3 border border-[#CCD0D5]">
           <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col lg:p-3 p-1 gap-2">
             <div className="flex lg:gap-3 gap-1  items-center">
@@ -129,7 +148,7 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="md:w-8/12 md:ml-[calc(16.6667%)] md:mr-[calc(16.6667%)] w-full lg:px-16 ">
+      <div className="md:w-8/12 md:ml-[calc(25%)] md:mr-[calc(25%)] w-full lg:px-16 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
@@ -152,12 +171,12 @@ function Network() {
           </div>
         </div>
         <div className="mt-6 sm:px-0 px-1">
-          {dataPost.map((data, index) => (
+          {listPostHome.map((data, index) => (
             <Post key={index} data={data}></Post>
           ))}
         </div>
       </div>
-      <div className=" md:w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-5 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
+      <div className=" md:w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-16 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
         <FriendRequest></FriendRequest>
         {listRecommendationPlan.length > 0 &&
           <>

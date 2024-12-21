@@ -3,7 +3,7 @@ import api from "../utils/httpRequest"
 const likePost = async (id, emotion) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/posts/${id}`, { emotion }, {
+        const res = await api.post(`post-service/posts/${id}/like`, emotion, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -18,8 +18,9 @@ const likePost = async (id, emotion) => {
 // revoke post 
 const revokePost = async (id) => {
     try {
+        console.log(id)
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/posts/${id}`, {
+        const res = await api.post(`post-service/posts/${id}/revokeLike`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -36,7 +37,7 @@ const revokePost = async (id) => {
 const getUserLikePost = async (id, idLike) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/posts/${id}/like/${idLike}`, {
+        const res = await api.get(`post-service/posts/${id}/like/${idLike}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

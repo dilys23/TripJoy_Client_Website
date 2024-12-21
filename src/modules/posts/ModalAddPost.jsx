@@ -11,6 +11,7 @@ import 'tippy.js/dist/tippy.css';
 import { BsFileEarmarkImage } from "react-icons/bs";
 import { createPost } from "../../services/post";
 import { notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 
 function ModalAddPost({ handleClose }) {
     const [namePlan, setNamePlan] = useState([]);
@@ -31,6 +32,11 @@ function ModalAddPost({ handleClose }) {
         api[type]({
             message: 'Thông báo',
             description: 'Tạo bài đăng thành công',
+            icon: <SmileOutlined
+                style={{
+                    color: '#108ee9',
+                }}
+            />,
         });
     };
     // IMAGE UPLOAD
@@ -69,7 +75,7 @@ function ModalAddPost({ handleClose }) {
             const res = await createPost(formData);
             console.log(res);
             openNotificationWithIcon('success');
-
+            handleClose();
             setLoading(false);
         } catch (error) {
             console.log('error', error)
@@ -108,6 +114,7 @@ function ModalAddPost({ handleClose }) {
                     className="relative sm:w-[550px] w-4/5 h-fit pb-6 flex  border-2 border-none rounded-[8px] shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3 gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
+                    {contextHolder}
 
                     <div className="absolute top-5 right-3">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />

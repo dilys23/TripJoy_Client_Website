@@ -7,7 +7,7 @@ const createPost = async (formData) => {
         const res = await api.post(`post-service/posts`, formData, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data'
             }
         });
         return res.data;
