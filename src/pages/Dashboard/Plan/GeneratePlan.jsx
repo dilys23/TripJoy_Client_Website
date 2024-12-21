@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import DetailGeneratePlan from "../../../modules/planAI/DetailGeneratePlan";
 import LoadingSpinner from "../../../components/Loading/LoadingSpinner";
 import { map } from "leaflet";
+import { useLocation } from "react-router-dom";
+
 function GeneratePlan() {
   const [isChoosePlan, setIsChoosePlan] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,12 +14,15 @@ function GeneratePlan() {
   const [plans, setPlans] = useState([]);
   const STORAGE_KEY = "tripPlansData";
   const [currentPlan, setCurrentPlan] = useState([]);
+  const location = useLocation();
+  const plan = location.state?.plan; 
+  console.log("plan",plan);
   useEffect(() => {
     const intervalId = setInterval(() => {
       try {
         const storedPlans = localStorage.getItem(STORAGE_KEY);
         const currentPlan = JSON.parse(localStorage.getItem("currentPlan"));
-
+        console.log("currentPlan",currentPlan);
         if (storedPlans && currentPlan) {
           const parsedPlans = JSON.parse(storedPlans);
           setCurrentPlan(currentPlan);
@@ -81,12 +86,36 @@ function GeneratePlan() {
         <div className="scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 flex h-[900px] flex-col gap-3 overflow-y-auto">
           {plans?.map((plan, index) => (
             <CardGeneratePlan
+            startPoint={currentPlan.startLocation}
+            endPoint={currentPlan.destination}
+            startDate={currentPlan.start_date}
+            endDate={currentPlan.end_date}
+            budget={currentPlan.budget}
+            transportation={currentPlan.transport}
               isActive={isChoosePlan === index}
               key={index}
               onClick={() => setIsChoosePlan(index)}
               suggestion={plan.suggestion}
               theme={plan.theme}
               details={plan.details}
+              listLocation={
+                plans[isChoosePlan]?.details?.map((detail) => detail.location) || []
+              }
+              listAddress={
+                plans[isChoosePlan]?.details?.map((detail) => detail.address) || []
+              }
+              listLongitude={
+                plans[isChoosePlan]?.details?.map((detail) =>
+                  parseFloat(detail.longitude),
+                ) || []
+              }
+              listLatitude={
+                plans[isChoosePlan]?.details?.map((detail) =>
+                  parseFloat(detail.latitude),
+                ) || []
+              }
+              totalDistance={plans[isChoosePlan]?.total_distance_km || 0}
+            
             />
           ))}
         </div>

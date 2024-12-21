@@ -18,11 +18,11 @@ import axios from "axios";
   listLatitude,
   totalDistance,
 }) {
-  console.log(listLocation);
-  console.log(listLongitude);
-  console.log(listAddress);
-  console.log(listLatitude);
-  console.log("totalDistance", totalDistance);
+  // console.log(listLocation);
+  // console.log(listLongitude);
+  // console.log(listAddress);
+  // console.log(listLatitude);
+  // console.log("totalDistance", totalDistance);
   // Lọc các điểm hợp lệ
   const waypoints = listLongitude
     .map((lon, index) => ({
@@ -38,7 +38,7 @@ import axios from "axios";
       );
     });
 
-  console.log("Filtered waypoints:", waypoints);
+  // console.log("Filtered waypoints:", waypoints);
 
   // // Nếu không có điểm hợp lệ, thoát hàm
   // if (waypoints.length === 0) {

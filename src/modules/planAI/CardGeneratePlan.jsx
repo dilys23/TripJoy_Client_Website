@@ -1,12 +1,62 @@
+import axios from "axios";
 import { MdCircle, MdMoreVert } from "react-icons/md";
-
 function CardRecommendationPlan({
   isActive,
   onClick,
   suggestion,
   theme,    
   details,
+  startPoint,
+  endPoint,
+  startDate,
+  endDate,
+  budget,
+  transport,
+  listLocation,
+  listAddress,
+  listLongitude,
+  listLatitude,
+  totalDistance,
 }) {
+  console.log(listLocation);
+  console.log(listLongitude);
+  const handleSavePlan = async () => {
+    const planLocations = details.map((detail, index) => ({
+      // Latitude: listLatitude[index] || "0", 
+      // Longitude: listLongitude[index] || "0", 
+      Latitude: detail.latitude || "0",
+      Longitude: detail.longitude || "0", 
+      Name: detail.location || "Activity not provided",
+      Address: detail.address || "No address provided",
+      EstimatedStartDate: detail.date || startDate, 
+    }));
+    console.log("Plan locations:", planLocations);
+    const payload = {
+      Plan: {
+        Title: suggestion,
+        StartDate: startDate,
+        EndDate: endDate,
+        EstimatedBudget: budget,
+        ProvinceStartId: startPoint, 
+        ProvinceEndId: endPoint, 
+        Method: transport, 
+        Vehicle: 0, 
+        PlanLocations: planLocations,
+      },
+    };
+    console.log("Payload:", payload);
+    try {
+      const response = await axios.post("YOUR_API_ENDPOINT", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Plan saved successfully:", response.data);
+    } catch (error) {
+      console.error("Error saving plan:", error);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
@@ -65,7 +115,8 @@ function CardRecommendationPlan({
 
       {/* Bottom Action */}
       <div className="bottom-2 right-5 flex w-full justify-end">
-        <button className="flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] mb-2 text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base">
+        <button className="flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] mb-2 text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base"
+          onClick={handleSavePlan}>
           Chọn
         </button>
       </div>
