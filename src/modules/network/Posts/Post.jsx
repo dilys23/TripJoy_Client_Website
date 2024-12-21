@@ -6,11 +6,11 @@ import { getUserById } from '../../../services/getUserById';
 import AvatarDefault from '../../../components/Avatar/AvatarDefault';
 import Emotion from '../../../components/Emotion';
 import { likePost, revokePost } from '../../../services/interactPost';
-import { formatDistanceToNow } from 'date-fns';
-import { vi } from 'date-fns/locale';
-import { commentPost, getCommentByPostId } from '../../../services/commentPost';
+
+import { commentPost, deleteComment, editComment, getCommentByPostId, likeComment, replyComment } from '../../../services/commentPost';
+import CommentItem from '../../../components/CommentItem';
 function Post({ data }) {
-    // console.log(data);
+    console.log(data);
     const [post, setPost] = useState(data);
     useEffect(() => {
         setPost(data);
@@ -18,8 +18,8 @@ function Post({ data }) {
 
     const [showFullText, setShowFullText] = useState(false)
     const truncatedText =
-        post?.content?.length > 80 && !showFullText
-            ? `${post.content.slice(0, 80)}...`
+        post?.content?.length > 230 && !showFullText
+            ? `${post.content.slice(0, 230)}...`
             : post?.content || 'No content available';
 
     const [user, setUser] = useState(null);
@@ -62,24 +62,33 @@ function Post({ data }) {
         fetchComment();
     }, []);
     const handleRevoke = async () => {
+        console.log(post.emotionByMe);
         try {
-            if (post?.emotionByMe === null) {
+            if (isLiked === null) {
                 const likeData = {
                     LikePost: {
                         Emotion: 0,
                     }
                 };
                 const res = await likePost(post?.postId, likeData);
+                // console.log(res);
                 setIsLike(0);
+                setPost(prevPost => ({
+                    ...prevPost,
+                    likeCount: prevPost.likeCount > 0 ? prevPost.likeCount + 1 : prevPost.likeCount
+                }));
+
             } else {
-                // console.log('unlike')
                 const res = await revokePost(post?.postId);
                 setIsLike(null);
+                setPost(prevPost => ({
+                    ...prevPost,
+                    likeCount: prevPost.likeCount > 0 ? prevPost.likeCount - 1 : prevPost.likeCount // Giảm số lượt thích
+                }));
             }
         } catch (error) {
             console.log(error);
         }
-
     }
     const handleLike = async (emotion) => {
         if (post) {
@@ -89,12 +98,13 @@ function Post({ data }) {
                 }
             };
             try {
-                // console.log(likeData)
                 const res = await likePost(post?.postId, likeData);
-                // console.log(res);
                 setIsLike(emotion);
                 handleHide();
-
+                setPost(prevPost => ({
+                    ...prevPost,
+                    likeCount: prevPost.likeCount + 1 // Tăng số lượt thích
+                }));
             } catch (error) {
                 console.log(error);
             }
@@ -117,12 +127,42 @@ function Post({ data }) {
             console.log(error);
         }
     }
-    const handleEmotionClick = (commentId) => {
-        setCommentVisible((prev) => ({
-            ...prev,
-            [commentId]: !prev[commentId],
-        }));
+    const handleEmotionClick = async (commentId, label) => {
+        const commentData = {
+            "LikeComment": {
+                "Emotion": Number(label)
+            }
+        }
+        try {
+            const res = await likeComment(commentId, commentData);
+            fetchComment();
+        } catch (error) {
+            console.log(error);
+        }
     };
+    const handleDelete = async (commentId) => {
+        try {
+            // console.log(commentId)
+            const res = await deleteComment(commentId);
+            fetchComment();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleEditComment = async (commentId, replyText) => {
+        try {
+            const commentData = {
+                "Comment": {
+                    "Content": replyText
+                }
+            }
+            const res = await replyComment(commentId, commentData);
+            fetchComment();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     return (
         <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-2 pb-3 px-1">
@@ -145,7 +185,7 @@ function Post({ data }) {
                     </div>
                     <div className="sm:mt-4 mt-1 whitespace-pre-line  text-[15px] px-5 " >
                         {truncatedText}
-                        {post?.content.length > 80 && !showFullText && (
+                        {post?.content?.length > 230 && !showFullText && (
                             <button
                                 onClick={() => setShowFullText(!showFullText)}
                                 className='text-[#161823b0] md:[13px] text-[13px] italic'>...xem tiếp</button>
@@ -159,34 +199,34 @@ function Post({ data }) {
                      ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
                     `}>
                             {post?.postImages.length === 1 && (
-                                <img src={post?.image[0]} alt="Post image 1"
+                                <img src={post?.image[0].url} alt="Post image 1"
                                     className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                             )}
 
                             {post?.postImages.length === 2 && (
                                 <>
-                                    <img src={post?.image[0]} alt="Post image 1"
+                                    <img src={post?.image[0].url} alt="Post image 1"
                                         className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
-                                    <img src={post?.image[1]} alt="Post image 2"
+                                    <img src={post?.image[1].url} alt="Post image 2"
                                         className="w-full  md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                                 </>
                             )}
                             {post?.postImages.length >= 3 && (
                                 <>
-                                    <img src={post?.postImages[0]} alt="Post image 1"
+                                    <img src={post?.postImages[0].url} alt="Post image 1"
                                         className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
-                                    <img src={post?.postImages[1]} alt="Post image 2"
+                                    <img src={post?.postImages[1].url} alt="Post image 2"
                                         className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
                                     {post?.postImages.length > 3 ? (
                                         <div className="relative w-full md:h-[250px] h-[120px] col-span-2 cursor-pointer">
-                                            <img src={post?.postImages[2]} alt="Post image 3"
+                                            <img src={post?.postImages[2].url} alt="Post image 3"
                                                 className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover" />
                                             <div className="absolute top-0 left-0 w-full md:h-[250px] h-[120px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
                                                 <span className="text-white text-[24px] font-bold">+{post?.image.length - 3}</span>
                                             </div>
                                         </div>
                                     ) : (
-                                        <img src={post?.postImages[2]} alt="Post image 3"
+                                        <img src={post?.postImages[2].url} alt="Post image 3"
                                             className="w-full md:h-[250px] h-[120px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
                                     )}
                                 </>
@@ -236,7 +276,10 @@ function Post({ data }) {
                 </div>
 
             }
-
+            <div className='flex justify-between w-full px-5 pt-2'>
+                <span className='text-[13px] flex items-center cursor-pointer'>👍{post?.likeCount} lượt thích</span>
+                <span className='text-[13px] flex items-center cursor-pointer'>{post?.commentCount} bình luận</span>
+            </div>
             <hr className='my-2 text-[#979797] w-[90%] mx-auto mt-2' />
             <div className='flex  w-full justify-center gap-14'>
                 <Tippy
@@ -266,7 +309,7 @@ function Post({ data }) {
                             </>
                         ) : (
                             <div className='flex items-center justify-center gap-2'>
-                                <span role="img" aria-label="current-emotion" className="text-[25px] md:text-[30px]">
+                                <span role="img" aria-label="current-emotion" className="text-[25px] ">
                                     {emotions.find((emotion) => emotion.label === String(isLiked))?.emoji}
                                 </span>
                                 <span className="text-blue-500 text-[14px]">
@@ -296,38 +339,15 @@ function Post({ data }) {
                 <>
                     <div className='w-full px-5 flex flex-col gap-2'>
                         {
-                            listComment.map((item) => (
-                                <div className='w-full h-fit flex gap-3'>
-                                    <AvatarDefault src="" className=" w-[30px] h-[30px]"></AvatarDefault>
-                                    <div className='flex flex-col'>
-                                        <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
-                                            <span className='text-[13px] font-semibold'>{item.userName}</span>
-                                            <span className='text-[12px]'>{item.content}</span>
-                                        </div>
-                                        <div className='flex gap-2'>
-                                            <span className='text-[9px]'>{formatDistanceToNow(
-                                                new Date(new Date(item.createdAt).setHours(new Date(item.createdAt).getHours() + 7)),
-                                                { addSuffix: true, locale: vi }
-                                            )}</span>
-                                            <Tippy
-                                                visible={commentVisible[item.id]}
-                                                // onClickOutside={handleHide}
-                                                // visible={visible}
-                                                interactive={true}
-                                                placement="top"
-                                                render={(attrs) => (
-                                                    <div className="w-[200px] items-start flex" tabIndex="-1" {...attrs}>
-                                                        <Emotion onEmotionClick={() => handleEmotionClick(item.id)} />
-                                                    </div>
-                                                )}
-                                            >
-                                                <span className='underline text-[9px] cursor-pointer'>Thích</span>
-                                            </Tippy>
-
-                                            <span className='underline text-[9px] cursor-pointer'>Phản hồi</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            listComment.slice(0, 2).map((item) => (
+                                <CommentItem
+                                    key={item.commentId}
+                                    onDelete={handleDelete}
+                                    commentVisible={commentVisible}
+                                    onSendReply={handleEditComment}
+                                    item={item}
+                                    emotions={emotions} handleEmotionClick={handleEmotionClick}
+                                ></CommentItem>
                             ))
                         }
                     </div>

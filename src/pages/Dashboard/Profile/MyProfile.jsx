@@ -382,11 +382,11 @@ function MyProfile() {
                         </div>
                     </div>
                     {/* các bài post */}
-                    <div className="mt-6 sm:px-0 px-1">
+                    {/* <div className="mt-6 sm:px-0 px-1">
                         {dataPost.map((data, index) => (
                             <Post key={index} data={data}></Post>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
                 {/* album  */}
                 <div className="sm:w-3/12 w-full lg:flex hidden bg-white border border-[#CCD0D5] h-[630px] flex-col rounded-md">
