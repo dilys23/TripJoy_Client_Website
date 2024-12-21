@@ -345,3 +345,6 @@
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.tippy-arrow {
+  display: none !important;
+}

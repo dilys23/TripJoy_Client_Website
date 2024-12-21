@@ -1,9 +1,9 @@
 import api from "../utils/httpRequest"
 // Create room chat
-const commentPost = async (id, Comment) => {
+const commentPost = async (id, comment) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/posts/${id}/comments`, { Comment }, {
+        const res = await api.post(`post-service/posts/${id}/comments`, comment, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

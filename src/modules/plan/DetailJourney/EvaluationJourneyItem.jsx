@@ -9,11 +9,8 @@ import ava1 from "../../../assets/images/anh2.jpg";
 import ava2 from "../../../assets/images/anh3.jpg";
 import TextArea from "../../../components/Input/TextArea";
 import ImageUploader from "../../../components/Image/ImageUpload";
-import { getMemberByPlanId } from "../../../services/member";
-import useDebounce from "../../../hooks/useDebounce";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
-import { getPlanLocationByIdService } from "../../../services/planLocation";
 function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [members, setMembers] = useState([]);
