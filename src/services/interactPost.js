@@ -18,7 +18,7 @@ const likePost = async (id, emotion) => {
 // revoke post 
 const revokePost = async (id) => {
     try {
-        console.log(id)
+        // console.log(id)
         const accessToken = localStorage.getItem('accessToken');
         const res = await api.post(`post-service/posts/${id}/revokeLike`, {}, {
             headers: {
