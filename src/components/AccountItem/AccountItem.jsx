@@ -8,7 +8,7 @@ function AccountItem({ account }) {
     }
     return (
         <div onClick={handleToProfile} className="w-full h-[50px] px-3 py-3 flex items-center gap-3 hover:bg-[#162c2408] cursor-pointer">
-            <AvatarDefault src="" alt=""></AvatarDefault>
+            <AvatarDefault src="" alt="" className="lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] "></AvatarDefault>
             <div className="flex flex-col">
                 <div>{account.userName}</div>
                 {account.status === 4 && <div className="text-[11px]">Bạn</div>}

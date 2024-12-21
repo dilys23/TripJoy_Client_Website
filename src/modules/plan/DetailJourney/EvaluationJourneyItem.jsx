@@ -9,21 +9,27 @@ import ava1 from "../../../assets/images/anh2.jpg";
 import ava2 from "../../../assets/images/anh3.jpg";
 import TextArea from "../../../components/Input/TextArea";
 import ImageUploader from "../../../components/Image/ImageUpload";
-import { getMemberByPlanId } from "../../../services/member";
-import useDebounce from "../../../hooks/useDebounce";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
-function EvaluationJourneyItem({ planId, journey, listMember }) {
+function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    // const [members, setMembers] = useState(listMember);
-    // const [loading, setLoading] = useState(false);
-    // const [note, setNote] = useState(journey?.note);
-    // const [images, setImages] = useState(journey.images);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [note, setNote] = useState("");
     const [images, setImages] = useState([]);
+    // const [planLocation, setPlanLocation] = useState({});
 
+    // const getPlanLocationById = async (id) => {
+    //     try {
+    //         const res = await getPlanLocationByIdService(id);
+    //         console.log(res.planLocation);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     getPlanLocationById(journey.planLocationId);
+    // }, [])
 
     useEffect(() => {
         setMembers(listMember || []);
@@ -33,7 +39,7 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
         setNote(journey?.note || "");
         setImages(journey?.images || []);
     }, [journey]);
-    console.log(journey);
+    // console.log(journey);
     const [planLocationExpense, setPlanLocationExpense] = useState({
         userSpenderIds: journey.userSpenders || [],
         payerId: journey.payerId || null,
@@ -54,7 +60,8 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
 
     const handleInputChange = useCallback((field, value) => {
         setPlanLocationExpense((prev) => ({ ...prev, [field]: value }));
-    }, []);
+        updateJourneyInfo(journey, { [field]: value });
+    }, [journey, updateJourneyInfo]);
     const toggleDropdown = () => {
         setIsDropdownOpen(prevState => !prevState);
     };
@@ -103,18 +110,17 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
     }, [journey.userSpenders, members]);
 
     const handleNoteChange = useCallback((e) => {
-        setNote(e.target.value);
+        const newNote = e.target.value;
+        setNote(newNote);
+        updateJourneyInfo(journey, { note: newNote });
     }, [])
 
     const callApi = async () => {
         try {
             if (planLocationExpense.payerId || planLocationExpense.amount || planLocationExpense.userSpenderIds.length > 0) {
-                // console.log('journey', journey.planLocationId);
-                // console.log(planLocationExpense);
                 console.log(note);
                 await addFeePlanLocation(journey.planLocationId, { planLocationExpense: planLocationExpense });
                 await editNotePlanLocation(journey.planLocationId, { note: note });
-                // console.log("API Called with:", { planLocationExpense: planLocationExpense });
             }
         } catch (error) {
             console.error("Error calling API:", error);
@@ -123,39 +129,11 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
     const handleSubmit = async () => {
         callApi();
     }
-    // console.log('journey', journey);
-    // const handleCheckboxChange = (userId) => {
-    //     setSelectedValues((prev) => {
-    //         if (userId === "all") {
-    //             return prev.includes("all") ? [] : ["all"];
-    //         }
-    //         const filteredPrev = prev.filter((item) => item !== "all");
-
-    //         if (filteredPrev.includes(userId)) {
-    //             return filteredPrev.filter((item) => item !== userId);
-    //         } else {
-    //             return [...filteredPrev, userId];
-    //         }
-    //     });
-
+    // const updateImages = (newImages) => {
+    //     const updatedImages = [...images, ...newImages]; // Merge current images with new ones
+    //     setImages(updatedImages);
+    //     updateJourneyInfo(journey, { images: updatedImages });
     // };
-
-    // useEffect(() => {
-
-    // const callApi = async () => {
-    //     try {
-    //         if (debouncedPlanLocationExpense.payerId || debouncedPlanLocationExpense.amount) {
-    //             console.log('journey', journey.planLocationId);
-    //             console.log(debouncedPlanLocationExpense);
-    //             await addFeePlanLocation(journey.planLocationId, { planLocationExpense: debouncedPlanLocationExpense });
-    //             console.log("API Called with:", { planLocationExpense: debouncedPlanLocationExpense });
-    //         }
-    //     } catch (error) {
-    //         console.error("Error calling API:", error);
-    //     }
-    // };
-    //     callApi();
-    // }, [debouncedPlanLocationExpense]);
     return (
         <div className={`w-full flex ${images.length <= 5 ? "h-[300px]" : "h-[340px]"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
@@ -279,7 +257,6 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
                                 }
                                 optionFilterProp="children"
                                 optionLabelProp="label"
-                            // showArrow={false}
                             >
                                 {members.map((member) => (
                                     <Select.Option
@@ -323,14 +300,6 @@ function EvaluationJourneyItem({ planId, journey, listMember }) {
                 <button
                     onClick={handleSubmit}
                     className="w-[150px] h-[35px] bg-[#46E8A5] hover:bg-[#40d497] rounded-[10px] font-bold text-white mx-auto transition-all duration-200">Hoàn thành</button>
-                {/* <div className="flex w-2/5 flex-col px-5 pt-4 gap-3">
-                    <div className="bg-[#F1F2F3] rounded-[10px] w-full h-3/5 flex flex-col items-center justify-center cursor-pointer">
-                        <img width="30" height="30" src="https://img.icons8.com/ios/50/image--v1.png" alt="image--v1" />
-                        <span className="text-[14px]">Thêm ảnh</span>
-                    </div>
-                    <button className="w-full h-[35px] bg-[#46E8A5] rounded-[10px] font-bold text-white">Hoàn thành</button>
-                </div> */}
-
             </div>
         </div>
     );

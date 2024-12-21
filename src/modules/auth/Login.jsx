@@ -64,7 +64,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
         setIsLoading(true);
         try {
             const response = await loginService(email, password);
-            console.log('Login success:', response);
+            // console.log('Login success:', response);
             const { accessToken, refreshToken } = response;
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);

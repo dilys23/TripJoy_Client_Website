@@ -2,7 +2,6 @@
 import { createContext, useEffect, useState } from "react";
 import { getCurrentUser } from "../services/getCurrentUser";
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import * as signalR from "@microsoft/signalr";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -12,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://192.168.100.174/notification-hub", { withCredentials: true }) // Đổi thành URL của SignalR server
+            .withUrl("http://192.168.99.67:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 
@@ -36,8 +35,6 @@ export const UserProvider = ({ children }) => {
 
         try {
             await hubConnection.start();
-            console.log("SignalR connected");
-            console.log(userInfo.profile)
             await hubConnection.invoke("AddNewUser", userInfo.profile.id); // Gửi userId lên server
             setConnection(hubConnection);
         } catch (err) {
@@ -91,7 +88,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, login, logout, onlineFriends }}>
+        <UserContext.Provider value={{ user, login, logout, onlineFriends, connection }}>
             {children}
         </UserContext.Provider>
     )

@@ -51,7 +51,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
       icon: icon,
     });
   };
-  console.log(planLocation)
+  // console.log(planLocation)
 
   useEffect(() => {
     if (plan) {
@@ -86,7 +86,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
       .addTo(map);
     planLocation?.forEach((location) => {
       const { latitude, longitude, locationName } = location;
-      console.log(location);
+      // console.log(location);
       const iconHtml = ReactDOMServer.renderToStaticMarkup(<MdLocationOn style={{ fontSize: '35px', color: 'red' }} />);
 
       const customIcon = L.divIcon({
@@ -104,7 +104,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     // Vẽ đường đi nếu có nhiều hơn 1 điểm
     if (planLocation?.length > 1) {
       const waypoints = planLocation.map(location => L.latLng(location.latitude, location.longitude));
-      console.log(waypoints);
+      // console.log(waypoints);
       try {
         const routingControl = L.Routing.control({
           waypoints: waypoints,
@@ -116,11 +116,11 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
         }).addTo(map);
 
         routingControl.on('routesfound', function (e) {
-          console.log('Route found:', e.routes[0]);
+          // console.log('Route found:', e.routes[0]);
         });
 
         routingControl.on('routingerror', function (e) {
-          console.error('Routing error:', e);
+          // console.error('Routing error:', e);
           // openNotificationWithIcon('error', 'Lỗi định tuyến', 'Không thể tìm thấy tuyến đường.');
         });
       } catch (error) {
@@ -313,7 +313,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
       }
     };
 
-    console.log('newFormData', newFormData);
+    // console.log('newFormData', newFormData);
     try {
       const res = await addPlanLocation(planId, newFormData);
       if (res) {
@@ -339,7 +339,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
 
   return (
     <div className={`relative ${className}`}>
-      <div id="map" className="h-[600px] w-full rounded-[10px] border border-slate-300 z-10"></div>
+      <div id="map" className="h-[630px] w-full rounded-[10px] border border-slate-300 z-10 pt-2"></div>
 
       <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
         <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-3 py-1 gap-3 relative">
