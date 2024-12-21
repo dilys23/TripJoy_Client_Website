@@ -8,7 +8,7 @@ import DetailBudget from "../../../modules/plan/Budget/DetailBudget.jsx"
 import Button from "../../../components/Button/Button.jsx";
 import { useParams } from "react-router-dom";
 import Map from "../../../components/MapCard/Map.jsx";
-import Map22 from "../../../components/MapCard/Map22.jsx";
+// import Map22 from "../../../components/MapCard/Map22.jsx";
 import ModalEditPlan from "../../../modules/plan/ModalEditPlan.jsx";
 import ModalInviteMember from "../../../modules/plan/ModalInviteMember.jsx";
 import { getPlanLocation } from "../../../services/planLocation.jsx";
