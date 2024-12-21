@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://192.168.100.201:6700/notification-hub", { withCredentials: true }) // Đổi thành URL của SignalR server
+            .withUrl("http://192.168.1.164:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 
