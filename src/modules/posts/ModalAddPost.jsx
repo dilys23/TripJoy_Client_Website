@@ -2,7 +2,7 @@ import { MdAutoDelete, MdCameraAlt, MdClose, MdDelete, MdGroups, MdLocationOn, M
 import avatarDefaut from "../../assets/images/avatarDefault.png"
 import TextArea from "../../components/Input/TextArea";
 import { getMyPlanRequest } from "../../services/plan";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Select, Spin } from "antd";
 import { FcAddImage } from "react-icons/fc";
 import Button from "../../components/Button/Button"
@@ -12,8 +12,10 @@ import { BsFileEarmarkImage } from "react-icons/bs";
 import { createPost } from "../../services/post";
 import { notification } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
+import { UserContext } from "../../contexts/UserContext";
 
-function ModalAddPost({ handleClose }) {
+function ModalAddPost({ handleClose, onRefresh }) {
+    const { user } = useContext(UserContext);
     const [namePlan, setNamePlan] = useState([]);
     const [loading, setLoading] = useState(false);
     const [sharePlan, setSharePlan] = useState(false);
@@ -74,8 +76,11 @@ function ModalAddPost({ handleClose }) {
             }
             const res = await createPost(formData);
             console.log(res);
-            openNotificationWithIcon('success');
             handleClose();
+            openNotificationWithIcon('success');
+            if (onRefresh) {
+                onRefresh();
+            }
             setLoading(false);
         } catch (error) {
             console.log('error', error)
@@ -114,7 +119,7 @@ function ModalAddPost({ handleClose }) {
                     className="relative sm:w-[550px] w-4/5 h-fit pb-6 flex  border-2 border-none rounded-[8px] shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3 gap-2"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {contextHolder}
+
 
                     <div className="absolute top-5 right-3">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
@@ -126,7 +131,7 @@ function ModalAddPost({ handleClose }) {
                         <div className="w-full justify-between flex items-center">
                             <div className="flex gap-2">
                                 <img src={avatarDefaut} alt="" className="w-9 h-9 rounded-full" />
-                                <span className="text-[15px] nunito-text font-semibold">Bạch Dương</span>
+                                <span className="text-[15px] nunito-text font-semibold">{user?.profile.userName}</span>
                             </div>
 
                         </div>
@@ -380,6 +385,7 @@ function ModalAddPost({ handleClose }) {
                     </div>
                 </div>
             </div>
+            {contextHolder}
         </>
     );
 }

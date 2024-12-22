@@ -79,7 +79,7 @@ const likeComment = async (idComment, emotion) => {
 const revokeComment = async (idComment) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${idComment}/likeComment`, {
+        const res = await api.post(`post-service/comments/${idComment}/revokeLike`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

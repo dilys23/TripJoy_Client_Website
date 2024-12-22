@@ -2,10 +2,10 @@ import ava from "../../../assets/images/ava.jpg";
 import * as MdIcons from "react-icons/fa";
 import FriendRequest from "../../../components/FriendRequest";
 import Contact from "../../../components/Contact/Contact";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ModalListPost from "../../../modules/network/ModalListPost";
 import { UserContext } from "../../../contexts/UserContext";
-import { Avatar, notification } from "antd";
+import { Avatar, notification, Skeleton } from "antd";
 import RecommendationPlanItem from "../../../components/RecommendationPlan";
 import RecommendationAddressItem from "../../../components/RecommendationAddress";
 import Post from "../../../modules/network/Posts/Post";
@@ -16,13 +16,24 @@ import anh4 from "../../../assets/images/anh4.jpg"
 import { getPlanInvitations } from "../../../services/getPlanInvitations";
 import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
 import ModalAddPost from "../../../modules/posts/ModalAddPost";
-import { getPostHomeFeed } from "../../../services/post";
+import { deletePost, getPostHomeFeed } from "../../../services/post";
+import useInfiniteScroll from "../../../hooks/useInfiniteScroll ";
+import CustomModal from "../../../components/Modal/CustomModal";
+import ModalUserLikePost from "../../../components/Modal/ModalUserLikePost";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false);
-  const { user } = useContext(UserContext);
+  const [showModalDeletePost, setShowModalDeletePost] = useState(false);
+  const [showModalUserLike, setShowModalUserLike] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+  // const { user } = useContext(UserContext);
+  // console.log(user);
+  // const observerRef = useRef(null);
+  // const [pageIndex, setPageIndex] = useState(0);
+  // const [loading, setLoading] = useState(false);
   const [listRecommendationPlan, setListRecommendationPlan] = useState([]);
   const [api, contextHolder] = notification.useNotification();
-  const [listPostHome, setListPostHome] = useState([]);
+  // const [listPostHome, setListPostHome] = useState([]);
+  // const [hasMore, setHasMore] = useState(true);
   const openNotificationWithIcon = (type, message, description, isHappy = false) => {
     const icon = isHappy ? (
       <SmileOutlined
@@ -51,8 +62,7 @@ function Network() {
 
   const fetchInvitation = async () => {
     try {
-      const data = await getPlanInvitations(0, 10);
-      // console.log(data.planInvitations.data);
+      const data = await getPlanInvitations(0, 3);
       setListRecommendationPlan(data.planInvitations.data);
     }
     catch (error) {
@@ -65,20 +75,52 @@ function Network() {
   const refreshInvitations = async () => {
     await fetchInvitation();
   }
-
-  const fetchPostHome = async () => {
+  const fetchPostHome = async (pageIndex, pageSize) => {
     try {
-      const data = await getPostHomeFeed();
-      // console.log(data.posts.data);
-      setListPostHome(data.posts.data);
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
-  useEffect(() => {
-    fetchPostHome();
-  }, [])
+      const response = await getPostHomeFeed(pageIndex, pageSize);
+      return response.posts.data;
 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const { dataList, loading, hasMore, observerRef, setDataList, refreshData } = useInfiniteScroll(fetchPostHome);
+
+
+  const handleRefreshData = () => {
+    refreshData();
+  };
+  // const handleDeletePost = async (postId) => {
+  //   try {
+  //     const res = await deletePost(postId);
+  //     if (res) {
+  //       setDataList((prevData) => prevData.filter(post => post.postId !== postId));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  // }
+  const handleDeletePost = async (postId) => {
+    try {
+      const res = await deletePost(postId);
+      setDataList(dataList.filter(post => post.postId !== postId));
+      setShowModalDeletePost(false);
+    } catch (error) {
+      console.log(error)
+    }
+
+  };
+
+  const handleOpenModal = (postId) => {
+    setPostIdToDelete(postId);
+    setShowModalDeletePost(true); // Mở modal khi chọn xóa
+  };
+  const handleOpenUserLike = (postId) => {
+    setPostIdToDelete(postId);
+    setShowModalUserLike(true);
+  }
+  // const 
   const listRecommendation = [
     {
       id: 1,
@@ -102,32 +144,10 @@ function Network() {
       numberMember: 2,
     },
   ];
-  // const dataPost = [
-  //   {
-  //     avatar: ava,
-  //     name: 'Le Nguyen',
-  //     time: '12 tieng truoc',
-  //     title: 'Măng Đen hôm đó nhiều mây',
-  //     descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-  //     image: [anh2, anh1, anh4, anh4],
-  //     isLiked: true,
-  //     numLikes: 100,
-  //     numComments: 8
-  //   }, {
-  //     avatar: ava,
-  //     name: 'My Thuat',
-  //     time: '5 tieng truoc',
-  //     title: 'Măng Đen hôm đó nhiều mây',
-  //     descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-  //     image: [anh1, anh2, anh3],
-  //     isLiked: false,
-  //     numLikes: 50,
-  //     numComments: 8
-  //   }
-  // ]
+
   return (
     <div className=" my-3 flex w-full md:px-3 px-2">
-      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-12 left-2 top-[80px] h-full lg:p-3 p-1">
+      <div className="lg:w-1/5 w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-12 left-2 top-[80px] h-full lg:p-3 p-1">
         <div className="bg-white h-fit rounded-xl p-3 border border-[#CCD0D5]">
           <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col lg:p-3 p-1 gap-2">
             <div className="flex lg:gap-3 gap-1  items-center">
@@ -148,7 +168,7 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="md:w-8/12 md:ml-[calc(22%)] md:mr-[calc(22%)] w-full lg:px-16 ">
+      <div className="md:w-8/12 lg:ml-[calc(22%)] lg:mr-[calc(22%)] md:ml-[calc(20%)] md:mr-[calc(20%)] w-full lg:px-16 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img
@@ -167,16 +187,21 @@ function Network() {
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
             </span>
-            {showModalListPost && <ModalAddPost handleClose={closeModal}></ModalAddPost>}
+            {showModalListPost && <ModalAddPost handleClose={closeModal} onRefresh={handleRefreshData}></ModalAddPost>}
           </div>
         </div>
         <div className="mt-6 sm:px-0 px-1">
-          {listPostHome.map((data, index) => (
-            <Post key={index} data={data}></Post>
+          {dataList.map((data) => (
+            <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} />
           ))}
+          <div ref={observerRef} style={{ height: '20px' }}>
+            {loading && <Skeleton active />}
+            {/* {!hasMore && <p>Đã hết dữ liệu</p>} */}
+          </div>
         </div>
+
       </div>
-      <div className=" md:w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-16 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
+      <div className="lg:w-1/5 w-2/12  flex-col md:flex hidden fixed top-[80px] lg:right-12 right-2 h-screen lg:p-3 py-3 overflow-y-auto custom-scrollbar pb-[200px]">
         <FriendRequest></FriendRequest>
         {listRecommendationPlan.length > 0 &&
           <>
@@ -195,6 +220,21 @@ function Network() {
           ))}
         </div>
       </div>
+      {showModalUserLike &&
+        (
+          <ModalUserLikePost handleClose={() => setShowModalUserLike(false)} postId={postIdToDelete}></ModalUserLikePost>
+        )}
+      {showModalDeletePost && (
+        <CustomModal
+          title="Xác Nhận Xóa"
+          content="Bạn có chắc chắn muốn xóa bài viết này không?"
+          open={showModalDeletePost}
+          onOk={() => handleDeletePost(postIdToDelete)}
+          onCancel={() => setShowModalDeletePost(false)}
+          okText="Xác nhận"
+          cancelText="Huỷ"
+        />
+      )}
       {contextHolder}
     </div>
   );

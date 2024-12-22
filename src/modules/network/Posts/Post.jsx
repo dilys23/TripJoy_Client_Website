@@ -1,22 +1,22 @@
-import PropTypes from 'prop-types';
-import { useCallback, useEffect, useState } from 'react';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { FcAutomotive, FcCalendar } from "react-icons/fc";
 import { getUserById } from '../../../services/getUserById';
 import AvatarDefault from '../../../components/Avatar/AvatarDefault';
 import Emotion from '../../../components/Emotion';
 import { likePost, revokePost } from '../../../services/interactPost';
-
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';
 import { commentPost, deleteComment, editComment, getCommentByPostId, likeComment, replyComment } from '../../../services/commentPost';
 import CommentItem from '../../../components/CommentItem';
-function Post({ data }) {
-    console.log(data);
+import { MdMoreVert } from 'react-icons/md';
+import { Dropdown, Menu } from 'antd';
+import { deletePost } from '../../../services/post';
+import CustomModal from '../../../components/Modal/CustomModal';
+function Post({ data, onDelete, onShowUserLike }) {
     const [post, setPost] = useState(data);
-    useEffect(() => {
-        setPost(data);
-    }, [data])
-
-    const [showFullText, setShowFullText] = useState(false)
+    const [showFullText, setShowFullText] = useState(false);
     const truncatedText =
         post?.content?.length > 230 && !showFullText
             ? `${post.content.slice(0, 230)}...`
@@ -31,17 +31,23 @@ function Post({ data }) {
     const [listComment, setListComment] = useState([]);
     const handleShow = useCallback(() => setVisible(true), []);
     const handleHide = useCallback(() => setVisible(false), []);
-    const emotions = [
+
+    const emotions = useMemo(() => [
         { emoji: "👍", label: "0", title: 'Đã thích' },
         { emoji: "❤️", label: "1", title: 'Yêu thích' },
         { emoji: "😢", label: "2", title: 'Buồn' },
         { emoji: "😂", label: "3", title: 'Haha' },
         { emoji: "😮", label: "4", title: 'Wow' },
         { emoji: "😡", label: "5", title: 'Phẫn nộ' },
+    ], []);
+    const items = [
+        { label: 'Chỉnh sửa', key: '1' },
+        { label: 'Xoá', key: '2' }
     ];
+
     const fetchUser = async () => {
         try {
-            const res = await getUserById(post.userId)
+            const res = await getUserById(data.userId)
             // console.log(res);
             setUser(res.user);
         } catch (error) {
@@ -50,67 +56,87 @@ function Post({ data }) {
     }
     const fetchComment = async () => {
         try {
-            const res = await getCommentByPostId(post.postId)
-            console.log(res.comments.data);
+            const res = await getCommentByPostId(data.postId)
+            // console.log(res.comments.data);
             setListComment(res.comments.data);
         } catch (error) {
             console.log(error);
         }
     }
     useEffect(() => {
+        setPost(data);
         fetchUser();
-        fetchComment();
-    }, []);
-    const handleRevoke = async () => {
-        console.log(post.emotionByMe);
-        try {
-            if (isLiked === null) {
-                const likeData = {
-                    LikePost: {
-                        Emotion: 0,
-                    }
-                };
-                const res = await likePost(post?.postId, likeData);
-                // console.log(res);
-                setIsLike(0);
-                setPost(prevPost => ({
-                    ...prevPost,
-                    likeCount: prevPost.likeCount > 0 ? prevPost.likeCount + 1 : prevPost.likeCount
-                }));
 
-            } else {
-                const res = await revokePost(post?.postId);
-                setIsLike(null);
-                setPost(prevPost => ({
-                    ...prevPost,
-                    likeCount: prevPost.likeCount > 0 ? prevPost.likeCount - 1 : prevPost.likeCount // Giảm số lượt thích
-                }));
-            }
-        } catch (error) {
-            console.log(error);
+    }, []);
+    useEffect(() => {
+        if (showComment) {
+            fetchComment();
         }
-    }
-    const handleLike = async (emotion) => {
-        if (post) {
-            const likeData = {
-                LikePost: {
-                    Emotion: Number(emotion),
-                }
-            };
+    }, [showComment]);
+    const handleRevoke = useCallback(
+        async () => {
+            console.log(post.emotionByMe);
             try {
-                const res = await likePost(post?.postId, likeData);
-                setIsLike(emotion);
-                handleHide();
-                setPost(prevPost => ({
-                    ...prevPost,
-                    likeCount: prevPost.likeCount + 1 // Tăng số lượt thích
-                }));
+                if (isLiked === null) {
+                    const likeData = {
+                        LikePost: {
+                            Emotion: 0,
+                        }
+                    };
+                    const res = await likePost(post?.postId, likeData);
+                    // console.log(res);
+                    setIsLike(0);
+                    setPost(prevPost => ({
+                        ...prevPost,
+                        likeCount: prevPost.likeCount + 1
+                    }));
+
+                } else {
+                    const res = await revokePost(post?.postId);
+                    setIsLike(null);
+                    setPost(prevPost => ({
+                        ...prevPost,
+                        likeCount: prevPost.likeCount > 0 ? prevPost.likeCount - 1 : prevPost.likeCount // Giảm số lượt thích
+                    }));
+                }
             } catch (error) {
                 console.log(error);
             }
-
         }
-    }
+        , [post])
+    const handleLike = useCallback(
+        async (emotion) => {
+            if (post) {
+                const likeData = {
+                    LikePost: {
+                        Emotion: Number(emotion),
+                    }
+                };
+                try {
+                    if (isLiked === null) {
+
+                        const res = await likePost(post?.postId, likeData);
+                        setIsLike(emotion);
+                        setPost(prevPost => ({
+                            ...prevPost,
+                            likeCount: prevPost.likeCount + 1
+                        }));
+                    } else if (isLiked !== emotion) {
+
+                        const res = await likePost(post?.postId, likeData);
+                        setIsLike(emotion);
+                    } else {
+
+                        console.log("Emotion không thay đổi.");
+                    }
+                    handleHide();
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
+        }
+        , [post])
     const handleSendComment = async () => {
         if (inputComment.length === 0) return;
         try {
@@ -120,9 +146,12 @@ function Post({ data }) {
                 }
             }
             const res = await commentPost(post?.postId, commentData);
-            // console.log(res);
             setInputComment('');
             fetchComment();
+            setPost((prevPost) => ({
+                ...prevPost,
+                commentCount: prevPost.commentCount + 1,
+            }));
         } catch (error) {
             console.log(error);
         }
@@ -145,6 +174,10 @@ function Post({ data }) {
             // console.log(commentId)
             const res = await deleteComment(commentId);
             fetchComment();
+            setPost((prevPost) => ({
+                ...prevPost,
+                commentCount: prevPost.commentCount > 0 ? prevPost.commentCount - 1 : 0,
+            }));
         } catch (error) {
             console.log(error);
         }
@@ -163,25 +196,53 @@ function Post({ data }) {
         }
     }
 
+    const handleMenuClick = (e) => {
+        // console.log('Clicked item:', e.key);
+        if (e.key === '1') {
+            console.log(data.postId)
+        } else if (e.key === '2') {
+            onDelete(data.postId);
+        }
+    };
+    const updateComment = (commentId, updatedData) => {
+        setListComment((prevComments) =>
+            prevComments.map((comment) =>
+                comment.commentId === commentId
+                    ? { ...comment, ...updatedData }
+                    : comment
+            )
+        );
+    };
+    const handleShowUserLike = () => {
+        onShowUserLike(data.postId);
+    }
+
 
     return (
         <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-2 pb-3 px-1">
             <div className='w-full flex md:flex-row flex-col'>
                 <div className='w-full'>
-                    <div className="flex justify-between px-5 ">
-                        <div className="flex gap-3 text-center cursor-pointer items-center">
-                            <div className='flex flex-col'>
-                                {/* <div className='nunito-text lg:text-[24px] md:text-[20px] text-[16px] md:leading-[32px] leading-[18px] font-extrabold text-start'>Hai ngày một đêm ở Hà Giang</div> */}
-                                <div className='flex gap-2 items-center'>
-                                    <AvatarDefault src={user?.avatar} alt={user?.avatar} className="md:w-[50px] md:h-[50px] w-[30px] h-[30px]"></AvatarDefault>
+                    <div className="flex justify-between px-5 items-center">
+                        <div className='flex gap-2 items-center'>
+                            <AvatarDefault src={user?.avatar} alt={user?.avatar} className="md:w-[50px] md:h-[50px] w-[30px] h-[30px]"></AvatarDefault>
 
-                                    <div className='block text-start'>
-                                        <div className='font-bold md:text-base text-[12px] nunito-text leading-4'>{user?.userName}</div>
-                                        <div className='text-[#979797] text-xs italic leading-4'>{post?.time}</div>
-                                    </div>
-                                </div>
+                            <div className='block text-start'>
+                                <div className='font-bold md:text-base text-[12px] nunito-text leading-4'>{user?.userName}</div>
+                                <div className='text-[#979797] text-[13px]  leading-4'>{formatDistanceToNow(
+                                    new Date(new Date(post?.createdAt).setHours(new Date(post?.createdAt).getHours() + 7)),
+                                    { addSuffix: true, locale: vi }
+                                )}</div>
                             </div>
                         </div>
+                        <Dropdown
+                            overlay={
+                                <Menu items={items} onClick={handleMenuClick} />
+                            }
+                            placement="bottomRight"
+                        >
+                            <MdMoreVert className="cursor-pointer text-[20px]" />
+                        </Dropdown>
+
                     </div>
                     <div className="sm:mt-4 mt-1 whitespace-pre-line  text-[15px] px-5 " >
                         {truncatedText}
@@ -196,18 +257,18 @@ function Post({ data }) {
                     {
                         post?.postImages.length > 0 &&
                         <div className={`grid w-full md:h-[250px] h-[120px] gap-3 mt-3 px-5
-                     ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
-                    `}>
+                              ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
+                                  `}>
                             {post?.postImages.length === 1 && (
-                                <img src={post?.image[0].url} alt="Post image 1"
+                                <img src={post?.postImages[0].url} alt="Post image 1"
                                     className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                             )}
 
                             {post?.postImages.length === 2 && (
                                 <>
-                                    <img src={post?.image[0].url} alt="Post image 1"
+                                    <img src={post?.postImages[0].url} alt="Post image 1"
                                         className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
-                                    <img src={post?.image[1].url} alt="Post image 2"
+                                    <img src={post?.postImages[1].url} alt="Post image 2"
                                         className="w-full  md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
                                 </>
                             )}
@@ -274,53 +335,57 @@ function Post({ data }) {
                         </div>
                     </div>
                 </div>
-
             }
             <div className='flex justify-between w-full px-5 pt-2'>
-                <span className='text-[13px] flex items-center cursor-pointer'>👍{post?.likeCount} lượt thích</span>
+                <span
+                    onClick={handleShowUserLike}
+                    className='text-[13px] flex items-center cursor-pointer'>👍{post?.likeCount} lượt thích</span>
                 <span className='text-[13px] flex items-center cursor-pointer'>{post?.commentCount} bình luận</span>
             </div>
             <hr className='my-2 text-[#979797] w-[90%] mx-auto mt-2' />
             <div className='flex  w-full justify-center gap-14'>
-                <Tippy
-                    onClickOutside={handleHide}
-                    visible={visible}
-                    interactive={true}
-                    placement="top"
-                    render={(attrs) => (
-                        <div className="w-[200px] items-start flex" tabIndex="-1" {...attrs}>
-                            <Emotion onEmotionClick={handleLike} />
-                        </div>
-                    )}
+
+                <div
+                    className='flex gap-2 items-center w-1/2  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'
                 >
-                    <div
-                        onClick={handleRevoke}
-                        onMouseEnter={handleShow}
-                        className='flex gap-2 items-center w-1/2  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'
-                    >
-                        {isLiked === null ? (
-                            <>
-                                <img
-                                    className="w-[20px] h-[20px] sm:w-[25px] sm:h-[25px] "
-                                    src="https://img.icons8.com/wired/64/facebook-like.png"
-                                    alt="facebook-like"
-                                />
-                                <span>Thích</span>
-                            </>
-                        ) : (
-                            <div className='flex items-center justify-center gap-2'>
-                                <span role="img" aria-label="current-emotion" className="text-[25px] ">
-                                    {emotions.find((emotion) => emotion.label === String(isLiked))?.emoji}
-                                </span>
-                                <span className="text-blue-500 text-[14px]">
-                                    {emotions.find((emotion) => emotion.label === String(isLiked))?.title || 'Đã thích'}
-                                </span>
+                    <Tippy
+                        onClickOutside={handleHide}
+                        visible={visible}
+                        interactive={true}
+                        placement="top"
+                        render={(attrs) => (
+                            <div className="w-[200px] items-start flex" tabIndex="-1" {...attrs}>
+                                <Emotion onEmotionClick={handleLike} />
                             </div>
                         )}
-
-
-                    </div>
-                </Tippy>
+                    >
+                        <div
+                            onClick={handleRevoke}
+                            // onMouseLeave={handleHide}
+                            onMouseEnter={handleShow}
+                            className='w-fit flex '>
+                            {isLiked === null ? (
+                                <>
+                                    <img
+                                        className="w-[20px] h-[20px] sm:w-[25px] sm:h-[25px] "
+                                        src="https://img.icons8.com/wired/64/facebook-like.png"
+                                        alt="facebook-like"
+                                    />
+                                    <span>Thích</span>
+                                </>
+                            ) : (
+                                <div className='flex items-center justify-center gap-2'>
+                                    <span role="img" aria-label="current-emotion" className="text-[25px] ">
+                                        {emotions.find((emotion) => emotion.label === String(isLiked))?.emoji}
+                                    </span>
+                                    <span className="text-blue-500 text-[14px]">
+                                        {emotions.find((emotion) => emotion.label === String(isLiked))?.title || 'Đã thích'}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </Tippy>
+                </div>
                 <div
                     onClick={() => setShowComment((prev) => (!prev))}
                     className='flex gap-2 items-center w-1/2  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'>
@@ -347,6 +412,7 @@ function Post({ data }) {
                                     onSendReply={handleEditComment}
                                     item={item}
                                     emotions={emotions} handleEmotionClick={handleEmotionClick}
+                                    updateComment={updateComment}
                                 ></CommentItem>
                             ))
                         }
@@ -368,7 +434,6 @@ function Post({ data }) {
                                 className="cursor-pointer"
                             />
                         </div>
-
                     </div>
                 </>
 
@@ -376,16 +441,5 @@ function Post({ data }) {
         </div>
     );
 }
-Post.propTypes = {
-    data: PropTypes.shape({
-        avatar: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        time: PropTypes.string.isRequired,
-        descrip: PropTypes.string.isRequired,
-        image: PropTypes.arrayOf(PropTypes.string).isRequired,
-        isLiked: PropTypes.bool.isRequired,
-        numLikes: PropTypes.number.isRequired,
-        numComments: PropTypes.number.isRequired
-    }).isRequired
-};
+
 export default Post;

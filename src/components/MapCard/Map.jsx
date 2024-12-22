@@ -15,7 +15,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
   const [marker, setMarker] = useState(null);
-  const [locations, setLocations] = useState([]); // Lưu danh sách địa điểm tìm được
+  const [locations, setLocations] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Hiển thị dropdown
   const [province, setProvince] = useState('');
   const [coordinates, setCoordinates] = useState({ latitude: 16.054, longitude: 108.202 });

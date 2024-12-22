@@ -14,8 +14,8 @@ function InputType({
     const [showPass, setShowPass] = useState(false);
 
     return (
-        <div className="w-[450px]">
-            <div className="relative flex items-center h-[40px] w-[450px] rounded-[5px] border border-[#ccd0d5] bg-white px-3 shadow focus-within:border-blue-400 focus:outline-none">
+        <div className="md:w-[450px] w-full">
+            <div className="relative flex items-center h-[40px]  rounded-[5px] border border-[#ccd0d5] bg-white shadow focus-within:border-blue-400 focus:outline-none">
                 <input
                     name={name}
                     required={required}
@@ -24,7 +24,7 @@ function InputType({
                     type={showPass ? 'text' : 'password'}
                     onBlur={onBlur}
                     validate={validate}
-                    className="w-full outline-none bg-transparent text-[15px]"
+                    className="w-full outline-none bg-transparent md:text-[16px] text-[14px] md:px-3 px-5"
                     placeholder={placeholder}
                 />
                 <div className="absolute right-5" onClick={() => setShowPass(!showPass)}>

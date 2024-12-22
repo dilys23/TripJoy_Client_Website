@@ -524,9 +524,8 @@ const Navbar1 = () => {
               </div>
               <div
                 id="collapseMenu"
-                className={`${
-                  isMenuOpen ? "block" : "hidden"
-                } max-lg:before:fixed max-lg:before:inset-0 max-lg:before:z-50 max-lg:before:bg-black max-lg:before:opacity-50 lg:!block`}
+                className={`${isMenuOpen ? "block" : "hidden"
+                  } max-lg:before:fixed max-lg:before:inset-0 max-lg:before:z-50 max-lg:before:bg-black max-lg:before:opacity-50 lg:!block`}
               >
                 <button
                   id="toggleClose"

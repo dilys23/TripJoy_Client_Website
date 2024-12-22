@@ -19,6 +19,7 @@ import { logoutService } from "../../services/login";
 import Search from "./Search";
 import avatarDefault from "../../assets/images/avatarDefault.png"
 import LoadingSpinner from "../Loading/LoadingSpinner";
+import CustomModal from "../Modal/CustomModal";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
@@ -48,6 +49,7 @@ const Navbar1 = () => {
 
   const [showSendOTP, setShowSendOTP] = useState(false);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
+  const [showModalLogout, setShowModalLogout] = useState(false);
   const [email, setEmailParent] = useState("");
   const location = useLocation();
   const handleLoginOpen = () => {
@@ -360,12 +362,23 @@ const Navbar1 = () => {
                               <span className="text-[14px]">Cài đặt</span>
                             </div>
                             <div
-                              onClick={handleLogout}
+                              onClick={() => setShowModalLogout(true)}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer"
                             >
                               <MdIcons.MdLogin className=" text-[25px]" />
                               <span className="text-[14px]">Đăng xuất</span>
                             </div>
+                            {
+                              showModalLogout && <CustomModal
+                                title="Thông báo"
+                                content="Bạn có chắc chắn muốn đăng xuất không?"
+                                open={showModalLogout}
+                                onOk={handleLogout}
+                                onCancel={() => setShowModalLogout(false)}
+                                okText="Xác Nhận"
+                                cancelText="Hủy"
+                              />
+                            }
                           </div>
                         </div>
                       )}>
@@ -535,6 +548,7 @@ const Navbar1 = () => {
                     onSwitchToLogin={handleLoginOpen}
                   />
                 )}
+
 
                 <button id="toggleOpen" className="lg:hidden" onClick={handleClick}>
                   <svg

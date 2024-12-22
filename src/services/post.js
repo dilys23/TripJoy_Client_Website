@@ -32,10 +32,14 @@ const getPostById = async (id) => {
 }
 
 // get post my home feed
-const getPostHomeFeed = async () => {
+const getPostHomeFeed = async (pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
         const res = await api.get(`post-service/posts/homefeed`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -63,7 +67,7 @@ const editPost = async (id, formData) => {
 const deletePost = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`post-service/posts/${id}`, {
+        const res = await api.delete(`post-service/posts/${id}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
