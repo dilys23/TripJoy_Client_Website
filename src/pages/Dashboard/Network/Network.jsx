@@ -127,7 +127,7 @@ function Network() {
   // ]
   return (
     <div className=" my-3 flex w-full md:px-3 px-2">
-      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-16 left-2 top-[80px] h-full lg:p-3 p-1">
+      <div className="md:w-2/12 flex-col md:flex hidden gap-5 fixed lg:left-12 left-2 top-[80px] h-full lg:p-3 p-1">
         <div className="bg-white h-fit rounded-xl p-3 border border-[#CCD0D5]">
           <div className="bg-[#FEF7F7] rounded-xl h-full w-full flex flex-col lg:p-3 p-1 gap-2">
             <div className="flex lg:gap-3 gap-1  items-center">
@@ -148,7 +148,7 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="md:w-8/12 md:ml-[calc(25%)] md:mr-[calc(25%)] w-full lg:px-16 ">
+      <div className="md:w-8/12 md:ml-[calc(22%)] md:mr-[calc(22%)] w-full lg:px-16 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <img

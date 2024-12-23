@@ -6,6 +6,7 @@ import DetailGeneratePlan from "../../../modules/planAI/DetailGeneratePlan";
 import LoadingSpinner from "../../../components/Loading/LoadingSpinner";
 import { map } from "leaflet";
 import { useLocation } from "react-router-dom";
+import fetchTripPlans from "../../../services/getAIrecommend";
 
 function GeneratePlan() {
   const [isChoosePlan, setIsChoosePlan] = useState(0);
@@ -15,14 +16,14 @@ function GeneratePlan() {
   const STORAGE_KEY = "tripPlansData";
   const [currentPlan, setCurrentPlan] = useState([]);
   const location = useLocation();
-  const plan = location.state?.plan; 
-  console.log("plan",plan);
+  const plan = location.state?.plan;
+  console.log("plan", plan);
   useEffect(() => {
     const intervalId = setInterval(() => {
       try {
         const storedPlans = localStorage.getItem(STORAGE_KEY);
         const currentPlan = JSON.parse(localStorage.getItem("currentPlan"));
-        console.log("currentPlan",currentPlan);
+        console.log("currentPlan", currentPlan);
         if (storedPlans && currentPlan) {
           const parsedPlans = JSON.parse(storedPlans);
           setCurrentPlan(currentPlan);
@@ -47,7 +48,22 @@ function GeneratePlan() {
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
-
+  const handleGenerate = async () => {
+    setIsLoading(true);
+    try {
+      const plan = localStorage.getItem("currentPlan");
+      localStorage.removeItem(STORAGE_KEY);
+      const fetchedPlans = await fetchTripPlans(plan);
+      console.log("Fetched plans:", fetchedPlans);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(fetchedPlans));
+      setPlans(fetchedPlans);
+      setIsLoading(false); // Dữ liệu đã được tải
+    } catch (error) {
+      console.error("Error in handleFinished:", error);
+      setError("Failed to generate plans");
+      setIsLoading(false); // Dừng loading khi có lỗi
+    }
+  };
   return (
     <div className="flex min-h-screen w-full py-4 lg:px-4">
       <div className="flex w-full flex-col gap-5 sm:w-2/5">
@@ -66,12 +82,15 @@ function GeneratePlan() {
             className="flex h-[37px] w-[37px] rounded-lg bg-white text-[#b7b7b7] transition-all duration-150"
             leftIcon={<MdFilterList className="h-[25px] w-[25px] pl-1" />}
           />
-          <Button className="rounded-[5px] bg-[#007AFF] px-3 py-2 text-[12px] text-white shadow-lg lg:text-base">
+          <Button
+            className="rounded-[5px] bg-[#007AFF] px-3 py-2 text-[12px] text-white shadow-lg lg:text-base"
+            onClick={handleGenerate}
+          >
             Gợi ý lại
           </Button>
         </div>
         {/* Tags */}
-        <div className="flex w-full flex-wrap justify-center gap-2 lg:justify-normal">
+        {/* <div className="flex w-full flex-wrap justify-center gap-2 lg:justify-normal">
           {plans?.map((plan, index) => (
             <Button
               className="rounded-[20px] bg-white px-3 py-2 text-[12px] shadow-lg lg:text-base"
@@ -81,17 +100,17 @@ function GeneratePlan() {
             </Button>
           ))}
          
-        </div>
+        </div> */}
         {/* Cards */}
         <div className="scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-100 flex h-[900px] flex-col gap-3 overflow-y-auto">
           {plans?.map((plan, index) => (
             <CardGeneratePlan
-            startPoint={currentPlan.startLocation}
-            endPoint={currentPlan.destination}
-            startDate={currentPlan.start_date}
-            endDate={currentPlan.end_date}
-            budget={currentPlan.budget}
-            transportation={currentPlan.transport}
+              startPoint={currentPlan.startLocation}
+              endPoint={currentPlan.destination}
+              startDate={currentPlan.start_date}
+              endDate={currentPlan.end_date}
+              budget={currentPlan.budget}
+              transportation={currentPlan.transport}
               isActive={isChoosePlan === index}
               key={index}
               onClick={() => setIsChoosePlan(index)}
@@ -99,10 +118,13 @@ function GeneratePlan() {
               theme={plan.theme}
               details={plan.details}
               listLocation={
-                plans[isChoosePlan]?.details?.map((detail) => detail.location) || []
+                plans[isChoosePlan]?.details?.map(
+                  (detail) => detail.location,
+                ) || []
               }
               listAddress={
-                plans[isChoosePlan]?.details?.map((detail) => detail.address) || []
+                plans[isChoosePlan]?.details?.map((detail) => detail.address) ||
+                []
               }
               listLongitude={
                 plans[isChoosePlan]?.details?.map((detail) =>
@@ -115,13 +137,12 @@ function GeneratePlan() {
                 ) || []
               }
               totalDistance={plans[isChoosePlan]?.total_distance_km || 0}
-            
             />
           ))}
         </div>
       </div>
       {/* Detail section */}
-      <div className="hidden min-h-[80%] rounded-md bg-white shadow-md sm:block sm:w-3/5">
+      <div className="hidden h-[700px] rounded-md bg-white shadow-md sm:block sm:w-3/5 sticky top-[20px]">
         <DetailGeneratePlan
           startPoint={currentPlan.startLocation}
           endPoint={currentPlan.destination}

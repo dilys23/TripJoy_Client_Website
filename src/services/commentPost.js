@@ -31,10 +31,10 @@ const getCommentByPostId = async (id) => {
     }
 };
 
-const replyComment = async (id, Comment) => {
+const replyComment = async (id, comment) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${id}/reply`, { Comment }, {
+        const res = await api.post(`post-service/comments/${id}/reply`, comment, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const getReplyComment = async (id) => {
 const likeComment = async (idComment, emotion) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${idComment}/like`, { emotion }, {
+        const res = await api.post(`post-service/comments/${idComment}/like`, emotion, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

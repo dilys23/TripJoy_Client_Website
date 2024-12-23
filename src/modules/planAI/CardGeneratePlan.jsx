@@ -1,10 +1,14 @@
 import axios from "axios";
 import { MdCircle, MdMoreVert } from "react-icons/md";
+import addGenarateTripbyAI from "../../services/addGenarateTripbyAI";
+import config from "../../config";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 function CardRecommendationPlan({
   isActive,
   onClick,
   suggestion,
-  theme,    
   details,
   startPoint,
   endPoint,
@@ -13,59 +17,81 @@ function CardRecommendationPlan({
   budget,
   transport,
   listLocation,
-  listAddress,
   listLongitude,
-  listLatitude,
-  totalDistance,
 }) {
-  console.log(listLocation);
-  console.log(listLongitude);
+  const [response, setResponse] = useState(null);
+  const navigate = useNavigate();
   const handleSavePlan = async () => {
+    const formatDate = (date) => {
+      if (!date) return null;
+      const d = new Date(date);
+      if (isNaN(d)) {
+        const [day, month, year] = date.split("/");
+        return `${year}-${month}-${day}`;
+      }
+      let month = "" + (d.getMonth() + 1);
+      let day = "" + d.getDate();
+      const year = d.getFullYear();
+
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+
+      return [year, month, day].join("-");
+    };
+
     const planLocations = details.map((detail, index) => ({
-      // Latitude: listLatitude[index] || "0", 
-      // Longitude: listLongitude[index] || "0", 
       Latitude: detail.latitude || "0",
-      Longitude: detail.longitude || "0", 
+      Longitude: detail.longitude || "0",
       Name: detail.location || "Activity not provided",
       Address: detail.address || "No address provided",
-      EstimatedStartDate: detail.date || startDate, 
+      EstimatedStartDate: formatDate(detail.date || startDate),
     }));
     console.log("Plan locations:", planLocations);
+
     const payload = {
       Plan: {
         Title: suggestion,
-        StartDate: startDate,
-        EndDate: endDate,
-        EstimatedBudget: budget,
-        ProvinceStartId: startPoint, 
-        ProvinceEndId: endPoint, 
-        Method: transport, 
-        Vehicle: 0, 
+        StartDate: formatDate(startDate),
+        EndDate: formatDate(endDate),
+        EstimatedBudget: parseInt(budget.replace(/\./g, "")),
+        ProvinceStart: startPoint,
+        ProvinceEnd: endPoint,
+        Method: transport,
+        Vehicle: 0,
         PlanLocations: planLocations,
       },
     };
     console.log("Payload:", payload);
+
     try {
-      const response = await axios.post("YOUR_API_ENDPOINT", payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Plan saved successfully:", response.data);
+      const response = await addGenarateTripbyAI(payload);
+
+      console.log("Response:", response);
+      return response;
+      // Handle response
     } catch (error) {
-      console.error("Error saving plan:", error);
+      console.error("Error:", error);
     }
   };
-
+  const handleButtonClick = async () => {
+    const result = await handleSavePlan();
+    if (result?.planId) {
+      // Kiểm tra nếu có planId
+      setResponse(result);
+      navigate(`/detail-plan/${result.planId}`); // Chuyển hướng với planId
+    } else {
+      console.error("Plan ID not found in response");
+    }
+  };
   return (
     <div
       onClick={onClick}
-      className={`flex w-full min-w-[360px] max-w-[360px] rounded-[15px] md:min-w-[260px] md:max-w-[240px] lg:min-w-[400px] lg:max-w-[550px] ${isActive ? "bg-[#007AFF]" : "border border-[#C2BFBF] bg-white shadow-lg"} cursor-pointer flex-col gap-2 px-3 pt-2`}
+      className={`flex w-full min-w-[260px] max-w-[260px] rounded-[15px] md:min-w-[260px] md:max-w-[240px] lg:min-w-[300px] lg:max-w-[500px] ${isActive ? "bg-[#007AFF]" : "border border-[#C2BFBF] bg-white shadow-lg"} cursor-pointer flex-col gap-2 px-3 pt-2`}
     >
       {/* Header */}
       <div className="flex w-full justify-between">
         <span
-          className={`${isActive ? "text-white" : "text-black"} text-[15px] font-bold lg:text-[18px] mb-2`}
+          className={`${isActive ? "text-white" : "text-black"} mb-2 text-[15px] font-bold lg:text-[18px]`}
         >
           {suggestion}
         </span>
@@ -75,30 +101,30 @@ function CardRecommendationPlan({
       </div>
 
       {/* Progress Bar */}
-      <div className="h-[10px] w-full rounded-[5px] bg-white border mb-[-10px]">
-        <div className="h-full w-1/3 rounded-[5px] bg-[#6FFFC3]  "></div>
+      <div className="mb-[-10px] h-[10px] w-full rounded-[5px] border bg-white">
+        <div className="h-full w-1/3 rounded-[5px] bg-[#6FFFC3]"></div>
       </div>
 
       {/* Details Section */}
-      <div className="relative flex min-h-fit flex-col gap-2 mb-3 p-5">
+      <div className="relative mb-3 flex min-h-fit flex-col gap-2 p-5">
         {details.map((detail, index) => (
           <div
             key={index}
-            className={`flex items-center ${isActive ? "text-white" : "text-black"} w-full gap-2 text-[14px] `}
+            className={`flex items-center ${isActive ? "text-white" : "text-black"} w-full gap-2 text-[14px]`}
           >
-            <span className="inline-block  w-1/5 text-[12px] lg:w-1/6 lg:text-base mr-2">
+            <span className="mr-2 inline-block w-1/5 text-[12px] lg:w-1/6 lg:text-base">
               {detail.date || "N/A"}
             </span>
             {isActive ? (
-              <MdCircle className="w-4 ml-2"/>
+              <MdCircle className="ml-2 w-4" />
             ) : (
-              <MdCircle className=" w-4 text-[#717171] ml-2" />
+              <MdCircle className="ml-2 w-4 text-[#717171]" />
             )}
-            <div className="flex w-full flex-col ml-2 mt-5 ">
-              <span className="overflow-hidden text-ellipsis text-[13px] font-bold lg:text-base">
+            <div className="ml-2 mt-5 flex w-full flex-col">
+              <span className="overflow-hidden text-ellipsis font-bold lg:text-base">
                 {detail.location || "Activity not provided"}
               </span>
-              <span className="overflow-hidden text-ellipsis text-[13px] lg:text-base">
+              <span className="overflow-hidden text-ellipsis lg:text-sm">
                 {detail.address || "No address provided"}
               </span>
             </div>
@@ -107,7 +133,7 @@ function CardRecommendationPlan({
         <div className="absolute flex h-full w-full flex-row items-center gap-[14px]">
           <div className="inline-block w-1/5 lg:w-1/6"></div>
           <div
-            className={`border-l-[1px] ${isActive ? "border-white" : "border-[#717171]"} h-[92%] border ml-2 mb-11`}
+            className={`border-l-[1px] ${isActive ? "border-white" : "border-[#717171]"} mb-11 ml-2 h-[92%] border`}
           ></div>
           <div className="w-2/3"></div>
         </div>
@@ -115,8 +141,10 @@ function CardRecommendationPlan({
 
       {/* Bottom Action */}
       <div className="bottom-2 right-5 flex w-full justify-end">
-        <button className="flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] mb-2 text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base"
-          onClick={handleSavePlan}>
+        <button
+          className="mb-2 flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base"
+          onClick={handleButtonClick}
+        >
           Chọn
         </button>
       </div>

@@ -5,24 +5,27 @@ import { MdAdd } from 'react-icons/md';
 import image from "../../../assets/images/anh1.jpg"
 import Hue from "../../../assets/images/Hue.jpg"
 import HoiAn from "../../../assets/images/hoian.png"
-import { Avatar } from 'antd';
+// import { Skeleton } from 'antd';
+import { Avatar, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import CardExpense from '../../../components/Card/CardExpense';
 import { getExpense, getMemberExpense } from '../../../services/budget';
+import AvatarDefault from '../../../components/Avatar/AvatarDefault';
 function DetailBudget({ planId }) {
     const [listMyExpense, setListMyExpense] = useState([])
     const [listMember, setListMember] = useState([]);
-
+    const [loading, setLoading] = useState(false);
     const fetchExpense = async () => {
         const pageIndex = 0;
         const pageSize = 5;
         try {
+            setLoading(true);
             const data = await getExpense(planId, pageIndex, pageSize);
             const memberData = await getMemberExpense(planId, pageIndex, pageSize);
-            console.log(data);
+            console.log(memberData.members.data);
             setListMyExpense(data.detailExpense.data);
-            setListMember(memberData.members.data)
-
+            setListMember(memberData.members.data);
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +96,7 @@ function DetailBudget({ planId }) {
                 <div className='w-1/3 h-full flex'>
                     <Pie
                         colors={['#557AFF', '#FF7324']}
-                    // {...config} className="w-full"
+                        {...config} className="w-full"
                     />
                 </div>
             </div>
@@ -124,20 +127,27 @@ function DetailBudget({ planId }) {
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
                     </div>
                     <div className='flex flex-col gap-2'>
-                        {listMyExpense.map((expense) => (
-                            <CardExpense
-                                key={expense.order}
-                                icon={
-                                    <img
-                                        width="28"
-                                        height="28"
-                                        src="https://img.icons8.com/fluency/28/map-pin.png"
-                                        alt="map-pin"
-                                    />
-                                }
-                                expense={expense}
-                            />
-                        ))}
+                        {
+                            loading ? <Skeleton active /> :
+
+                                (
+                                    listMyExpense.map((expense) => (
+                                        <CardExpense
+                                            key={expense.order}
+                                            icon={
+                                                <img
+                                                    width="28"
+                                                    height="28"
+                                                    src="https://img.icons8.com/fluency/28/map-pin.png"
+                                                    alt="map-pin"
+                                                />
+                                            }
+                                            expense={expense}
+                                        />
+                                    ))
+                                )
+                        }
+
                     </div>
                 </div>
                 <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-4 py-3 gap-2'>
@@ -146,17 +156,28 @@ function DetailBudget({ planId }) {
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
                     </div>
                     <hr className='w-[90%] text-[#CCD0D5] mx-auto' />
-                    <div className='w-full max-h-[250px] overflow-y-hidden gap-4 flex flex-col '>
-                        {/* {listMember.map((member) =>
-                            <div className='w-full flex justify-between items-center'>
-                                <div className='flex gap-3 items-center cursor-pointer'>
-                                    <Avatar src={member.avatar} className='w-[50px] h-[50px]'></Avatar>
-                                    <span className='font-medium text-[14px]'>{member.name}</span>
+                    <div className="w-full max-h-[250px] overflow-y-hidden gap-4 flex flex-col">
+                        {loading ? (
+                            // Skeleton loading khi đang tải dữ liệu
+                            <>
+                                <Skeleton active />
+
+
+                            </>
+                        ) : (
+                            // Hiển thị danh sách thành viên khi đã có dữ liệu
+                            listMember.map((member) => (
+                                <div key={member.userName} className="w-full flex justify-between items-center">
+                                    <div className="flex gap-3 items-center cursor-pointer">
+                                        <AvatarDefault src={member.url} className="w-[40px] h-[40px]" />
+                                        <span className="font-medium text-[14px]">{member.userName}</span>
+                                    </div>
+                                    <div className="font-semibold text-[18px]">{member.excess}</div>
                                 </div>
-                                <div className='font-semibold text-[18px]'>{member.price}</div>
-                            </div>
-                        )} */}
+                            ))
+                        )}
                     </div>
+
                 </div>
             </div>
         </div>

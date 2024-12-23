@@ -94,7 +94,7 @@ import axios from "axios";
     <div className="flex h-full w-full flex-col gap-3 px-3 py-3">
       <div className="px-1 text-[18px] font-bold">Lộ trình</div>
       {/* <img src={map} alt="" className="w-full lg:h-2/3 h-[300px] object-cover rounded-lg" /> */}
-      <div>
+      <div >
         {/* <Mapbox
           listAddress={listAddress.filter(
             (address) => address && address.trim() !== "",
@@ -111,58 +111,58 @@ import axios from "axios";
         />
       </div>
       <div className="px-1 text-[18px] font-bold">Chi tiết</div>
-      <div className="flex h-[250px] w-full items-center rounded-lg border border-[#C2BFBF] px-7 shadow-lg lg:gap-14">
+      <div className="flex h-[220px] w-full items-center rounded-lg border border-[#C2BFBF] px-7 shadow-lg lg:gap-14">
         <img
           src={motobrike}
           alt=""
           className="h-[100px] w-[100px] lg:h-[170px] lg:w-[170px] ml-5"
         />
-        <div className="flex flex-col px-2 py-3 lg:w-[60%]">
+        <div className="flex flex-col px-2 py-3 lg:w-[65%]">
           <div className="flex justify-between">
             <div className="flex flex-col justify-start">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Bắt đầu
               </span>
-              <span className="font-bold text-[19px] text-[#616161]">{startPoint}</span>
+              <span className="font-bold text-[15px] text-[#616161]">{startPoint}</span>
             </div>
             <div className="flex w-[200px] flex-col justify-start">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Kết thúc
               </span>
-              <span className="font-bold text-[19px] text-[#616161]">{endPoint}</span>
+              <span className="font-bold text-[14px] text-[#616161]">{endPoint}</span>
             </div>
           </div>
           {/* <hr className="w-[80%] mx-auto text-[#CCD0D5]" /> */}
           <div className="flex justify-between mt-4">
             <div className="flex flex-col justify-start">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Thời gian
               </span>
-              <span className="font-bold text-[19px] text-[#616161]">
+              <span className="font-bold text-[15px] text-[#616161]">
                 {startDate} đến {endDate}
               </span>
             </div>
             <div className="flex w-[200px] flex-col justify-end">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Tổng quãng đường 
               </span>
 
-              <span className="font-bold text-[19px] text-[#616161]">{totalDistance} km</span>
+              <span className="font-bold text-[15px] text-[#616161]">{totalDistance} km</span>
             </div>
           </div>
           {/* <hr className="w-[80%] mx-auto text-[#CCD0D5]" /> */}
           <div className="flex justify-between mt-4">
             <div className="flex flex-col justify-start">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Thành viên
               </span>
-              <span className="font-bold text-[19px] text-[#616161]">Cá nhân</span>
+              <span className="font-bold text-[16px] text-[#616161]">Cá nhân</span>
             </div>
             <div className="flex w-[200px] flex-col justify-end">
-              <span className="text-[20px] font-bold text-[#B3B3B3]">
+              <span className="text-[16px] font-bold text-[#B3B3B3]">
                 Kinh phí
               </span>
-              <span className="font-bold text-[19px] text-[#616161]">{budget}</span>
+              <span className="font-bold text-[1px] text-[#616161]">{budget}</span>
             </div>
           </div>
         </div>
