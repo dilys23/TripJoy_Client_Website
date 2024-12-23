@@ -117,7 +117,11 @@ const CardRecommendationPlan = ({ isActive, onClick }) => {
 
             {/* Nút chọn */}
             <div className="absolute bottom-2 right-5 flex w-full justify-end">
-              <button className="flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] px-2 py-2 text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base">
+              <button className="flex h-[30px] w-[64px] items-center justify-center rounded-md bg-[#FF9864] px-2 py-2 text-[12px] font-bold text-black transition-all duration-200 hover:bg-[#ea8553] lg:text-base"
+               primary
+               to={{
+                 pathname: config.routes.generatePlan,
+               }}>
                 Chọn
               </button>
             </div>

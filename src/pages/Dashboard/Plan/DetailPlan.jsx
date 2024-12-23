@@ -136,19 +136,22 @@ function DetailPlan() {
                 <div className=" flex w-full justify-between items-center">
                     <div className="flex gap-10">
                         <button
-                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh" ? "border-b-4 border-black font-bold" : ""}`}
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh"   ? "text-black font-bold border-b-4 border-black"
+                                : "text-zinc-400"}`}
                             onClick={() => setActiveTab("hanhTrinh")}
                         >
                             Hành trình
                         </button>
                         <button
-                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thuChi" ? "border-b-4 border-black font-bold" : ""}`}
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thuChi" ? "text-black font-bold border-b-4 border-black"
+                                : "text-zinc-400"}`}
                             onClick={() => setActiveTab("thuChi")}
                         >
                             Thu chi
                         </button>
                         <button
-                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thanhVien" ? "border-b-4 border-black font-bold" : ""}`}
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "thanhVien" ? "text-black font-bold border-b-4 border-black"
+                                : "text-zinc-400"}`}
                             onClick={() => setActiveTab("thanhVien")}
                         >
                             Thành viên

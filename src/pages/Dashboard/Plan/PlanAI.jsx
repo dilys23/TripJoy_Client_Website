@@ -34,6 +34,7 @@ function PlanAI() {
   const [budget, setBudget] = useState("");
   const [transport, setTransport] = useState(0);
   const [errors, setErrors] = useState({});
+  const [plan, setPlan] = useState({});
   const handleSelect = (option) => {
     setSelectedMember(option);
   };
@@ -141,7 +142,8 @@ function PlanAI() {
       transport: selectedTopic,
     };
     console.log("Payload sent to API:", plan);
-
+    setPlan(plan);
+    // history.push(config.routes.generatePlan, { plan });
     try {
       localStorage.removeItem(STORAGE_KEY);
       // Sử dụng await để đợi dữ liệu trả về từ API
@@ -152,6 +154,9 @@ function PlanAI() {
       // Lưu kết quả vào localStorage
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fetchedPlans));
       localStorage.setItem('currentPlan', JSON.stringify(plan));
+      
+      // Điều hướng đến trang generatePlan với plan trong state
+      history.push(config.routes.generatePlan, { plan });
 
     } catch (error) {
       console.error("Error in handleFinished:", error);
@@ -447,7 +452,10 @@ function PlanAI() {
               </Button>
               <Button
                 primary
-                to={config.routes.generatePlan}
+                to={{
+                  pathname: config.routes.generatePlan,
+                  state: { plan },
+                }}
                 onClick={handleFinished}
                 className="h-[37px] w-[85px] rounded-lg"
               >
