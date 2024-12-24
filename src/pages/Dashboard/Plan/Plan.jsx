@@ -224,12 +224,12 @@ function Plan() {
         </div>
         <div className=" flex-col gap-1 sm:w-2/5 sm:flex hidden">
           <AddPlan onAddSuccess={() => setIsPlanAdded((prev) => !prev)} />
-          <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-2">NHÓM GỢI Ý</span>
+          {/* <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-2">NHÓM GỢI Ý</span>
           <div className="flex gap-8 lg:flex-row flex-col justify-start mb-2">
             {listRecommendationPlan.slice(0, 2).map((plan) => (
               <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div >

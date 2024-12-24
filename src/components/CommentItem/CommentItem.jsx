@@ -5,7 +5,7 @@ import Tippy from '@tippyjs/react/headless';
 import AvatarDefault from '../Avatar/AvatarDefault';
 import Emotion from '../Emotion';
 import { useEffect, useRef, useState } from 'react';
-import { getReplyComment, likeComment } from '../../services/commentPost';
+import { getReplyComment, likeComment, revokeComment } from '../../services/commentPost';
 
 function CommentItem({
     commentVisible,
@@ -13,7 +13,9 @@ function CommentItem({
     emotions,
     handleEmotionClick,
     onDelete,
-    onSendReply
+    onSendReply,
+    updateComment,
+    onEditComment
 }) {
     const [activeDropdownId, setActiveDropdownId] = useState(null);
     const [isReplyVisible, setIsReplyVisible] = useState(false);
@@ -23,6 +25,7 @@ function CommentItem({
     // const [replyEmotion, setReplyEmotion] = useState({});  // Store emotions for replies
     const dropdownRef = useRef(null);
     const moreButtonRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleDropdownToggle = (id) => {
         if (activeDropdownId === id) {
@@ -48,9 +51,7 @@ function CommentItem({
         };
     }, [activeDropdownId]);
 
-    const dropdownPosition = moreButtonRef.current
-        ? moreButtonRef.current.getBoundingClientRect()
-        : { top: 0, left: 0 };
+
 
     const handleDelete = () => {
         onDelete(item.commentId);
@@ -71,7 +72,7 @@ function CommentItem({
         if (!visibleReplies[itemId] && commentId) {
             try {
                 const res = await getReplyComment(commentId);
-                console.log(res.comments.data);
+                // console.log(res.comments.data);
                 setListReplyComment(res.comments.data);
             } catch (error) {
                 console.log(error);
@@ -91,7 +92,6 @@ function CommentItem({
     };
 
     const handleEmotionSelect = async (emotion, replyId) => {
-
         const likeData = {
             LikeComment: {
                 Emotion: Number(emotion),
@@ -99,13 +99,53 @@ function CommentItem({
         };
         try {
             const res = await likeComment(replyId, likeData);
-            console.log(res);
+            setListReplyComment((prevList) =>
+                prevList.map((reply) =>
+                    reply.commentId === replyId
+                        ? { ...reply, emotionByMe: emotion }
+                        : reply
+                )
+            );
         } catch (error) {
             console.log(error);
         }
 
     };
+    const handleRevokeEmotion = async (commentId) => {
+        try {
+            const res = await revokeComment(commentId);
+            if (res) {
+                updateComment(commentId, { emotionByMe: null });
+            }
+        } catch (error) {
+            console.error('Failed to revoke emotion:', error);
+        }
+    };
 
+    const handleRevokeReplyComment = async (replyId) => {
+        try {
+
+            const res = await revokeComment(replyId);
+            console.log(res);
+            setListReplyComment((prevList) =>
+                prevList.map((reply) =>
+                    reply.commentId === replyId
+                        ? { ...reply, emotionByMe: null }
+                        : reply
+                )
+            );
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // const handleEditComment = async = (commentId) => {
+    //     try {
+
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     return (
         <div className='w-full h-fit flex gap-3'>
             <AvatarDefault src="" className="w-[30px] h-[30px]" />
@@ -113,24 +153,60 @@ function CommentItem({
                 <div className='flex gap-2 items-center'>
                     <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
                         <span className='text-[13px] font-semibold'>{item.userName}</span>
-                        <span className='text-[12px]'>{item.content}</span>
+                        {isEditing ? (
+                            // Hiển thị input nếu đang ở chế độ chỉnh sửa
+                            <div className="flex items-center gap-2">
+                                <input
+                                    value={replyText}
+                                    onChange={(e) => setReplyText(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+
+                                            setIsEditing(false);
+                                        }
+                                    }}
+                                    type="text"
+                                    autoFocus
+                                    className="bg-transparent border-gray-400 w-full outline-none text-[12px]"
+                                />
+                                <img
+                                    onClick={() => {
+                                        // handleSendReply();
+                                        setIsEditing(false);
+                                    }}
+                                    width="20"
+                                    height="20"
+                                    src="https://img.icons8.com/arcade/64/sent.png"
+                                    alt="sent"
+                                    className="cursor-pointer"
+                                />
+                            </div>
+                        ) : (
+
+                            <span
+                                className="text-[12px] cursor-pointer"
+                                onDoubleClick={() => setIsEditing(true)}
+                            >
+                                {item.content}
+                            </span>
+                        )}
                     </div>
+
                     <div className='relative'>
-                        <MdMoreHoriz
-                            className='cursor-pointer'
-                            onClick={() => handleDropdownToggle(item.commentId)}
-                            ref={moreButtonRef}
-                        />
+                        <div ref={moreButtonRef}>
+                            <MdMoreHoriz
+                                className='cursor-pointer'
+                                onClick={() => handleDropdownToggle(item.commentId)}
+                            />
+                        </div>
                         {activeDropdownId === item.commentId && (
                             <div
-                                className="absolute bg-white shadow-lg rounded-md mt-1 w-[100px]"
-                                style={{
-                                    top: `${dropdownPosition.top + dropdownPosition.height + 5}px`,
-                                    left: `${dropdownPosition.left}px`
-                                }}
+                                className="absolute top-3 z-50 bg-white shadow-lg rounded-md mt-1 w-[100px]"
                             >
                                 <ul>
-                                    <li className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
+                                    <li
+                                        onClick={() => setIsEditing(true)}
+                                        className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
                                     <li
                                         onClick={handleDelete}
                                         className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Xóa</li>
@@ -139,6 +215,11 @@ function CommentItem({
                         )}
                     </div>
                 </div>
+                {isEditing &&
+                    <span className='text-[9px] nunito-text'>Nhấn Esc để
+                        <span
+                            onClick={() => setIsEditing(false)}
+                            className='text-[#007AFF] font-semibold cursor-pointer'> huỷ</span></span>}
                 <div className='flex gap-2 items-center'>
                     <span className='text-[9px]'>{formatDistanceToNow(
                         new Date(new Date(item.createdAt).setHours(new Date(item.createdAt).getHours() + 7)),
@@ -161,7 +242,9 @@ function CommentItem({
                             item.emotionByMe === null ?
                                 <span className='hover:underline text-[9px] cursor-pointer'>Thích</span>
                                 :
-                                <span role="img" aria-label="current-emotion" className="text-[13px] cursor-pointer">
+                                <span
+                                    onClick={() => handleRevokeEmotion(item.commentId)}
+                                    role="img" aria-label="current-emotion" className="text-[13px] cursor-pointer">
                                     {emotions.find((emotion) => emotion.label === String(item.emotionByMe))?.emoji}
                                 </span>
                         }
@@ -203,11 +286,13 @@ function CommentItem({
                                         )}
                                     >
                                         {reply.emotionByMe ? (
-                                            <span className="text-[13px] cursor-pointer">
+                                            <span
+                                                onClick={() => handleRevokeReplyComment(reply.commentId)}
+                                                className="text-[13px] cursor-pointer w-fit">
                                                 {emotions.find((emotion) => emotion.label === String(reply.emotionByMe))?.emoji}
                                             </span>
                                         ) : (
-                                            <span className='hover:underline text-[9px] cursor-pointer'>Thích</span>
+                                            <span className='hover:underline text-[9px] cursor-pointer w-fit'>Thích</span>
                                         )}
                                     </Tippy>
                                 </div>
@@ -223,6 +308,11 @@ function CommentItem({
                             <input
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSendReply();
+                                    }
+                                }}
                                 type="text" placeholder='Viết phản hồi...'
                                 className='bg-transparent w-full outline-none text-[10px]' />
                             <img

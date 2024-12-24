@@ -34,10 +34,10 @@ const revokePost = async (id) => {
 };
 
 // get user by like post (emotion)
-const getUserLikePost = async (id, idLike) => {
+const getUserLikePost = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`post-service/posts/${id}/like/${idLike}`, {
+        const res = await api.get(`post-service/posts/${id}/like`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -49,4 +49,21 @@ const getUserLikePost = async (id, idLike) => {
         throw error;
     }
 };
-export { likePost, revokePost, getUserLikePost }
+const getUserLikePostByIcon = async (id, emotion) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`post-service/posts/${id}/like`, {
+            params: {
+                emotion
+            },
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data
+    } catch (error) {
+        console.log('error: ', error);
+    }
+}
+export { likePost, revokePost, getUserLikePost, getUserLikePostByIcon }

@@ -59,7 +59,7 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
         try {
             if (message.trim() && message.length > 0 && currentRoom) {
                 const res = await sendMessages(currentRoom.roomId, message);
-                await connection.invoke("SendMessage", friend.id, message);
+                await connection.invoke("SendMessage", friend.id, message, friend.userName, friend.avatarUrl);
                 setMessage('');
                 await fetchMessage();
             }
@@ -75,7 +75,7 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
                     <img src={avatar} className="rounded-full w-10 h-10"></img>
                     <div className="flex flex-col">
                         <span className="text-[14px] font-bold">{friend?.userName}</span>
-                        <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span>
+                        {/* <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span> */}
                     </div>
                 </div>
                 <MdClose

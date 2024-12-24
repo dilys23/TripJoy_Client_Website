@@ -113,11 +113,16 @@ function DetailPlan() {
                             <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
                                 <BsShare />
                             </button>
-                            <button
-                                onClick={() => setOpenModalEditPlan(true)}
-                                className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                                <MdOutlineSettings />
-                            </button>
+                            {
+                                role === 0
+                                &&
+                                <button
+                                    onClick={() => setOpenModalEditPlan(true)}
+                                    className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                                    <MdOutlineSettings />
+                                </button>
+                            }
+
                         </div>
                         <div className="absolute bottom-4 left-5 flex flex-col gap-2">
                             <span className="text-white md:text-[35px] text-[23px] font-extrabold nunito-text">{plan?.title}</span>
@@ -180,7 +185,7 @@ function DetailPlan() {
                 <div className="mt-4">
                     {activeTab === "hanhTrinh" && (
                         <div>
-                            <DetailJourney planId={planId} plan={plan} planLocation={planLocation} listMember={listMember} onSuccess={refreshPlanLocations}></DetailJourney>
+                            <DetailJourney role={role} planId={planId} plan={plan} planLocation={planLocation} listMember={listMember} onSuccess={refreshPlanLocations}></DetailJourney>
                         </div>
                     )}
                     {activeTab === "thuChi" && (
@@ -198,7 +203,7 @@ function DetailPlan() {
 
             </div>
             {contextHolder}
-            <Map plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[630px] rounded-md lg:flex pt-2 hidden sticky top-[60px]" ></Map>
+            <Map role={role} plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[630px] rounded-md lg:flex pt-2 hidden sticky top-[60px]" ></Map>
             {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
             {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
             {openModalStartPlan && <ModalStartPlan planId={planId} handleClose={() => setOpenModalStartPlan(false)} onSuccess={refreshPlanLocations} openNotificationWithIcon={openNotificationWithIcon}></ModalStartPlan>}

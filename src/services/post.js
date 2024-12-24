@@ -15,6 +15,21 @@ const createPost = async (formData) => {
         throw error
     }
 };
+// Create a post append
+const createPostPlan = async (formData) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`post-service/posts/plan`, formData, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+};
 // get post by id
 const getPostById = async (id) => {
     try {
@@ -32,10 +47,14 @@ const getPostById = async (id) => {
 }
 
 // get post my home feed
-const getPostHomeFeed = async () => {
+const getPostHomeFeed = async (pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
         const res = await api.get(`post-service/posts/homefeed`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -63,7 +82,7 @@ const editPost = async (id, formData) => {
 const deletePost = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`post-service/posts/${id}`, {
+        const res = await api.delete(`post-service/posts/${id}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -74,4 +93,4 @@ const deletePost = async (id) => {
         throw error
     }
 }
-export { createPost, getPostById, getPostHomeFeed, editPost, deletePost }
+export { createPost, getPostById, getPostHomeFeed, editPost, deletePost, createPostPlan }

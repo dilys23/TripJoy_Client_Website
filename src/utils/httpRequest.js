@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.18.25.102:7000/",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  // withCredentials: true
+    baseURL: 'http://10.18.25.110:7000/',
+    headers: {
+        "Content-Type": "application/json"
+    },
+    // withCredentials: true
 });
 
 export const get = async (path, options = {}) => {

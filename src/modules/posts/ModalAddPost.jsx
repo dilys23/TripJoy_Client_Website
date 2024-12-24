@@ -2,42 +2,92 @@ import { MdAutoDelete, MdCameraAlt, MdClose, MdDelete, MdGroups, MdLocationOn, M
 import avatarDefaut from "../../assets/images/avatarDefault.png"
 import TextArea from "../../components/Input/TextArea";
 import { getMyPlanRequest } from "../../services/plan";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Select, Spin } from "antd";
 import { FcAddImage } from "react-icons/fc";
 import Button from "../../components/Button/Button"
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { BsFileEarmarkImage } from "react-icons/bs";
-import { createPost } from "../../services/post";
+import { createPost, createPostPlan } from "../../services/post";
 import { notification } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
+import { UserContext } from "../../contexts/UserContext";
 
-function ModalAddPost({ handleClose }) {
+function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
+    const { user } = useContext(UserContext);
     const [namePlan, setNamePlan] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [sharePlan, setSharePlan] = useState(false);
+    // const [sharePlan, setSharePlan] = useState(false);
     const [planChosen, setPlanChosen] = useState(null);
     const fileInputRef = useRef(null);
-
-    const [content, setContent] = useState();
+    const [isPlanChosenError, setIsPlanChosenError] = useState(false);
+    const [content, setContent] = useState('');
     const [openFieldAddImage, setOpenFieldAddImage] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
     const [showImages, setShowImage] = useState(false);
     const [showTrip, setShowTrip] = useState(false);
 
 
-    const [api, contextHolder] = notification.useNotification();
-    const openNotificationWithIcon = (type) => {
-        api[type]({
-            message: 'Thông báo',
-            description: 'Tạo bài đăng thành công',
-            icon: <SmileOutlined
-                style={{
-                    color: '#108ee9',
-                }}
-            />,
-        });
+    // const [api, contextHolder] = notification.useNotification();
+    // const openNotificationWithIcon = (type) => {
+    //     api[type]({
+    //         message: 'Thông báo',
+    //         description: 'Tạo bài đăng thành công',
+    //         icon: <SmileOutlined
+    //             style={{
+    //                 color: '#108ee9',
+    //             }}
+    //         />,
+    //     });
+    // };
+    useEffect(() => {
+
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+    const formatDateRange = (startDate, endDate) => {
+        const format = (dateString) => {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        };
+
+        return `${format(startDate)} - ${format(endDate)}`;
+    };
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(amount) + 'đ';
+    };
+
+    const handleButtonClick = () => {
+        if (planChosen) {
+            setShowTrip((prev) => !prev);
+        } else {
+
+            setIsPlanChosenError(true);
+            setTimeout(() => {
+                setIsPlanChosenError(false);
+            }, 1500);
+        }
+    };
+    const handleImageButtonClick = () => {
+        if (planChosen) {
+            setShowImage((prev) => !prev);
+        } else {
+            setIsPlanChosenError(true);
+            setTimeout(() => {
+                setIsPlanChosenError(false);
+            }, 1500);
+        }
     };
     // IMAGE UPLOAD
 
@@ -60,22 +110,102 @@ function ModalAddPost({ handleClose }) {
             console.error("File input ref is null");
         }
     };
+    //  IMAGE FROM PLAN
+    useEffect(() => {
+        async function fetchImageFiles() {
+            if (Array.isArray(planChosen?.images) && showImages) {
+                console.log(planChosen.images);
+                const files = await Promise.all(
+                    planChosen.images.map(async (image) => {
+                        const parts = image.url.split("/");
+                        const fileName = parts[parts.length - 1];
+                        const response = await fetch(image.url);
+                        const blob = await response.blob();
+                        const fileExtension = fileName.split('.').pop().toLowerCase();
+                        let mimeType = 'image/jpeg';
+                        if (fileExtension === 'png') {
+                            mimeType = 'image/png';
+                        } else if (fileExtension === 'gif') {
+                            mimeType = 'image/gif';
+                        } else if (fileExtension === 'jpg' || fileExtension === 'jpeg') {
+                            mimeType = 'image/jpeg';
+                        }
 
+                        return new File([blob], fileName, { type: mimeType });
+                    })
+                );
+                console.log(files);
+                setImageFiles(files);  // Set the files here
+            }
+        }
+
+        fetchImageFiles();
+    }, [planChosen?.images, showImages]);
+
+
+
+
+    const handleSelect = (index) => {
+        setSelectedImages((prevSelected) =>
+            prevSelected.includes(index)
+                ? prevSelected.filter((i) => i !== index) // Deselect
+                : [...prevSelected, index] // Select
+        );
+    };
     // ADD POST NORMAL (WITHOUT PLAN)
     const handleAddPostNormal = async () => {
         try {
             setLoading(true);
             const formData = new FormData();
-            formData.append('Post.Content', content);
-            if (selectedImages.length > 0) {
-                selectedImages.forEach((image, index) => {
-                    formData.append(`Post.Images[${index}]`, image);
-                });
+
+            if (planChosen) {
+                formData.append('PlanPost.Content', content);
+                if (selectedImages.length > 0) {
+                    selectedImages.forEach((image, index) => {
+                        formData.append(`PlanPost.Images[${index}]`, image);
+                    });
+                }
+                formData.append('PlanPost.PlanId', planChosen.id);
+                formData.append('PlanPost.PlanStartDate', planChosen.startDate);
+                formData.append('PlanPost.PlanEndDate', planChosen.endDate);
+                formData.append('PlanPost.Budget', planChosen.estimatedBudget);
+                formData.append('PlanPost.ProvinceStart.ProvinceId', planChosen.provinceStart.provinceId);
+                formData.append('PlanPost.ProvinceStart.ProvinceName', planChosen.provinceStart.provinceName);
+                formData.append('PlanPost.ProvinceEnd.ProvinceId', planChosen.provinceEnd.provinceId);
+                formData.append('PlanPost.ProvinceEnd.ProvinceName', planChosen.provinceEnd.provinceName);
+                formData.append('PlanPost.Vehicle', planChosen.vehicle);
+                if (showTrip) {
+                    planChosen.locations.forEach((location, index) => {
+                        formData.append(`PlanPost.PostPlanLocations[${index}].LocationId`, location.id);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Latitude`, location.latitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Longitude`, location.longitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Order`, location.order);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Name`, location.name);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Address`, location.address);
+                    });
+                }
+                console.log(planChosen);
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
+                // const response = await createPostPlan(formData);
+                // console.log(response);
+            } else {
+                formData.append('Post.Content', content);
+                if (selectedImages.length > 0) {
+                    selectedImages.forEach((image, index) => {
+                        formData.append(`Post.Images[${index}]`, image);
+                    });
+                }
+                const res = await createPost(formData);
+                console.log(res);
             }
-            const res = await createPost(formData);
-            console.log(res);
-            openNotificationWithIcon('success');
-            handleClose();
+
+            // handleClose();
+            // openNotificationWithIcon('success', 'Thông báo', 'Tạo bài đăng thành công !', true);
+            // if (onRefresh) {
+            //     onRefresh();
+            // }
             setLoading(false);
         } catch (error) {
             console.log('error', error)
@@ -99,10 +229,26 @@ function ModalAddPost({ handleClose }) {
         fetchPlan();
     }, [])
     const handleChangePlan = (value) => {
+        if (value === null) {
+            setShowImage(false)
+            setShowTrip(false)
+            setPlanChosen(null);
+            return;
+        }
+        // Tìm kế hoạch phù hợp
         const selectedPlan = namePlan.find(plan => plan.id === value);
         setPlanChosen(selectedPlan);
-        console.log(selectedPlan);
-    }
+    };
+    // const handleAddPlanAppendPlan = async () => {
+    //     try {
+
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+
     return (
         <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
@@ -111,22 +257,22 @@ function ModalAddPost({ handleClose }) {
             // onClick={handleClose}
             >
                 <div
-                    className="relative sm:w-[550px] w-4/5 h-fit pb-6 flex  border-2 border-none rounded-[8px] shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3 gap-2"
+                    className="relative sm:w-[550px] overflow-y-auto w-4/5 h-fit flex  border-2 border-none rounded-[8px] shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center sm:px-3 py-3"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {contextHolder}
 
-                    <div className="absolute top-5 right-3">
+
+                    <div className="absolute top-4 right-3">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
-                    <div className="w-full justify-center flex flex-col gap-1 h-[40px] items-center">
+                    <div className="w-full justify-center flex flex-col h-fit pt-2 items-center">
                         <span className="text-xl font-bold"> Tạo bài viết</span>
                     </div>
                     <div className="w-full flex flex-col gap-2 px-3 py-0">
                         <div className="w-full justify-between flex items-center">
                             <div className="flex gap-2">
                                 <img src={avatarDefaut} alt="" className="w-9 h-9 rounded-full" />
-                                <span className="text-[15px] nunito-text font-semibold">Bạch Dương</span>
+                                <span className="text-[15px] nunito-text font-semibold">{user?.profile.userName}</span>
                             </div>
 
                         </div>
@@ -208,13 +354,13 @@ function ModalAddPost({ handleClose }) {
                             }
                             {/* Thêm plan vào bài đăng nhé */}
                             <>
-
-                                <div className="flex w-full gap-3 mt-3 ">
-                                    <div className="w-9/12">
+                                <div className="flex w-full gap-3 mt-2 ">
+                                    <div className="sm:w-9/12 w-8/12 relative">
                                         <Select
                                             showSearch
                                             placeholder="Hãy chọn chuyến đi mà bạn muốn chia sẻ !"
                                             loading={loading}
+                                            allowClear
                                             value={planChosen ? planChosen.id : undefined}
                                             onChange={handleChangePlan}
                                             filterOption={(input, option) =>
@@ -230,19 +376,19 @@ function ModalAddPost({ handleClose }) {
                                                 </Select.Option>
                                             ))}
                                         </Select>
+                                        {isPlanChosenError && <span className=" absolute left-0 top-9 text-[9px] text-red-500 leading-[9px]">Vui lòng chọn chuyến đi!</span>}
                                     </div>
-
-                                    <div className="w-3/12 flex gap-1">
+                                    <div className="sm:w-3/12 w-4/12 flex gap-1">
                                         <Tippy content="Lộ trình">
                                             <button
-                                                onClick={() => setShowTrip((prev) => !prev)}
+                                                onClick={handleButtonClick}
                                                 className="w-8 h-8 border border-[#17A1fa] rounded-[8px] flex justify-center items-center">
                                                 <MdLocationOn className="text-[#f24822]" />
                                             </button>
                                         </Tippy>
                                         <Tippy content="Chia sẻ ảnh">
                                             <button
-                                                onClick={() => setShowImage((prev) => !prev)}
+                                                onClick={handleImageButtonClick}
                                                 className="w-8 h-8 border border-[#17A1fa] rounded-[8px] flex justify-center items-center">
                                                 <FcAddImage className="text-[#f24822]" />
                                             </button>
@@ -269,25 +415,32 @@ function ModalAddPost({ handleClose }) {
                                                 <div className="flex gap-3 w-full">
                                                     <div className="w-1/2 flex flex-col gap-1">
                                                         <span className="text-[13px] font-bold">Điểm bắt đầu</span>
-                                                        <input type="text" className="outline-none border border-[#b3b3b3] rounded w-full  h-[30px]" />
+                                                        <input
+                                                            value={planChosen.provinceStart.provinceName}
+                                                            type="text" className="outline-none border border-[#b3b3b3] rounded w-full text-[13px] h-[30px] px-2" />
                                                     </div>
                                                     <div className="w-1/2 flex flex-col  gap-1">
                                                         <span className="text-[13px] font-bold">Điểm kết thúc</span>
-                                                        <input type="text" className="outline-none border border-[#b3b3b3] rounded w-full h-[30px]" />
+                                                        <input
+                                                            value={planChosen.provinceEnd.provinceName}
+                                                            type="text" className="outline-none border border-[#b3b3b3] rounded w-full h-[30px] text-[13px] px-2" />
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-3 w-full">
                                                     <div className="w-1/2 flex flex-col gap-1">
                                                         <span className="text-[13px] font-bold">Thời gian</span>
-                                                        <input type="text" className="outline-none border border-[#b3b3b3] rounded w-full h-[30px]" />
+                                                        <input
+                                                            value={formatDateRange(planChosen.startDate, planChosen.endDate)}
+                                                            type="text" className="outline-none border border-[#b3b3b3] px-1 rounded text-[13px] w-full h-[30px]" />
                                                     </div>
                                                     <div className="w-1/2 flex flex-col gap-1">
                                                         <span className="text-[13px] font-bold">Tổng chi phí</span>
                                                         <input
                                                             type="text"
                                                             className="outline-none border border-[#b3b3b3] rounded w-full h-[30px] text-[13px] px-2"
-                                                            value={planChosen.estimatedBudget}
-                                                            readOnly />
+                                                            value={planChosen?.estimatedBudget ? formatCurrency(planChosen.estimatedBudget) : ''}
+                                                        // readOnly
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -302,7 +455,7 @@ function ModalAddPost({ handleClose }) {
                                                     <span className="text-[13px] font-bold">Phương tiện</span>
                                                     <ul className="flex gap-1 flex-wrap">
                                                         {
-                                                            planChosen.vehicle === 1 &&
+                                                            planChosen.vehicle === 0 &&
                                                             <li
                                                                 className={`flex border justify-center items-center border-[#E3E6E8] p-2 rounded-xl shadow-md cursor-pointer
                                                             }`}
@@ -311,7 +464,7 @@ function ModalAddPost({ handleClose }) {
                                                             </li>
                                                         }
                                                         {
-                                                            planChosen.vehicle === 2 &&
+                                                            planChosen.vehicle === 1 &&
                                                             <li
                                                                 className={`flex border border-[#E3E6E8]  p-2 rounded-xl shadow-md cursor-pointer 
                                                             }`}
@@ -320,7 +473,7 @@ function ModalAddPost({ handleClose }) {
                                                             </li>
                                                         }
                                                         {
-                                                            planChosen.vehicle === 3 &&
+                                                            planChosen.vehicle === 2 &&
                                                             <li
                                                                 className={`flex border border-[#E3E6E8]  p-2 rounded-xl shadow-md cursor-pointer 
                                                             }`}
@@ -330,7 +483,7 @@ function ModalAddPost({ handleClose }) {
                                                         }
 
                                                         {
-                                                            planChosen.vehicle === 4 &&
+                                                            planChosen.vehicle === 3 &&
                                                             <li
                                                                 className={`flex border border-[#E3E6E8]  p-2 rounded-xl shadow-md cursor-pointer 
                                                             }`}
@@ -339,7 +492,7 @@ function ModalAddPost({ handleClose }) {
                                                             </li>
                                                         }
                                                         {
-                                                            planChosen.vehicle === 5 &&
+                                                            planChosen.vehicle === 4 &&
                                                             <li
                                                                 className={`flex border border-[#E3E6E8]  p-2 rounded-xl shadow-md cursor-pointer 
                                                             }`}
@@ -356,17 +509,48 @@ function ModalAddPost({ handleClose }) {
 
                                     <div className="flex w-full gap-3">
                                         {
-                                            showTrip &&
-                                            <div className="w-4/12 flex flex-col gap-2">
+                                            planChosen && showTrip &&
+                                            <div className="w-5/12 flex flex-col gap-2">
                                                 <span className="text-[13px] font-bold">Lộ trình</span>
-
+                                                <div className="flex flex-col w-full">
+                                                    {planChosen.locations.slice(0, 3).map((location) => (
+                                                        <div key={location.id} className="flex w-full gap-2">
+                                                            <div className="circle  w-[15px] "></div>
+                                                            <div className="flex flex-col w-10/12">
+                                                                <span className="text-[12px] font-semibold">{location.name}</span>
+                                                                <span className="text-[10px] truncate w-full">{location.address}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    {planChosen.locations.length > 3 && (
+                                                        <div className="text-[12px] text-gray-500">...</div>
+                                                    )}
+                                                </div>
                                             </div>
                                         }
                                         {
                                             showImages &&
-                                            <div className="w-8/12 flex flex-col">
+                                            <div className="w-7/12 flex flex-col">
                                                 <span className="text-[13px] font-bold">Ảnh</span>
-                                                <div className="h-[120px] flex-wrap border border-[#b3b3b3] rounded w-full"></div>
+                                                <div className="h-[120px] flex-wrap border border-[#b3b3b3] rounded w-full flex gap-3 px-2 py-2 overflow-hidden">
+
+
+                                                    {imageFiles.map((file, index) => (
+                                                        <div key={index} className="relative ">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedImages.includes(index)}
+                                                                onChange={() => handleSelect(index)}
+                                                                className="absolute top-1 left-1"
+                                                            />
+                                                            <img
+                                                                src={URL.createObjectURL(file)}
+                                                                alt="Plan"
+                                                                className="w-[50px] h-[50px] object-cover rounded"
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         }
                                     </div>
@@ -374,12 +558,15 @@ function ModalAddPost({ handleClose }) {
                             </>
 
                             <Button
+                                disabled={!content.trim()}
                                 onClick={handleAddPostNormal}
-                                primary className="rounded mt-5">Đăng</Button>
+                                primary className="rounded mt-0">Đăng</Button>
                         </div>
                     </div>
                 </div>
+                {/* {contextHolder} */}
             </div>
+
         </>
     );
 }
