@@ -5,11 +5,11 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import { MdCheckCircleOutline, MdClose, MdLocationOn } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
+import { FrownOutlined, SmileOutlined } from "@ant-design/icons";
 import { notification } from "antd";
-import locationProvinces from "./locations.json"
-import dayjs from 'dayjs';
-import 'leaflet-routing-machine';
+import locationProvinces from "./locations.json";
+import dayjs from "dayjs";
+import "leaflet-routing-machine";
 import { addPlanLocation } from "../../services/planLocation";
 const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
@@ -17,37 +17,47 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
   const [marker, setMarker] = useState(null);
   const [locations, setLocations] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Hiển thị dropdown
-  const [province, setProvince] = useState('');
-  const [coordinates, setCoordinates] = useState({ latitude: 16.054, longitude: 108.202 });
+  const [province, setProvince] = useState("");
+  const [coordinates, setCoordinates] = useState({
+    latitude: 16.054,
+    longitude: 108.202,
+  });
   const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   console.log(role);
   const [formData, setFormData] = useState({
-    Longitude: '',
-    Latitude: '',
-    Name: '',
-    Address: '',
-    EstimatedStartDate: plan?.estimatedStartDate ? dayjs(plan.estimatedStartDate).format('YYYY-MM-DD') : null
-  })
+    Longitude: "",
+    Latitude: "",
+    Name: "",
+    Address: "",
+    EstimatedStartDate: plan?.estimatedStartDate
+      ? dayjs(plan.estimatedStartDate).format("YYYY-MM-DD")
+      : null,
+  });
 
-  const openNotificationWithIcon = (type, message, description, isHappy = false) => {
+  const openNotificationWithIcon = (
+    type,
+    message,
+    description,
+    isHappy = false,
+  ) => {
     const icon = isHappy ? (
       <SmileOutlined
         style={{
-          color: '#108ee9',
+          color: "#108ee9",
         }}
       />
     ) : (
       <FrownOutlined
         style={{
-          color: '#108ee9',
+          color: "#108ee9",
         }}
       />
     );
     api[type]({
-      message: message || 'Thông báo',
-      description: description || 'Vui lòng điền đủ thông tin.',
+      message: message || "Thông báo",
+      description: description || "Vui lòng điền đủ thông tin.",
       icon: icon,
     });
   };
@@ -57,17 +67,18 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
     if (plan) {
       const provinceName = plan?.provinceEnd?.provinceName;
       setProvince(provinceName);
-      const location = locationProvinces.find((loc) => loc.name === provinceName);
+      const location = locationProvinces.find(
+        (loc) => loc.name === provinceName,
+      );
       if (location) {
         setCoordinates({
           latitude: location.latitude,
           longitude: location.longitude,
         });
       }
-
     }
-  }, [plan])
-
+  }, [plan]);
+  console.log("coordinates", coordinates);
   useEffect(() => {
     const map = L.map("map", {
       center: [coordinates.latitude, coordinates.longitude],
@@ -84,10 +95,34 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         position: "bottomleft",
       })
       .addTo(map);
-    planLocation?.forEach((location) => {
+    planLocation?.forEach((location, index) => {
       const { latitude, longitude, locationName } = location;
-      // console.log(location);
-      const iconHtml = ReactDOMServer.renderToStaticMarkup(<MdLocationOn style={{ fontSize: '35px', color: 'red' }} />);
+      const iconHtml = ReactDOMServer.renderToStaticMarkup(
+        <div style={{ position: "relative", textAlign: "center" }}>
+          <MdLocationOn style={{ fontSize: "35px", color: "red" }} />
+          <div
+            style={{
+              position: "absolute",
+              top: "10%",
+              left: "80%",
+              transform: "translate(-50%, -50%)",
+              color: "white",
+              fontSize: "10px",
+              fontWeight: "bold",
+              // padding: "5px",
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+              borderRadius: "100px",
+              cursor: "pointer",
+              // userSelect: "none",
+              width: "15px",
+              height: "15px",
+
+            }}
+          >
+            {index + 1}
+          </div>
+        </div>
+      );
 
       const customIcon = L.divIcon({
         className: "custom-marker-icon",
@@ -103,31 +138,50 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
 
     // Vẽ đường đi nếu có nhiều hơn 1 điểm
     if (planLocation?.length > 1) {
-      const waypoints = planLocation.map(location => L.latLng(location.latitude, location.longitude));
-      // console.log(waypoints);
+      const waypoints = planLocation.map((location) =>
+        L.latLng(location.latitude, location.longitude),
+      );
+      const validWaypoints = [];
+
+      console.log("waypoints", waypoints);
+      console.log(waypoints);
+
+      waypoints.forEach((point) => {
+        console.log("point:::", point);
+        if (
+          point.lat >= 8.179 &&
+          point.lat <= 23.393 &&
+          point.lng >= 102.144 &&
+          point.lng <= 109.465
+        ) {
+          validWaypoints.push(point);
+        }
+      });
+
+      // console.log("Valid Waypoints:", validWaypoints);
+
       try {
         const routingControl = L.Routing.control({
-          waypoints: waypoints,
+          waypoints: validWaypoints,
           createMarker: () => null,
           routeWhileDragging: false,
           lineOptions: {
-            styles: [{ color: "red", opacity: 0.7, weight: 4 }],
+            styles: [{ color: "red", opacity: 0.7, weight: 3 }],
           },
         }).addTo(map);
 
-        routingControl.on('routesfound', function (e) {
+        routingControl.on("routesfound", function (e) {
           // console.log('Route found:', e.routes[0]);
         });
 
-        routingControl.on('routingerror', function (e) {
+        routingControl.on("routingerror", function (e) {
           // console.error('Routing error:', e);
           // openNotificationWithIcon('error', 'Lỗi định tuyến', 'Không thể tìm thấy tuyến đường.');
         });
       } catch (error) {
-        console.error('Lỗi khi tạo Routing Control:', error);
+        console.error("Lỗi khi tạo Routing Control:", error);
       }
     }
-
 
     const existingMarkers = new Set();
     const markersMap = new window.Map();
@@ -157,7 +211,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
     try {
       // Gọi API ngược để lấy thông tin địa chỉ
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
       );
 
       if (response.data) {
@@ -198,28 +252,25 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
   };
 
   // SEARCH
-  const handleSearch = useCallback(
-    async (query) => {
-      if (!query.trim()) {
-        setLocations([]);
-        setIsDropdownVisible(false);
-        return;
-      }
+  const handleSearch = useCallback(async (query) => {
+    if (!query.trim()) {
+      setLocations([]);
+      setIsDropdownVisible(false);
+      return;
+    }
 
-      try {
-        // Gọi API Geocoding của OpenStreetMap (Nominatim) với giới hạn tìm kiếm trong Việt Nam
-        const response = await axios.get(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=VN`
-        );
+    try {
+      // Gọi API Geocoding của OpenStreetMap (Nominatim) với giới hạn tìm kiếm trong Việt Nam
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=VN`,
+      );
 
-        setLocations(response.data); // Lưu danh sách kết quả
-        setIsDropdownVisible(true); // Hiển thị dropdown
-      } catch (error) {
-        console.error("Lỗi khi tìm kiếm địa điểm:", error);
-      }
-    },
-    []
-  );
+      setLocations(response.data); // Lưu danh sách kết quả
+      setIsDropdownVisible(true); // Hiển thị dropdown
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm địa điểm:", error);
+    }
+  }, []);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -232,14 +283,12 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
     const query = e.target.value;
     setSearchQuery(query);
 
-
     if (query.trim()) {
       setIsDropdownVisible(true);
     } else {
       setIsDropdownVisible(false);
     }
   };
-
 
   const handleLocationSelect = (location) => {
     const { lat, lon, display_name } = location;
@@ -271,14 +320,12 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
 
     setSearchQuery(display_name); // Cập nhật giá trị input
     setIsDropdownVisible(false); // Ẩn dropdown
-
   };
   useEffect(() => {
     if (mapInstance) {
       mapInstance.setView([coordinates.latitude, coordinates.longitude], 12);
     }
   }, [coordinates]);
-
 
   const handleClearSearch = () => {
     setSearchQuery("");
@@ -291,7 +338,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
     const { value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      EstimatedStartDate: dayjs(value).format('YYYY-MM-DD'),
+      EstimatedStartDate: dayjs(value).format("YYYY-MM-DD"),
     }));
   };
 
@@ -299,7 +346,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
     const { Longitude, Latitude, Name, Address, EstimatedStartDate } = formData;
     console.log("formData", formData);
     if (!Longitude || !Latitude || !Name || !Address || !EstimatedStartDate) {
-      openNotificationWithIcon('info', undefined, undefined, false);
+      openNotificationWithIcon("info", undefined, undefined, false);
       return;
     }
     setLoading(true);
@@ -310,93 +357,110 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         Name: formData.Name,
         Address: formData.Address,
         EstimatedStartDate: formData.EstimatedStartDate,
-      }
+      },
     };
 
     // console.log('newFormData', newFormData);
     try {
       const res = await addPlanLocation(planId, newFormData);
       if (res) {
-        openNotificationWithIcon('success', 'Thông báo', 'Thêm một địa điểm thành công', true);
+        openNotificationWithIcon(
+          "success",
+          "Thông báo",
+          "Thêm một địa điểm thành công",
+          true,
+        );
       }
       if (onLocationAdded) onLocationAdded();
       handleClearSearch();
-      setFormData(prevFormData => ({
+      setFormData((prevFormData) => ({
         ...prevFormData,
-        Longitude: '',
-        Latitude: '',
-        Name: '',
-        Address: ''
+        Longitude: "",
+        Latitude: "",
+        Name: "",
+        Address: "",
       }));
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className={`relative ${className}`}>
-      <div id="map" className="h-[630px] w-full rounded-[10px] border border-slate-300 z-10 pt-2"></div>
+      <div
+        id="map"
+        className="z-10 h-[630px] w-full rounded-[10px] border border-slate-300 pt-2"
+      ></div>
 
-      {role === 0 &&
-        <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
-          <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-3 py-1 gap-3 relative">
-            <div className="w-6/12 flex flex-col relative">
-              <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm<span className="text-[red] ml-1 text-[10px]">*</span></span>
-              <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
+      {role === 0
+        &&
+        <div className="absolute top-5 z-50 mx-auto flex h-[70px] w-full justify-center">
+          <div className="relative flex h-full w-[95%] gap-3 rounded-md border border-[#B3B3B3] bg-white px-3 py-1 opacity-90">
+            <div className="relative flex w-6/12 flex-col">
+              <span className="text-[12px] font-semibold text-[#1270B0]">
+                Địa điểm<span className="ml-1 text-[10px] text-[red]">*</span>
+              </span>
+              <div className="relative flex w-full items-center rounded border border-[#979797] px-1 outline-none">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="flex-1 border-none outline-none  text-[12px] h-[25.6px] pr-3"
+                  className="h-[25.6px] flex-1 border-none pr-3 text-[12px] outline-none"
                 />
                 {/* Clear button */}
                 {searchQuery && (
                   <button
                     onClick={handleClearSearch}
-                    className="ml-2 text-transparent  text-md absolute right-0 "
+                    className="text-md absolute right-0 ml-2 text-transparent"
                   >
                     <MdClose className="text-black" />
                   </button>
                 )}
               </div>
 
-
-              {!state && <div
-                className={`absolute top-[50px] w-[300px] bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
-                  }`}
-              >
-                {locations.map((location, index) => (
-                  <React.Fragment key={index}>
-                    <div
-                      onClick={() => handleLocationSelect(location)}
-                      className="px-1 py-1 hover:bg-gray-200 cursor-pointer text-[12px] flex items-center "
-                    >
-                      <FaMapMarkerAlt className="mr-1 text-[#1270B0] flex items-center" /> {/* Icon location */}
-                      <div className="truncate w-full" title={location.display_name}>
-                        {location.display_name}
+              {!state && (
+                <div
+                  className={`absolute top-[50px] z-50 w-[300px] rounded-md border border-[#979797] bg-white shadow-md ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
+                    }`}
+                >
+                  {locations.map((location, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        onClick={() => handleLocationSelect(location)}
+                        className="hover:bg-gray-200 flex cursor-pointer items-center px-1 py-1 text-[12px]"
+                      >
+                        <FaMapMarkerAlt className="mr-1 flex items-center text-[#1270B0]" />{" "}
+                        {/* Icon location */}
+                        <div
+                          className="w-full truncate"
+                          title={location.display_name}
+                        >
+                          {location.display_name}
+                        </div>
                       </div>
-                    </div>
-                    {index < locations.length - 1 && <hr className="border-t border-gray-300 my-1" />}
-                  </React.Fragment>
-                ))}
-
-              </div>}
+                      {index < locations.length - 1 && (
+                        <hr className="border-gray-300 my-1 border-t" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="w-4/12 flex flex-col">
-              <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính<span className="text-[red] ml-1 text-[10px]">*</span></span>
+            <div className="flex w-4/12 flex-col">
+              <span className="text-[12px] font-semibold text-[#1270B0]">
+                Ngày dự tính<span className="ml-1 text-[10px] text-[red]">*</span>
+              </span>
               <input
                 id="start-date"
                 value={formData.EstimatedStartDate}
                 onChange={handleDateChange}
                 type="date"
-                min={dayjs(plan?.estimatedStartDate).format('YYYY-MM-DD')}
-                max={dayjs(plan?.estimatedEndDate).format('YYYY-MM-DD')}
-                className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
+                min={dayjs(plan?.estimatedStartDate).format("YYYY-MM-DD")}
+                max={dayjs(plan?.estimatedEndDate).format("YYYY-MM-DD")}
+                className="h-[25.6px] rounded-md border border-[#B3B3B3] px-1 text-[12px] outline-none"
               />
             </div>
             {/* <div className="w-2/12 flex flex-col">
@@ -406,17 +470,29 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
               className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
             />
           </div> */}
-            <div className="w-2/12 flex flex-col min-w-[25.6px] items-center">
+            <div className="flex w-2/12 min-w-[25.6px] flex-col items-center">
               <div className="h-[18px]"></div>
               <div
                 disabled={loading}
                 onClick={handleAddPlanLocation}
-                className={`w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center ${loading ? '' : 'cursor-pointer'}`}>
-                {loading ? <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" /> : <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />}
+                className={`flex h-[25.6px] w-full items-center justify-center rounded-md bg-[#0892F0] ${loading ? "" : "cursor-pointer"}`}
+              >
+                {loading ? (
+                  <img
+                    className="h-5 w-5 animate-spin"
+                    width="24"
+                    height="24"
+                    src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF"
+                    alt="loading"
+                  />
+                ) : (
+                  <MdCheckCircleOutline className="text-center text-[18px] font-bold text-white" />
+                )}
               </div>
             </div>
           </div>
-        </div>}
+        </div>
+      }
       {contextHolder}
     </div>
   );

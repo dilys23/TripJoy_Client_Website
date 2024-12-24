@@ -23,19 +23,19 @@ const Mapbox = ({ listLongitude, listLatitude }) => {
   useEffect(() => {
     if (map && listLongitude && listLatitude) {
       // Tạo danh sách tọa độ từ longitudes và latitudes
-    
+
       const waypoints = listLongitude
         .map((lon, index) => ({
           latLng: L.latLng(listLatitude[index], lon),
         }))
-        .filter((point) =>{
+        .filter((point) => {
           return (
-            point.latLng.lat>= 8.179 &&
-            point.latLng.lat<= 23.393 &&
-            point.latLng.lng>= 102.144 &&
-            point.latLng.lng<= 109.465 
+            point.latLng.lat >= 8.179 &&
+            point.latLng.lat <= 23.393 &&
+            point.latLng.lng >= 102.144 &&
+            point.latLng.lng <= 109.465
           );
-        }) ; // Lọc bỏ các giá trị không hợp lệ
+        }); // Lọc bỏ các giá trị không hợp lệ
       console.log("waypoint", waypoints);
       if (waypoints.length === 0) return;
 
@@ -56,7 +56,14 @@ const Mapbox = ({ listLongitude, listLatitude }) => {
               iconAnchor: [20, 40],
             }),
           });
-          marker.bindTooltip((i + 1).toString(), { permanent: true, direction: "right", className : " border-1 border-black w-5 h-6 transform translate-x-10 -translate-y-[10]" }).openTooltip();
+          marker
+            .bindTooltip((i + 1).toString(), {
+              permanent: true,
+              direction: "right",
+              className:
+                " border-1 border-black w-5 h-6 transform translate-x-10 -translate-y-[10]",
+            })
+            .openTooltip();
           return marker;
         },
       }).addTo(map);
@@ -69,7 +76,7 @@ const Mapbox = ({ listLongitude, listLatitude }) => {
     }
   }, [map, listLongitude, listLatitude]);
 
-  return <div id="map" className="h-[500px] w-full"></div>;
+  return <div id="map" className="relative z-0 h-[350px] w-full"></div>;
 };
 
 export default Mapbox;
