@@ -4,42 +4,36 @@ import { FcMoneyTransfer } from "react-icons/fc";
 import { MdExpandMore, MdGroups } from "react-icons/md";
 import { Select, Spin } from 'antd';
 import RatingStar from "../../../components/Rate";
-import ava from "../../../assets/images/ava.jpg";
 import ava1 from "../../../assets/images/anh2.jpg";
-import ava2 from "../../../assets/images/anh3.jpg";
 import TextArea from "../../../components/Input/TextArea";
 import ImageUploader from "../../../components/Image/ImageUpload";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
+import { getPlanLocationByIdService } from "../../../services/planLocation";
 function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [note, setNote] = useState("");
     const [images, setImages] = useState([]);
-    // const [planLocation, setPlanLocation] = useState({});
 
-    // const getPlanLocationById = async (id) => {
-    //     try {
-    //         const res = await getPlanLocationByIdService(id);
-    //         console.log(res.planLocation);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // useEffect(() => {
-    //     getPlanLocationById(journey.planLocationId);
-    // }, [])
 
     useEffect(() => {
         setMembers(listMember || []);
     }, [listMember]);
-
+    const fetchPlanLocation = async (id) => {
+        try {
+            const res = await getPlanLocationByIdService(id);
+            setImages(res.planLocation.images);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         setNote(journey?.note || "");
-        setImages(journey?.images || []);
+        fetchPlanLocation(journey.planLocationId);
     }, [journey]);
-    // console.log(journey);
+
     const [planLocationExpense, setPlanLocationExpense] = useState({
         userSpenderIds: journey.userSpenders || [],
         payerId: journey.payerId || null,
@@ -135,7 +129,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
     //     updateJourneyInfo(journey, { images: updatedImages });
     // };
     return (
-        <div className={`w-full flex ${images.length <= 5 ? "h-[300px]" : "h-[340px]"} pt-1 mt-3 px-[1px]`}>
+        <div className={`w-full flex ${images?.length <= 5 ? "h-[300px]" : "h-[340px]"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
                 style={{
                     clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 50%)',
@@ -163,26 +157,26 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
             <div
                 style={{ borderColor: colorBorder, borderWidth: '1px' }}
                 className="w-full h-full flex flex-col border bg-white rounded-lg shadow-md py-4 gap-2">
-                <div className="w-full h-full flex flex-col px-4 gap-2">
+                <div className="w-full h-full flex flex-col sm:px-4 px-1 gap-2">
                     <div className="w-full flex gap-0 ">
                         <div className="w-7/12 flex gap-1 items-center">
-                            <MdGroups className="text-[#34A853] text-[30px]" />
-                            <span className="text-[15px] text-[#333333] font-medium w-[70px]">Tham gia</span>
+                            <MdGroups className="text-[#34A853] sm:text-[30px] text-[20px]" />
+                            <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium sm:w-[70px]">Tham gia</span>
                             <div className="relative h-[30px]">
                                 <button
                                     onClick={toggleDropdown}
-                                    className="shadow w-[150px] h-full rounded-[20px] border border-[#CCD0D5] text-[12px] flex px-2 items-center overflow-x-hidden"
+                                    className="shadow sm:w-[150px] w-[100px] h-full rounded-[20px] border border-[#CCD0D5] text-[12px] flex px-2 items-center overflow-x-hidden"
                                     type="button"
                                 >
                                     {planLocationExpense.userSpenderIds.length === members.length ? (
-                                        <span className="bg-blue-100 text-blue-600 px-2 rounded-lg">Tất cả</span>
+                                        <span className="bg-blue-100 text-blue-600 px-2 rounded-lg sm:text-[15px] text-[10px]">Tất cả</span>
                                     ) : planLocationExpense.userSpenderIds.length > 0 &&
                                         planLocationExpense.userSpenderIds.length < members.length ? (
                                         <div className="flex gap-[2px]">
                                             {planLocationExpense.userSpenderIds.map((item, index) => (
                                                 <span
                                                     key={index}
-                                                    className="bg-blue-100 text-blue-600 px-2 rounded-lg truncate"
+                                                    className="bg-blue-100 text-blue-600 px-2 rounded-lg truncate sm:text-[15px] text-[10px]"
                                                 >
                                                     {getNameFromId(item.userId)}
                                                 </span>
@@ -210,7 +204,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                                         />
                                                         <label
                                                             htmlFor={`checkbox-item-${member}`}
-                                                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 sm:text-[15px] text-[10px]"
                                                         >
                                                             {member.name}
                                                         </label>
@@ -221,26 +215,27 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex relative cursor-pointer">
-                                <img src={ava1} alt="" className="w-[32px] h-[32px] rounded-full" />
-                                <img src={ava2} alt="" className="w-[32px] h-[32px] rounded-full -ml-3" />
-                                <img src={ava} alt="" className="w-[32px] h-[32px] rounded-full -ml-3" />
-                            </div>
+                            {/* <div className="flex relative cursor-pointer">
+                                <img src={ava1} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full" />
+                                <img src={ava2} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full -ml-3" />
+                                <img src={ava} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full -ml-3" />
+                            </div> */}
                         </div>
                         <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
                             <img width="25" height="25" src="https://img.icons8.com/fluency/48/price-tag--v1.png" alt="price-tag--v1" className="md:w-[30px] md:h-[30px] w-[20px] h-[20px]" />
-                            <span className="text-[15px] text-[#333333] font-medium w-[65px]">Giá</span>
+                            <span className=" text-[#333333] font-medium w-[65px] sm:text-[15px] text-[10px]">Giá</span>
                             <input
                                 value={planLocationExpense.amount}
                                 onChange={(e) => handleInputChange("amount", e.target.value.replace(/[^0-9]/g, ""))}
-                                type="text" className="shadow w-[150px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 text-[14px]" />
+                                type="text"
+                                className="shadow sm:w-[150px] w-[100px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 sm:text-[15px] text-[10px]" />
                         </div>
                     </div>
 
                     <div className="w-full flex gap-0">
                         <div className="w-7/12 flex gap-2 items-center ">
                             <FcMoneyTransfer className="text-[30px]" />
-                            <span className="text-[15px] text-[#333333] font-medium w-[65px]">Người trả</span>
+                            <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[65px]">Người trả</span>
                             <Select
                                 showSearch
                                 value={planLocationExpense.payerId}
@@ -251,7 +246,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                 placeholder="Chọn tên"
                                 loading={loading}
                                 notFoundContent={loading ? <Spin size="small" /> : "Không tìm thấy dữ liệu"}
-                                className="shadow w-[150px] h-full rounded-[20px] border border-[#CCD0D5] outline-none px-2 text-[11px] no-border-select"
+                                className="shadow sm:w-[150px] w-[100px]  h-full rounded-[20px] border border-[#CCD0D5] outline-none px-2 sm:text-[15px] text-[10px] no-border-select"
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().includes(input.toLowerCase())
                                 }
@@ -263,7 +258,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                         key={member.userId}
                                         value={member.userId}
                                         label={
-                                            <div className="px-1 bg-blue-100 text-blue-600 text-[12px] rounded-[20px] h-[20px] flex justify-center items-center">
+                                            <div className="px-1 bg-blue-100 text-blue-600 sm:text-[12px] text-[10px] rounded-[20px] h-[20px] flex justify-center items-center">
                                                 {member.name}
                                             </div>
                                         }
@@ -273,7 +268,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                     </Select.Option>
                                 ))}
                             </Select>
-                            <img src={ava1} alt="" className="w-[32px] h-[32px] rounded-full" />
+                            <img src={ava1} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full" />
                         </div>
                         <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
                             <FaStar className="text-yellow-500 text-[25px] w-[30px]" ></FaStar>
@@ -293,7 +288,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                 onChange={handleNoteChange}
                                 width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] text-[12px]"></TextArea>
                         </div>
-                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} ></ImageUploader>
+                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={fetchPlanLocation}></ImageUploader>
                     </div>
 
                 </div>

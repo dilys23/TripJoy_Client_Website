@@ -11,7 +11,7 @@ import locationProvinces from "./locations.json"
 import dayjs from 'dayjs';
 import 'leaflet-routing-machine';
 import { addPlanLocation } from "../../services/planLocation";
-const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
+const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
   const [marker, setMarker] = useState(null);
@@ -22,7 +22,7 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
   const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-
+  console.log(role);
   const [formData, setFormData] = useState({
     Longitude: '',
     Latitude: '',
@@ -341,81 +341,82 @@ const Map = ({ className, plan, planId, planLocation, onLocationAdded }) => {
     <div className={`relative ${className}`}>
       <div id="map" className="h-[630px] w-full rounded-[10px] border border-slate-300 z-10 pt-2"></div>
 
-      <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
-        <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-3 py-1 gap-3 relative">
-          <div className="w-6/12 flex flex-col relative">
-            <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm<span className="text-[red] ml-1 text-[10px]">*</span></span>
-            <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="flex-1 border-none outline-none  text-[12px] h-[25.6px] pr-3"
-              />
-              {/* Clear button */}
-              {searchQuery && (
-                <button
-                  onClick={handleClearSearch}
-                  className="ml-2 text-transparent  text-md absolute right-0 "
-                >
-                  <MdClose className="text-black" />
-                </button>
-              )}
+      {role === 0 &&
+        <div className="absolute top-5 w-full h-[70px] flex justify-center z-50 mx-auto">
+          <div className="w-[95%] h-full bg-white opacity-90 rounded-md border border-[#B3B3B3] flex px-3 py-1 gap-3 relative">
+            <div className="w-6/12 flex flex-col relative">
+              <span className="text-[12px] text-[#1270B0] font-semibold">Địa điểm<span className="text-[red] ml-1 text-[10px]">*</span></span>
+              <div className="relative w-full flex items-center border border-[#979797] outline-none rounded px-1">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="flex-1 border-none outline-none  text-[12px] h-[25.6px] pr-3"
+                />
+                {/* Clear button */}
+                {searchQuery && (
+                  <button
+                    onClick={handleClearSearch}
+                    className="ml-2 text-transparent  text-md absolute right-0 "
+                  >
+                    <MdClose className="text-black" />
+                  </button>
+                )}
+              </div>
+
+
+              {!state && <div
+                className={`absolute top-[50px] w-[300px] bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
+                  }`}
+              >
+                {locations.map((location, index) => (
+                  <React.Fragment key={index}>
+                    <div
+                      onClick={() => handleLocationSelect(location)}
+                      className="px-1 py-1 hover:bg-gray-200 cursor-pointer text-[12px] flex items-center "
+                    >
+                      <FaMapMarkerAlt className="mr-1 text-[#1270B0] flex items-center" /> {/* Icon location */}
+                      <div className="truncate w-full" title={location.display_name}>
+                        {location.display_name}
+                      </div>
+                    </div>
+                    {index < locations.length - 1 && <hr className="border-t border-gray-300 my-1" />}
+                  </React.Fragment>
+                ))}
+
+              </div>}
             </div>
 
-
-            {!state && <div
-              className={`absolute top-[50px] w-[300px] bg-white border border-[#979797] rounded-md shadow-md z-50 ${isDropdownVisible && locations.length > 0 ? "block" : "hidden"
-                }`}
-            >
-              {locations.map((location, index) => (
-                <React.Fragment key={index}>
-                  <div
-                    onClick={() => handleLocationSelect(location)}
-                    className="px-1 py-1 hover:bg-gray-200 cursor-pointer text-[12px] flex items-center "
-                  >
-                    <FaMapMarkerAlt className="mr-1 text-[#1270B0] flex items-center" /> {/* Icon location */}
-                    <div className="truncate w-full" title={location.display_name}>
-                      {location.display_name}
-                    </div>
-                  </div>
-                  {index < locations.length - 1 && <hr className="border-t border-gray-300 my-1" />}
-                </React.Fragment>
-              ))}
-
-            </div>}
-          </div>
-
-          <div className="w-4/12 flex flex-col">
-            <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính<span className="text-[red] ml-1 text-[10px]">*</span></span>
-            <input
-              id="start-date"
-              value={formData.EstimatedStartDate}
-              onChange={handleDateChange}
-              type="date"
-              min={dayjs(plan?.estimatedStartDate).format('YYYY-MM-DD')}
-              max={dayjs(plan?.estimatedEndDate).format('YYYY-MM-DD')}
-              className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
-            />
-          </div>
-          {/* <div className="w-2/12 flex flex-col">
+            <div className="w-4/12 flex flex-col">
+              <span className="text-[12px] text-[#1270B0] font-semibold">Ngày dự tính<span className="text-[red] ml-1 text-[10px]">*</span></span>
+              <input
+                id="start-date"
+                value={formData.EstimatedStartDate}
+                onChange={handleDateChange}
+                type="date"
+                min={dayjs(plan?.estimatedStartDate).format('YYYY-MM-DD')}
+                max={dayjs(plan?.estimatedEndDate).format('YYYY-MM-DD')}
+                className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
+              />
+            </div>
+            {/* <div className="w-2/12 flex flex-col">
             <span className="text-[12px] text-[#1270B0] font-semibold">Giờ</span>
             <input
               type="time"
               className="border border-[#B3B3B3] outline-none rounded-md px-1 text-[12px] h-[25.6px]"
             />
           </div> */}
-          <div className="w-2/12 flex flex-col min-w-[25.6px] items-center">
-            <div className="h-[18px]"></div>
-            <div
-              disabled={loading}
-              onClick={handleAddPlanLocation}
-              className={`w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center ${loading ? '' : 'cursor-pointer'}`}>
-              {loading ? <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" /> : <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />}
+            <div className="w-2/12 flex flex-col min-w-[25.6px] items-center">
+              <div className="h-[18px]"></div>
+              <div
+                disabled={loading}
+                onClick={handleAddPlanLocation}
+                className={`w-full h-[25.6px] bg-[#0892F0] rounded-md justify-center flex items-center ${loading ? '' : 'cursor-pointer'}`}>
+                {loading ? <img className="w-5 h-5 animate-spin" width="24" height="24" src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF" alt="loading" /> : <MdCheckCircleOutline className="text-white text-[18px] font-bold text-center" />}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </div>}
       {contextHolder}
     </div>
   );

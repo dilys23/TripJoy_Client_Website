@@ -15,6 +15,21 @@ const createPost = async (formData) => {
         throw error
     }
 };
+// Create a post append
+const createPostPlan = async (formData) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`post-service/posts/plan`, formData, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+};
 // get post by id
 const getPostById = async (id) => {
     try {
@@ -78,4 +93,4 @@ const deletePost = async (id) => {
         throw error
     }
 }
-export { createPost, getPostById, getPostHomeFeed, editPost, deletePost }
+export { createPost, getPostById, getPostHomeFeed, editPost, deletePost, createPostPlan }

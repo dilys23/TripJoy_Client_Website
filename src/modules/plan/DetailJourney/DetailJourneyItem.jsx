@@ -37,10 +37,10 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
             console.log(error);
         }
     }
-   
+
 
     return (
-        <div className="w-full md:gap-5 gap-2 flex h-[171px]" >
+        <div className="w-full md:gap-5 gap-2 flex sm:h-[171px] h-[150px]" >
             {!isEdit ? (
                 <div className="flex w-[25px] h-full relative">
                     <div

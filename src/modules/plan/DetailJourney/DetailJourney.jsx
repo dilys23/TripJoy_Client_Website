@@ -9,7 +9,7 @@ import EvaluationJourneyItem from "./EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
 import { changeOrderPlanLocation, getPlanLocationByIdService } from "../../../services/planLocation"
-function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
+function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess }) {
 
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
@@ -67,13 +67,24 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
             setExpandedGroups([...expandedGroups, date]);
         }
     };
-    const toggleDetail = (id) => {
-        if (expandedEvaluationItems.includes(id)) {
-            setExpandedEvaluationItems(expandedEvaluationItems.filter(itemId => itemId !== id));
-        } else {
-            setExpandedEvaluationItems([...expandedEvaluationItems, id]);
-        }
+    const toggleDetail = (journeyId) => {
+        setExpandedEvaluationItems((prev) => {
+            // Nếu journeyId đã có trong mảng, xóa nó
+            if (prev.includes(journeyId)) {
+                return prev.filter(id => id !== journeyId);
+            }
+            // Nếu không có trong mảng, xóa tất cả các phần tử cũ và thêm journeyId mới vào
+            return [journeyId];
+        });
     };
+
+    // const toggleDetail = (id) => {
+    //     if (expandedEvaluationItems.includes(id)) {
+    //         setExpandedEvaluationItems(expandedEvaluationItems.filter(itemId => itemId !== id));
+    //     } else {
+    //         setExpandedEvaluationItems([...expandedEvaluationItems, id]);
+    //     }
+    // };
     const handleEdit = () => {
         setIsEdit((prev) => !prev)
     }
@@ -108,11 +119,12 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex justify-end w-full mt-[-20px] mb-5">
-                <Button onClick={handleEdit} tertiary={isEdit} primary={!isEdit} className="md:text-[15px] text-[8px] rounded-lg px-8">
-                    {!isEdit ? "Edit" : "Save"}
-                </Button>
-            </div>
+            {role === 0 &&
+                <div className="flex justify-end w-full mt-[-20px] mb-5">
+                    <Button onClick={handleEdit} tertiary={isEdit} primary={!isEdit} className="md:text-[15px] text-[8px] rounded-lg px-8">
+                        {!isEdit ? "Edit" : "Save"}
+                    </Button>
+                </div>}
             <div className="flex flex-col w-full min-h-[800px]">
                 {Object.keys(groupedJourneys).map((date) => (
                     <div key={date} className="mb-4">
@@ -148,7 +160,7 @@ function DetailJourney({ planId, plan, planLocation, listMember, onSuccess }) {
                                                             isEdit={isEdit}
                                                             journey={journey}
                                                             index={index}
-                                                            toggleDetail={toggleDetail}
+                                                            toggleDetail={() => toggleDetail(journey.planLocationId)}
                                                             expandedEvaluationItems={expandedEvaluationItems}
                                                             dragHandleProps={provided.dragHandleProps}
                                                             onSuccess={onSuccess}

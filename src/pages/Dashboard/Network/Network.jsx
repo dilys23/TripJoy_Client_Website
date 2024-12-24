@@ -25,8 +25,15 @@ function Network() {
   const [showModalDeletePost, setShowModalDeletePost] = useState(false);
   const [showModalUserLike, setShowModalUserLike] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
-  // const { user } = useContext(UserContext);
+  const [mySelf, setMySelf] = useState({});
+  const { user } = useContext(UserContext);
   // console.log(user);
+  useEffect(() => {
+    if (user) {
+      setMySelf(user.profile);
+      console.log(user.profile)
+    }
+  }, [user])
   // const observerRef = useRef(null);
   // const [pageIndex, setPageIndex] = useState(0);
   // const [loading, setLoading] = useState(false);
@@ -187,15 +194,20 @@ function Network() {
             <span className="hidden text-white sm:block sm:text-[10px] md:text-base">
               Chia sẻ
             </span>
-            {showModalListPost && <ModalAddPost handleClose={closeModal} onRefresh={handleRefreshData}></ModalAddPost>}
+            {showModalListPost && <ModalAddPost handleClose={closeModal} onRefresh={handleRefreshData} openNotificationWithIcon={openNotificationWithIcon}></ModalAddPost>}
           </div>
         </div>
-        <div className="mt-6 sm:px-0 px-1">
+        <div className="mt-6 flex flex-col gap-3 sm:px-0 px-1">
           {dataList.map((data) => (
-            <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} />
+            <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
           ))}
           <div ref={observerRef} style={{ height: '20px' }}>
-            {loading && <Skeleton active />}
+            {loading &&
+              <>
+                <Skeleton active />
+                <Skeleton active />
+                <Skeleton active />
+              </>}
             {/* {!hasMore && <p>Đã hết dữ liệu</p>} */}
           </div>
         </div>

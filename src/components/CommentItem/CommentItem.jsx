@@ -14,7 +14,8 @@ function CommentItem({
     handleEmotionClick,
     onDelete,
     onSendReply,
-    updateComment
+    updateComment,
+    onEditComment
 }) {
     const [activeDropdownId, setActiveDropdownId] = useState(null);
     const [isReplyVisible, setIsReplyVisible] = useState(false);
@@ -24,6 +25,7 @@ function CommentItem({
     // const [replyEmotion, setReplyEmotion] = useState({});  // Store emotions for replies
     const dropdownRef = useRef(null);
     const moreButtonRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleDropdownToggle = (id) => {
         if (activeDropdownId === id) {
@@ -49,9 +51,7 @@ function CommentItem({
         };
     }, [activeDropdownId]);
 
-    // const dropdownPosition = moreButtonRef.current
-    //     ? moreButtonRef.current.getBoundingClientRect()
-    //     : { top: 0, left: 0 };
+
 
     const handleDelete = () => {
         onDelete(item.commentId);
@@ -137,8 +137,15 @@ function CommentItem({
         } catch (error) {
             console.log(error)
         }
-
     }
+    // const handleEditComment = async = (commentId) => {
+    //     try {
+
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     return (
         <div className='w-full h-fit flex gap-3'>
             <AvatarDefault src="" className="w-[30px] h-[30px]" />
@@ -146,8 +153,45 @@ function CommentItem({
                 <div className='flex gap-2 items-center'>
                     <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
                         <span className='text-[13px] font-semibold'>{item.userName}</span>
-                        <span className='text-[12px]'>{item.content}</span>
+                        {isEditing ? (
+                            // Hiển thị input nếu đang ở chế độ chỉnh sửa
+                            <div className="flex items-center gap-2">
+                                <input
+                                    value={replyText}
+                                    onChange={(e) => setReplyText(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+
+                                            setIsEditing(false);
+                                        }
+                                    }}
+                                    type="text"
+                                    autoFocus
+                                    className="bg-transparent border-gray-400 w-full outline-none text-[12px]"
+                                />
+                                <img
+                                    onClick={() => {
+                                        // handleSendReply();
+                                        setIsEditing(false);
+                                    }}
+                                    width="20"
+                                    height="20"
+                                    src="https://img.icons8.com/arcade/64/sent.png"
+                                    alt="sent"
+                                    className="cursor-pointer"
+                                />
+                            </div>
+                        ) : (
+
+                            <span
+                                className="text-[12px] cursor-pointer"
+                                onDoubleClick={() => setIsEditing(true)}
+                            >
+                                {item.content}
+                            </span>
+                        )}
                     </div>
+
                     <div className='relative'>
                         <div ref={moreButtonRef}>
                             <MdMoreHoriz
@@ -158,13 +202,11 @@ function CommentItem({
                         {activeDropdownId === item.commentId && (
                             <div
                                 className="absolute top-3 z-50 bg-white shadow-lg rounded-md mt-1 w-[100px]"
-                            // style={{
-                            //     top: `${dropdownPosition.top + dropdownPosition.height + 5}px`,
-                            //     left: `${dropdownPosition.left}px`
-                            // }}
                             >
                                 <ul>
-                                    <li className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
+                                    <li
+                                        onClick={() => setIsEditing(true)}
+                                        className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
                                     <li
                                         onClick={handleDelete}
                                         className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Xóa</li>
@@ -173,6 +215,11 @@ function CommentItem({
                         )}
                     </div>
                 </div>
+                {isEditing &&
+                    <span className='text-[9px] nunito-text'>Nhấn Esc để
+                        <span
+                            onClick={() => setIsEditing(false)}
+                            className='text-[#007AFF] font-semibold cursor-pointer'> huỷ</span></span>}
                 <div className='flex gap-2 items-center'>
                     <span className='text-[9px]'>{formatDistanceToNow(
                         new Date(new Date(item.createdAt).setHours(new Date(item.createdAt).getHours() + 7)),
@@ -261,6 +308,11 @@ function CommentItem({
                             <input
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSendReply();
+                                    }
+                                }}
                                 type="text" placeholder='Viết phản hồi...'
                                 className='bg-transparent w-full outline-none text-[10px]' />
                             <img

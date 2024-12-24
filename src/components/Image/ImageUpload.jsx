@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { addImageIntoPlan, removeImageIntoPlan } from "../../services/detailPlanLocationService";
 
-function ImageUploader({ planLocationId, images, setImages }) {
+function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
 
     const maxImages = 10;
 
@@ -14,8 +14,10 @@ function ImageUploader({ planLocationId, images, setImages }) {
             try {
                 const res = await addImageIntoPlan(planLocationId, newImages);
                 console.log(res.url);
+                console.log(planLocationId)
                 const newImageUrl = res;
                 setImages((prevImages) => [...prevImages, newImageUrl]);
+                onSuccess();
             } catch (error) {
                 console.log(error);
             }

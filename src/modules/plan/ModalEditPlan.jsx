@@ -15,6 +15,8 @@ dayjs.extend(utc);
 function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
     // console.log(plan);
     const [loading, setLoading] = useState(false);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
     const [formData, setFormData] = useState({
         namePlan: plan?.title || "",
         startDestination: plan?.provinceStart.provinceName,
@@ -256,7 +258,7 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
                                         handleInputChange("endDate", null);
                                     }
                                 }}
-                           
+
                             />
                         </Space>
 

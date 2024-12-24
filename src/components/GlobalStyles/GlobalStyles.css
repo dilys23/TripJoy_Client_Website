@@ -348,3 +348,11 @@
 .tippy-arrow {
   display: none !important;
 }
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: white;
+  border: 4px solid #007aff;
+  margin-bottom: 10px;
+}
