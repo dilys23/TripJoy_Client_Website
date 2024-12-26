@@ -129,7 +129,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
     //     updateJourneyInfo(journey, { images: updatedImages });
     // };
     return (
-        <div className={`w-full flex ${images?.length <= 5 ? "h-[300px]" : "h-[340px]"} pt-1 mt-3 px-[1px]`}>
+        <div className={`w-full flex ${images?.length <= 5 ? "sm:h-[300px] h-fit" : "sm:h-[340px] h-fit"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
                 style={{
                     clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 100%, 0 50%)',
@@ -233,9 +233,9 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                     </div>
 
                     <div className="w-full flex gap-0">
-                        <div className="w-7/12 flex gap-2 items-center ">
-                            <FcMoneyTransfer className="text-[30px]" />
-                            <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[65px]">Người trả</span>
+                        <div className="w-7/12 flex sm:gap-2 gap-1 items-center ">
+                            <FcMoneyTransfer className="sm:text-[30px] text-[20px]" />
+                            <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium sm:w-[65px]">Người trả</span>
                             <Select
                                 showSearch
                                 value={planLocationExpense.payerId}
@@ -258,35 +258,35 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                         key={member.userId}
                                         value={member.userId}
                                         label={
-                                            <div className="px-1 bg-blue-100 text-blue-600 sm:text-[12px] text-[10px] rounded-[20px] h-[20px] flex justify-center items-center">
+                                            <div className="px-1 bg-blue-100 text-blue-600 sm:text-[15px] text-[10px] text-[10px] rounded-[20px] h-[20px] flex justify-center items-center">
                                                 {member.name}
                                             </div>
                                         }
-                                        className="text-[12px]"
+                                        className="sm:text-[15px] text-[10px]"
                                     >
                                         {member.name}
                                     </Select.Option>
                                 ))}
                             </Select>
-                            <img src={ava1} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full" />
+                            {/* <img src={ava1} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full" /> */}
                         </div>
                         <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
                             <FaStar className="text-yellow-500 text-[25px] w-[30px]" ></FaStar>
-                            <span className="text-[15px] text-[#333333] font-medium w-[70px]">Đánh giá</span>
+                            <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[70px]">Đánh giá</span>
                             <RatingStar />
                         </div>
 
                     </div>
                     <div className="w-full flex gap-4">
                         <div className="w-6/12 flex flex-col gap-2">
-                            <div className="flex gap-3 items-center">
-                                <img width="30" height="30" src="https://img.icons8.com/color/48/note.png" alt="note" />
-                                <span className="text-[15px] text-[#333333] font-medium w-[70px]">Ghi chú</span>
+                            <div className="flex sm:gap-3 gap-1 items-center">
+                                <img width="30" height="30" src="https://img.icons8.com/color/48/note.png" alt="note" className="sm:w-[30px] sm:h-[30px] w-[20px] h-[20px]" />
+                                <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[70px]">Ghi chú</span>
                             </div>
                             <TextArea
                                 value={note}
                                 onChange={handleNoteChange}
-                                width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] text-[12px]"></TextArea>
+                                width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] sm:text-[12px] text-[8px]"></TextArea>
                         </div>
                         <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={fetchPlanLocation}></ImageUploader>
                     </div>

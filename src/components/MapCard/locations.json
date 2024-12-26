@@ -10,7 +10,7 @@
     "longitude": 105.8542
   },
   {
-    "name": "Hồ Chí Minh",
+    "name": "Thành phố Hồ Chí Minh",
     "latitude": 10.8231,
     "longitude": 106.6297
   },
@@ -88,6 +88,11 @@
     "name": "Đắk Lắk",
     "latitude": 12.6644,
     "longitude": 108.0924
+  },
+  {
+    "name": "Lâm Đồng",
+    "latitude": 11.532,
+    "longitude": 107.783
   },
   {
     "name": "Đắk Nông",

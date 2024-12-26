@@ -20,6 +20,7 @@ import Search from "./Search";
 import avatarDefault from "../../assets/images/avatarDefault.png"
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import CustomModal from "../Modal/CustomModal";
+import FrameChat from "../Chat/FrameChat";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
@@ -31,7 +32,7 @@ const Navbar1 = () => {
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen); // Đảo ngược trạng thái hiển thị menu
   };
-
+  const [isOpen, setIsOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   var { isRegister, isVerifyAccount, userVerify } = useAuthStore();
 
@@ -61,6 +62,9 @@ const Navbar1 = () => {
   const handleSendOTPOpen = () => {
     setShowLogin(false);
     setShowSendOTP(true);
+  };
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
   const handleSendOTPClose = () => setShowSendOTP(false);
 
@@ -298,6 +302,48 @@ const Navbar1 = () => {
                 className="list-style-none mr-5 ms-auto flex flex-row items-center ps-0 md:ps-4"
                 data-twe-navbar-nav-ref
               >
+
+                <li className="relative px-2" data-twe-dropdown-ref>
+                  <button
+                    className="hidden-arrow flex items-center text-blue-800/80 transition duration-200 hover:text-black/80 focus:text-black/80"
+                    onClick={toggleDropdown}
+                  >
+                    <span className="[&>svg]:h-7 [&>svg]:w-7">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M3.505 2.365A41.369 41.369 0 019 2c1.863 0 3.697.124 5.495.365 1.247.167 2.18 1.108 2.435 2.268a4.45 4.45 0 00-.577-.069 43.141 43.141 0 00-4.706 0C9.229 4.696 7.5 6.727 7.5 8.998v2.24c0 1.413.67 2.735 1.76 3.562l-2.98 2.98A.75.75 0 015 17.25v-3.443c-.501-.048-1-.106-1.495-.172C2.033 13.438 1 12.162 1 10.72V5.28c0-1.441 1.033-2.717 2.505-2.914z" />
+                        <path d="M14 6c-.762 0-1.52.02-2.271.062C10.157 6.148 9 7.472 9 8.998v2.24c0 1.519 1.147 2.839 2.71 2.935.214.013.428.024.642.034.2.009.385.09.518.224l2.35 2.35a.75.75 0 001.28-.531v-2.07c1.453-.195 2.5-1.463 2.5-2.915V8.998c0-1.526-1.157-2.85-2.729-2.936A41.645 41.645 0 0014 6z" />
+                      </svg>
+                    </span>
+
+                    <span className="absolute -mt-6 ms-5 rounded-full bg-red-600 px-[0.50em] py-[0.25em] text-[0.6rem] font-bold leading-none text-white">
+                      6
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <FrameChat></FrameChat>
+
+                  )}
+                </li>
+                {/* <ul className="absolute right-0 z-10 mt-2 w-60 bg-white shadow-md rounded-lg border dark:bg-gray-800">
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 1</span>: Tin nhắn demo 1
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 2</span>: Tin nhắn demo 2
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 3</span>: Tin nhắn demo 3
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300">
+                        <a href="#" className="text-blue-500 hover:underline">
+                          Xem tất cả tin nhắn
+                        </a>
+                      </li>
+                    </ul> */}
                 <li
                   className="relative px-2"
                   data-twe-dropdown-ref

@@ -2,8 +2,12 @@ import { MdClose } from "react-icons/md";
 import ava from "../../assets/images/avatarDefault.png"
 import { useEffect, useState } from "react";
 import { EditProfileIcon } from "../../components/Icons/Icons";
-import Button from "../../components/Button/Button.jsx";
 import { getCurrentUser } from "../../services/getCurrentUser.js";
+import { DatePicker } from "antd";
+import 'antd/dist/reset.css';
+import moment from 'moment';
+import { updateProfileRequest } from "../../services/updateProfile.js";
+import dayjs from "dayjs";
 function ModalEditProfile({ handleClose }) {
 
     useEffect(() => {
@@ -13,11 +17,12 @@ function ModalEditProfile({ handleClose }) {
         };
     }, []);
     const formatDate = (date) => {
-        if (!date) return '';
-        const [year, month, day] = date.split('-');
-        return `${day}-${month}-${year}`;
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
-
     const [formData, setFormData] = useState({
         userName: '',
         phoneNumber: '',
@@ -26,7 +31,7 @@ function ModalEditProfile({ handleClose }) {
         district: '',
         ward: '',
         province: '',
-        gender: null,
+        gender: '',
         country: 'Việt Nam'
     });
 
@@ -46,10 +51,13 @@ function ModalEditProfile({ handleClose }) {
 
     const [isChange, setIsChange] = useState(true);
 
-
     const handleInputChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+        setFormData(prev => ({
+            ...prev,
+            [field]: value === "" ? null : value
+        }));
     };
+
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
@@ -58,26 +66,29 @@ function ModalEditProfile({ handleClose }) {
         }
     };
 
-    // const handleFileChange = (e) => {
-    //     const [file] = e.target.files;
 
-    //     if (!file) return;
+    const handleSubmit = async () => {
 
-    //     const types = ['image/jpeg', 'image/jpg', 'image/png'];
-    //     if (types.includes(file.type)) {
-    //         file.url = URL.createObjectURL(file);
-    //         setFormData(prevState => ({
-    //             ...prevState,
-    //             Avatar: { ...prevState.Avatar, Url: file.url }
-    //         }));
-    //         setIsChange(true);
-    //     } else {
-    //         toast.error('Định dạng file không hợp lệ!', { autoClose: 3000 });
-    //     }
-    // };
-    const handleSubmit = () => {
-        const { email, ...submitData } = formData;
-        console.log("Submitting data:", submitData);
+        const data = new FormData();
+        data.append('UserName', formData.userName);
+        data.append('PhoneNumber', formData.phoneNumber);
+        data.append('DateOfBirth', formData.dateOfBirth);
+        data.append('Avatar', formData.avatar);
+        data.append('Address.district', formData.district);
+        data.append('Address.ward', formData.ward);
+        data.append('Address.province', formData.province);
+        data.append('Gender', formData.gender);
+        data.append('Address.country', 'Việt Nam');
+        for (let [key, value] of data.entries()) {
+            console.log(key, ':', value);
+        }
+        try {
+            const res = await updateProfileRequest(data);
+            handleClose();
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -101,7 +112,7 @@ function ModalEditProfile({ handleClose }) {
                             <div className="sm:w-[190px] w-[100px] flex sm:justify-end justify-center">
                                 <div className="relative sm:w-[96px] sm:h-[96px] w-[70px] h-[70px]">
                                     <img
-                                        src={formData?.avatar instanceof File ? URL.createObjectURL(formData.avatar) : ava}
+                                        src={formData?.avatar || ava}
                                         alt=""
                                         className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full"
                                     />
@@ -139,7 +150,7 @@ function ModalEditProfile({ handleClose }) {
                                 type="text"
                                 name="email"
                                 className="w-3/4 outline-none px-3 h-[35px] bg-[#f5fbff] rounded-md border-[#55B7FF] border cursor-pointer sm:text-base text-[13px]"
-                                value={formData?.email}
+                                defaultValue={formData?.email}
                                 // onChange={(e)=> handleInputChange('email')}
                                 disabled></input>
                         </div>
@@ -154,14 +165,15 @@ function ModalEditProfile({ handleClose }) {
                         </div>
                         <div className="w-full flex px-2">
                             <div className="w-1/4 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Ngày sinh</div>
-                            <input
-                                name="dob"
-                                type="date"
-                                className="w-3/4 outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                value={formData?.dateOfBirth ? formatDate(formData.dateOfBirth) : ''}
-                                onChange={(e) => handleInputChange("dateOfBirth", formatDate(e.target.value))}
-                            ></input>
+
+                            <DatePicker
+                                className="w-3/4"
+                                format="DD-MM-YYYY"
+                                value={formData?.dateOfBirth ? dayjs(formData.dateOfBirth) : null}
+                                onChange={(date) => handleInputChange('dateOfBirth', date ? date.format('YYYY-MM-DD') : null)}
+                            />
                         </div>
+
                         <div className="w-full flex px-2">
                             <div className="w-1/4 sm:mr-[24px] text-start text-[#161823 sm:text-base text-[13px] font-medium leading-6]">Giới tính</div>
                             <div className="flex gap-5">
@@ -207,11 +219,15 @@ function ModalEditProfile({ handleClose }) {
                                     type="text"
                                     name="province"
                                     placeholder="Tỉnh"
+                                    value={formData?.province}
+                                    onChange={(e) => handleInputChange('province', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"></input>
                                 <input
                                     type="text"
                                     name="district"
                                     placeholder="Quận"
+                                    value={formData?.district}
+                                    onChange={(e) => handleInputChange('district', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
 
                                 />
@@ -219,37 +235,12 @@ function ModalEditProfile({ handleClose }) {
                                     type="text"
                                     name="ward"
                                     placeholder="Phường"
+                                    value={formData?.ward}
+                                    onChange={(e) => handleInputChange('ward', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
 
                                 />
-                                {/* <input
-                                    type="text"
-                                    name="province"
-                                    placeholder="Tỉnh"
-                                    className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                    value={formData.address.province}
-                                    onChange={handleInputChange}
-                                />
-                                {formData.address.province && (
-                                    <>
-                                        <input
-                                            type="text"
-                                            name="district"
-                                            placeholder="Quận"
-                                            className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                            value={formData.address.district}
-                                            onChange={handleInputChange}
-                                        />
-                                        <input
-                                            type="text"
-                                            name="ward"
-                                            placeholder="Phường"
-                                            className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
-                                            value={formData.address.ward}
-                                            onChange={handleInputChange}
-                                        />
-                                    </>
-                                )} */}
+
                             </div>
                         </div>
                         <div className="w-full justify-end flex pt-1">

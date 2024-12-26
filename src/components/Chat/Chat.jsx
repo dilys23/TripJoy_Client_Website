@@ -7,7 +7,7 @@ import { getMessageByRoomId, sendMessages } from "../../services/Chat";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { UserContext } from "../../contexts/UserContext";
-function Chat({ handleClose, currentRoom, modePrivate, friend }) {
+function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
     const [listMessage, setListMessage] = useState([]);
     const { user, connection } = useContext(UserContext);
     const myId = user?.profile.id || '';
@@ -20,18 +20,25 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
     const [loading, setLoading] = useState(false);
     const fetchMessage = async () => {
         try {
-            const res = await getMessageByRoomId(currentRoom.roomId);
-            setListMessage(res.messages.data);
+            if (currentRoom) {
+                const res = await getMessageByRoomId(currentRoom.roomId);
+                setListMessage(res.messages.data);
+            } else if (groupRoomChat) {
+                const res = await getMessageByRoomId(groupRoomChat.roomId);
+                setListMessage(res.messages.data);
+            }
         } catch (error) {
             console.log(error)
         }
 
     }
+
     useEffect(() => {
         if (currentRoom) {
             fetchMessage()
         }
     }, [])
+
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -51,30 +58,36 @@ function Chat({ handleClose, currentRoom, modePrivate, friend }) {
 
             return () => {
                 connection.off("ReceiveMessage", handleReceiveMessage);
-                // console.log("Unsubscribed from ReceiveMessage event");
             };
         }
     }, [currentRoom, connection]);
     const sendMessage = async () => {
-        try {
-            if (message.trim() && message.length > 0 && currentRoom) {
-                const res = await sendMessages(currentRoom.roomId, message);
-                await connection.invoke("SendMessage", friend.id, message, friend.userName, friend.avatarUrl);
-                setMessage('');
-                await fetchMessage();
+        if (message.trim() && message.length() > 0) {
+            try {
+                if (currentRoom) {
+                    const res = await sendMessages(currentRoom.roomId, message);
+                    await connection.invoke("SendMessage", friend.id, message, friend.userName, friend.avatarUrl);
+                    setMessage('');
+                    await fetchMessage();
+                }else{
+                    
+                }
+            } catch (error) {
+                console.log('fetch mess:', error);
             }
-        } catch (error) {
-            console.log('fetch mess:', error);
+        } else {
+            return;
         }
     };
+
     // console.log(currentRoom);
     return ReactDOM.createPortal(
         <div className="w-[300px] h-[320px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
             <div className="w-full h-[50px] flex justify-between px-3 py-2 items-center border-b border-b-[#007AFF]">
                 <div className="flex gap-3 ">
                     <img src={avatar} className="rounded-full w-10 h-10"></img>
-                    <div className="flex flex-col">
-                        <span className="text-[14px] font-bold">{friend?.userName}</span>
+                    <div className="flex items-center">
+                        <span className="text-[14px] font-bold">{friend?.userName || groupRoomChat?.chatRoomName}</span>
                         {/* <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span> */}
                     </div>
                 </div>

@@ -37,7 +37,7 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
     return (
         <div className="w-1/2 flex flex-col gap-2 pl-5 ">
             <label
-                className="flex gap-3 items-center cursor-pointer"
+                className="flex sm:gap-3 gap-1 items-center cursor-pointer"
                 htmlFor="image-upload"
             >
                 <img
@@ -47,7 +47,7 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
                     alt="image"
                     className="md:w-[30px] md:h-[30px] w-[25px] h-[25px]"
                 />
-                <span className="text-[15px] text-[#333333] font-medium w-[70px]">
+                <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[70px]">
                     Thêm ảnh
                 </span>
             </label>

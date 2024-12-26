@@ -13,9 +13,9 @@ function RatingStar() {
             {Array(5).fill(false).map((_, index) => (
                 <div key={index} onClick={() => handleClick(index)} className="cursor-pointer">
                     {index < rating ? (
-                        <FaStar className="text-yellow-500 text-[20px]" />
+                        <FaStar className="text-yellow-500 sm:text-[20px]" />
                     ) : (
-                        <FaRegStar className="text-yellow-500 text-[20px]" />
+                        <FaRegStar className="text-yellow-500 sm:text-[20px]" />
                     )}
                 </div>
             ))}

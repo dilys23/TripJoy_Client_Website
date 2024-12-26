@@ -76,22 +76,22 @@ function DetailBudget({ planId }) {
     };
     return (
         <div className="w-full  min-h-[400px]  mt-[-20px] mb-16  flex flex-col gap-6">
-            <div className="w-full h-[178px] bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex">
-                <div className="w-1/3 flex flex-col justify-center items-center h-full pl-12">
-                    <span className="text-[35px] font-bold"> 2.450.000 đ </span>
+            <div className="w-full h-[178px] bg-white shadow-md rounded-[10px] border border-[rgb(204,208,213)] flex">
+                <div className="w-1/3 flex flex-col justify-center items-center h-full sm:pl-12">
+                    <span className="sm:text-[35px] text-[18px] font-bold"> 2.450.000 đ </span>
                     <span className="font-semibold">Đã chi</span>
                 </div>
-                <div className='w-1/3 h-full justify-center items-center flex flex-col text-start gap-1'>
-                    <div className='flex gap-2 items-center w-[120px]'>
+                <div className='w-1/3 h-full justify-center items-center flex flex-col text-start gap-1 sm:pl-0 pl-5'>
+                    <div className='flex gap-2 items-center w-[120px] sm:text-base text-[10px]'>
                         <div className='w-[15px] h-[15px] rounded-full bg-[#17A1FA]'></div>
                         <span className='text-[#979797] font-bold'>Cả nhóm</span>
                     </div>
-                    <span className='text-[#282828] nunito-text font-extrabold text-[20px] w-[120px]'> 3.450.000 đ </span>
-                    <div className='flex gap-2 items-center w-[120px]'>
+                    <span className='text-[#282828] nunito-text font-extrabold sm:text-[20px] w-[120px]'> 3.450.000 đ </span>
+                    <div className='flex gap-2 items-center w-[120px] sm:text-base text-[10px]'>
                         <div className='w-[15px] h-[15px] rounded-full bg-[#FF7324]'></div>
                         <span className='text-[#979797] font-bold'>Còn lại</span>
                     </div>
-                    <span className='text-[#282828] nunito-text font-extrabold text-[20px] w-[120px]'> 1.000.000 đ </span>
+                    <span className='text-[#282828] nunito-text font-extrabold  sm:text-[20px w-[120px]'> 1.000.000 đ </span>
                 </div>
                 <div className='w-1/3 h-full flex'>
                     <Pie
@@ -120,8 +120,8 @@ function DetailBudget({ planId }) {
                     </div>
                 </div>
             </div> */}
-            <div className='w-full flex gap-8'>
-                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-3 py-3 gap-2'>
+            <div className='w-full flex sm:flex-row flex-col gap-8'>
+                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex sm:w-1/2 w-full h-[300px] flex-col px-3 py-3 gap-2'>
                     <div className='flex items-center justify-between '>
                         <span className='font-semibold '>Cá nhân</span>
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
@@ -150,7 +150,7 @@ function DetailBudget({ planId }) {
 
                     </div>
                 </div>
-                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex w-1/2 h-[300px] flex-col px-4 py-3 gap-2'>
+                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex sm:w-1/2 w-full h-[300px] flex-col px-4 py-3 gap-2'>
                     <div className='flex items-center justify-between '>
                         <span className='font-semibold '>Thành viên</span>
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>

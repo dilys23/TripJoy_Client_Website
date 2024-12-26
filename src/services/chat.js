@@ -63,8 +63,6 @@ const createPlanRoomChat = async (planId, PlanName) => {
             planId,
             PlanName
         }, {
-            UserId
-        }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

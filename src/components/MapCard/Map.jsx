@@ -25,7 +25,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
   const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-  console.log(role);
+  // console.log(role);
   const [formData, setFormData] = useState({
     Longitude: "",
     Latitude: "",
@@ -78,7 +78,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
       }
     }
   }, [plan]);
-  console.log("coordinates", coordinates);
+  // console.log("coordinates", coordinates);
   useEffect(() => {
     const map = L.map("map", {
       center: [coordinates.latitude, coordinates.longitude],
@@ -143,11 +143,11 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
       );
       const validWaypoints = [];
 
-      console.log("waypoints", waypoints);
-      console.log(waypoints);
+      // console.log("waypoints", waypoints);
+      // console.log(waypoints);
 
       waypoints.forEach((point) => {
-        console.log("point:::", point);
+        // console.log("point:::", point);
         if (
           point.lat >= 8.179 &&
           point.lat <= 23.393 &&

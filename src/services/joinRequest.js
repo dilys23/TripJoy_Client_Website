@@ -1,9 +1,9 @@
 import api from "../utils/httpRequest"
-// Create room chat
-const commentPost = async (id, comment) => {
+
+const updatePlanStatus = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/posts/${id}/comments`, comment, {
+        const res = await api.put(`travelplan-service/plans/${id}/change-join-status`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -15,10 +15,13 @@ const commentPost = async (id, comment) => {
         throw error;
     }
 };
-const getCommentByPostId = async (id) => {
+const getPlansAvailableToJoin = async (pageIndex, pageSize) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`post-service/posts/${id}/comments`, {
+        const res = await api.get(`travelplan-service/plans/available-join`, {
+            params: {
+                pageIndex, pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -31,10 +34,10 @@ const getCommentByPostId = async (id) => {
     }
 };
 
-const replyComment = async (id, comment) => {
+const joinRequest = async (id, Introduction) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${id}/reply`, comment, {
+        const res = await api.post(`travelplan-service/plans/${id}/join-request`, { Introduction }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -46,10 +49,28 @@ const replyComment = async (id, comment) => {
         throw error;
     }
 }
-const getReplyComment = async (id) => {
+const revokeJoinRequest = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`post-service/comments/${id}/reply`, {
+        const res = await api.post(`travelplan-service/plans/${id}/revoke-join-request`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+}
+const getJoinPlanRequest = async (id, pageIndex, pageSize) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/${id}/join-request`, {
+            params: {
+                pageIndex, pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -61,10 +82,42 @@ const getReplyComment = async (id) => {
         throw error;
     }
 };
-const likeComment = async (idComment, emotion) => {
+const acceptJoinRequest = async (idPlan, idUser) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${idComment}/like`, emotion, {
+        const res = await api.post(`travelplan-service/plans/${idPlan}/join-request/accept/${idUser}`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+
+}
+const declineJoinRequest = async (idPlan, idUser) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`travelplan-service/plans/${idPlan}/join-request/decline/${idUser}`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+
+}
+const viewDetailAvailablePlan = async (id) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/${id}/available-join`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -76,47 +129,4 @@ const likeComment = async (idComment, emotion) => {
         throw error;
     }
 }
-const revokeComment = async (idComment) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`post-service/comments/${idComment}/revokeLike`, {}, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        console.log('error: ', error);
-        throw error;
-    }
-}
-const deleteComment = async (id) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.delete(`post-service/comments/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        console.log('error: ', error);
-    }
-}
-const editComment = async (id, comment) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`post-service/comments/${id}`, comment, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        console.log('error: ', error);
-    }
-}
-export { commentPost, getCommentByPostId, replyComment, getReplyComment, likeComment, revokeComment, deleteComment, editComment }
+export { updatePlanStatus, getPlansAvailableToJoin, joinRequest, revokeJoinRequest, getJoinPlanRequest, acceptJoinRequest, declineJoinRequest, viewDetailAvailablePlan }

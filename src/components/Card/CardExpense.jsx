@@ -13,7 +13,7 @@ const CardExpense = ({ icon, expense }) => {
           <div className="flex flex-col gap-2">
             <h3 className="text-sm font-medium flex"><span className="w-[20px] h-[20px]">{icon}</span>{expense?.name}</h3>
             <div className=" flex items-center">
-              <span className="flex px-3 text-xs font-normal leading-none text-[#6E7073]">
+              <span className="flex px-3 text-xs font-normal leading-none text-[#6E7073] ">
                 7h00 23/12/2024
               </span>
 

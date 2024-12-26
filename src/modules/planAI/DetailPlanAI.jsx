@@ -93,7 +93,7 @@ function DetailPlanAI() {
     }, [listAddress])
     return (
         <div className="relative w-full lg:h-[88vh] sm:h-[92vh] h-[85vh] lg:px-0 px-3">
-            {/* <Map /> */}
+            <Map />
             <img src={map} alt="" className="w-full h-full object-cover" />
             <div className={`absolute lg:w-1/3 sm:w-1/2 w-full lg:h-full sm:h-2/3  ${isUpInformationDetail ? "h-3/5 transition-all duration-700 transform translate-y-0 opacity-100" : "h-auto transition-all transform translate-y-1 duration-700"} left-0 sm:top-0 bottom-0 sm:px-5 sm:py-5 px-3`}>
                 <div className="w-full sm:min-w-[280px] lg:min-w-[460px] h-full bg-white rounded-lg flex flex-col">

@@ -19,7 +19,7 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
         const stars = [];
         for (let i = 1; i <= 5; i++) {
             if (rating >= i) {
-                stars.push(<FaStar key={i} className="text-yellow-500" />);
+                stars.push(<FaStar key={i} className="text-yellow-500 sm:text-base text-[12px]" />);
             } else if (rating >= i - 0.5) {
                 stars.push(<FaStarHalfAlt key={i} className="text-yellow-500" />);
             } else {
@@ -71,24 +71,25 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                     <img
                         src={journey?.avatar || HoiAn}
                         alt=""
-                        className="w-1/6 md:min-w-[120px]  min-w-[77px] object-cover md:h-full h-full rounded-xl"
+                        className="w-1/6 md:min-w-[120px]  min-w-[77px] object-cover md:h-full h-full sm:rounded-xl rounded-md"
                     />
                     <div className="flex w-5/6 flex-col md:px-2 gap-1">
                         <div className="flex justify-between ">
-                            <span className="md:text-[21px] text-[14px] nunito-text font-bold text-[#333333]">
+                            <span className="md:text-[21px] text-[13px] nunito-text font-bold text-[#333333]">
                                 {journey.locationName}
                             </span>
                             {!isEdit ? (
                                 <Button
                                     secondary
-                                    className="md:text-[15px] text-[8px] rounded-lg"
+                                    className="sm:text-[15px] text-[8px] rounded-lg sm:flex hidden "
                                     onClick={() => toggleDetail(journey.planLocationId)}
                                 >
                                     Chi tiết
                                 </Button>
                             ) : null}
+
                         </div>
-                        <span className="nunito-text font-normal text-[#333333] md:text-[14px] text-[10px]">
+                        <span className="nunito-text font-normal text-[#333333] md:text-[14px] text-[8px]">
                             {journey.locationAddress}
                         </span>
                         <div className="w-full flex md:gap-5">
@@ -108,7 +109,18 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                                 </div>
                             )} */}
                         </div>
-                        <div className="flex items-center gap-1 py-2">{renderStars(journey.rating || 5)}</div>
+                        <div className="flex w-full justify-between">
+                            <div className="flex items-center gap-1 py-2">{renderStars(journey.rating || 5)}</div>
+                            {!isEdit ? (
+                                <Button
+                                    secondary
+                                    className="sm:text-[15px] text-[8px] rounded-lg sm:hidden flex "
+                                    onClick={() => toggleDetail(journey.planLocationId)}
+                                >
+                                    Chi tiết
+                                </Button>
+                            ) : null}
+                        </div>
                     </div>
                 </div>
             </div>

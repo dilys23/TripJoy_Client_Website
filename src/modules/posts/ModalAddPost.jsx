@@ -28,8 +28,8 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
     const [imageFiles, setImageFiles] = useState([]);
     const [showImages, setShowImage] = useState(false);
     const [showTrip, setShowTrip] = useState(false);
-
-
+    const [selectImagesPlan, setSelectImagesPlan] = useState([]);
+    const [error, setError] = useState(false);
     // const [api, contextHolder] = notification.useNotification();
     // const openNotificationWithIcon = (type) => {
     //     api[type]({
@@ -146,25 +146,28 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
 
 
     const handleSelect = (index) => {
-        setSelectedImages((prevSelected) =>
-            prevSelected.includes(index)
-                ? prevSelected.filter((i) => i !== index) // Deselect
-                : [...prevSelected, index] // Select
-        );
+        setSelectImagesPlan((prevSelected) => {
+            if (prevSelected.includes(index)) {
+                // Nếu chỉ mục đã tồn tại, loại bỏ nó
+                return prevSelected.filter((item) => item !== index);
+            } else {
+                // Nếu chỉ mục chưa tồn tại, thêm vào
+                return [...prevSelected, index];
+            }
+        });
     };
     // ADD POST NORMAL (WITHOUT PLAN)
     const handleAddPostNormal = async () => {
+        if (!content || !content.trim()) {
+            setError(true)
+            return;
+        }
         try {
             setLoading(true);
             const formData = new FormData();
 
             if (planChosen) {
                 formData.append('PlanPost.Content', content);
-                if (selectedImages.length > 0) {
-                    selectedImages.forEach((image, index) => {
-                        formData.append(`PlanPost.Images[${index}]`, image);
-                    });
-                }
                 formData.append('PlanPost.PlanId', planChosen.id);
                 formData.append('PlanPost.PlanStartDate', planChosen.startDate);
                 formData.append('PlanPost.PlanEndDate', planChosen.endDate);
@@ -177,19 +180,35 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                 if (showTrip) {
                     planChosen.locations.forEach((location, index) => {
                         formData.append(`PlanPost.PostPlanLocations[${index}].LocationId`, location.id);
-                        formData.append(`PlanPost.PostPlanLocations[${index}].Latitude`, location.latitude);
-                        formData.append(`PlanPost.PostPlanLocations[${index}].Longitude`, location.longitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Latitude`, location.latitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Longitude`, location.longitude);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Order`, location.order);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Name`, location.name);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Address`, location.address);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].EstimatedStartDate`, location.estimatedStartDate);
                     });
                 }
+                if (showImages || selectedImages.length > 0) {
+                    const allSelectedFiles = [
+                        ...selectedImages,
+                        ...selectImagesPlan.map(index => imageFiles[index]),
+                    ];
+                    allSelectedFiles.forEach((file, index) => {
+                        formData.append(`PlanPost.Images[${index}]`, file);
+                    });
+
+                }
+
+
                 console.log(planChosen);
                 for (let [key, value] of formData.entries()) {
                     console.log(`${key}: ${value}`);
                 }
                 // const response = await createPostPlan(formData);
                 // console.log(response);
+
+                const response = await createPostPlan(formData);
+
             } else {
                 formData.append('Post.Content', content);
                 if (selectedImages.length > 0) {
@@ -201,11 +220,11 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                 console.log(res);
             }
 
-            // handleClose();
-            // openNotificationWithIcon('success', 'Thông báo', 'Tạo bài đăng thành công !', true);
-            // if (onRefresh) {
-            //     onRefresh();
-            // }
+            handleClose();
+            openNotificationWithIcon('success', 'Thông báo', 'Tạo bài đăng thành công !', true);
+            if (onRefresh) {
+                onRefresh();
+            }
             setLoading(false);
         } catch (error) {
             console.log('error', error)
@@ -276,7 +295,7 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                             </div>
 
                         </div>
-                        <div className="flex flex-col gap-2 text-start">
+                        <div className="flex flex-col gap-2 text-start relative">
 
                             {/* Content  */}
                             <span className="text-[13px] font-bold">Nội dung</span>
@@ -284,7 +303,7 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                                 onChange={(e) => setContent(e.target.value)}
                                 value={content}
                                 height="80px" className=" text-[13px]" placeholder="Chia sẻ chuyến đi của bạn..."></TextArea>
-
+                            {error && <span className="absolute left-0 top-[110px] text-[9px] text-red-500 leading-[9px]">Vui lòng nhập nội dung bài viết !</span>}
                             {/* Up load anh nhaaa */}
                             {openFieldAddImage &&
                                 <div className="relative w-full h-[120px] border border-[#b3b3b3] mt-2 rounded justify-center flex flex-col gap-1 bg-[#f8f9fb] p-1 overflow-hidden">
@@ -304,28 +323,33 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                                                         alt={`Selected ${index}`}
                                                         className="w-full h-full object-cover rounded"
                                                     />
-                                                    <div className=" absolute top-1 left-1 flex justify-center items-center text-[20px] gap-2">
-                                                        <button
-                                                            onClick={() => removeImage(index)}
-                                                            className=" bg-white p-2  rounded-full hover:bg-[#e8e5e5]" >
-                                                            <MdDelete className="text-[12px]" /></button>
-                                                        <button
-                                                            onClick={triggerFileInput}
-                                                            className="flex bg-white px-2 py-1 rounded-md hover:bg-[#e8e5e5] text-[13px] items-center justify-center gap-1">
-                                                            <BsFileEarmarkImage />
-                                                            <span>Thêm ảnh</span>
-                                                            <input
-                                                                type="file"
-                                                                accept="image/*"
-                                                                multiple
-                                                                className="hidden"
-                                                                ref={fileInputRef}
-                                                                onChange={(e) => handleImageChange(e)}
-                                                            />
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        onClick={() => removeImage(index)}
+                                                        className="absolute left-1 top-1 bg-white p-2  rounded-full hover:bg-[#e8e5e5]" >
+                                                        <MdDelete className="text-[12px]" /></button>
+
                                                 </div>
                                             ))}
+                                        </div>
+                                    }
+                                    {
+                                        selectedImages.length > 0 &&
+                                        <div className=" absolute top-2 left-12 flex justify-center items-center text-[20px] gap-2">
+
+                                            <button
+                                                onClick={triggerFileInput}
+                                                className="flex bg-white px-2 py-1 rounded-md hover:bg-[#e8e5e5] text-[13px] items-center justify-center gap-1">
+                                                <BsFileEarmarkImage />
+                                                <span>Thêm ảnh</span>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    multiple
+                                                    className="hidden"
+                                                    ref={fileInputRef}
+                                                    onChange={(e) => handleImageChange(e)}
+                                                />
+                                            </button>
                                         </div>
                                     }
                                     {
@@ -532,14 +556,14 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                                             showImages &&
                                             <div className="w-7/12 flex flex-col">
                                                 <span className="text-[13px] font-bold">Ảnh</span>
-                                                <div className="h-[120px] flex-wrap border border-[#b3b3b3] rounded w-full flex gap-3 px-2 py-2 overflow-hidden">
+                                                <div className="h-[120px] flex-wrap border border-[#b3b3b3] rounded w-full flex gap-3 px-3 py-2 overflow-auto">
 
 
                                                     {imageFiles.map((file, index) => (
                                                         <div key={index} className="relative ">
                                                             <input
                                                                 type="checkbox"
-                                                                checked={selectedImages.includes(index)}
+                                                                checked={selectImagesPlan.includes(index)}
                                                                 onChange={() => handleSelect(index)}
                                                                 className="absolute top-1 left-1"
                                                             />

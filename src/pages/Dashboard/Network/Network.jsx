@@ -20,18 +20,20 @@ import { deletePost, getPostHomeFeed } from "../../../services/post";
 import useInfiniteScroll from "../../../hooks/useInfiniteScroll ";
 import CustomModal from "../../../components/Modal/CustomModal";
 import ModalUserLikePost from "../../../components/Modal/ModalUserLikePost";
+import { getPlansAvailableToJoin } from "../../../services/joinRequest";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false);
   const [showModalDeletePost, setShowModalDeletePost] = useState(false);
   const [showModalUserLike, setShowModalUserLike] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [listRecommendation, setListRecommendation] = useState([]);
   const [mySelf, setMySelf] = useState({});
   const { user } = useContext(UserContext);
   // console.log(user);
   useEffect(() => {
     if (user) {
       setMySelf(user.profile);
-      console.log(user.profile)
+      // console.log(user.profile)
     }
   }, [user])
   // const observerRef = useRef(null);
@@ -76,8 +78,20 @@ function Network() {
       console.log(error);
     }
   }
+  const fetchPlanAvailable = async () => {
+    try {
+      const response = await getPlansAvailableToJoin(0, 5);
+      return response.plans.data;
+      // console.log(data.plans.data);
+    }
+    catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
   useEffect(() => {
     fetchInvitation();
+    fetchPlanAvailable();
   }, [])
   const refreshInvitations = async () => {
     await fetchInvitation();
@@ -91,27 +105,33 @@ function Network() {
       console.log(error);
     }
   };
-  const { dataList, loading, hasMore, observerRef, setDataList, refreshData } = useInfiniteScroll(fetchPostHome);
+  const {
+    dataList: posts,
+    loading: loadingPosts,
+    hasMore: hasMorePosts,
+    observerRef: observerRefPosts,
+    setDataList: setPostsDataList,
+    refreshData: refreshPosts
+  } = useInfiniteScroll(fetchPostHome);
+
+  const {
+    dataList: plans,
+    loading: loadingPlans,
+    hasMore: hasMorePlans,
+    observerRef: observerRefPlans,
+    setDataList: setPlansDataList,
+    refreshData: refreshPlans
+  } = useInfiniteScroll(fetchPlanAvailable);
 
 
   const handleRefreshData = () => {
-    refreshData();
+    refreshPosts();
   };
-  // const handleDeletePost = async (postId) => {
-  //   try {
-  //     const res = await deletePost(postId);
-  //     if (res) {
-  //       setDataList((prevData) => prevData.filter(post => post.postId !== postId));
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
 
-  // }
   const handleDeletePost = async (postId) => {
     try {
       const res = await deletePost(postId);
-      setDataList(dataList.filter(post => post.postId !== postId));
+      setPostsDataList(posts.filter(post => post.postId !== postId));
       setShowModalDeletePost(false);
     } catch (error) {
       console.log(error)
@@ -121,36 +141,38 @@ function Network() {
 
   const handleOpenModal = (postId) => {
     setPostIdToDelete(postId);
-    setShowModalDeletePost(true); // Mở modal khi chọn xóa
+    setShowModalDeletePost(true);
   };
   const handleOpenUserLike = (postId) => {
     setPostIdToDelete(postId);
     setShowModalUserLike(true);
   }
+
+
   // const 
-  const listRecommendation = [
-    {
-      id: 1,
-      title: "Cù Lao Chàm",
-      image: anh1,
-      time: "20/12 đến 25/12",
-      numberMember: 5,
-    },
-    {
-      id: 2,
-      title: "Lủng Cú",
-      image: anh2,
-      time: "20/12 đến 25/12",
-      numberMember: 3,
-    },
-    {
-      id: 3,
-      title: "Vịnh Hạ Long",
-      image: anh4,
-      time: "20/12 đến 25/12",
-      numberMember: 2,
-    },
-  ];
+  // const listRecommendation = [
+  //   {
+  //     id: 1,
+  //     title: "Cù Lao Chàm",
+  //     image: anh1,
+  //     time: "20/12 đến 25/12",
+  //     numberMember: 5,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Lủng Cú",
+  //     image: anh2,
+  //     time: "20/12 đến 25/12",
+  //     numberMember: 3,
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Vịnh Hạ Long",
+  //     image: anh4,
+  //     time: "20/12 đến 25/12",
+  //     numberMember: 2,
+  //   },
+  // ];
 
   return (
     <div className=" my-3 flex w-full md:px-3 px-2">
@@ -198,11 +220,11 @@ function Network() {
           </div>
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:px-0 px-1">
-          {dataList.map((data) => (
+          {posts.map((data) => (
             <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
           ))}
-          <div ref={observerRef} style={{ height: '20px' }}>
-            {loading &&
+          <div ref={observerRefPosts} style={{ height: '20px' }}>
+            {loadingPosts &&
               <>
                 <Skeleton active />
                 <Skeleton active />
@@ -227,8 +249,8 @@ function Network() {
         }
         <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold pb-3 pt-3">ĐỊA ĐIỂM GỢI Ý</span>
         <div className="flex w-full flex-col gap-3 pb-16">
-          {listRecommendation.map((plan) => (
-            <RecommendationAddressItem key={plan.id} plan={plan}></RecommendationAddressItem>
+          {plans.map((plan) => (
+            <RecommendationAddressItem mySelf={mySelf} key={plan.id} plan={plan}></RecommendationAddressItem>
           ))}
         </div>
       </div>
