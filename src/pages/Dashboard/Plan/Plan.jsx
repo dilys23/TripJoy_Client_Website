@@ -216,8 +216,8 @@ function Plan() {
 
           ) : (
             <div className="flex flex-col gap-5">
-              {listMyPlan.map((plan) => (
-                <PlanCard key={plan.id} plan={plan}></PlanCard>
+              {listMyPlan.map((plan, index) => (
+                <PlanCard key={plan.id} plan={plan} mapId={index}></PlanCard>
               ))}
             </div>
           )}

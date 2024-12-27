@@ -5,10 +5,17 @@ import Emotion from '../../../components/Emotion';
 import { likePost, revokePost } from '../../../services/interactPost';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { commentPost, deleteComment, getCommentByPostId, likeComment, replyComment } from '../../../services/commentPost';
+import { commentPost, deleteComment, editComment, getCommentByPostId, likeComment, replyComment } from '../../../services/commentPost';
 import CommentItem from '../../../components/CommentItem';
 import { MdMoreVert } from 'react-icons/md';
 import { Dropdown } from 'antd';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
+
+import ModalDetailRouting from '../../../components/Modal/ModalDetailRouting';
 function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const [post, setPost] = useState(data);
     // console.log(data);
@@ -32,6 +39,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const emotionRef = useRef(null);
     const handleMouseEnter = () => setVisible(true);
     const handleMouseLeave = () => handleHide();
+    const [showRouting, setShowRouting] = useState(false);
     const emotions = useMemo(() => [
         { emoji: "👍", label: "0", title: 'Đã thích' },
         { emoji: "❤️", label: "1", title: 'Yêu thích' },
@@ -222,12 +230,31 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             maximumFractionDigits: 0,
         }).format(amount) + 'đ';
     };
-    const handleEditComment = async (commentId) => {
-
+    const handleEditComment = async (commentId, replyText) => {
+        // console.log(commentId, replyText);
+        const commentData = {
+            "Comment": {
+                "Content": replyText
+            }
+        }
+        try {
+            const res = await editComment(commentId, commentData);
+            // console.log(res);
+            setListComment(prevComments =>
+                prevComments.map(comment =>
+                    comment.commentId === commentId
+                        ? { ...comment, content: replyText }
+                        : comment
+                )
+            );
+        } catch (error) {
+            console.log('error', error)
+        }
     }
-
+    // console.log(data.planPost.postPlanLocations);
     return (
         <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-2 pb-3 px-1">
+            {showRouting && <ModalDetailRouting routing={data.planPost.postPlanLocations} handleClose={() => setShowRouting(false)} name={post?.userPosted.userName}></ModalDetailRouting>}
             <div className='w-full flex md:flex-row flex-col'>
                 <div className='w-full'>
                     <div className="flex justify-between px-5 items-center">
@@ -244,9 +271,10 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                         </div>
                         <div className='flex gap-2'>
                             {
-                                post?.postType !== 0
+                                post?.postType !== 0 && post?.planPost
                                 &&
                                 <div
+                                    onClick={() => setShowRouting(true)}
                                     className='flex gap-1 items-center cursor-pointer'>
                                     <span className='text-[12px] text-[#007AFF] font-bold'>Xem lộ trình</span>
                                     <img width="23" height="23" src="https://img.icons8.com/color/48/worldwide-location.png" alt="worldwide-location" />
@@ -277,7 +305,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
 
 
                     </div>
-                    {
+                    {/* {
                         post?.postImages.length > 0 &&
                         <div className={`grid w-full md:h-[250px] h-[120px] gap-3 mt-3 px-5
                               ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
@@ -306,7 +334,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                                             <img src={post?.postImages[2].url} alt="Post image 3"
                                                 className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover" />
                                             <div className="absolute top-0 left-0 w-full md:h-[250px] h-[120px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
-                                                <span className="text-white text-[24px] font-bold">+{post?.image.length - 3}</span>
+                                                <span className="text-white text-[24px] font-bold">+{post?.postImages.length - 3}</span>
                                             </div>
                                         </div>
                                     ) : (
@@ -316,6 +344,59 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                                 </>
                             )}
                         </div>
+                    } */}
+                    {
+                        post?.postImages.length > 0 && (
+                            <div className="w-full md:h-[250px] h-[120px] mt-3 px-5">
+                                {post?.postImages.length <= 3 ? (
+                                    <div
+                                        className={`grid w-full md:h-[250px] h-[120px] gap-3 
+            ${post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+                                    >
+                                        {post?.postImages.map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image.url}
+                                                alt={`Post image ${index + 1}`}
+                                                className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer"
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <Swiper
+                                        modules={[Navigation, Pagination]}
+                                        slidesPerView={3}
+                                        spaceBetween={10}
+                                        navigation
+                                        pagination={{ clickable: true }}
+                                        loop={true}
+                                        className='max-w-[670px] your-slider-class'
+
+                                    >
+                                        {post?.postImages.slice(0, 3).map((image, index) => (
+                                            <SwiperSlide key={index}>
+                                                <img
+                                                    src={image.url}
+                                                    alt={`Post image ${index + 1}`}
+                                                    className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer"
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                        {post?.postImages.length > 3 && (
+                                            <SwiperSlide>
+                                                <div className="relative w-full md:h-[250px] h-[120px] cursor-pointer">
+                                                    <img
+                                                        src={post?.postImages[2].url}
+                                                        alt="Post image 3"
+                                                        className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover"
+                                                    />
+                                                </div>
+                                            </SwiperSlide>
+                                        )}
+                                    </Swiper>
+                                )}
+                            </div>
+                        )
                     }
                 </div>
             </div>
@@ -491,6 +572,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                             />
                         </div>
                     </div>
+
                 </>
 
             }

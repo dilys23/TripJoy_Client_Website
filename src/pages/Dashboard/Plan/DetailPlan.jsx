@@ -1,7 +1,7 @@
 import hoian from "../../../assets/images/noImages.jpg"
-import { MdOutlineSettings } from "react-icons/md";
+import { MdNotifications, MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DetailJourney from "../../../modules/plan/DetailJourney/DetailJourney.jsx";
 import DetailMember from "../../../modules/plan/members/DetailMember.jsx";
 import DetailBudget from "../../../modules/plan/Budget/DetailBudget.jsx"
@@ -18,6 +18,12 @@ import ModalStartPlan from "../../../components/Modal/ModalStartPlan.jsx";
 import ModalSoonEndPlan from "../../../components/Modal/ModalSoonEndPlan.jsx";
 import MapWithRoute from "../../../components/MapCard/MapDemo.jsx";
 import Chat from "../../../components/Chat/Chat.jsx";
+import { createPlanRoomChat } from "../../../services/Chat.js";
+import { FcGlobe, FcPrivacy } from "react-icons/fc";
+import { updatePlanStatus } from "../../../services/joinRequest.js";
+import CustomModal from "../../../components/Modal/CustomModal.jsx";
+import ModalAllJoinRequest from "../../../components/Modal/ModalAllJoinRequest.jsx";
+import { UserContext } from "../../../contexts/UserContext.jsx";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -32,6 +38,14 @@ function DetailPlan() {
     const [planLocation, setPlanLocation] = useState([]);
     const [role, setRole] = useState(null);
     const [isChatVisible, setIsChatVisible] = useState(false);
+    const [groupRoomChat, setGroupRoomChat] = useState();
+    const [isOpen, setIsOpen] = useState(false);
+    const [openModalConfirmChangeStatus, setOpenModalConfirmChangeStatus] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(plan?.status);
+    const [statusPlan, setStatusPlan] = useState();
+    const [openModalAllJoinRequest, setOpenModalAllJoinRequest] = useState(false);
+    const { connection, user } = useContext(UserContext);
+    // console.log(user);
     const fetchPlanLocation = async () => {
         try {
             const data = await getPlanLocation(planId, 0, 10);
@@ -45,6 +59,17 @@ function DetailPlan() {
             console.log("Da co loi xay ra")
         }
     }
+
+    useEffect(() => {
+        if (planId && user) {
+            connection.on("JoinPlan", user?.profile.id, planId);
+            console.log("connection ok", planId, user?.profile.id);
+            return () => {
+                connection.off("LeavePlan", user?.profile.id, planId);
+                console.log("leave connection");
+            };
+        }
+    }, [connection, planId])
     const fetchMember = async () => {
         try {
             const res = await getMemberByPlanId(planId);
@@ -81,22 +106,75 @@ function DetailPlan() {
             description: description
         });
     };
-    const toggleChat = () => {
+    // const toggleChat = () => {
+
+    //     setIsChatVisible(!isChatVisible);
+    // };
+    const handleCreateRoomChat = async () => {
         setIsChatVisible(!isChatVisible);
+        if (plan) {
+            try {
+                console.log(plan);
+                const res = await createPlanRoomChat(planId, plan.title);
+                console.log(res);
+                setGroupRoomChat(res.room);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+    }
+
+
+    const options = [
+        { label: "Công khai", icon: <FcGlobe />, value: 0 },
+        { label: "Riêng tư", icon: <FcPrivacy />, value: 1 },
+    ];
+
+
+    const handleOptionClick = (value) => {
+        setIsOpen(false);
+        setStatusPlan(value);
+        setOpenModalConfirmChangeStatus(true);
     };
+    const handleChangeStatus = async () => {
+        try {
+            const res = await updatePlanStatus(planId);
+            console.log(res);
+            setSelectedOption(statusPlan);
+            setOpenModalConfirmChangeStatus(false)
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
 
     return (
         <div className="flex w-full lg:px-10 px-3 h-auto min-h-[630px] gap-10 ">
             <button
-                onClick={toggleChat}
+                onClick={handleCreateRoomChat}
                 className={`fixed items-center justify-center right-[110px] bottom-12 z-10 bg-white rounded-full w-[55px] h-[55px] message-button ${isChatVisible ? 'hidden' : ''}`}>
                 <img className="w-[30px] h-[30px] text-center mx-auto" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFvklEQVR4nO2Zf2wURRTHnwoIUaL44w+DEkVLQ/nV392521pqMGgEY4AQCEJCBA1BFEH8gZqqIUCbVlPo7t3MHJSfCWlDDGpMiiiIDd3DKqJEDOVmrpVQoJHGVChQ2md273pce9f7gUcPQl/y0n07u+++n30zezevAAM2YLevMcOWTw17M63Lnwm3sjkNdQd1q+h0qyvgVjXHIWWk021vp4baqR9WR8OtatRQX7KqYag7gs8jwh2uWtvwpIiyuY4PV/XGEdmbGx5TNzWOJi6Zkccbs0y30cYnCyrl0N73mILp4Xzbtl+fvceMHXUFj1PD/prTUI9QQ73A69SJET9U4U0P2FyyUGFiGWFijcJkucIlVZjYTJisMl1hsoZw+S3h8kfCRb3pChMe0wkTzQoX5wmT/xAuMRZXmLhKmGxQuNAI9eQE63Ea6mprirlVDLihemi9fVSI+IJKeT9hcqPCxelYP/zGunClVR0bYoG47cXUUK843fY/qKHuokb+C0UId4ZAZNH6wb6n2isZbcDc4lrMWr0bM97gmL6oBHPWft9vMAoXFd0awwoPnUqe6b2TZCytwDHjsjA1Mx/HFs7EcdMW4fjZqzBn/Q/9WZVOhTc8Za4Vp2FnTre6lhkFj/YJQrhc2QNiGcMx6XbMXXcg6VMsj8slZYeUYdRtb/OvjU5qqF/qh22pEUEU/bhView1+5IOQUxncoup0XxDUUPdGbToz4dMN8Llwu4bM1dsxbQpc5IPwAPT65tgrbS+4CHqtpdQw14eUpE8Kl7svnHSwnU4Yd5HNwGA9M0QLg9GXeTXQDxq943Zn9RYftOAMPlTzCC5m7xpyRZM+nIm3TGD5Gw99WC0hHOqT+GR5na8cKUTva1X8NMDLQkdJ31OLVEXM0hBxbF7IyUrrPTimbYO7G3v7D2bkPEoIN/FDlIph0ZKtqrmLIazg94LCRmP4ntiBynaPyhSsg/2nYso5P+OR3bR4yd8VCNMdPWV7PntTdh2uTNEyMf7zyVkPAqIIy4QhYuOSAkX7zmNx1suWQIudXSh6+dWtCVwnPTtJfGBMNEey1tk+s4mLNjsvWHjJNTfi7Misi2O5DfMM9/ehulLNgRihXnnxVuR1mRDEC5x/Ky3cNLi0mvnXOLpuEAIly3JhiBc4tjCWZj1fnUgzmXeJ+IDYaI52RCES0yZkI25pYYvZqLrufITd8dbkb+SDZFbUospE3JMgG6QZojXFC4bkwmRt/F3TJsyFye+3GMLcSBuEMLFqf4SrThPWE2NnPUHMWPlFhw/azmmjMu0/hJ68vq/DH0V6b82UPaHX2CqMhVTc57BtKkLrM1cbmldmGvFq/FXhMkzyV4jJLhqTLTnU+8j8VeEyXPJFk+63exQMjk3bghfRcTfCX6irQqXZ30tVHnU3LKaLVaFia99LVexiTChK1yuV5goIky8qzDvK3lcTjb7xNcFEes3u78/W2yj3pkK9Uwx9/pWI9pxMsVOPaPMJnXc7/1EG4nScDZ/HStMLIiWB8vhYayCIT3OlcEws1toHVfBENTBaq6hA0aiDotQh2kJBBH/RgBpMSsQIlqDN1GDk6hDNVIYjDow1KALdTiKlTAUN0Im6lCDOnSgDrtQhw2ow0XUAVEHF2pwwX+MqMHniQHh4mL4SshqxdE0MgxEaUCET0htj9gH1d7rXDjfbcFrcLV3Ja8PhMnLPdeD/FPh8rlw16IGM/ziL6MOzUEw5hP29hLqCTr+DTX4JShejhTuQw1aUIcjkAgL7BCZPEpcYr65jw8LUQV3oQYnLCEOeB012O+HMJ/qDNRgbyDWYSnq8Jk/NqfgCNTA6Qee32MNlcGwhICYbyIbk+nRrkMHTA486SIYhBp8FTzHA7EOxf54uvm0sQICuc31BMk21GGVX2iZFVdAulUZvzh0QBo6YDYWxfCPmWQaOmAS6rAdHZCSbC0DNmADdpvZf5G0wQqHC1Z0AAAAAElFTkSuQmCC" alt="speech-bubble-with-dots"></img>
             </button>
             {
                 isChatVisible &&
-                <Chat handleClose={() => setIsChatVisible(false)}></Chat>
+                <Chat handleClose={() => setIsChatVisible(false)} plan={plan} groupRoomChat={groupRoomChat}></Chat>
             }
+            {
+                openModalConfirmChangeStatus
+                &&
+                <CustomModal
+                    title="Thông báo"
+                    content="Bạn có chắc chắn muốn chuyển quyền riêng tư của kế hoạch này không?"
+                    open={openModalConfirmChangeStatus}
+                    onOk={() => handleChangeStatus()}
+                    onCancel={() => setOpenModalConfirmChangeStatus(false)}
+                    okText="Xác nhận"
+                    cancelText="Huỷ"
+                />
+            }
+
             <div className="lg:w-3/5 w-full flex flex-col gap-8">
                 {!plan ?
                     <Skeleton.Image style={{ width: '100%', height: '100%', borderRadius: '8px' }} active />
@@ -110,9 +188,40 @@ function DetailPlan() {
                                 <BsFillPersonPlusFill />
                                 <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
                             </button>
-                            <button className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
-                                <BsShare />
-                            </button>
+                            <Button
+                                leftIcon={selectedOption === 0 ? <FcGlobe /> : <FcPrivacy />}
+                                onClick={() => setIsOpen(!isOpen)}
+                                className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                            </Button>
+                            <Button
+                                onClick={() => setOpenModalAllJoinRequest(true)}
+                                leftIcon={<MdNotifications className="text-[20px] text-[#056649]" />}
+                                className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
+                            </Button>
+                            {
+                                openModalAllJoinRequest
+                                &&
+                                <ModalAllJoinRequest
+                                    planId={planId}
+                                    onSuccess={fetchMember}
+                                    open={() => setOpenModalAllJoinRequest(true)}
+                                    onCancel={() => setOpenModalAllJoinRequest(false)}></ModalAllJoinRequest>
+                            }
+                            {isOpen && (
+                                <ul className="absolute top-full left-1/2 mt-2 w-[100px] bg-white border border-[#CCD0D5] rounded-md shadow-lg z-10 ">
+                                    {options.map((option, index) => (
+                                        <li
+                                            key={index}
+                                            onClick={() => handleOptionClick(option.value)}
+                                            className="px-1 py-2 cursor-pointer hover:bg-gray-100 text-[12px] flex items-center space-x-2"
+                                        >
+                                            <span>{option.icon}</span>
+                                            <span>{option.label}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+
                             {
                                 role === 0
                                 &&
@@ -139,9 +248,9 @@ function DetailPlan() {
                         </div>
                     </div>}
                 <div className=" flex w-full justify-between items-center">
-                    <div className="flex gap-10">
+                    <div className="flex sm:gap-10 gap-2">
                         <button
-                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh"   ? "text-black font-bold border-b-4 border-black"
+                            className={`font-semibold md:text-[18px] cursor-pointer ${activeTab === "hanhTrinh" ? "text-black font-bold border-b-4 border-black"
                                 : "text-zinc-400"}`}
                             onClick={() => setActiveTab("hanhTrinh")}
                         >
@@ -165,7 +274,7 @@ function DetailPlan() {
                     {plan?.status === 0 &&
                         <Button
                             onClick={() => setOpenModalStartPlan(true)}
-                            secondary className="text-[15px] w-[120px]" >Bắt đầu</Button>
+                            secondary className="text-[15px] sm:w-[120px]" >Bắt đầu</Button>
                     }
                     {plan?.status === 1 &&
                         <button

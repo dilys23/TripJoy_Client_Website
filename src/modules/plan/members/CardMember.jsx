@@ -35,7 +35,7 @@ function CardMember({ role, member, handleOpenModalEdit, handleOpenModalRemoveMe
     return (
         <div className="w-full h-[80px] flex shadow-md rounded-[10px] border border-[#CCD0D5] items-center px-5 justify-between">
             <div className="flex gap-3  items-center">
-                <Avatar className="w-[60px] h-[60px] object-cover cursor-pointer" src={user?.avatar || avatarDefault}></Avatar>
+                <Avatar className="w-[60px] h-[60px] object-cover cursor-pointer" src={user?.avatar?.url || avatarDefault}></Avatar>
                 <span className="font-bold nunito-text cursor-pointer">{loading ? 'Name User' : user?.userName}</span>
             </div>
             <div className="flex gap-5 items-center">

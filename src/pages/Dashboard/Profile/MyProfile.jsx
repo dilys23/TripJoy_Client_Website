@@ -48,6 +48,7 @@ function MyProfile() {
     useEffect(() => {
         fetchUser();
     }, [id.id])
+    console.log(profile)
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState("Công khai");
 
@@ -125,36 +126,7 @@ function MyProfile() {
 
         fetchFriends();
     }, []);
-    const dataPost = [
-        {
-            avatar: ava,
-            name: 'Bach Duong',
-            time: '12 tieng truoc',
-            title: 'Măng Đen hôm đó nhiều mây',
-            descrip: 'Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Măng Đen hôm đó nhiều mây. Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.Nếu là người yêu núi yêu rừng thì Măng Đen là một nơi thật tuyệt. Và nó tuyệt với mìn thật.',
-            image: [anh2, anh1, anh4],
-            isLiked: true,
-            numLikes: 100,
-            numComments: 8
-        }
-    ]
-    // const listFriend = [
-    //     {
-    //         id: 1,
-    //         name: 'Le Nguyen',
-    //         avatar: ava,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Hong Nhung',
-    //         avatar: ava1
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Bao Chau',
-    //         avatar: ava2
-    //     },
-    // ]
+
     const albums = [
         {
             id: 1,
@@ -185,16 +157,16 @@ function MyProfile() {
     return (
         <div className="w-full min-h-screen flex h-auto flex-col sm:px-20 pb-5 nunito-text">
             <div className="w-full bg-white border border-[#CCD0D5] sm:h-[350px] h-[520px] flex relative rounded-md sm:justify-normal justify-center">
-                <img src={profile?.avatar || coverPhoto} alt="" className="w-full sm:h-[73%] h-2/3 object-cover absolute top-0 rounded-t-md" />
+                <img src={coverPhoto} alt="" className="w-full sm:h-[73%] h-2/3 object-cover absolute top-0 rounded-t-md" />
                 <div className="flex sm:justify-between flex-col sm:flex-row  w-full absolute sm:top-[130px] top-[100px] lg:px-10 px-4 items-center">
                     <div className="flex sm:w-3/4 sm:flex-row flex-col items-center sm:gap-2">
                         <div className="flex justify-center items-center relative lg:w-[212px] lg:h-[212px] sm:w-[160px] sm:h-[160px] w-[178px] h-[178px] bg-white rounded-full">
-                            <img src={profile?.avatar || avatarDefault} alt="" className="lg:w-[200px] lg:h-[200px] sm:w-[150px] sm:h-[150px] w-[168px] h-[168px] rounded-full object-cover absolute cursor-pointer" />
+                            <img src={profile?.avatar?.url || avatarDefault} alt="" className="lg:w-[200px] lg:h-[200px] sm:w-[150px] sm:h-[150px] w-[168px] h-[168px] rounded-full object-cover absolute cursor-pointer" />
                         </div>
                         <div className="flex flex-col items-start justify-normal sm:pt-5 sm:h-[160px]">
                             <div className="flex flex-col sm:text-start text-center mx-auto">
-                                <div className="sm:text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">{profile?.userName}</div>
-                                <div className="sm:text-white text-[20px] nunito-text pt-5 mr-6">@kwiwiwiii</div>
+                                <div className="text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">{profile?.userName}</div>
+                                <div className="text-white text-[20px] nunito-text ">@kwiwiwiii</div>
                             </div>
                             <div className="flex gap-10 sm:pt-10 ">
                                 <div className="flex flex-col justify-center text-center">
@@ -285,11 +257,11 @@ function MyProfile() {
                         </div>
                         <div className="flex gap-2 px-3 pb-3">
                             <MdLocationOn className="text-[25px] text-[#1478B9]" />
-                            <span className="text-[15px]">Đến từ <b>Huế</b></span>
+                            <span className="text-[15px]">Đến từ <b>{profile?.address?.province}</b></span>
                         </div>
                         <div className="flex gap-2 px-4">
                             <MdOutlineEmail className="text-[20px] text-[#1478B9]" />
-                            <span className="text-[15px]">bachduongvan0402@gmail.com</span>
+                            <span className="text-[15px]">{profile?.email}</span>
                         </div>
 
                     </div>
@@ -342,7 +314,7 @@ function MyProfile() {
                         </div>
                         <div className="flex cursor-pointer items-center gap-7 w-full py-1">
                             <Avatar
-                                src={avatarDefault}
+                                src={profile?.avatar?.url || avatarDefault}
                                 alt=""
                                 className="rounded-90 h-[30px] w-[30px] sm:h-[51px] sm:w-[52px]"
                             />
@@ -441,7 +413,7 @@ function MyProfile() {
                     </div>
                 </div>
             </div>
-            {openModalEdit && <ModalEditProfile myId={1} handleClose={() => setOpenModalEdit(false)}></ModalEditProfile>}
+            {openModalEdit && <ModalEditProfile myId={1} handleClose={() => setOpenModalEdit(false)} onSuccess={fetchUser}></ModalEditProfile>}
         </div>
     );
 }

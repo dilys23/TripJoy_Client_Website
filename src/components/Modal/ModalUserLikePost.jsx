@@ -22,7 +22,7 @@ function ModalUserLikePost({ handleClose, postId }) {
             // console.log(emotionLabel)
             const res = await getUserLikePostByIcon(postId, emotionLabel);
             setUserLikePostByIcon(res.users.data);
-            // console.log(res)
+            console.log(res)
         } catch (error) {
             console.error("Error fetching reactions by icon:", error);
         }
@@ -94,7 +94,7 @@ function ModalUserLikePost({ handleClose, postId }) {
                             userLikePost.map((user) => (
                                 <div className="w-full justify-between flex  py-2 ">
                                     <div className="flex gap-3 items-center cursor-pointer">
-                                        <img src={user.avatar || avatarDefault} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
+                                        <img src={user?.url || avatarDefault} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
                                         <span className="text-[14px] font-semibold">{user.userName}</span>
                                     </div>
 
@@ -105,7 +105,7 @@ function ModalUserLikePost({ handleClose, postId }) {
                             userLikePostByIcon.map((user) => (
                                 <div key={user.id} className="w-full justify-between flex py-2">
                                     <div className="flex gap-3 items-center cursor-pointer">
-                                        <img src={user.avatar || avatarDefault} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
+                                        <img src={user.url || avatarDefault} alt="" className="w-[40px] h-[40px] rounded-full object-cover" />
                                         <span className="text-[14px] font-semibold">{user.userName}</span>
                                     </div>
                                 </div>

@@ -11,7 +11,7 @@ function ContactItem({ contact, onlineFriends, onClick }) {
             <div className="flex justify-between items-center w-full lg:h-[66px] h-[50px] lg:px-4 px-2 py-5">
                 <div className='flex gap-3 items-center'>
                     <div className='relative'>
-                        <img src={contact?.avatar || avatarDefault} alt="" className='lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] rounded-90 cursor-pointer' />
+                        <img src={contact?.avatar?.url || avatarDefault} alt="" className='lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] rounded-90 cursor-pointer' />
 
                         {isOnline && (
                             <div className='absolute right-1 bottom-[-2px] rounded-full bg-white w-[12px] h-[12px] flex justify-center items-center'>

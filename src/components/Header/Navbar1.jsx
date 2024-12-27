@@ -2,14 +2,11 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { Collapse, Dropdown, initTWE } from "tw-elements";
 import gifLogo from "../../assets/images/airplane_16121567.gif";
 import staticLogo from "../../assets/images/logoTripJoy.png";
-
-// import Login from "../../modules/auth/Login";
 import Login from "../../modules/auth/Login";
 import SendOTP from "../../modules/auth/SendOTP";
 import ForgetPassword from "../../modules/auth/ForgetPassword";
 import Register from "../../modules/auth/Register";
 import * as MdIcons from "react-icons/md";
-// import noImages from "../../images/noImages.jpg";
 import { UserContext } from "../../contexts/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
@@ -20,6 +17,10 @@ import Search from "./Search";
 import avatarDefault from "../../assets/images/avatarDefault.png"
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import CustomModal from "../Modal/CustomModal";
+import FrameChat from "../Chat/FrameChat";
+import Chat from "../Chat/Chat";
+import { getMyFriend } from "../../services/friend";
+import { createRoomChatPrivate } from "../../services/Chat";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
@@ -31,7 +32,7 @@ const Navbar1 = () => {
   const handleClick = () => {
     setIsMenuOpen(!isMenuOpen); // Đảo ngược trạng thái hiển thị menu
   };
-
+  const [isOpen, setIsOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   var { isRegister, isVerifyAccount, userVerify } = useAuthStore();
 
@@ -52,6 +53,54 @@ const Navbar1 = () => {
   const [showModalLogout, setShowModalLogout] = useState(false);
   const [email, setEmailParent] = useState("");
   const location = useLocation();
+  const [openChatBox, setOpenChatBox] = useState(false);
+  // const [room, setRoom] = useState(null);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [listMyFriend, setListMyFriend] = useState({})
+  const handleOpenChat = (roomData) => {
+    setIsOpen(false);
+    setRoom(roomData);
+    setOpenChatBox(true);
+
+  };
+
+  const handleCloseChat = () => {
+    setRoom(null);
+    setOpenChatBox(false);
+  };
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const listFriend = await getMyFriend();
+        setListMyFriend(listFriend.users.data);
+        // console.log(listFriend.users.data)
+      } catch (error) {
+        console.log('Error while getting my friend request:', error);
+      }
+    };
+
+    fetchFriends();
+  }, []);
+  const createRoomChat = async (friend) => {
+    try {
+      const res = await createRoomChatPrivate(friend.userId);
+      if (res && res.room) {
+        // console.log('Room created:', res.room);
+        // onOpenChat(res.room);
+        // handleClose();
+        setChatRooms((prevRooms) => [
+          ...prevRooms,
+          { room: res.room, friend: friend }
+        ]);
+      } else {
+        console.error('Room creation failed:', res);
+      }
+    } catch (error) {
+      console.error('Error while creating room chat:', error);
+    }
+  };
+
+
   const handleLoginOpen = () => {
     console.log("chuyển qua trang login");
     setShowLogin(true);
@@ -61,6 +110,9 @@ const Navbar1 = () => {
   const handleSendOTPOpen = () => {
     setShowLogin(false);
     setShowSendOTP(true);
+  };
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
   const handleSendOTPClose = () => setShowSendOTP(false);
 
@@ -198,7 +250,9 @@ const Navbar1 = () => {
                 className={`${user ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}
               >
                 <div className="flex flex-col gap-y-4">
-                  <div className="flex items-center gap-x-3">
+                  <a
+                    href="/"
+                    className="flex items-center gap-x-3">
                     <img
                       src={isHovered ? gifLogo : staticLogo}
                       alt="Logo"
@@ -206,7 +260,7 @@ const Navbar1 = () => {
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
                     />
-                  </div>
+                  </a>
                 </div>
               </div>
               <Search></Search>
@@ -298,6 +352,67 @@ const Navbar1 = () => {
                 className="list-style-none mr-5 ms-auto flex flex-row items-center ps-0 md:ps-4"
                 data-twe-navbar-nav-ref
               >
+
+                <li className="relative px-2" data-twe-dropdown-ref>
+                  <button
+                    className="hidden-arrow flex items-center text-blue-800/80 transition duration-200 hover:text-black/80 focus:text-black/80"
+                    onClick={toggleDropdown}
+                  >
+                    <span className="[&>svg]:h-7 [&>svg]:w-7">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M3.505 2.365A41.369 41.369 0 019 2c1.863 0 3.697.124 5.495.365 1.247.167 2.18 1.108 2.435 2.268a4.45 4.45 0 00-.577-.069 43.141 43.141 0 00-4.706 0C9.229 4.696 7.5 6.727 7.5 8.998v2.24c0 1.413.67 2.735 1.76 3.562l-2.98 2.98A.75.75 0 015 17.25v-3.443c-.501-.048-1-.106-1.495-.172C2.033 13.438 1 12.162 1 10.72V5.28c0-1.441 1.033-2.717 2.505-2.914z" />
+                        <path d="M14 6c-.762 0-1.52.02-2.271.062C10.157 6.148 9 7.472 9 8.998v2.24c0 1.519 1.147 2.839 2.71 2.935.214.013.428.024.642.034.2.009.385.09.518.224l2.35 2.35a.75.75 0 001.28-.531v-2.07c1.453-.195 2.5-1.463 2.5-2.915V8.998c0-1.526-1.157-2.85-2.729-2.936A41.645 41.645 0 0014 6z" />
+                      </svg>
+                    </span>
+
+                    <span className="absolute -mt-6 ms-5 rounded-full bg-red-600 px-[0.50em] py-[0.25em] text-[0.6rem] font-bold leading-none text-white">
+                      6
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <FrameChat
+                      createRoomChat={createRoomChat}
+                      onOpenChat={handleOpenChat}
+                      handleClose={() => setIsOpen(false)}></FrameChat>
+                  )}
+                  {/* {openChatBox && room && (
+                    <Chat
+                      handleClose={handleCloseChat}
+                      key={room?.roomId}
+                      currentRoom={room}
+                    />
+                  )} */}
+
+                  {chatRooms.map((room, index) => (
+                    <Chat
+                      key={index}
+                      handleClose={() => setChatRooms((prevRooms) => prevRooms.filter((_, i) => i !== index))}
+                      currentRoom={room.room}
+                      modePrivate={true}
+                      friend={room.friend}
+                    />
+                  ))}
+                </li>
+                {/* <ul className="absolute right-0 z-10 mt-2 w-60 bg-white shadow-md rounded-lg border dark:bg-gray-800">
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 1</span>: Tin nhắn demo 1
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 2</span>: Tin nhắn demo 2
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
+                        <span className="font-semibold">Người gửi 3</span>: Tin nhắn demo 3
+                      </li>
+                      <li className="p-2 text-sm text-gray-700 dark:text-gray-300">
+                        <a href="#" className="text-blue-500 hover:underline">
+                          Xem tất cả tin nhắn
+                        </a>
+                      </li>
+                    </ul> */}
                 <li
                   className="relative px-2"
                   data-twe-dropdown-ref
@@ -354,7 +469,7 @@ const Navbar1 = () => {
                               onClick={handleClickProfile}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
                               {/* <MdIcons.MdOutlinePerson className=" text-[25px]" /> */}
-                              <img src={avatarDefault} alt="" className="w-[30px] h-[30px] rounded-full" />
+                              <img src={user?.profile?.avatar?.url || avatarDefault} alt="" className="w-[30px] h-[30px] rounded-full" />
                               <span className="text-[14px]">{user?.profile.userName}</span>
                             </div>
                             <div className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
@@ -386,7 +501,7 @@ const Navbar1 = () => {
                         onMouseEnter={() => {
                           setShowMenu(true);
                         }}
-                        src={avatarDefault}
+                        src={user?.profile?.avatar?.url || avatarDefault}
                         type="button"
                         // data-dropdown-toggle="userDropdown"
                         // data-dropdown-placement="bottom-start"

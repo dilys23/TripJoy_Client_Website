@@ -22,6 +22,7 @@ function CommentItem({
     const [replyText, setReplyText] = useState("");
     const [listReplyComment, setListReplyComment] = useState([]);
     const [visibleReplies, setVisibleReplies] = useState({});
+    const [inputComment, setInputComment] = useState(item.content);
     // const [replyEmotion, setReplyEmotion] = useState({});  // Store emotions for replies
     const dropdownRef = useRef(null);
     const moreButtonRef = useRef(null);
@@ -138,14 +139,13 @@ function CommentItem({
             console.log(error)
         }
     }
-    // const handleEditComment = async = (commentId) => {
-    //     try {
-
-
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    const handleEditComment = () => {
+        if (inputComment.trim()) {
+            onEditComment(item.commentId, inputComment);
+            setIsEditing(false)
+            fetchReplies();
+        }
+    }
     return (
         <div className='w-full h-fit flex gap-3'>
             <AvatarDefault src="" className="w-[30px] h-[30px]" />
@@ -154,14 +154,13 @@ function CommentItem({
                     <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
                         <span className='text-[13px] font-semibold'>{item.userName}</span>
                         {isEditing ? (
-                            // Hiển thị input nếu đang ở chế độ chỉnh sửa
                             <div className="flex items-center gap-2">
                                 <input
-                                    value={replyText}
-                                    onChange={(e) => setReplyText(e.target.value)}
+                                    value={inputComment}
+                                    onChange={(e) => setInputComment(e.target.value)}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-
+                                            handleEditComment();
                                             setIsEditing(false);
                                         }
                                     }}
@@ -171,7 +170,7 @@ function CommentItem({
                                 />
                                 <img
                                     onClick={() => {
-                                        // handleSendReply();
+                                        handleEditComment();
                                         setIsEditing(false);
                                     }}
                                     width="20"

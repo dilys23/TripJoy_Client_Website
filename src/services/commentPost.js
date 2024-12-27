@@ -105,10 +105,10 @@ const deleteComment = async (id) => {
         console.log('error: ', error);
     }
 }
-const editComment = async (id, Comment) => {
+const editComment = async (id, comment) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`post-service/comments/${id}`, { Comment }, {
+        const res = await api.put(`post-service/comments/${id}`, comment, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

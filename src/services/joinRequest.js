@@ -1,11 +1,27 @@
 import api from "../utils/httpRequest"
-// Create room chat
-const createRoomChatPrivate = async (UserId) => {
+
+const updatePlanStatus = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post('chat-service/rooms/private', {
-            UserId
-        }, {
+        const res = await api.put(`travelplan-service/plans/${id}/change-join-status`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+};
+const getPlansAvailableToJoin = async (pageIndex, pageSize) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/available-join`, {
+            params: {
+                pageIndex, pageSize
+            },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -18,13 +34,42 @@ const createRoomChatPrivate = async (UserId) => {
     }
 };
 
-const getMessageByRoomId = async (roomId, pageIndex, pageSize) => {
+const joinRequest = async (id, Introduction) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`chat-service/rooms/${roomId}/messages`, {
+        const res = await api.post(`travelplan-service/plans/${id}/join-request`, { Introduction }, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+}
+const revokeJoinRequest = async (id) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`travelplan-service/plans/${id}/revoke-join-request`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+}
+const getJoinPlanRequest = async (id, pageIndex, pageSize) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`travelplan-service/plans/${id}/join-request`, {
             params: {
-                pageIndex,
-                pageSize
+                pageIndex, pageSize
             },
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -36,13 +81,11 @@ const getMessageByRoomId = async (roomId, pageIndex, pageSize) => {
         console.log('error: ', error);
         throw error;
     }
-}
-const sendMessages = async (roomId, Message) => {
+};
+const acceptJoinRequest = async (idPlan, idUser) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post(`chat-service/rooms/${roomId}/messages`, {
-            Message
-        }, {
+        const res = await api.post(`travelplan-service/plans/${idPlan}/join-request/accept/${idUser}`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -53,16 +96,28 @@ const sendMessages = async (roomId, Message) => {
         console.log('error: ', error);
         throw error;
     }
-}
 
+}
+const declineJoinRequest = async (idPlan, idUser) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`travelplan-service/plans/${idPlan}/join-request/decline/${idUser}`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
 
-const createPlanRoomChat = async (planId, PlanName) => {
+}
+const viewDetailAvailablePlan = async (id) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.post('chat-service/rooms/plan', {
-            planId,
-            PlanName
-        }, {
+        const res = await api.get(`travelplan-service/plans/${id}/available-join`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -74,39 +129,4 @@ const createPlanRoomChat = async (planId, PlanName) => {
         throw error;
     }
 }
-const getRecentConversation = async (pageIndex, pageSize) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.get(`chat-service/rooms`, {
-            params: {
-                pageIndex,
-                pageSize
-            },
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        console.log('error: ', error);
-        throw error;
-    }
-}
-const markMessageRead = async (roomId) => {
-    try {
-        const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`chat-service/rooms/${roomId}/mark-read`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        return res.data;
-    } catch (error) {
-        console.log('error: ', error);
-        throw error;
-    }
-}
-
-export { createRoomChatPrivate, getMessageByRoomId, sendMessages, createPlanRoomChat, getRecentConversation, markMessageRead }
+export { updatePlanStatus, getPlansAvailableToJoin, joinRequest, revokeJoinRequest, getJoinPlanRequest, acceptJoinRequest, declineJoinRequest, viewDetailAvailablePlan }

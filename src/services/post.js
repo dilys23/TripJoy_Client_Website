@@ -65,6 +65,25 @@ const getPostHomeFeed = async (pageIndex, pageSize) => {
         throw error
     }
 }
+
+const getPostByUserId = async (userId, pageIndex, pageSize) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`post-service/posts/users/${userId}`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error
+    }
+}
 const editPost = async (id, formData) => {
     try {
         const accessToken = localStorage.getItem('accessToken');

@@ -154,7 +154,7 @@ function PlanAI() {
       // Lưu kết quả vào localStorage
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fetchedPlans));
       localStorage.setItem('currentPlan', JSON.stringify(plan));
-      
+
       // Điều hướng đến trang generatePlan với plan trong state
       history.push(config.routes.generatePlan, { plan });
 
@@ -192,13 +192,12 @@ function PlanAI() {
       <div className="relative h-[100%] w-full overflow-x-hidden rounded-[7px] border-[0.4px] border-[#CCD0D5] bg-white shadow-md">
         {currentStep === 1 && (
           <div
-            className={`step-container flex flex-col items-center justify-start gap-2 pt-8 ${
-              slideDirection === "next"
-                ? "step-exit-next"
-                : slideDirection === "prev"
-                  ? "step-exit-prev"
-                  : "step-active"
-            }`}
+            className={`step-container flex flex-col items-center justify-start gap-2 pt-8 ${slideDirection === "next"
+              ? "step-exit-next"
+              : slideDirection === "prev"
+                ? "step-exit-prev"
+                : "step-active"
+              }`}
           >
             <span className="text-[14px] font-bold leading-10 sm:text-[25px]">
               Hãy chọn địa điểm mà bạn muốn đi ?
@@ -206,9 +205,8 @@ function PlanAI() {
             <input
               type="text"
               placeholder="Nơi bắt đầu..."
-              className={`h-[35px] w-full rounded-[98px] border px-3 text-[10px] outline-none sm:h-[50px] sm:w-1/3 sm:text-[16px] ${
-                errors.startLocation ? "border-red-500" : "border-gray"
-              }`}
+              className={`h-[35px] w-full rounded-[98px] border px-3 text-[10px] outline-none sm:h-[50px] sm:w-1/3 sm:text-[16px] ${errors.startLocation ? "border-red-500" : "border-gray"
+                }`}
               value={startLocation}
               onChange={(e) => setStartLocation(e.target.value)}
             />
@@ -220,9 +218,8 @@ function PlanAI() {
             <input
               type="text"
               placeholder="Nơi kết thúc..."
-              className={`h-[35px] w-full rounded-[98px] border px-3 text-[10px] outline-none sm:h-[50px] sm:w-1/3 sm:text-[16px] ${
-                errors.endLocation ? "border-red-500" : "border-gray"
-              }`}
+              className={`h-[35px] w-full rounded-[98px] border px-3 text-[10px] outline-none sm:h-[50px] sm:w-1/3 sm:text-[16px] ${errors.endLocation ? "border-red-500" : "border-gray"
+                }`}
               value={endLocation}
               onChange={(e) => setEndLocation(e.target.value)}
             />
@@ -319,10 +316,10 @@ function PlanAI() {
             </div>
 
             <div className="absolute bottom-10 flex w-[90%] justify-between">
-              <Button tertiary onClick={handleBackPage}>
+              <Button tertiary onClick={handleBackPage} className="text-[13px]">
                 Trở về
               </Button>
-              <Button secondary onClick={handleNextPage}>
+              <Button secondary onClick={handleNextPage} >
                 Kế tiếp
               </Button>
             </div>
@@ -342,9 +339,8 @@ function PlanAI() {
             <div className="flex w-full justify-center gap-5 md:gap-12">
               <input
                 type="text"
-                className={`h-[50px] w-1/3 rounded-lg border border-[#CCD0D5] px-5 text-[20px] text-[#F05D1D] outline-none ${
-                  errors.budget ? "border-red-500" : "border-gray"
-                }`}
+                className={`h-[50px] w-1/3 rounded-lg border border-[#CCD0D5] px-5 text-[20px] text-[#F05D1D] outline-none ${errors.budget ? "border-red-500" : "border-gray"
+                  }`}
                 placeholder="1.500.000đ"
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
@@ -413,7 +409,7 @@ function PlanAI() {
               </div>
             )}
             <div className="absolute bottom-10 flex w-[90%] justify-between pt-12">
-              <Button tertiary onClick={handleBackPage}>
+              <Button tertiary onClick={handleBackPage} className="text-[13px]">
                 Trở về
               </Button>
               <Button secondary onClick={handleNextPage}>
@@ -447,7 +443,7 @@ function PlanAI() {
               )} */}
             </div>
             <div className="absolute bottom-10 flex w-[90%] justify-between">
-              <Button tertiary onClick={handleBackPage}>
+              <Button tertiary onClick={handleBackPage} className="text-[13px]">
                 Trở về
               </Button>
               <Button
