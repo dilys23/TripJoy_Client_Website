@@ -27,7 +27,7 @@ function ModalJoinRequest({
             <div className="flex flex-col gap-2">
                 <div className="relative pb-5">
                     <img src={coverPhoto} alt="" />
-                    <img src={mySelf.avatar || ava} alt="" className="w-16 h-16 rounded-full absolute  top-[80px] left-5" />
+                    <img src={mySelf.avatar?.url || ava} alt="" className="w-16 h-16 rounded-full absolute  top-[80px] left-5" />
                     <span className="pl-[90px] font-bold mt-3">{mySelf.userName}</span>
                 </div>
                 <TextArea height="100px" width="100%"

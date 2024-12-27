@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MdLocationOn } from "react-icons/md";
 import "leaflet-routing-machine";
-function RoutingMap(planLocation) {
-    console.log(planLocation)
+function RoutingMap(planLocation, mapId) {
+    const mapRef = useRef(null);
+    // console.log(planLocation)
     const [coordinates, setCoordinates] = useState({
         latitude: 16.054,
         longitude: 108.202,
@@ -18,7 +19,14 @@ function RoutingMap(planLocation) {
             return;
         }
 
-        const map = L.map("map", {
+        // Use mapRef instead of document.getElementById
+        const mapContainer = mapRef.current;
+        if (mapContainer && mapContainer._leaflet_id) {
+            // Map already initialized, exit the function
+            return;
+        }
+
+        const map = L.map(mapRef.current, { // Initialize map using mapRef.current
             center: [coordinates.latitude, coordinates.longitude],
             zoom: 10,
             zoomControl: false,
@@ -35,10 +43,7 @@ function RoutingMap(planLocation) {
             .addTo(map);
 
         locations.forEach((location, index) => {
-            // Lấy tọa độ và tên từ từng location
             const { coordinates: { latitude, longitude }, name } = location;
-
-            // Tạo icon tùy chỉnh cho marker
             const iconHtml = ReactDOMServer.renderToStaticMarkup(
                 <div style={{ position: "relative", textAlign: "center" }}>
                     <MdLocationOn style={{ fontSize: "35px", color: "red" }} />
@@ -69,10 +74,9 @@ function RoutingMap(planLocation) {
                 iconAnchor: [15, 50],
             });
 
-            // Tạo marker từ tọa độ và thêm vào map
             L.marker([latitude, longitude], { icon: customIcon })
                 .addTo(map)
-                .bindPopup(`<b>${name}</b>`); // Hiển thị tên location khi click vào marker
+                .bindPopup(`<b>${name}</b>`);
         });
 
         if (locations.length > 1) {
@@ -91,15 +95,22 @@ function RoutingMap(planLocation) {
         }
 
         return () => {
-            map.off();
-            map.remove();
+            // Cleanup map instance on component unmount
+            if (map) {
+                map.off();
+                map.remove();
+            }
         };
-    }, [planLocation]);
+    }, [planLocation, coordinates]); // Add coordinates as dependency to ensure the map updates if they change
+
 
     return (
+
         <div
-            id="map"
+            ref={mapRef} // This will now reference the map container
+            id={`map-${mapId}`} // Optional dynamic ID for multiple maps
             className="z-10 h-full w-full rounded-[10px] border border-slate-300 sm:pt-2"
+
         ></div>
     );
 }

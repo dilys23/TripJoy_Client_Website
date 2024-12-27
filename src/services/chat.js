@@ -74,4 +74,39 @@ const createPlanRoomChat = async (planId, PlanName) => {
         throw error;
     }
 }
-export { createRoomChatPrivate, getMessageByRoomId, sendMessages, createPlanRoomChat }
+const getRecentConversation = async (pageIndex, pageSize) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.get(`chat-service/rooms`, {
+            params: {
+                pageIndex,
+                pageSize
+            },
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+}
+const markMessageRead = async (roomId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.put(`chat-service/rooms/${roomId}/mark-read`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log('error: ', error);
+        throw error;
+    }
+}
+
+export { createRoomChatPrivate, getMessageByRoomId, sendMessages, createPlanRoomChat, getRecentConversation, markMessageRead }

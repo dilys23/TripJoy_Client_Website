@@ -1,6 +1,6 @@
 import { MdClose } from "react-icons/md";
 import ava from "../../assets/images/avatarDefault.png"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EditProfileIcon } from "../../components/Icons/Icons";
 import { getCurrentUser } from "../../services/getCurrentUser.js";
 import { DatePicker } from "antd";
@@ -8,7 +8,8 @@ import 'antd/dist/reset.css';
 import moment from 'moment';
 import { updateProfileRequest } from "../../services/updateProfile.js";
 import dayjs from "dayjs";
-function ModalEditProfile({ handleClose }) {
+import { UserContext } from "../../contexts/UserContext.jsx";
+function ModalEditProfile({ handleClose, onSuccess }) {
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -16,30 +17,26 @@ function ModalEditProfile({ handleClose }) {
             document.body.style.overflow = "auto";
         };
     }, []);
-    const formatDate = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+
     const [formData, setFormData] = useState({
         userName: '',
         phoneNumber: '',
         dateOfBirth: '',
         avatar: null,
-        district: '',
-        ward: '',
-        province: '',
-        gender: '',
-        country: 'Việt Nam'
+        address: {
+            district: '',
+            ward: '',
+            province: '',
+            country: 'Việt Nam'
+        }
     });
 
     const fetchUser = async () => {
         try {
             const res = await getCurrentUser();
             setFormData(res.user.profile);
-            console.log(res.user.profile)
+            console.log(res.user.profile);
+
         } catch (error) {
             console.log(error)
         }
@@ -52,39 +49,71 @@ function ModalEditProfile({ handleClose }) {
     const [isChange, setIsChange] = useState(true);
 
     const handleInputChange = (field, value) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value === "" ? null : value
-        }));
+        setFormData(prev => {
+            if (["province", "district", "ward"].includes(field)) {
+                // Cập nhật từng trường trong address
+                return {
+                    ...prev,
+                    address: {
+                        ...prev.address,
+                        [field]: value === "" ? null : value
+                    }
+                };
+            }
+            return {
+                ...prev,
+                [field]: value === "" ? null : value
+            };
+        });
     };
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-
-            handleInputChange("avatar", e.target.files[0]);
+            const previewUrl = URL.createObjectURL(file);
+            handleInputChange("avatar", { file, previewUrl });
         }
+    };
+    const validateForm = () => {
+        const { userName, phoneNumber, dateOfBirth, avatar, address } = formData;
+        if (!userName || !phoneNumber || !dateOfBirth || !avatar) {
+            return false;
+        }
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            return false;
+        }
+        if (!address?.district || !address?.ward || !address?.province) {
+            return false;
+        }
+        return true;
     };
 
 
     const handleSubmit = async () => {
+        if (!validateForm()) {
+            alert("Please fill out all required fields correctly.");
+            return;
+        }
 
         const data = new FormData();
         data.append('UserName', formData.userName);
         data.append('PhoneNumber', formData.phoneNumber);
         data.append('DateOfBirth', formData.dateOfBirth);
-        data.append('Avatar', formData.avatar);
-        data.append('Address.district', formData.district);
-        data.append('Address.ward', formData.ward);
-        data.append('Address.province', formData.province);
+        data.append('Avatar', formData.avatar?.file);
+        data.append('Address.district', formData.address?.district);
+        data.append('Address.ward', formData.address?.ward);
+        data.append('Address.province', formData.address?.province);
         data.append('Gender', formData.gender);
-        data.append('Address.country', 'Việt Nam');
+        data.append('Address.country', formData.address?.country || 'Việt Nam');
         for (let [key, value] of data.entries()) {
             console.log(key, ':', value);
         }
         try {
             const res = await updateProfileRequest(data);
+            console.log(res);
             handleClose();
+            onSuccess();
 
         } catch (error) {
             console.log(error)
@@ -112,8 +141,8 @@ function ModalEditProfile({ handleClose }) {
                             <div className="sm:w-[190px] w-[100px] flex sm:justify-end justify-center">
                                 <div className="relative sm:w-[96px] sm:h-[96px] w-[70px] h-[70px]">
                                     <img
-                                        src={formData?.avatar || ava}
-                                        alt=""
+                                        src={formData?.avatar?.previewUrl || formData?.avatar?.url || ava}
+                                        alt="Avatar"
                                         className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full"
                                     />
                                     {/* <img src={URL.createObjectURL(formData?.avatar) || ava} alt="" className="sm:w-[96px] sm:h-[96px] w-[70px] h-[70px] rounded-full" /> */}
@@ -219,14 +248,14 @@ function ModalEditProfile({ handleClose }) {
                                     type="text"
                                     name="province"
                                     placeholder="Tỉnh"
-                                    value={formData?.province}
+                                    value={formData?.address?.province || ''}
                                     onChange={(e) => handleInputChange('province', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"></input>
                                 <input
                                     type="text"
                                     name="district"
                                     placeholder="Quận"
-                                    value={formData?.district}
+                                    value={formData?.address?.district || ''}
                                     onChange={(e) => handleInputChange('district', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
 
@@ -235,7 +264,7 @@ function ModalEditProfile({ handleClose }) {
                                     type="text"
                                     name="ward"
                                     placeholder="Phường"
-                                    value={formData?.ward}
+                                    value={formData?.address?.ward || ''}
                                     onChange={(e) => handleInputChange('ward', e.target.value)}
                                     className="w-full outline-none px-3 h-[35px] bg-[#f1f1f2] rounded-md sm:text-base text-[13px]"
 

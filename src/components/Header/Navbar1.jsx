@@ -2,14 +2,11 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { Collapse, Dropdown, initTWE } from "tw-elements";
 import gifLogo from "../../assets/images/airplane_16121567.gif";
 import staticLogo from "../../assets/images/logoTripJoy.png";
-
-// import Login from "../../modules/auth/Login";
 import Login from "../../modules/auth/Login";
 import SendOTP from "../../modules/auth/SendOTP";
 import ForgetPassword from "../../modules/auth/ForgetPassword";
 import Register from "../../modules/auth/Register";
 import * as MdIcons from "react-icons/md";
-// import noImages from "../../images/noImages.jpg";
 import { UserContext } from "../../contexts/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react/headless';
@@ -21,6 +18,9 @@ import avatarDefault from "../../assets/images/avatarDefault.png"
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import CustomModal from "../Modal/CustomModal";
 import FrameChat from "../Chat/FrameChat";
+import Chat from "../Chat/Chat";
+import { getMyFriend } from "../../services/friend";
+import { createRoomChatPrivate } from "../../services/Chat";
 const Navbar1 = () => {
   initTWE({ Collapse, Dropdown });
   const [isHovered, setIsHovered] = useState(false);
@@ -53,6 +53,54 @@ const Navbar1 = () => {
   const [showModalLogout, setShowModalLogout] = useState(false);
   const [email, setEmailParent] = useState("");
   const location = useLocation();
+  const [openChatBox, setOpenChatBox] = useState(false);
+  // const [room, setRoom] = useState(null);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [listMyFriend, setListMyFriend] = useState({})
+  const handleOpenChat = (roomData) => {
+    setIsOpen(false);
+    setRoom(roomData);
+    setOpenChatBox(true);
+
+  };
+
+  const handleCloseChat = () => {
+    setRoom(null);
+    setOpenChatBox(false);
+  };
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const listFriend = await getMyFriend();
+        setListMyFriend(listFriend.users.data);
+        // console.log(listFriend.users.data)
+      } catch (error) {
+        console.log('Error while getting my friend request:', error);
+      }
+    };
+
+    fetchFriends();
+  }, []);
+  const createRoomChat = async (friend) => {
+    try {
+      const res = await createRoomChatPrivate(friend.userId);
+      if (res && res.room) {
+        // console.log('Room created:', res.room);
+        // onOpenChat(res.room);
+        // handleClose();
+        setChatRooms((prevRooms) => [
+          ...prevRooms,
+          { room: res.room, friend: friend }
+        ]);
+      } else {
+        console.error('Room creation failed:', res);
+      }
+    } catch (error) {
+      console.error('Error while creating room chat:', error);
+    }
+  };
+
+
   const handleLoginOpen = () => {
     console.log("chuyển qua trang login");
     setShowLogin(true);
@@ -202,7 +250,9 @@ const Navbar1 = () => {
                 className={`${user ? "" : "mx-auto w-11/12 lg:w-full"} flex h-full items-center justify-between`}
               >
                 <div className="flex flex-col gap-y-4">
-                  <div className="flex items-center gap-x-3">
+                  <a
+                    href="/"
+                    className="flex items-center gap-x-3">
                     <img
                       src={isHovered ? gifLogo : staticLogo}
                       alt="Logo"
@@ -210,7 +260,7 @@ const Navbar1 = () => {
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
                     />
-                  </div>
+                  </a>
                 </div>
               </div>
               <Search></Search>
@@ -324,9 +374,28 @@ const Navbar1 = () => {
                     </span>
                   </button>
                   {isOpen && (
-                    <FrameChat></FrameChat>
-
+                    <FrameChat
+                      createRoomChat={createRoomChat}
+                      onOpenChat={handleOpenChat}
+                      handleClose={() => setIsOpen(false)}></FrameChat>
                   )}
+                  {/* {openChatBox && room && (
+                    <Chat
+                      handleClose={handleCloseChat}
+                      key={room?.roomId}
+                      currentRoom={room}
+                    />
+                  )} */}
+
+                  {chatRooms.map((room, index) => (
+                    <Chat
+                      key={index}
+                      handleClose={() => setChatRooms((prevRooms) => prevRooms.filter((_, i) => i !== index))}
+                      currentRoom={room.room}
+                      modePrivate={true}
+                      friend={room.friend}
+                    />
+                  ))}
                 </li>
                 {/* <ul className="absolute right-0 z-10 mt-2 w-60 bg-white shadow-md rounded-lg border dark:bg-gray-800">
                       <li className="p-2 text-sm text-gray-700 dark:text-gray-300 border-b">
@@ -400,7 +469,7 @@ const Navbar1 = () => {
                               onClick={handleClickProfile}
                               className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
                               {/* <MdIcons.MdOutlinePerson className=" text-[25px]" /> */}
-                              <img src={avatarDefault} alt="" className="w-[30px] h-[30px] rounded-full" />
+                              <img src={user?.profile?.avatar?.url || avatarDefault} alt="" className="w-[30px] h-[30px] rounded-full" />
                               <span className="text-[14px]">{user?.profile.userName}</span>
                             </div>
                             <div className="flex items-center gap-2 hover:bg-[#16182312] px-3 h-[40px] cursor-pointer ">
@@ -432,7 +501,7 @@ const Navbar1 = () => {
                         onMouseEnter={() => {
                           setShowMenu(true);
                         }}
-                        src={avatarDefault}
+                        src={user?.profile?.avatar?.url || avatarDefault}
                         type="button"
                         // data-dropdown-toggle="userDropdown"
                         // data-dropdown-placement="bottom-start"

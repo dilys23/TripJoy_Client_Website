@@ -67,6 +67,9 @@
 .z-1000 {
   z-index: 1000;
 }
+.z-500 {
+  z-index: 500;
+}
 
 .post-scroll::-webkit-scrollbar {
   width: 0px;
@@ -355,4 +358,16 @@
   background-color: white;
   border: 4px solid #007aff;
   margin-bottom: 10px;
+}
+
+.your-slider-class .swiper-button-next::after,
+.your-slider-class .swiper-button-prev::after {
+  color: white !important;
+}
+.your-slider-class .swiper-button-next {
+  right: -10px;
+}
+
+.your-slider-class .swiper-button-prev {
+  left: -10px;
 }

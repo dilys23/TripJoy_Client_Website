@@ -22,7 +22,7 @@ function DetailBudget({ planId }) {
             setLoading(true);
             const data = await getExpense(planId, pageIndex, pageSize);
             const memberData = await getMemberExpense(planId, pageIndex, pageSize);
-            console.log(memberData.members.data);
+            console.log(data);
             setListMyExpense(data.detailExpense.data);
             setListMember(memberData.members.data);
             setLoading(false);

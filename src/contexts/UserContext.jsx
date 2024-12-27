@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://192.168.1.22:6700/notification-hub", { withCredentials: true })
+            .withUrl("http://192.168.100.250:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 
@@ -79,7 +79,8 @@ export const UserProvider = ({ children }) => {
             }
         }
         if (storedUserInfo) {
-            setUser(storedUserInfo.user);
+            fetchApi();
+            // setUser(storedUserInfo.user);
             initializeSocketConnection(storedUserInfo.user);
             setLoading(false);
         } else {
@@ -88,7 +89,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, login, logout, onlineFriends, connection }}>
+        <UserContext.Provider value={{ user, login, logout, onlineFriends, connection, setUser }}>
             {children}
         </UserContext.Provider>
     )

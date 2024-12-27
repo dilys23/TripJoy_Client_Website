@@ -35,12 +35,10 @@ const useInfiniteScroll = (fetchData, pageSize = 10) => {
         }
     }, [pageIndex]);
     const refreshData = async () => {
-        // Reset page index, data list, and hasMore flag when refreshing
         setPageIndex(0);
         setDataList([]);
         setHasMore(true);
 
-        // Fetch new data from the start
         await loadMoreData();
     };
 

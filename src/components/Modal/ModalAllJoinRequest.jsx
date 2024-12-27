@@ -10,6 +10,7 @@ function ModalAllJoinRequest({
     planId,
     open,
     onCancel,
+    onSuccess
 }) {
     const [viewRequest, setViewRequest] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -31,6 +32,7 @@ function ModalAllJoinRequest({
             setViewRequest(false);
             refreshData();
             console.log(res);
+            onSuccess();
         } catch (error) {
             console.error(error);
         }

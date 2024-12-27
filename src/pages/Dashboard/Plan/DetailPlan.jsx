@@ -1,7 +1,7 @@
 import hoian from "../../../assets/images/noImages.jpg"
 import { MdNotifications, MdOutlineSettings } from "react-icons/md";
 import { BsCalendar2Week, BsFillPersonPlusFill, BsFillPinMapFill, BsShare } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DetailJourney from "../../../modules/plan/DetailJourney/DetailJourney.jsx";
 import DetailMember from "../../../modules/plan/members/DetailMember.jsx";
 import DetailBudget from "../../../modules/plan/Budget/DetailBudget.jsx"
@@ -23,6 +23,7 @@ import { FcGlobe, FcPrivacy } from "react-icons/fc";
 import { updatePlanStatus } from "../../../services/joinRequest.js";
 import CustomModal from "../../../components/Modal/CustomModal.jsx";
 import ModalAllJoinRequest from "../../../components/Modal/ModalAllJoinRequest.jsx";
+import { UserContext } from "../../../contexts/UserContext.jsx";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -43,6 +44,8 @@ function DetailPlan() {
     const [selectedOption, setSelectedOption] = useState(plan?.status);
     const [statusPlan, setStatusPlan] = useState();
     const [openModalAllJoinRequest, setOpenModalAllJoinRequest] = useState(false);
+    const { connection, user } = useContext(UserContext);
+    // console.log(user);
     const fetchPlanLocation = async () => {
         try {
             const data = await getPlanLocation(planId, 0, 10);
@@ -56,6 +59,17 @@ function DetailPlan() {
             console.log("Da co loi xay ra")
         }
     }
+
+    useEffect(() => {
+        if (planId && user) {
+            connection.on("JoinPlan", user?.profile.id, planId);
+            console.log("connection ok", planId, user?.profile.id);
+            return () => {
+                connection.off("LeavePlan", user?.profile.id, planId);
+                console.log("leave connection");
+            };
+        }
+    }, [connection, planId])
     const fetchMember = async () => {
         try {
             const res = await getMemberByPlanId(planId);
@@ -189,6 +203,7 @@ function DetailPlan() {
                                 &&
                                 <ModalAllJoinRequest
                                     planId={planId}
+                                    onSuccess={fetchMember}
                                     open={() => setOpenModalAllJoinRequest(true)}
                                     onCancel={() => setOpenModalAllJoinRequest(false)}></ModalAllJoinRequest>
                             }

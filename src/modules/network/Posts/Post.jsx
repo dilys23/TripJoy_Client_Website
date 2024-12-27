@@ -9,6 +9,12 @@ import { commentPost, deleteComment, editComment, getCommentByPostId, likeCommen
 import CommentItem from '../../../components/CommentItem';
 import { MdMoreVert } from 'react-icons/md';
 import { Dropdown } from 'antd';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
+
 import ModalDetailRouting from '../../../components/Modal/ModalDetailRouting';
 function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const [post, setPost] = useState(data);
@@ -299,7 +305,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
 
 
                     </div>
-                    {
+                    {/* {
                         post?.postImages.length > 0 &&
                         <div className={`grid w-full md:h-[250px] h-[120px] gap-3 mt-3 px-5
                               ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
@@ -338,6 +344,59 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                                 </>
                             )}
                         </div>
+                    } */}
+                    {
+                        post?.postImages.length > 0 && (
+                            <div className="w-full md:h-[250px] h-[120px] mt-3 px-5">
+                                {post?.postImages.length <= 3 ? (
+                                    <div
+                                        className={`grid w-full md:h-[250px] h-[120px] gap-3 
+            ${post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+                                    >
+                                        {post?.postImages.map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image.url}
+                                                alt={`Post image ${index + 1}`}
+                                                className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer"
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <Swiper
+                                        modules={[Navigation, Pagination]}
+                                        slidesPerView={3}
+                                        spaceBetween={10}
+                                        navigation
+                                        pagination={{ clickable: true }}
+                                        loop={true}
+                                        className='max-w-[670px] your-slider-class'
+
+                                    >
+                                        {post?.postImages.slice(0, 3).map((image, index) => (
+                                            <SwiperSlide key={index}>
+                                                <img
+                                                    src={image.url}
+                                                    alt={`Post image ${index + 1}`}
+                                                    className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer"
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                        {post?.postImages.length > 3 && (
+                                            <SwiperSlide>
+                                                <div className="relative w-full md:h-[250px] h-[120px] cursor-pointer">
+                                                    <img
+                                                        src={post?.postImages[2].url}
+                                                        alt="Post image 3"
+                                                        className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover"
+                                                    />
+                                                </div>
+                                            </SwiperSlide>
+                                        )}
+                                    </Swiper>
+                                )}
+                            </div>
+                        )
                     }
                 </div>
             </div>

@@ -5,8 +5,9 @@ import config from "../../config";
 import Button from "../../components/Button/Button";
 import { useState, useEffect } from "react";
 import { getUserById } from "../../services/getUserById";
-function PlanCard({ plan }) {
-    console.log(plan);
+import RoutingMap from "../../components/MapCard/RoutingMap";
+function PlanCard({ plan, mapId }) {
+    // console.log(plan);
     const [leader, setLeader] = useState(null);
     const fetchLeader = async () => {
         try {
@@ -42,7 +43,7 @@ function PlanCard({ plan }) {
             <div className="lg:w-2/3 w-full h-full p-1 flex flex-col gap-4">
                 <div className="flex justify-between items-center">
                     <div className="flex gap-3 items-center">
-                        <img src={avatar} alt="" className="w-[50px] h-[50px] rounded-full" />
+                        <img src={leader?.avatar?.url || avatar} alt="" className="w-[50px] h-[50px] rounded-full" />
                         <div className="flex flex-col text-start">
                             <div className="text-base leading-5 font-bold">{leader?.userName || 'Leader Name'}</div>
                             <div className="text-[10px] text-[#AEAEAE] font-normal leading-3">Hôm nay, 6/9/2024</div>
@@ -80,7 +81,7 @@ function PlanCard({ plan }) {
                 </div>
             </div>
             <div className="lg:w-1/3 w-full">
-                <img src={map} alt="" className="w-full h-full p-2 object-cover rounded-lg" />
+                <RoutingMap planLocation={plan.locations} mapId={mapId}></RoutingMap>
             </div>
         </div>
     );

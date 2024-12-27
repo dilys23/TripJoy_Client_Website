@@ -92,9 +92,7 @@ const List = () => {
           top: -20,
         },
       },
-      fill: {
-        opacity: 1,
-      }
+
     };
 
     if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {

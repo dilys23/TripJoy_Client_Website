@@ -7,9 +7,9 @@ import Chat from "../Chat/Chat";
 function Contact() {
     const [listMyFriend, setListMyFriend] = useState([]);
     const { onlineFriends } = useContext(UserContext);
-    const [openChatRoom, setOpenChatRoom] = useState(false);
-    const [currentRoom, setCurrentRoom] = useState(null);
-    const [friend, setFriend] = useState(null);
+    // const [openChatRoom, setOpenChatRoom] = useState(false);
+    // const [currentRoom, setCurrentRoom] = useState(null);
+    // const [friend, setFriend] = useState(null);
     const [chatRooms, setChatRooms] = useState([]);
     // console.log(onlineFriends);
 
@@ -27,18 +27,7 @@ function Contact() {
         fetchFriends();
     }, []);
 
-    // const createRoomChat = async (friend) => {
-    //     try {
-    //         // console.log(listMyFriend);
-    //         const res = await createRoomChatPrivate(friend.id);
-    //         console.log(friend.id);
-    //         setCurrentRoom(res.room);
-    //         setOpenChatRoom(true);
-    //         setFriend(friend);
-    //     } catch (error) {
-    //         console.log('Error while creating room chat:', error);
-    //     }
-    // }
+
     const createRoomChat = async (friend) => {
         try {
             const res = await createRoomChatPrivate(friend.id);
