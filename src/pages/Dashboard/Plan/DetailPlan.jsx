@@ -62,14 +62,14 @@ function DetailPlan() {
 
     useEffect(() => {
         if (planId && user) {
-            connection.on("JoinPlan", user?.profile.id, planId);
+            connection.invoke("JoinPlan", user?.profile.id, planId);
             console.log("connection ok", planId, user?.profile.id);
             return () => {
-                connection.off("LeavePlan", user?.profile.id, planId);
+                connection.invoke("LeavePlan", user?.profile.id, planId);
                 console.log("leave connection");
             };
         }
-    }, [connection, planId])
+    }, [connection, planId, user])
     const fetchMember = async () => {
         try {
             const res = await getMemberByPlanId(planId);

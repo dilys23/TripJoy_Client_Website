@@ -63,22 +63,20 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
         if (groupRoomChat && connection) {
             const handleReceiveMessage = (receivedMessage) => {
                 console.log(receivedMessage)
-                // setListMessage((prevMessages) => [
-                //     receivedMessage,
-                //     ...prevMessages
+                setListMessage((prevMessages) => [
+                    receivedMessage,
+                    ...prevMessages
 
-                // ]);
+                ]);
             };
             connection.on("ReceiveMessagePlan", handleReceiveMessage);
-            // connection.on("ReceiveMessagePlan", (receivedMessage) => {
-            //     console.log("Received message:", receivedMessage);
-            // });
+
             return () => {
                 connection.off("ReceiveMessagePlan", handleReceiveMessage);
             };
         }
     }, [groupRoomChat, connection]);
-    // console.log(connection);
+    console.log(listMessage);
     // console.log(user)
     const sendMessage = async () => {
         if (message.trim() && message.length > 0) {
@@ -141,7 +139,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
                             </div>
                         </div>
                     ) : (
-                        // Tin nhắn của người khác
+
                         <div key={index} className="w-full flex gap-2 items-start">
                             <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full" />
                             <div className="flex flex-col text-start">
