@@ -370,7 +370,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                                         navigation
                                         pagination={{ clickable: true }}
                                         loop={true}
-                                        className='max-w-[670px] your-slider-class'
+                                        className='max-w-[600px] your-slider-class'
 
                                     >
                                         {post?.postImages.slice(0, 3).map((image, index) => (

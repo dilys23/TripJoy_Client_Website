@@ -217,7 +217,7 @@ function Network() {
         </div>
         <Contact></Contact>
       </div>
-      <div className="md:w-8/12 lg:ml-[calc(22%)] lg:mr-[calc(22%)] md:ml-[calc(20%)] md:mr-[calc(20%)] w-full lg:px-16 ">
+      <div className="md:w-7/12  lg:ml-[calc(22%)] lg:mr-[calc(22%)] md:ml-[calc(20%)] md:mr-[calc(20%)] w-full lg:px-16 ">
         <div className="rounded-20 flex h-[71px] w-full items-center justify-between bg-white px-4  border border-[#CCD0D5]">
           <div className="flex cursor-pointer items-center gap-3 w-full">
             <AvatarDefault

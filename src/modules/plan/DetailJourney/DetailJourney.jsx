@@ -116,7 +116,9 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
             )
         );
     };
+    const updateImage = () => {
 
+    }
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             {role === 0 &&
@@ -166,7 +168,7 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
                                                             onSuccess={onSuccess}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} />
+                                                            <EvaluationJourneyItem journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} updateImage={updateImage} />
                                                         )}
                                                     </div>
                                                 )}

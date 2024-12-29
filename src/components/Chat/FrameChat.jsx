@@ -6,8 +6,7 @@ import { MdCircle } from "react-icons/md";
 import Chat from "./Chat";
 
 function FrameChat({ onOpenChat, handleClose, createRoomChat }) {
-    // const [openChatBox, setOpenChatBox] = useState(false);
-    // const [room, setRoom] = useState();
+
     const fetchConversation = async (pageIndex, pageSize) => {
         try {
             const res = await getRecentConversation(pageIndex, pageSize);

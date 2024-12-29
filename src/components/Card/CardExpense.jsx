@@ -27,7 +27,7 @@ const CardExpense = ({ icon, expense }) => {
               alt="scooter"
               className="w-[20px] h-[20px] "
             />
-            <span className="text-[16px] font-bold"> {expense.amount}</span>
+            <span className="text-[16px] font-bold">{Math.round(expense.amount).toLocaleString('vi-VN')} đ </span>
           </span>
         </div>
 

@@ -38,7 +38,7 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
         }
     }
 
-
+    console.log(journey)
     return (
         <div className="w-full md:gap-5 gap-2 flex sm:h-[171px] h-[150px]" >
             {!isEdit ? (
@@ -69,7 +69,7 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
                 <span className="font-semibold md:text-[14px] text-[12px] gap-1">{journey?.hour}</span>
                 <div className="flex w-full md:h-[150px] h-[130px] bg-white rounded-xl shadow-lg border border-[#CCD0D5] px-2 py-2 md:gap-3 gap-[6px]">
                     <img
-                        src={journey?.avatar || HoiAn}
+                        src={journey?.images[0]?.url || HoiAn}
                         alt=""
                         className="w-1/6 md:min-w-[120px]  min-w-[77px] object-cover md:h-full h-full sm:rounded-xl rounded-md"
                     />

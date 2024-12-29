@@ -61,7 +61,7 @@ function DetailPlan() {
     }
 
     useEffect(() => {
-        if (planId && user) {
+        if (planId && user && connection) {
             connection.invoke("JoinPlan", user?.profile.id, planId);
             console.log("connection ok", planId, user?.profile.id);
             return () => {
@@ -159,7 +159,9 @@ function DetailPlan() {
             </button>
             {
                 isChatVisible &&
-                <Chat handleClose={() => setIsChatVisible(false)} plan={plan} groupRoomChat={groupRoomChat}></Chat>
+                <Chat
+                    handleClose={() => setIsChatVisible(false)}
+                    plan={plan} groupRoomChat={groupRoomChat}></Chat>
             }
             {
                 openModalConfirmChangeStatus
