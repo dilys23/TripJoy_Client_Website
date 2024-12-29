@@ -13,16 +13,19 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
     const myId = user?.profile.id || '';
     const messagesEndRef = useRef(null);
     const [message, setMessage] = useState('');
-
+    const [members, setMembers] = useState([]);
+    // const []
 
     const fetchMessage = async () => {
         try {
             if (currentRoom) {
                 const res = await getMessageByRoomId(currentRoom.roomId);
                 setListMessage(res.messages.data);
+
             } else if (groupRoomChat) {
                 const res = await getMessageByRoomId(groupRoomChat.roomId);
-                // console.log(res);
+                setMembers(res.members);
+                // console.log(res.members);
                 setListMessage(res.messages.data);
             }
         } catch (error) {
@@ -76,7 +79,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
             };
         }
     }, [groupRoomChat, connection]);
-    console.log(listMessage);
+    // console.log(listMessage);
     // console.log(user)
     const sendMessage = async () => {
         if (message.trim() && message.length > 0) {
@@ -109,13 +112,25 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
         }
 
     }
+    const findUser = (userId, members, friend) => {
+        if (friend) {
+            return { userName: friend.userName, avatar: friend.avatar };
+        }
+
+        const member = members.find((m) => m.userId === userId);
+        if (member) {
+            return { userName: member.userName, avatar: member.avatar };
+        }
+
+        return { userName: "Ẩn danh", avatar: avatar };
+    };
 
     // console.log(currentRoom);
     return ReactDOM.createPortal(
-        <div className="w-[300px] h-[320px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
+        <div className="w-[300px] h-[350px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
             <div className="w-full h-[50px] flex justify-between px-3 py-2 items-center border-b border-b-[#007AFF]">
                 <div className="flex gap-3 ">
-                    <img src={friend?.avatar?.url || friend?.avatar} className="rounded-full w-10 h-10"></img>
+                    <img src={friend?.avatar?.url || friend?.avatar || plan?.avatar} className="rounded-full w-10 h-10"></img>
                     <div className="flex items-center">
                         <span className="text-[14px] font-bold">{friend?.userName || groupRoomChat?.chatRoomName}</span>
                         {/* <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span> */}
@@ -127,32 +142,37 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
             </div>
 
 
-            <div className="w-full h-[230px] bg-[#f4f4f4] flex px-2 py-1 overflow-auto custom-scroll flex-col-reverse">
-                {listMessage.map((msg, index) => (
-                    msg.postedByUser === myId ? (
-                        // Tin nhắn của người dùng hiện tại
-                        <div key={index} className="flex flex-col w-full items-end pt-1">
-                            <div className="flex flex-col gap-1 w-fit">
-                                <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FFD666] rounded-[17px] text-[#575656] text-[13px] leading-3 items-center">
-                                    {msg.message}
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
+            <div className="w-full h-[250px] bg-[#f4f4f4] flex px-2 py-1 overflow-auto custom-scroll flex-col-reverse">
+                {listMessage.map((msg, index) => {
+                    // Gọi hàm `findUser` để lấy thông tin người dùng
+                    const { userName, avatar } = findUser(msg.postedByUser, members, friend);
 
-                        <div key={index} className="w-full flex gap-2 items-start">
-                            <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full" />
-                            <div className="flex flex-col text-start">
-                                <span className="text-[10px] nunito-text font-semibold">{friend?.userName}</span>
-                                <div className="flex flex-col gap-1">
-                                    <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FF8B4A] rounded-[17px] text-white text-[13px] leading-3 items-center">
+                    if (msg.sendByMe) {
+                        return (
+                            <div key={index} className="flex flex-col w-full items-end pt-1">
+                                <div className="flex flex-col gap-1 w-fit">
+                                    <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FFD666] rounded-[17px] text-[#575656] text-[13px] leading-3 items-center">
                                         {msg.message}
                                     </div>
                                 </div>
                             </div>
+                        );
+                    }
+
+                    return (
+                        <div key={index} className="w-full flex gap-2 items-start pt-1">
+                            <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full" />
+                            <div className="flex flex-col text-start">
+                                <span className="text-[10px] font-semibold">{userName}</span>
+                                <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FF8B4A] rounded-[17px] text-white text-[13px] leading-3 items-center">
+                                    {msg.message}
+                                </div>
+                            </div>
                         </div>
-                    )
-                ))}
+                    );
+                })}
+
+
             </div>
 
 

@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://192.168.100.250:6700/notification-hub", { withCredentials: true })
+            .withUrl("http://192.168.1.31:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 

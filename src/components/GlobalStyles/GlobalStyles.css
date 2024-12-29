@@ -4,8 +4,8 @@
 }
 .input-container {
   position: relative;
-  width: 100px; /* Chiều rộng của ô nhập */
-  height: 100px; /* Chiều cao của ô nhập */
+  width: 100px;
+  height: 100px;
 }
 
 .custom-input {
@@ -13,20 +13,20 @@
   height: 100%;
   padding: 10px;
   border: none;
-  border-radius: 10px; /* Bo góc */
+  border-radius: 10px;
   background-color: white;
   position: relative;
-  z-index: 1; /* Đặt ô nhập lên trên border */
+  z-index: 1;
 }
 
 .input-container::before {
   content: "";
   position: absolute;
-  top: -4px; /* Điều chỉnh để căn chỉnh border */
-  left: -4px; /* Điều chỉnh để căn chỉnh border */
-  right: -4px; /* Điều chỉnh để căn chỉnh border */
-  bottom: -4px; /* Điều chỉnh để căn chỉnh border */
-  border-radius: 10px; /* Bo góc */
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 10px;
   background: linear-gradient(
     90deg,
     red 25%,
@@ -38,8 +38,8 @@
     transparent 100%
   );
   background-size: 200% 200%;
-  z-index: 0; /* Đặt border dưới ô nhập */
-  animation: border-animation 2s infinite; /* Thêm animation nếu cần */
+  z-index: 0;
+  animation: border-animation 2s infinite;
 }
 
 @keyframes border-animation {
@@ -163,25 +163,25 @@
 .swiper-button-next.custom-next {
   position: absolute;
   z-index: 10;
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  color: white; /* Màu chữ */
+
+  color: white;
   width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border-radius: 50%;  */
+
   cursor: pointer;
 }
 
 .swiper-button-prev.custom-prev {
-  top: 10px; /* Vị trí trên */
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .swiper-button-next.custom-next {
-  bottom: 10px; /* Vị trí dưới */
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -275,7 +275,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgba(0, 0, 0, 0.2); */
+
   background-color: rgba(255, 255, 255, 0.6);
   z-index: 9999;
   opacity: 1;
@@ -370,4 +370,37 @@
 
 .your-slider-class .swiper-button-prev {
   left: -10px;
+}
+/* .recharts-responsive-container {
+  width: 240px !important;
+  height: auto;
+} */
+
+.recharts-surface {
+  width: 100%;
+  height: 100%;
+}
+.recharts-responsive-container {
+  width: 100%;
+  height: auto;
+  max-width: 240px;
+}
+
+/* Khi màn hình nhỏ hơn 600px, giảm chiều rộng của container */
+@media (max-width: 600px) {
+  .recharts-responsive-container {
+    width: 100%;
+    max-width: 80px;
+  }
+}
+
+/* Khi màn hình lớn hơn 1200px, tăng chiều rộng của container */
+@media (min-width: 1200px) {
+  .recharts-responsive-container {
+    width: 240px;
+    max-width: 280px;
+  }
+}
+.recharts-default-legend {
+  display: none;
 }

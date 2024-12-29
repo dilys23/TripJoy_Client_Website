@@ -88,6 +88,7 @@ const Navbar1 = () => {
         // console.log('Room created:', res.room);
         // onOpenChat(res.room);
         // handleClose();
+        setIsOpen(false);
         setChatRooms((prevRooms) => [
           ...prevRooms,
           { room: res.room, friend: friend }

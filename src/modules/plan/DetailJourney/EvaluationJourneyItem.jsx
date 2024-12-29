@@ -10,7 +10,7 @@ import ImageUploader from "../../../components/Image/ImageUpload";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
 import { getPlanLocationByIdService } from "../../../services/planLocation";
-function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
+function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateImage }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -28,6 +28,10 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
         } catch (error) {
             console.log(error);
         }
+    }
+    const updateImageSuccess = () => {
+        fetchPlanLocation();
+        updateImage();
     }
     useEffect(() => {
         setNote(journey?.note || "");
@@ -288,7 +292,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo }) {
                                 onChange={handleNoteChange}
                                 width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] sm:text-[12px] text-[8px]"></TextArea>
                         </div>
-                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={fetchPlanLocation}></ImageUploader>
+                        <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={updateImageSuccess}></ImageUploader>
                     </div>
 
                 </div>
