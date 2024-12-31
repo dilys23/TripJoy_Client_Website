@@ -7,7 +7,7 @@ const useInfiniteScroll = (fetchData, pageSize = 10) => {
     const [dataList, setDataList] = useState([]);
     const [hasMore, setHasMore] = useState(true);
 
-
+   
     const loadMoreData = async () => {
         setLoading(true);
         try {

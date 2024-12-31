@@ -25,7 +25,7 @@ const addGenarateTripbyAI = async (payload) => {
       console.error("Setup Error:", error.message);
     }
 
-    throw error; // Ném lỗi để tiếp tục xử lý ở hàm gọi
+    throw error;
   }
 };
 

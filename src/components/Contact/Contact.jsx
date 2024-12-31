@@ -51,6 +51,7 @@ function Contact() {
                     currentRoom={room.room}
                     modePrivate={true}
                     friend={room.friend}
+                    contact
                 />
             ))}
 

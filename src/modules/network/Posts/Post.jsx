@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import AvatarDefault from '../../../components/Avatar/AvatarDefault';
 import Emotion from '../../../components/Emotion';
@@ -7,15 +7,17 @@ import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { commentPost, deleteComment, editComment, getCommentByPostId, likeComment, replyComment } from '../../../services/commentPost';
 import CommentItem from '../../../components/CommentItem';
-import { MdMoreVert } from 'react-icons/md';
+import { MdAddLocationAlt, MdMoreVert } from 'react-icons/md';
 import { Dropdown } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import 'swiper/css'
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
-
+import gifadd from "../../../assets/gif/icons8-add.gif"
 import ModalDetailRouting from '../../../components/Modal/ModalDetailRouting';
+import { UserContext } from '../../../contexts/UserContext';
+import ModalClonePlan from '../../../components/Modal/ModalClonePlan';
 function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const [post, setPost] = useState(data);
     // console.log(data);
@@ -35,6 +37,8 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const handleHide = () => {
         setTimeout(() => setVisible(false), 4000);
     };
+    const [clonePlan, setClonePlan] = useState(true);
+    const { user } = useContext(UserContext);
     const tippyRef = useRef(null);
     const emotionRef = useRef(null);
     const handleMouseEnter = () => setVisible(true);
@@ -251,9 +255,15 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             console.log('error', error)
         }
     }
+    // console.log(data);
+    // console.log(user.profile.avatar.url);
     // console.log(data.planPost.postPlanLocations);
     return (
         <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-2 pb-3 px-1">
+            {
+                clonePlan &&
+                <ModalClonePlan plan={data.planPost} open={() => setClonePlan(true)} handleClose={() => setClonePlan(false)}></ModalClonePlan>
+            }
             {showRouting && <ModalDetailRouting routing={data.planPost.postPlanLocations} handleClose={() => setShowRouting(false)} name={post?.userPosted.userName}></ModalDetailRouting>}
             <div className='w-full flex md:flex-row flex-col'>
                 <div className='w-full'>
@@ -305,46 +315,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
 
 
                     </div>
-                    {/* {
-                        post?.postImages.length > 0 &&
-                        <div className={`grid w-full md:h-[250px] h-[120px] gap-3 mt-3 px-5
-                              ${post?.postImages.length < 3 ? (post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2") : "grid-cols-4"}
-                                  `}>
-                            {post?.postImages.length === 1 && (
-                                <img src={post?.postImages[0].url} alt="Post image 1"
-                                    className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
-                            )}
 
-                            {post?.postImages.length === 2 && (
-                                <>
-                                    <img src={post?.postImages[0].url} alt="Post image 1"
-                                        className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
-                                    <img src={post?.postImages[1].url} alt="Post image 2"
-                                        className="w-full  md:h-[250px] h-[120px] rounded-[7px] object-cover cursor-pointer" />
-                                </>
-                            )}
-                            {post?.postImages.length >= 3 && (
-                                <>
-                                    <img src={post?.postImages[0].url} alt="Post image 1"
-                                        className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
-                                    <img src={post?.postImages[1].url} alt="Post image 2"
-                                        className="w-full md:h-[250px] h-[120px] col-span-1 rounded-[7px] object-cover cursor-pointer" />
-                                    {post?.postImages.length > 3 ? (
-                                        <div className="relative w-full md:h-[250px] h-[120px] col-span-2 cursor-pointer">
-                                            <img src={post?.postImages[2].url} alt="Post image 3"
-                                                className="w-full md:h-[250px] h-[120px] rounded-[7px] object-cover" />
-                                            <div className="absolute top-0 left-0 w-full md:h-[250px] h-[120px] bg-black bg-opacity-25 flex items-center justify-center rounded-[7px]">
-                                                <span className="text-white text-[24px] font-bold">+{post?.postImages.length - 3}</span>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <img src={post?.postImages[2].url} alt="Post image 3"
-                                            className="w-full md:h-[250px] h-[120px] col-span-2 rounded-[7px] object-cover cursor-pointer" />
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    } */}
                     {
                         post?.postImages.length > 0 && (
                             <div className="w-full md:h-[250px] h-[120px] mt-3 px-5">
@@ -469,7 +440,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             <div className='flex  w-full justify-center gap-14'>
 
                 <div
-                    className='flex gap-2 items-center w-1/2  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'
+                    className='flex gap-2 items-center w-1/3  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'
                 >
                     <Tippy
                         onClickOutside={handleHide}
@@ -519,7 +490,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 </div>
                 <div
                     onClick={() => setShowComment((prev) => (!prev))}
-                    className='flex gap-2 items-center w-1/2  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'>
+                    className='flex gap-2 items-center w-1/3  justify-center cursor-pointer transition-all duration-150 py-1 md:text-[16px] text-[12px]'>
                     <img
                         className='w-[18px] h-[18px] sm:w-[22px] sm:h-[22px]'
                         src="https://img.icons8.com/ios/50/speech-bubble.png"
@@ -527,8 +498,18 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     />
                     <span className='text-[#3a3a3a] sm:text-[15px] text-[13px]'>Bình luận </span>
                 </div>
+                <div
+                    onClick={() => {
+                        console.log("Đã nhấn vào Tạo chuyến đi");
+                        setClonePlan(true);
+                    }}
+                    className='flex gap-1 items-center w-1/3  justify-center text-[#056649] font-medium cursor-pointer transition-all duration-150 py-1 md:text-[14px] text-[12px]'>
+                    <img src={gifadd} alt="" className='w-8 h-8' />
+                    Tạo chuyến đi
+                </div>
 
             </div>
+
             {
                 showComment &&
 
@@ -550,7 +531,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                         }
                     </div>
                     <div className='md:h-[60px] h-[60px] px-5 py-1 w-full flex gap-2'>
-                        <AvatarDefault src={post?.userPosted.avatar} alt={post?.userPosted.avatar} className="md:w-[40px] md:h-[40px] w-[30px] h-[30px]"></AvatarDefault>
+                        <AvatarDefault src={user?.profile?.avatar?.url} alt={post?.userPosted.avatar} className="md:w-[40px] md:h-[40px] w-[30px] h-[30px]"></AvatarDefault>
                         <div className='w-11/12 bg-[#f0f2f5] h-full rounded-lg py-3 px-2 flex'>
                             <input
                                 value={inputComment}
