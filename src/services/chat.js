@@ -96,7 +96,7 @@ const getRecentConversation = async (pageIndex, pageSize) => {
 const markMessageRead = async (roomId) => {
     try {
         const accessToken = localStorage.getItem('accessToken');
-        const res = await api.put(`chat-service/rooms/${roomId}/mark-read`, {
+        const res = await api.put(`chat-service/rooms/${roomId}/mark-read`, {}, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',

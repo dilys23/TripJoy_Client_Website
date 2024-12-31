@@ -7,38 +7,66 @@ import { getMessageByRoomId, markMessageRead, sendMessages } from "../../service
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { UserContext } from "../../contexts/UserContext";
-function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
+import { toast } from "react-toastify";
+import useInfiniteScroll from "../../hooks/useInfiniteScroll ";
+function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact = false }) {
     const [listMessage, setListMessage] = useState([]);
     const { user, connection } = useContext(UserContext);
     const myId = user?.profile.id || '';
     const messagesEndRef = useRef(null);
     const [message, setMessage] = useState('');
     const [members, setMembers] = useState([]);
-    // const []
+    // const [isRead, setIsRead] = useState(false);
+    // console.log(friend?.avatar?.url)
 
-    const fetchMessage = async () => {
+    // const fetchMessage = async () => {
+    //     try {
+    //         if (currentRoom) {
+    //             const res = await getMessageByRoomId(currentRoom.roomId);
+    //             setListMessage(res.messages.data);
+
+    //         } else if (groupRoomChat) {
+    //             const res = await getMessageByRoomId(groupRoomChat.roomId);
+    //             setMembers(res.members);
+    //             setListMessage(res.messages.data);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         toast.error("Lỗi kết nối");
+    //     }
+
+    // }
+    const chatContainerRef = useRef(null);
+    const fetchMessage = async (pageIndex = 0, pageSize = 10) => {
         try {
             if (currentRoom) {
-                const res = await getMessageByRoomId(currentRoom.roomId);
-                setListMessage(res.messages.data);
-
+                const res = await getMessageByRoomId(currentRoom.roomId, pageIndex, pageSize);
+                return res.messages.data;
             } else if (groupRoomChat) {
-                const res = await getMessageByRoomId(groupRoomChat.roomId);
-                setMembers(res.members);
-                // console.log(res.members);
-                setListMessage(res.messages.data);
+                const res = await getMessageByRoomId(groupRoomChat.roomId, pageIndex, pageSize);
+                if (pageIndex === 0) {
+                    setMembers(res.members);
+                }
+                return res.messages.data;
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            toast.error("Lỗi kết nối");
+            return [];
         }
-
-    }
-
-    useEffect(() => {
-        if (currentRoom || groupRoomChat) {
-            fetchMessage();
-        }
-    }, [currentRoom, groupRoomChat]);
+    };
+    const { dataList, loading, hasMore, observerRef, setDataList, refreshData } = useInfiniteScroll(fetchMessage);
+    // useEffect(() => {
+    //     // Tải lại tin nhắn khi phòng chat thay đổi
+    //     if (currentRoom || groupRoomChat) {
+    //         refreshData();
+    //     }
+    // }, [currentRoom, groupRoomChat, refreshData]);
+    // useEffect(() => {
+    //     if (currentRoom || groupRoomChat) {
+    //         fetchMessage();
+    //     }
+    // }, [currentRoom, groupRoomChat]);
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -79,8 +107,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
             };
         }
     }, [groupRoomChat, connection]);
-    // console.log(listMessage);
-    // console.log(user)
+
     const sendMessage = async () => {
         if (message.trim() && message.length > 0) {
             try {
@@ -89,14 +116,18 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
                     console.log(res);
                     await connection.invoke("SendMessagePlan", groupRoomChat.planId, myId, message, user?.profile?.userName, user?.profile?.avatar?.url);
                     console.log(groupRoomChat.planId, myId);
-                } else {
+                } else if (contact) {
                     const res = await sendMessages(currentRoom.roomId, message);
                     await connection.invoke("SendMessage", friend.id, message, friend.userName, friend.avatarUrl);
+                } else {
+                    const res = await sendMessages(currentRoom.roomId, message);
+                    await connection.invoke("SendMessage", friend.userId, message, friend.userName, friend.avatar);
                 }
                 setMessage('');
                 await fetchMessage();
             } catch (error) {
                 console.log('fetch mess:', error);
+                toast.error("Lỗi kết nối");
             }
         } else {
             return;
@@ -105,16 +136,21 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
     // console.log(currentRoom)
     const markMessage = async () => {
         try {
-            const res = await markMessageRead(currentRoom.roomId)
-
+            const res = await markMessageRead(currentRoom.roomId);
+            // console.log(res);
         } catch (error) {
-
+            console.log(error);
         }
 
     }
+    useEffect(() => {
+        if (currentRoom) {
+            markMessage();
+        }
+    }, [])
     const findUser = (userId, members, friend) => {
         if (friend) {
-            return { userName: friend.userName, avatar: friend.avatar };
+            return { userName: friend.userName, avatar: friend?.avatar?.url || friend.avatar };
         }
 
         const member = members.find((m) => m.userId === userId);
@@ -124,13 +160,18 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
 
         return { userName: "Ẩn danh", avatar: avatar };
     };
-
+    // useEffect(() => {
+    //     if (chatContainerRef.current) {
+    //         console.log('cuon');
+    //         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    //     }
+    // }, [dataList]);
     // console.log(currentRoom);
     return ReactDOM.createPortal(
-        <div className="w-[300px] h-[350px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
+        <div ref={chatContainerRef} className="w-[300px] h-[350px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
             <div className="w-full h-[50px] flex justify-between px-3 py-2 items-center border-b border-b-[#007AFF]">
                 <div className="flex gap-3 ">
-                    <img src={friend?.avatar?.url || friend?.avatar || plan?.avatar} className="rounded-full w-10 h-10"></img>
+                    <img src={friend?.avatar.url || friend?.avatar || plan?.avatar || avatar} alt="" className="rounded-full w-10 h-10"></img>
                     <div className="flex items-center">
                         <span className="text-[14px] font-bold">{friend?.userName || groupRoomChat?.chatRoomName}</span>
                         {/* <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span> */}
@@ -141,12 +182,14 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
                     className="text-[#5686e1] text-[20px] font-extrabold cursor-pointer" />
             </div>
 
-
+            <div ref={observerRef} className="loading-indicator">
+                {loading && <p className="text-[10px]">Đang tải...</p>}
+            </div>
             <div className="w-full h-[250px] bg-[#f4f4f4] flex px-2 py-1 overflow-auto custom-scroll flex-col-reverse">
-                {listMessage.map((msg, index) => {
+                {dataList.map((msg, index) => {
                     // Gọi hàm `findUser` để lấy thông tin người dùng
                     const { userName, avatar } = findUser(msg.postedByUser, members, friend);
-
+                    const avatarUrl = typeof avatar === 'object' && avatar?.url ? avatar.url : avatar;
                     if (msg.sendByMe) {
                         return (
                             <div key={index} className="flex flex-col w-full items-end pt-1">
@@ -161,7 +204,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
 
                     return (
                         <div key={index} className="w-full flex gap-2 items-start pt-1">
-                            <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full" />
+                            <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full" />
                             <div className="flex flex-col text-start">
                                 <span className="text-[10px] font-semibold">{userName}</span>
                                 <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FF8B4A] rounded-[17px] text-white text-[13px] leading-3 items-center">
@@ -199,7 +242,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan }) {
                     </Tippy>
                 </div>
             </div>
-        </div >,
+        </div>,
         document.body
     );
 }

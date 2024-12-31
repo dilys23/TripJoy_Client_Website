@@ -4,8 +4,9 @@ import { MdArrowRightAlt, MdMoreHoriz } from "react-icons/md";
 import Tippy from '@tippyjs/react/headless';
 import AvatarDefault from '../Avatar/AvatarDefault';
 import Emotion from '../Emotion';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { getReplyComment, likeComment, revokeComment } from '../../services/commentPost';
+import { UserContext } from '../../contexts/UserContext';
 
 function CommentItem({
     commentVisible,
@@ -17,6 +18,7 @@ function CommentItem({
     updateComment,
     onEditComment
 }) {
+    const { user } = useContext(UserContext);
     const [activeDropdownId, setActiveDropdownId] = useState(null);
     const [isReplyVisible, setIsReplyVisible] = useState(false);
     const [replyText, setReplyText] = useState("");
@@ -146,9 +148,10 @@ function CommentItem({
             fetchReplies();
         }
     }
+    // console.log(item);
     return (
         <div className='w-full h-fit flex gap-3'>
-            <AvatarDefault src="" className="w-[30px] h-[30px]" />
+            <AvatarDefault src={item?.url} className="w-[30px] h-[30px]" />
             <div className='flex flex-col w-full'>
                 <div className='flex gap-2 items-center'>
                     <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
@@ -191,28 +194,32 @@ function CommentItem({
                         )}
                     </div>
 
-                    <div className='relative'>
-                        <div ref={moreButtonRef}>
-                            <MdMoreHoriz
-                                className='cursor-pointer'
-                                onClick={() => handleDropdownToggle(item.commentId)}
-                            />
-                        </div>
-                        {activeDropdownId === item.commentId && (
-                            <div
-                                className="absolute top-3 z-50 bg-white shadow-lg rounded-md mt-1 w-[100px]"
-                            >
-                                <ul>
-                                    <li
-                                        onClick={() => setIsEditing(true)}
-                                        className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
-                                    <li
-                                        onClick={handleDelete}
-                                        className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Xóa</li>
-                                </ul>
+                    {
+                        user?.profile?.id === item.userId
+                        &&
+                        <div className='relative'>
+                            <div ref={moreButtonRef}>
+                                <MdMoreHoriz
+                                    className='cursor-pointer'
+                                    onClick={() => handleDropdownToggle(item.commentId)}
+                                />
                             </div>
-                        )}
-                    </div>
+                            {activeDropdownId === item.commentId && (
+                                <div
+                                    className="absolute top-3 z-50 bg-white shadow-lg rounded-md mt-1 w-[100px]"
+                                >
+                                    <ul>
+                                        <li
+                                            onClick={() => setIsEditing(true)}
+                                            className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Chỉnh sửa</li>
+                                        <li
+                                            onClick={handleDelete}
+                                            className="text-[12px] cursor-pointer p-2 hover:bg-[#f4f2f2] transition-all duration-200">Xóa</li>
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    }
                 </div>
                 {isEditing &&
                     <span className='text-[9px] nunito-text'>Nhấn Esc để
@@ -266,7 +273,7 @@ function CommentItem({
                     <div className='pt-2'>
                         {listReplyComment.map((reply) => (
                             <div key={reply.commentId} className='flex gap-3 pb-2 px-5'>
-                                <AvatarDefault src="" className="w-[30px] h-[30px]" />
+                                <AvatarDefault src={user?.profile?.avatar?.url} className="w-[30px] h-[30px]" />
                                 <div className='flex flex-col'>
                                     <div className='flex flex-col bg-[#f0f2f5] w-fit px-2 py-1 rounded-xl'>
                                         <span className='text-[13px] font-semibold'>{reply.userName}</span>
@@ -302,7 +309,7 @@ function CommentItem({
 
                 {isReplyVisible && (
                     <div className='h-[50px] px-5 py-1 w-full flex gap-2'>
-                        <AvatarDefault src="" className="md:w-[40px] md:h-[40px] w-[30px] h-[30px]" />
+                        <AvatarDefault src={user?.profile?.avatar?.url} className="md:w-[40px] md:h-[40px] w-[30px] h-[30px]" />
                         <div className='w-11/12 bg-[#f0f2f5] h-full rounded-lg py-3 px-2 flex'>
                             <input
                                 value={replyText}

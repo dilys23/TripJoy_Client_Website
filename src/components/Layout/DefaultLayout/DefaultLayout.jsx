@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Navbar from "../../Header/Navbar1"
 import Sidebar from "../../Sidebar/Sidebar"
 import { useState } from 'react';
+import Header from '../../Header/Header';
 function DefaultLayout({ children }) {
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -14,7 +15,8 @@ function DefaultLayout({ children }) {
     return (
         <>
             <div className="bg-[#f5f6f7] w-full h-full">
-                <Navbar></Navbar>
+                {/* <Navbar></Navbar> */}
+                <Header></Header>
                 <div className='flex w-full md:px-6 px-0 bg-[#f5f6f7] pt-20 min-h-screen h-full '>
                     {/* <Sidebar showSidebar={showSidebar} toggleSidebar={toggleSidebar} /> */}
                     {children}

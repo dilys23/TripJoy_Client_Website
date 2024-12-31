@@ -163,7 +163,7 @@ function Plan() {
         </div>
       </div>
       <div className="mt-8 flex h-full w-full lg:gap-16 md:gap-10 sm:gap-6">
-        <div className="sm:w-3/5">
+        <div className="sm:w-3/5 w-full">
           <div className="mb-5 flex md:h-[42px] w-full sm:gap-3 gap-3 sm:justify-normal justify-end sm:flex-row flex-col" >
             <div className="flex w-full gap-1 md:h-[42px] h-[30px]">
               <input

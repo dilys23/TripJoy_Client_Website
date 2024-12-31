@@ -80,7 +80,7 @@ function PlanCard({ plan, mapId }) {
                     </div>
                 </div>
             </div>
-            <div className="lg:w-1/3 w-full">
+            <div className="lg:w-1/3 w-full lg:h-auto h-[200px]">
                 <RoutingMap planLocation={plan.locations} mapId={mapId}></RoutingMap>
             </div>
         </div>

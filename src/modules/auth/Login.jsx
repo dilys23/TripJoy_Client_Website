@@ -109,9 +109,9 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
 
     return (
         <>
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-0"></div>
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
             <div
-                className="fixed inset-0 flex w-full h-screen justify-center items-center text-center z-50"
+                className="fixed inset-0 flex w-full h-screen justify-center items-center text-center z-1000"
                 onClick={handleClose}
             >
                 <div

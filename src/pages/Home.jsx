@@ -7,10 +7,12 @@ import Extension from "./Home/Extension";
 // import Discover from "../components/Layout/Discover"
 import Footer from "./Home/Footer";
 import { Toaster } from "react-hot-toast";
+import Header from "../components/Header/Header";
 function Home() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
+      <Header></Header>
       <Hero />
       <Fetured />
       <Packages />
