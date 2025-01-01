@@ -92,7 +92,7 @@ function DetailBudget({ planId }) {
                         <span className='font-semibold '>Cá nhân</span>
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
                     </div>
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-2 h-[250px] overflow-auto'>
                         {
                             loading ? <Skeleton active /> :
 
@@ -122,7 +122,7 @@ function DetailBudget({ planId }) {
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
                     </div>
                     <hr className='w-full text-[#CCD0D5] mx-auto' />
-                    <div className="w-full max-h-[250px] overflow-y-hidden gap-1 flex flex-col">
+                    <div className="w-full max-h-[250px] overflow-y-hidden gap-1 flex flex-col ">
                         {loading ? (
                             <>
                                 <Skeleton active className='px-4' />

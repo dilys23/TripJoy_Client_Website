@@ -112,4 +112,4 @@ const deletePost = async (id) => {
         throw error.response.data.detail
     }
 }
-export { createPost, getPostById, getPostHomeFeed, editPost, deletePost, createPostPlan }
+export { createPost, getPostById, getPostHomeFeed, editPost, deletePost, createPostPlan, getPostByUserId }

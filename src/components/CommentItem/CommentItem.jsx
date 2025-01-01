@@ -80,7 +80,7 @@ function CommentItem({
                 setListReplyComment(res.comments.data);
             } catch (error) {
                 // console.log(error);
-                toast.error("Lỗi kết nối", error);
+                toast.error(error);
             }
         }
     };
@@ -113,7 +113,7 @@ function CommentItem({
             );
         } catch (error) {
             console.log(error);
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
 
     };
@@ -124,7 +124,7 @@ function CommentItem({
                 updateComment(commentId, { emotionByMe: null });
             }
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error('Failed to revoke emotion:', error);
         }
     };
@@ -142,7 +142,7 @@ function CommentItem({
                 )
             );
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error)
         }
     }

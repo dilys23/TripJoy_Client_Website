@@ -27,7 +27,7 @@ function ModalEditRole({ planId, member, handleClose, onSuccess }) {
             }
         }
         catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
     }
 

@@ -21,7 +21,7 @@ function Contact() {
                 setListMyFriend(listFriend.users.data);
                 // console.log(listFriend.users.data)
             } catch (error) {
-                // toast.error("Lỗi kết nối", error);
+                // toast.error(error);
                 console.log('Error while getting my friend request:', error);
             }
         };
@@ -33,13 +33,13 @@ function Contact() {
     const createRoomChat = async (friend) => {
         try {
             const res = await createRoomChatPrivate(friend.id);
-            console.log(friend.id);
+            // console.log(friend.id);
             setChatRooms((prevRooms) => [
                 ...prevRooms,
                 { room: res.room, friend: friend }
             ]);
         } catch (error) {
-            // toast.error("Lỗi kết nối", error);
+            // toast.error(error);
             console.log('Error while creating room chat:', error);
         }
     }

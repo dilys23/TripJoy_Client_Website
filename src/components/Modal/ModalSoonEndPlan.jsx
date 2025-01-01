@@ -27,7 +27,7 @@ function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWith
             }
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
         }
     }

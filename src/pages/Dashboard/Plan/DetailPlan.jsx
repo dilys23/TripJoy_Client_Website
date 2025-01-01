@@ -145,7 +145,7 @@ function DetailPlan() {
             setSelectedOption(statusPlan);
             setOpenModalConfirmChangeStatus(false)
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
 
         }

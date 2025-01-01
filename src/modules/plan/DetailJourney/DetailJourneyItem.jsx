@@ -35,7 +35,7 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
             const response = await removePlanLocation(journey.planLocationId);
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
         }
     }

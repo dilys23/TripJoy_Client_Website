@@ -60,7 +60,7 @@ function GeneratePlan() {
       setPlans(fetchedPlans);
       setIsLoading(false); // Dữ liệu đã được tải
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Error in handleFinished:", error);
       setError("Failed to generate plans");
       setIsLoading(false); // Dừng loading khi có lỗi

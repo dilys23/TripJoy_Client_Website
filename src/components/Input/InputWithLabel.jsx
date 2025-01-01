@@ -24,7 +24,7 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
             }
             setPageIndex((prevIndex) => prevIndex + 1);
         } catch (error) {
-            // toast.error("Lỗi kết nối", error);
+            // toast.error(error);
             console.error("Failed to fetch provinces:", error);
         } finally {
             setLoading(false);

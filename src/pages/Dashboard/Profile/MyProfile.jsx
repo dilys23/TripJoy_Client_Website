@@ -32,6 +32,7 @@ import { useParams } from "react-router-dom";
 import { getUserById } from "../../../services/getUserById";
 import { acceptFriendRequest, declineFriendRequest, getMyFriend, removeFriend, revokeFriendRequest, sendFriendRequest } from "../../../services/friend";
 import { toast } from "react-toastify";
+import { getPostByUserId } from "../../../services/post"
 function MyProfile() {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [profile, setProfile] = useState(null);
@@ -40,11 +41,12 @@ function MyProfile() {
     const id = useParams();
     const [stateFriend, setStateFriend] = useState(4);
     const [listMyFriend, setListMyFriend] = useState([]);
+    const [postList, setPostList] = useState([]);
     const fetchUser = async () => {
         const res = await getUserById(id.id);
         setProfile(res.user);
         setStateFriend(res.user.status);
-        console.log(res);
+        // console.log(res);
     }
     useEffect(() => {
         fetchUser();
@@ -57,6 +59,17 @@ function MyProfile() {
         { label: "Công khai", icon: <FcGlobe /> },
         { label: "Bạn bè", icon: <FcPrivacy /> },
     ];
+    const fetchPost = async () => {
+        try {
+            console.log(id);
+            const res = await getPostByUserId(id.id, 0, 10);
+            console.log(res);
+            setPostList(res.posts.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     const handleOptionClick = (option) => {
@@ -70,7 +83,7 @@ function MyProfile() {
             const res = await sendFriendRequest(id.id);
             setStateFriend(2);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('Error while sending friend request:', error);
         }
     }
@@ -79,7 +92,7 @@ function MyProfile() {
             const res = await acceptFriendRequest(id.id);
             setStateFriend(1);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('Error while accept friend request:', error);
         }
     }
@@ -88,7 +101,7 @@ function MyProfile() {
             const res = await declineFriendRequest(id.id);
             setStateFriend(0);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('Error while decline friend request:', error);
         }
     }
@@ -97,7 +110,7 @@ function MyProfile() {
             const res = await revokeFriendRequest(id.id);
             setStateFriend(0);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('Error while revoke friend request:', error);
         }
     }
@@ -106,7 +119,7 @@ function MyProfile() {
             const res = await removeFriend(id.id);
             setStateFriend(0);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('Error while remove friend request:', error);
         }
     }
@@ -129,9 +142,10 @@ function MyProfile() {
                 console.log('Error while getting my friend request:', error);
             }
         };
-
+        // fetchPost();
         fetchFriends();
     }, []);
+
 
     const albums = [
         {
@@ -358,6 +372,13 @@ function MyProfile() {
                             </div>
 
                         </div>
+                    </div>
+                    <div className="">
+                        {/* {
+                            postList.map((data, index) => (
+                                <Post key={index} data={data}></Post>
+                            ))
+                        } */}
                     </div>
                     {/* các bài post */}
                     {/* <div className="mt-6 sm:px-0 px-1">

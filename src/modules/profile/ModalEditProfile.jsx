@@ -117,7 +117,7 @@ function ModalEditProfile({ handleClose, onSuccess }) {
             onSuccess();
 
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error)
         }
     }

@@ -22,7 +22,7 @@ function ModalAllJoinRequest({
             return res.joinPlanRequests.data || [];
             // console.log(res);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error(error);
         }
     }
@@ -36,7 +36,7 @@ function ModalAllJoinRequest({
             console.log(res);
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error(error);
         }
     }
@@ -47,7 +47,7 @@ function ModalAllJoinRequest({
             refreshData();
             console.log(res);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error(error);
         }
     }
