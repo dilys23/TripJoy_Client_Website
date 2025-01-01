@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { getUserLikePost, getUserLikePostByIcon } from "../../services/interactPost";
 import avatarDefault from "../../assets/images/avatarDefault.png"
+import { toast } from "react-toastify";
 function ModalUserLikePost({ handleClose, postId }) {
     // console.log(postId);
     const emotions = [
@@ -24,6 +25,7 @@ function ModalUserLikePost({ handleClose, postId }) {
             setUserLikePostByIcon(res.users.data);
             console.log(res)
         } catch (error) {
+            
             console.error("Error fetching reactions by icon:", error);
         }
     };
@@ -35,6 +37,7 @@ function ModalUserLikePost({ handleClose, postId }) {
                 setUserLikePost(res.users.data);
 
             } catch (error) {
+                toast.error("Lỗi kết nối", error);
                 console.error("Error fetching reactions:", error);
             }
         };

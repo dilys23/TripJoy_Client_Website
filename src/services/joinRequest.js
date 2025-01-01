@@ -12,7 +12,7 @@ const updatePlanStatus = async (id) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 const getPlansAvailableToJoin = async (pageIndex, pageSize) => {
@@ -30,7 +30,7 @@ const getPlansAvailableToJoin = async (pageIndex, pageSize) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 
@@ -46,7 +46,7 @@ const joinRequest = async (id, Introduction) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 const revokeJoinRequest = async (id) => {
@@ -61,7 +61,7 @@ const revokeJoinRequest = async (id) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 const getJoinPlanRequest = async (id, pageIndex, pageSize) => {
@@ -79,7 +79,7 @@ const getJoinPlanRequest = async (id, pageIndex, pageSize) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 const acceptJoinRequest = async (idPlan, idUser) => {
@@ -94,7 +94,7 @@ const acceptJoinRequest = async (idPlan, idUser) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 
 }
@@ -110,7 +110,7 @@ const declineJoinRequest = async (idPlan, idUser) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 
 }
@@ -126,7 +126,8 @@ const viewDetailAvailablePlan = async (id) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
+
 export { updatePlanStatus, getPlansAvailableToJoin, joinRequest, revokeJoinRequest, getJoinPlanRequest, acceptJoinRequest, declineJoinRequest, viewDetailAvailablePlan }

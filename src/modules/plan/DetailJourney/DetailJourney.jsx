@@ -9,6 +9,7 @@ import EvaluationJourneyItem from "./EvaluationJourneyItem"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { format, addDays, eachDayOfInterval } from "date-fns";
 import { changeOrderPlanLocation, getPlanLocationByIdService } from "../../../services/planLocation"
+import { toast } from "react-toastify"
 function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess }) {
 
     const [expandedEvaluationItems, setExpandedEvaluationItems] = useState([]);
@@ -93,6 +94,7 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
             const res = await changeOrderPlanLocation(planId, planLocationIdFirst, planLocationIdSecond);
             onSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }
@@ -116,15 +118,14 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
             )
         );
     };
-    const updateImage = () => {
+    const updateImage = () => { }
 
-    }
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            {role === 0 &&
+            {role === 0 && plan?.status !== 2 &&
                 <div className="flex justify-end w-full mt-[-20px] mb-5">
                     <Button onClick={handleEdit} tertiary={isEdit} primary={!isEdit} className="md:text-[15px] text-[8px] rounded-lg px-8">
-                        {!isEdit ? "Edit" : "Save"}
+                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
                     </Button>
                 </div>}
             <div className="flex flex-col w-full min-h-[800px]">
@@ -168,7 +169,7 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
                                                             onSuccess={onSuccess}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} updateImage={updateImage} />
+                                                            <EvaluationJourneyItem plan={plan} journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} updateImage={updateImage} />
                                                         )}
                                                     </div>
                                                 )}

@@ -14,7 +14,7 @@ const createRoomChatPrivate = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 };
 
@@ -34,7 +34,7 @@ const getMessageByRoomId = async (roomId, pageIndex, pageSize) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 }
 const sendMessages = async (roomId, Message) => {
@@ -51,7 +51,7 @@ const sendMessages = async (roomId, Message) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 }
 
@@ -71,7 +71,7 @@ const createPlanRoomChat = async (planId, PlanName) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 }
 const getRecentConversation = async (pageIndex, pageSize) => {
@@ -90,7 +90,7 @@ const getRecentConversation = async (pageIndex, pageSize) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 }
 const markMessageRead = async (roomId) => {
@@ -105,7 +105,7 @@ const markMessageRead = async (roomId) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+         throw error.response.data.detail;
     }
 }
 

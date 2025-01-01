@@ -23,6 +23,7 @@ import ModalUserLikePost from "../../../components/Modal/ModalUserLikePost";
 import { getPlansAvailableToJoin, viewDetailAvailablePlan } from "../../../services/joinRequest";
 import ModalDetailRouting from "../../../components/Modal/ModalDetailRouting";
 import AvatarDefault from "../../../components/Avatar/AvatarDefault";
+import { toast } from "react-toastify";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false);
   const [showModalDeletePost, setShowModalDeletePost] = useState(false);
@@ -154,6 +155,7 @@ function Network() {
       setPostsDataList(posts.filter(post => post.postId !== postId));
       setShowModalDeletePost(false);
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.log(error)
     }
 

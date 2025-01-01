@@ -30,13 +30,16 @@ const resetPasswordService = async (email) => {
 }
 
 // xac nhan doi mat khau
-const confirmForgetPasswordService = async ({ otp, url }) => {
+const confirmForgetPasswordService = async (otp, url) => {
     console.log("Sending OTP:", (otp));
     console.log("Sending key:", (url));
     try {
-        const res = await axios.post(url, {
+        const res = await axios.post({
             otp
         }, {
+            params: {
+                key: url
+            },
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -66,7 +69,7 @@ const changePasswordService = async ({ url, password, confirmPassword }) => {
         return res.data;
     } catch (error) {
         console.log('Login error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 //ham logout
@@ -101,7 +104,7 @@ const refreshTokenService = async () => {
         });
         return res.data;
     } catch (error) {
-        throw error;
+        throw error.response.data.detail;
     }
 }
 

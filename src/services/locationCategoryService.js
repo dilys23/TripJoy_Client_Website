@@ -14,7 +14,7 @@ const addLocationCategoryRequest = async (name, description) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // GET LOCATION CATEGORY
@@ -29,7 +29,7 @@ const getLocationCategoryRequest = async () => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 

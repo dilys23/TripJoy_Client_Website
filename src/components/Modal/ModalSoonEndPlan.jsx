@@ -1,6 +1,7 @@
 import { MdClose } from "react-icons/md";
 import image from "../../assets/images/endplansoon.png"
-import { endPlanSoonService } from "../../services/statusPlanService";
+import { completePlan, endPlanSoonService } from "../../services/statusPlanService";
+import { toast } from "react-toastify";
 function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWithIcon }) {
     const handlePausePlan = async () => {
         try {
@@ -12,6 +13,21 @@ function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWith
             }
             onSuccess();
         } catch (error) {
+            toast.error("Bạn không có quyền chỉnh sửa");
+            console.log(error);
+        }
+    }
+    const handleCompletePlan = async () => {
+        try {
+            const response = await completePlan(planId);
+            handleClose();
+
+            if (response) {
+                openNotificationWithIcon('success', 'Chúc mừng bạn đã kết thúc chuyến đi thành công !');
+            }
+            onSuccess();
+        } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }
@@ -37,7 +53,9 @@ function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWith
                             <br /> Hẹn các bạn ở chuyến đi tiếp theo cùng TripJoy! </span>
                         <div className="flex gap-10 mx-auto pt-5">
                             <button onClick={handlePausePlan} className="w-[100px] bg-white border shadow-sm font-bold text-[15px] rounded h-[37px]">Tạm dừng </button>
-                            <button className="w-[100px] bg-[#FF8B4A] text-white font-bold text-[15px] rounded h-[37px]">Kết thúc</button>
+                            <button
+                                onClick={handleCompletePlan}
+                                className="w-[100px] bg-[#FF8B4A] text-white font-bold text-[15px] rounded h-[37px]">Kết thúc</button>
                         </div>
                     </div>
                 </div>

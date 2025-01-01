@@ -4,6 +4,7 @@ import { getMyFriend } from "../../services/friend"
 import { UserContext } from "../../contexts/UserContext";
 import { createRoomChatPrivate } from "../../services/Chat";
 import Chat from "../Chat/Chat";
+import toast from "react-hot-toast";
 function Contact() {
     const [listMyFriend, setListMyFriend] = useState([]);
     const { onlineFriends } = useContext(UserContext);
@@ -20,6 +21,7 @@ function Contact() {
                 setListMyFriend(listFriend.users.data);
                 // console.log(listFriend.users.data)
             } catch (error) {
+                // toast.error("Lỗi kết nối", error);
                 console.log('Error while getting my friend request:', error);
             }
         };
@@ -37,6 +39,7 @@ function Contact() {
                 { room: res.room, friend: friend }
             ]);
         } catch (error) {
+            // toast.error("Lỗi kết nối", error);
             console.log('Error while creating room chat:', error);
         }
     }

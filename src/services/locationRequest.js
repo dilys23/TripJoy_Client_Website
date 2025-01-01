@@ -14,7 +14,7 @@ const addLocationRequest = async (formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -37,7 +37,7 @@ const addImagesLocationRequest = async (LocationId, Url) => {
             });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -58,7 +58,7 @@ const deleteImagesLocationRequest = async (LocationId, ImageId) => {
             });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 export { addLocationRequest, addImagesLocationRequest, deleteImagesLocationRequest }

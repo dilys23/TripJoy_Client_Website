@@ -5,6 +5,7 @@ import { joinRequest, revokeJoinRequest, viewDetailAvailablePlan } from "../../s
 import RoutingMap from "../MapCard/RoutingMap"
 import ModalDetailRouting from "../Modal/ModalDetailRouting";
 import Button from "../Button/Button";
+import { toast } from "react-toastify";
 function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
     // console.log(plan);
 
@@ -25,6 +26,7 @@ function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
                 console.log(res);
 
             } catch (error) {
+                toast.error("Lỗi kết nối", error);
                 console.log(error);
             }
         }
@@ -36,6 +38,7 @@ function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
             setApplyStatus(true);
             setShowModalJoin(false);
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }

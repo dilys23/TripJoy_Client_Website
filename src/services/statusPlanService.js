@@ -12,7 +12,7 @@ const startPlanService = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // END PLAN
@@ -27,8 +27,22 @@ const endPlanSoonService = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
+    }
+}
+const completePlan = async (planId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.post(`travelplan-service/plans/${planId}/complete`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        throw error.response.data.detail
     }
 }
 
-export { startPlanService, endPlanSoonService }
+export { startPlanService, endPlanSoonService, completePlan }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProvinces } from "../../services/getProvince";
 import { Select, Spin } from "antd";
+import toast from "react-hot-toast";
 
 function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
     const [isFocused, setIsFocused] = useState(false);
@@ -23,6 +24,7 @@ function InputWithLabel({ label, placeholder, value, onChange, isDropdown }) {
             }
             setPageIndex((prevIndex) => prevIndex + 1);
         } catch (error) {
+            // toast.error("Lỗi kết nối", error);
             console.error("Failed to fetch provinces:", error);
         } finally {
             setLoading(false);

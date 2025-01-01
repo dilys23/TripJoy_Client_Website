@@ -6,6 +6,7 @@ import { useAuthStore } from "../../services/authUser";
 import { sendOTP, register1 } from "../../services/authAccount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 function Register({ onClose, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,6 +33,7 @@ function Register({ onClose, onSwitchToLogin }) {
       console.log(result);
       console.log("gửi otp đến email thành công ", result);
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Lỗi khi gửi OTP:", error.message);
     }
   };
@@ -49,6 +51,7 @@ function Register({ onClose, onSwitchToLogin }) {
       console.log("Đăng kí thành công  ", result);
       onSwitchToLogin();
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Lỗi khi gửi thông tin:", error.message);
     }
   };

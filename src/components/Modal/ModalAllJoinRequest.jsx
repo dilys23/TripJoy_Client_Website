@@ -6,6 +6,7 @@ import AvatarDefault from "../Avatar/AvatarDefault";
 import { MdArrowBack } from "react-icons/md";
 import Button from "../Button/Button"
 import TextArea from "../Input/TextArea";
+import { toast } from "react-toastify";
 function ModalAllJoinRequest({
     planId,
     open,
@@ -21,6 +22,7 @@ function ModalAllJoinRequest({
             return res.joinPlanRequests.data || [];
             // console.log(res);
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error(error);
         }
     }
@@ -34,6 +36,7 @@ function ModalAllJoinRequest({
             console.log(res);
             onSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error(error);
         }
     }
@@ -44,6 +47,7 @@ function ModalAllJoinRequest({
             refreshData();
             console.log(res);
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error(error);
         }
     }

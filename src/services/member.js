@@ -13,7 +13,7 @@ const inviteMemberRequest = async (planId, userId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -30,7 +30,7 @@ const revokeMemberRequest = async (planId, userId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // Get member by id plan
@@ -45,7 +45,7 @@ const getMemberByPlanId = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // CHANG ROLE PERMISSION
@@ -60,7 +60,7 @@ const changePermissionService = async (planId, userId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 // Remove Member
@@ -75,7 +75,7 @@ const removeMemberService = async (planId, userId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 // ACCEPT INVITATION
@@ -90,7 +90,7 @@ const acceptInvitationService = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // DECLINE INVITATION
@@ -105,8 +105,24 @@ const declineInvitationService = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
-export { inviteMemberRequest, revokeMemberRequest, getMemberByPlanId, changePermissionService, removeMemberService, acceptInvitationService, declineInvitationService }
+const outPlanService = async (planId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await api.put(`travelplan-service/plans/${planId}/members/remove`, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error.response.data.detail)
+        throw error.response.data.detail
+    }
+}
+
+export { inviteMemberRequest, revokeMemberRequest, getMemberByPlanId, changePermissionService, removeMemberService, acceptInvitationService, declineInvitationService, outPlanService }

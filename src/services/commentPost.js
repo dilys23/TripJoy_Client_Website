@@ -12,7 +12,7 @@ const commentPost = async (id, comment) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 const getCommentByPostId = async (id) => {
@@ -27,7 +27,7 @@ const getCommentByPostId = async (id) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 
@@ -43,7 +43,7 @@ const replyComment = async (id, comment) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 const getReplyComment = async (id) => {
@@ -58,7 +58,7 @@ const getReplyComment = async (id) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 const likeComment = async (idComment, emotion) => {
@@ -73,7 +73,7 @@ const likeComment = async (idComment, emotion) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 const revokeComment = async (idComment) => {
@@ -88,7 +88,7 @@ const revokeComment = async (idComment) => {
         return res.data;
     } catch (error) {
         console.log('error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 const deleteComment = async (id) => {

@@ -7,6 +7,7 @@ import LoadingSpinner from "../../../components/Loading/LoadingSpinner";
 import { map } from "leaflet";
 import { useLocation } from "react-router-dom";
 import fetchTripPlans from "../../../services/getAIrecommend";
+import { toast } from "react-toastify";
 
 function GeneratePlan() {
   const [isChoosePlan, setIsChoosePlan] = useState(0);
@@ -59,6 +60,7 @@ function GeneratePlan() {
       setPlans(fetchedPlans);
       setIsLoading(false); // Dữ liệu đã được tải
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Error in handleFinished:", error);
       setError("Failed to generate plans");
       setIsLoading(false); // Dừng loading khi có lỗi

@@ -1,6 +1,7 @@
 import { MdClose } from "react-icons/md";
 import iconChange from "../../assets/images/cahge.png"
 import { changePermissionService } from "../../services/member";
+import { toast } from "react-toastify";
 
 function ModalEditRole({ planId, member, handleClose, onSuccess }) {
 
@@ -26,7 +27,7 @@ function ModalEditRole({ planId, member, handleClose, onSuccess }) {
             }
         }
         catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
     }
 

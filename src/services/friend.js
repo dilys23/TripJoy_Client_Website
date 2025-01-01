@@ -14,7 +14,7 @@ const sendFriendRequest = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log('ACCEPT FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 
@@ -33,7 +33,7 @@ const acceptFriendRequest = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log('ACCEPT FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 
@@ -52,7 +52,7 @@ const declineFriendRequest = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log('DECLINE FRIEND  error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 // REMOVE FRIEND
@@ -70,7 +70,7 @@ const removeFriend = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log('REMOVE FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 // REVOKE FRIEND REQUEST
@@ -88,7 +88,7 @@ const revokeFriendRequest = async (UserId) => {
         return res.data;
     } catch (error) {
         console.log(' REVOKE FRIEND REQUEST error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 
@@ -105,7 +105,7 @@ const getMyFriend = async () => {
         return res.data;
 
     } catch (error) {
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { sendFriendRequest, acceptFriendRequest, declineFriendRequest, removeFriend, revokeFriendRequest, getMyFriend }

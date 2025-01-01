@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { addImageIntoPlan, removeImageIntoPlan } from "../../services/detailPlanLocationService";
+import { toast } from "react-toastify";
 
 function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
 
@@ -19,6 +20,7 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
                 setImages((prevImages) => [...prevImages, newImageUrl]);
                 onSuccess();
             } catch (error) {
+                toast.error("Lỗi kết nối", error);
                 console.log(error);
             }
         }
@@ -30,6 +32,7 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
             await removeImageIntoPlan(planLocationId, image);
             setImages(updatedImages);
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log('Error removing image:', error);
         }
     };

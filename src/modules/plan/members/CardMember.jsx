@@ -4,7 +4,7 @@ import { CiEdit } from "react-icons/ci";
 import { getUserById } from "../../../services/getUserById";
 import avatarDefault from "../../../assets/images/avatarDefault.png"
 import { getCurrentUser } from "../../../services/getCurrentUser";
-function CardMember({ role, member, handleOpenModalEdit, handleOpenModalRemoveMember }) {
+function CardMember({ role, member, handleOpenModalEdit, handleOpenModalRemoveMember, handleOpenOutPlan }) {
     // console.log(member);
     const [user, setUser] = useState({});
     const [isMyseft, setIsMyseft] = useState(false);
@@ -79,7 +79,9 @@ function CardMember({ role, member, handleOpenModalEdit, handleOpenModalRemoveMe
                 )}
 
                 {isMyseft && (
-                    <button className="w-[133px] flex justify-center py-2 bg-[#17A1FA] text-white text-[14px] rounded-md cursor-pointer">
+                    <button
+                        onClick={handleOpenOutPlan}
+                        className="w-[133px] flex justify-center py-2 bg-[#17A1FA] text-white text-[14px] rounded-md cursor-pointer">
                         Rời nhóm
                     </button>
                 )}

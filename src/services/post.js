@@ -12,7 +12,7 @@ const createPost = async (formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // Create a post append
@@ -27,7 +27,7 @@ const createPostPlan = async (formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // get post by id
@@ -42,7 +42,7 @@ const getPostById = async (id) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -62,7 +62,7 @@ const getPostHomeFeed = async (pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -81,7 +81,7 @@ const getPostByUserId = async (userId, pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 const editPost = async (id, formData) => {
@@ -95,7 +95,7 @@ const editPost = async (id, formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 const deletePost = async (id) => {
@@ -109,7 +109,7 @@ const deletePost = async (id) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 export { createPost, getPostById, getPostHomeFeed, editPost, deletePost, createPostPlan }

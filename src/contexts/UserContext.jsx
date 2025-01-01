@@ -2,6 +2,7 @@
 import { createContext, useEffect, useState } from "react";
 import { getCurrentUser } from "../services/getCurrentUser";
 import { HubConnectionBuilder } from "@microsoft/signalr";
+import { toast } from "react-toastify";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -11,7 +12,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://10.18.25.110:6700/notification-hub", { withCredentials: true })
+            .withUrl("http://172.16.1.238:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 
@@ -38,6 +39,7 @@ export const UserProvider = ({ children }) => {
             await hubConnection.invoke("AddNewUser", userInfo.profile.id); // Gửi userId lên server
             setConnection(hubConnection);
         } catch (err) {
+            toast.error("Lỗi kết nối", error);
             console.error("SignalR connection failed:", err);
         }
     };

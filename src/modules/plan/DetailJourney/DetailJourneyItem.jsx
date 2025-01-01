@@ -4,6 +4,7 @@ import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import HoiAn from "../../../assets/images/noImages.jpg"
 import { EditLocationIcon } from "../../../components/Icons/Icons";
 import { changeOrderPlanLocation, removePlanLocation } from "../../../services/planLocation";
+import { toast } from "react-toastify";
 function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandleProps, onSuccess }) {
     const dashStyle = journey.status === 0
         ? 'linear-gradient(to bottom, #FF7324 40%, transparent 40%)'
@@ -34,11 +35,12 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
             const response = await removePlanLocation(journey.planLocationId);
             onSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }
 
-    console.log(journey)
+    // console.log(journey)
     return (
         <div className="w-full md:gap-5 gap-2 flex sm:h-[171px] h-[150px]" >
             {!isEdit ? (

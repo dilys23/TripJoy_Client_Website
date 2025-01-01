@@ -12,7 +12,7 @@ const searchUserRequest = async (searchValue) => {
         return res.data.users.data;
     } catch (error) {
         console.log('search error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { searchUserRequest }

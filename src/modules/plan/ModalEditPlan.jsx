@@ -9,6 +9,7 @@ import { notification } from 'antd';
 import { updatePlanRequest } from "../../services/plan";
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { toast } from "react-toastify";
 
 dayjs.extend(utc);
 
@@ -65,6 +66,7 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
             const blob = await response.blob(); // Convert to Blob
             return new File([blob], name, { type }); // Tạo File object
         } catch (error) {
+            
             console.error('Error converting avatar:', error);
             return null;
         }
@@ -156,6 +158,7 @@ function ModalEditPlan({ planId, plan, handleClose, OnSuccess }) {
             handleClose();
             OnSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error(error);
         } finally {
             setLoading(false);

@@ -13,6 +13,7 @@ import { createPost, createPostPlan } from "../../services/post";
 import { notification } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 import { UserContext } from "../../contexts/UserContext";
+import toast from "react-hot-toast";
 
 function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
     const { user } = useContext(UserContext);
@@ -156,6 +157,7 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
             }
         });
     };
+    console.log(planChosen);
     // ADD POST NORMAL (WITHOUT PLAN)
     const handleAddPostNormal = async () => {
         if (!content || !content.trim()) {
@@ -180,8 +182,8 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                 if (showTrip) {
                     planChosen.locations.forEach((location, index) => {
                         formData.append(`PlanPost.PostPlanLocations[${index}].LocationId`, location.id);
-                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Latitude`, location.latitude);
-                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Longitude`, location.longitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Latitude`, location.coordinates.latitude);
+                        formData.append(`PlanPost.PostPlanLocations[${index}].Coordinates.Longitude`, location.coordinates.longitude);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Order`, location.order);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Name`, location.name);
                         formData.append(`PlanPost.PostPlanLocations[${index}].Address`, location.address);
@@ -227,7 +229,8 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
             }
             setLoading(false);
         } catch (error) {
-            console.log('error', error)
+            console.log('error', error);
+            toast.error(error);
         }
     }
 
@@ -580,11 +583,28 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                                     </div>
                                 </>
                             </>
-
                             <Button
+                                disabled={loading || !content.trim()}
+                                onClick={handleAddPostNormal}
+                                primary
+                                className="rounded mt-0"
+                            >
+                                {loading ? (
+                                    <img
+                                        className="h-5 w-5 animate-spin"
+                                        width="24"
+                                        height="24"
+                                        src="https://img.icons8.com/?size=100&id=94550&format=png&color=FFFFFF"
+                                        alt="loading"
+                                    />
+                                ) : (
+                                    "Đăng"
+                                )}
+                            </Button>
+                            {/* <Button
                                 disabled={!content.trim()}
                                 onClick={handleAddPostNormal}
-                                primary className="rounded mt-0">Đăng</Button>
+                                primary className="rounded mt-0">Đăng</Button> */}
                         </div>
                     </div>
                 </div>

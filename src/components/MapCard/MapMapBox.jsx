@@ -4,7 +4,8 @@ import ReactMapGL, { Marker, Popup, Source, Layer } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
-mapboxgl.accessToken ="pk.eyJ1IjoiZGlseXMyMyIsImEiOiJjbTFwNGsxYXAwMGNxMmlvajZ4cTVoNjNwIn0.S12DlUDIneIXNewe0v8IFg";
+import { toast } from "react-toastify";
+mapboxgl.accessToken = "pk.eyJ1IjoiZGlseXMyMyIsImEiOiJjbTFwNGsxYXAwMGNxMmlvajZ4cTVoNjNwIn0.S12DlUDIneIXNewe0v8IFg";
 
 function Mapbox({ listLatitude, listLongitude, listAddress }) {
   const [viewport, setViewport] = useState({
@@ -60,21 +61,22 @@ function Mapbox({ listLatitude, listLongitude, listAddress }) {
       const response = await axios.get(url);
       const routeGeoJSON = response.data.routes[0].geometry;
       setRoute(routeGeoJSON); // Lưu trữ đường đi vào state
-       // Tính toán bounds và cập nhật viewport
-       const bounds = getBounds(coordinates);
-       const { longitude, latitude, zoom } = new WebMercatorViewport({
-         width: window.innerWidth,
-         height: window.innerHeight,
-       }).fitBounds(bounds, { padding: 50 });
- 
-       setViewport({
-         width: "100vw",
-         height: "100vh",
-         latitude,
-         longitude,
-         zoom,
-       });
+      // Tính toán bounds và cập nhật viewport
+      const bounds = getBounds(coordinates);
+      const { longitude, latitude, zoom } = new WebMercatorViewport({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }).fitBounds(bounds, { padding: 50 });
+
+      setViewport({
+        width: "100vw",
+        height: "100vh",
+        latitude,
+        longitude,
+        zoom,
+      });
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Error fetching route:", error);
     }
   };
@@ -115,8 +117,8 @@ function Mapbox({ listLatitude, listLongitude, listAddress }) {
     }
   }, [listAddress]);
 
- 
- 
+
+
   return (
     <div style={{ width: "100%", height: "500px" }}>
       <ReactMapGL
