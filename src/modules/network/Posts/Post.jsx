@@ -102,7 +102,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     }));
                 }
             } catch (error) {
-                toast.error("Lỗi kết nối", error);
+                toast.error(error);
                 console.log(error);
             }
         }
@@ -134,7 +134,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     }
                     handleHide();
                 } catch (error) {
-                    toast.error("Lỗi kết nối", error);
+                    toast.error(error);
                 }
 
             }
@@ -156,7 +156,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 commentCount: prevPost.commentCount + 1,
             }));
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
     }
     const handleEmotionClick = async (commentId, label) => {
@@ -169,7 +169,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             const res = await likeComment(commentId, commentData);
             fetchComment();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
     };
     const handleDelete = async (commentId) => {
@@ -182,7 +182,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 commentCount: prevPost.commentCount > 0 ? prevPost.commentCount - 1 : 0,
             }));
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
     }
     const handleSendReply = async (commentId, replyText) => {
@@ -195,7 +195,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             const res = await replyComment(commentId, commentData);
             fetchComment();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
         }
     }
 
@@ -254,7 +254,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 )
             );
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log('error', error)
         }
     }

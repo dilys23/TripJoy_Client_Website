@@ -4,14 +4,14 @@ import AvatarDefault from '../Avatar/AvatarDefault';
 import { useNavigate } from 'react-router-dom';
 function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
     const navigate = useNavigate();
-    console.log(info)
+    // console.log(info)
     const handleToProfile = () => {
         navigate(`/profile/${info.id}`);
         window.location.reload();
     }
 
     return (
-        <div className="w-full h-[100px] bg-white rounded-20 my-3 px-1   border border-[#CCD0D5]">
+        <div className="w-full h-fit bg-white rounded-20 py-1 px-1   border border-[#CCD0D5]">
             <div onClick={handleToProfile} className="flex gap-3 items-center px-2 py-1 ">
                 <AvatarDefault src={info?.avatar.url} alt="" className="lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] "></AvatarDefault>
                 <div>

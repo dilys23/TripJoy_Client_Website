@@ -71,7 +71,7 @@ function CardRecommendationPlan({
       return response;
       // Handle response
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Error:", error);
     }
   };

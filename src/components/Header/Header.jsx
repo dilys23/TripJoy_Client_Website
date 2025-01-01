@@ -80,7 +80,7 @@ function Header() {
                 setListMyFriend(listFriend.users.data);
 
             } catch (error) {
-                // toast.error("Lỗi kết nối", error);
+                // toast.error(error);
                 console.log('Error while getting my friend request:', error);
             }
         };
@@ -100,7 +100,7 @@ function Header() {
                 console.error('Room creation failed:', res);
             }
         } catch (error) {
-            // toast.error("Lỗi kết nối", error);
+            // toast.error(error);
             console.error('Error while creating room chat:', error);
         }
     };
@@ -168,7 +168,7 @@ function Header() {
             navigate("/");
             logout();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error("Logout error:", error);
         }
     };
@@ -183,6 +183,7 @@ function Header() {
         navigate(`/profile/${user.profile.id}`);
 
     };
+    // const location = useLocation();
 
 
     return (
@@ -363,7 +364,8 @@ function Header() {
                                             <li className="px-3">
                                                 <a
                                                     href="/network"
-                                                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
+                                                    className={`text-gray-300 divide flex flex-col items-center gap-1 text-base ${location.pathname === '/network' ? 'text-blue-600' : 'hover:text-blue-600'}`}
+                                                // className="text-gray-300 divide flex flex-col items-center gap-1 text-base text-blue-600 hover:text-blue-900"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511 511.999" fill="currentColor" className="h-6 w-6"                    >
                                                         <path
@@ -376,7 +378,8 @@ function Header() {
                                             <li className="px-3">
                                                 <a
                                                     href="/plan"
-                                                    className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
+                                                    className={`text-gray-300 divide flex flex-col items-center gap-1 text-base ${location.pathname === '/plan' ? 'text-blue-600' : 'hover:text-blue-600'}`}
+                                                // className="text-gray-300 divide flex flex-col items-center gap-1 text-base hover:text-blue-600"
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"

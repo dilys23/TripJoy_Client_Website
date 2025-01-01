@@ -160,7 +160,7 @@ function PlanAI() {
       history.push(config.routes.generatePlan, { plan });
 
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Error in handleFinished:", error);
     }
   };

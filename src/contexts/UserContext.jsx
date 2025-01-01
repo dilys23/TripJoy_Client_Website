@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
     const [onlineFriends, setOnlineFriends] = useState([]);
     const initializeSocketConnection = async (userInfo) => {
         const hubConnection = new HubConnectionBuilder()
-            .withUrl("http://172.16.1.238:6700/notification-hub", { withCredentials: true })
+            .withUrl("http://192.168.1.51:6700/notification-hub", { withCredentials: true })
             .withAutomaticReconnect()
             .build();
 
@@ -39,7 +39,7 @@ export const UserProvider = ({ children }) => {
             await hubConnection.invoke("AddNewUser", userInfo.profile.id); // Gửi userId lên server
             setConnection(hubConnection);
         } catch (err) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error("SignalR connection failed:", err);
         }
     };

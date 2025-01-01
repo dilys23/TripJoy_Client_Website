@@ -26,7 +26,7 @@ function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
                 console.log(res);
 
             } catch (error) {
-                toast.error("Lỗi kết nối", error);
+                toast.error(error);
                 console.log(error);
             }
         }
@@ -38,7 +38,7 @@ function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
             setApplyStatus(true);
             setShowModalJoin(false);
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
         }
     }

@@ -94,7 +94,7 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
             const res = await changeOrderPlanLocation(planId, planLocationIdFirst, planLocationIdSecond);
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
         }
     }

@@ -14,7 +14,7 @@ function FrameChat({ createRoomChat }) {
             return res.conversations.data || [];
         }
         catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             // console.log(error);
             return [];
         }

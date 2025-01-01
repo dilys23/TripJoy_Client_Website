@@ -180,7 +180,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
           // openNotificationWithIcon('error', 'Lỗi định tuyến', 'Không thể tìm thấy tuyến đường.');
         });
       } catch (error) {
-        toast.error("Lỗi kết nối", error);
+        toast.error(error);
         console.error("Lỗi khi tạo Routing Control:", error);
       }
     }
@@ -249,7 +249,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         });
       }
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Lỗi khi lấy thông tin địa điểm:", error);
     }
   };
@@ -271,7 +271,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
       setLocations(response.data); // Lưu danh sách kết quả
       setIsDropdownVisible(true); // Hiển thị dropdown
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Lỗi khi tìm kiếm địa điểm:", error);
     }
   }, []);
@@ -385,7 +385,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         Address: "",
       }));
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.log(error);
     } finally {
       setLoading(false);

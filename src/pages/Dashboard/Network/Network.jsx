@@ -155,7 +155,7 @@ function Network() {
       setPostsDataList(posts.filter(post => post.postId !== postId));
       setShowModalDeletePost(false);
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.log(error)
     }
 

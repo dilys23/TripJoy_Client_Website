@@ -19,53 +19,53 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
     // const [isRead, setIsRead] = useState(false);
     // console.log(friend?.avatar?.url)
 
-    // const fetchMessage = async () => {
-    //     try {
-    //         if (currentRoom) {
-    //             const res = await getMessageByRoomId(currentRoom.roomId);
-    //             setListMessage(res.messages.data);
-
-    //         } else if (groupRoomChat) {
-    //             const res = await getMessageByRoomId(groupRoomChat.roomId);
-    //             setMembers(res.members);
-    //             setListMessage(res.messages.data);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         toast.error("Lỗi kết nối");
-    //     }
-
-    // }
-    const chatContainerRef = useRef(null);
-    const fetchMessage = async (pageIndex = 0, pageSize = 10) => {
+    const fetchMessage = async () => {
         try {
             if (currentRoom) {
-                const res = await getMessageByRoomId(currentRoom.roomId, pageIndex, pageSize);
-                return res.messages.data;
+                const res = await getMessageByRoomId(currentRoom.roomId);
+                setListMessage(res.messages.data);
+
             } else if (groupRoomChat) {
-                const res = await getMessageByRoomId(groupRoomChat.roomId, pageIndex, pageSize);
-                if (pageIndex === 0) {
-                    setMembers(res.members);
-                }
-                return res.messages.data;
+                const res = await getMessageByRoomId(groupRoomChat.roomId);
+                setMembers(res.members);
+                setListMessage(res.messages.data);
             }
         } catch (error) {
             console.log(error);
-            return [];
+            // toast.error("Lỗi kết nối");
         }
-    };
-    const { dataList, loading, hasMore, observerRef, setDataList, refreshData } = useInfiniteScroll(fetchMessage);
+
+    }
+    const chatContainerRef = useRef(null);
+    // const fetchMessage = async (pageIndex = 0, pageSize = 10) => {
+    //     try {
+    //         if (currentRoom) {
+    //             const res = await getMessageByRoomId(currentRoom.roomId, pageIndex, pageSize);
+    //             return res.messages.data;
+    //         } else if (groupRoomChat) {
+    //             const res = await getMessageByRoomId(groupRoomChat.roomId, pageIndex, pageSize);
+    //             if (pageIndex === 0) {
+    //                 setMembers(res.members);
+    //             }
+    //             return res.messages.data;
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         return [];
+    //     }
+    // };
+    // const { dataList, loading, hasMore, observerRef, setDataList, refreshData } = useInfiniteScroll(fetchMessage);
     // useEffect(() => {
     //     // Tải lại tin nhắn khi phòng chat thay đổi
     //     if (currentRoom || groupRoomChat) {
     //         refreshData();
     //     }
     // }, [currentRoom, groupRoomChat, refreshData]);
-    // useEffect(() => {
-    //     if (currentRoom || groupRoomChat) {
-    //         fetchMessage();
-    //     }
-    // }, [currentRoom, groupRoomChat]);
+    useEffect(() => {
+        if (currentRoom || groupRoomChat) {
+            fetchMessage();
+        }
+    }, [currentRoom, groupRoomChat]);
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -126,7 +126,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
                 await fetchMessage();
             } catch (error) {
                 console.log('fetch mess:', error);
-                toast.error("Lỗi kết nối");
+                // toast.error(error);
             }
         } else {
             return;
@@ -139,7 +139,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
             // console.log(res);
         } catch (error) {
             console.log(error);
-            toast.error("Lỗi kết nối");
+            toast.error(error);
         }
 
     }
@@ -182,11 +182,11 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
                     className="text-[#5686e1] text-[20px] font-extrabold cursor-pointer" />
             </div>
 
-            <div ref={observerRef} className="loading-indicator">
-                {loading && <p className="text-[10px]">Đang tải...</p>}
-            </div>
+            {/* <div ref={observerRef} className="loading-indicator">
+                {loading && <p className="text-[10px] bg-transparent w-full justify-between">Đang tải...</p>}
+            </div> */}
             <div className="w-full h-[250px] bg-[#f4f4f4] flex px-2 py-1 overflow-auto custom-scroll flex-col-reverse">
-                {dataList.map((msg, index) => {
+                {listMessage.map((msg, index) => {
                     // Gọi hàm `findUser` để lấy thông tin người dùng
                     const { userName, avatar } = findUser(msg.postedByUser, members, friend);
                     const avatarUrl = typeof avatar === 'object' && avatar?.url ? avatar.url : avatar;
@@ -228,7 +228,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
 
                 />
                 <div className="flex w-4/12 text-end justify-end">
-                    <Tippy content="Gửi ảnh"><img width="25" height="25" src="https://img.icons8.com/keek/100/image.png" alt="image" /></Tippy>
+                    {/* <Tippy content="Gửi ảnh"><img width="25" height="25" src="https://img.icons8.com/keek/100/image.png" alt="image" /></Tippy> */}
                     <Tippy content="Icon"><img width="25" height="25" src="https://img.icons8.com/emoji/48/smiling-face-with-smiling-eyes.png" alt="smiling-face-with-smiling-eyes" /></Tippy>
                     <Tippy content="Gửi tin nhắn">
                         <img

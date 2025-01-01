@@ -34,7 +34,7 @@ function RecommendationPlanItem({ plan, onSuccess, openNotificationWithIcon }) {
             openNotificationWithIcon('success', 'Thông báo', 'Hẹn gặp bạn ở một dịp khác', true);
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             // openNotificationWithIcon('success', 'Thông báo', 'Thời gian chuyến đi này trùng với một hành trình khác.', false)
             console.log(error);
         }

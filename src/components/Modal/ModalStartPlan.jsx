@@ -12,7 +12,7 @@ function ModalStartPlan({ handleClose, planId, onSuccess, openNotificationWithIc
             }
             onSuccess();
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.log(error);
         }
     }

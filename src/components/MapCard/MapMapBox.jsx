@@ -76,7 +76,7 @@ function Mapbox({ listLatitude, listLongitude, listAddress }) {
         zoom,
       });
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Error fetching route:", error);
     }
   };

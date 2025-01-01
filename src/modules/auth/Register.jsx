@@ -33,7 +33,7 @@ function Register({ onClose, onSwitchToLogin }) {
       console.log(result);
       console.log("gửi otp đến email thành công ", result);
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Lỗi khi gửi OTP:", error.message);
     }
   };
@@ -51,7 +51,7 @@ function Register({ onClose, onSwitchToLogin }) {
       console.log("Đăng kí thành công  ", result);
       onSwitchToLogin();
     } catch (error) {
-      toast.error("Lỗi kết nối", error);
+      toast.error(error);
       console.error("Lỗi khi gửi thông tin:", error.message);
     }
   };

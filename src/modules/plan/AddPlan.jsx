@@ -130,7 +130,7 @@ function AddPlan({ onAddSuccess, onClose }) {
             }
             openNotificationWithIcon('success');
         } catch (error) {
-            toast.error("Lỗi kết nối", error);
+            toast.error(error);
             console.error(error);
         } finally {
             setLoading(false);

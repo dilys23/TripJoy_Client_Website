@@ -157,7 +157,7 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
             }
         });
     };
-    console.log(planChosen);
+    // console.log(planChosen);
     // ADD POST NORMAL (WITHOUT PLAN)
     const handleAddPostNormal = async () => {
         if (!content || !content.trim()) {
