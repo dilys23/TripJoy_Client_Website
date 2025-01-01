@@ -21,6 +21,7 @@ import FrameChat from "../Chat/FrameChat";
 import Chat from "../Chat/Chat";
 import { getMyFriend } from "../../services/friend";
 import { createRoomChatPrivate } from "../../services/Chat";
+import toast from "react-hot-toast";
 function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -79,6 +80,7 @@ function Header() {
                 setListMyFriend(listFriend.users.data);
 
             } catch (error) {
+                // toast.error("Lỗi kết nối", error);
                 console.log('Error while getting my friend request:', error);
             }
         };
@@ -98,6 +100,7 @@ function Header() {
                 console.error('Room creation failed:', res);
             }
         } catch (error) {
+            // toast.error("Lỗi kết nối", error);
             console.error('Error while creating room chat:', error);
         }
     };
@@ -165,6 +168,7 @@ function Header() {
             navigate("/");
             logout();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error("Logout error:", error);
         }
     };
@@ -244,40 +248,7 @@ function Header() {
                                                 />
                                             ))}
                                         </div>
-                                        <div
-                                            className="relative px-2"
-                                            data-twe-dropdown-ref
-                                            data-twe-dropdown-alignment="end"
-                                        >
-                                            <a
-                                                className="hidden-arrow mr  flex items-center text-black/60 transition duration-200 hover:text-black/80 hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"
-                                                href="#"
-                                                id="dropdownMenuButton1"
-                                                role="button"
-                                                data-twe-dropdown-toggle-ref
-                                                aria-expanded="false"
-                                            >
-                                                <span className="[&>svg]:h-7 [&>svg]:w-7">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                                                            clipRule="evenodd"
-                                                        />
-                                                    </svg>
-                                                </span>
 
-                                                <span className="absolute -mt-6 ms-3 rounded-full bg-red-500 px-[0.50em] py-[0.25em] text-[0.6rem] font-bold leading-none text-white">
-                                                    12
-                                                </span>
-                                            </a>
-
-
-                                        </div>
                                         <div className="px-2" data-twe-nav-item-ref>
                                             <a
                                                 className="flex transition duration-200  hover:ease-in-out focus:text-black/80 active:text-black/80 motion-reduce:transition-none dark:text-white/60 dark:hover:text-white/80 dark:focus:text-white/80 dark:active:text-white/80"

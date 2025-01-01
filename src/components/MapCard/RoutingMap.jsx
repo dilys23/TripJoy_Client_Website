@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MdLocationOn } from "react-icons/md";
 import "leaflet-routing-machine";
-function RoutingMap(planLocation, mapId) {
+const RoutingMap = (planLocation, mapId) => {
     const mapRef = useRef(null);
     // console.log(planLocation)
     const [coordinates, setCoordinates] = useState({

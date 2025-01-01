@@ -48,6 +48,20 @@ function Plan() {
   const debouncedValue = useDebounce(searchValue, 200);
   const [isPlanAdded, setIsPlanAdded] = useState(false);
   const [dateSelect, setDateSelect] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Lắng nghe sự thay đổi kích thước màn hình
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const fetchPlans = async () => {
     try {
       setLoading(true);
@@ -94,50 +108,12 @@ function Plan() {
   useEffect(() => {
     fetchFilteredPlans();
   }, [debouncedValue, dateSelect]);
-  // const fetchFilteredPlans = async () => {
-  //   try {
-  //     if (!debouncedValue.trim()) {
-  //       await fetchPlans();
-  //     } else {
-  //       setLoading(true);
-  //       const data = await searchMyPlanByTitleRequest(0, 10, debouncedValue);
-  //       setListMyPlan(data.plans.data);
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchFilteredPlans();
-  // }, [debouncedValue]);
+
 
   useEffect(() => {
     fetchPlans();
   }, [isPlanAdded]);
-  const listRecommendationPlan = [
-    {
-      id: 1,
-      title: "Cù Lao Chàm",
-      image: anh1,
-      time: "20/12 đến 25/12",
-      numberMember: 5,
-    },
-    {
-      id: 2,
-      title: "Lủng Cú",
-      image: anh2,
-      time: "20/12 đến 25/12",
-      numberMember: 3,
-    },
-    {
-      id: 3,
-      title: "Vịnh Hạ Long",
-      image: anh4,
-      time: "20/12 đến 25/12",
-      numberMember: 2,
-    },
-  ];
+
 
 
   return (
@@ -181,14 +157,7 @@ function Plan() {
                   setDateSelect(date ? date.format("YYYY-MM-DD") : null);
                 }}
               />
-              {/* <input
-                type="text"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
-                placeholder="Select Date"
-                value={new Date()}
-                className="h-full  w-1/6 rounded-md border-[0.4px] border-[#CCD0D5] px-3 md:text-[14px] text-[10px] shadow-md outline-none"
-              /> */}
+
               <div className="h-full w-1/6">
                 <Dropdown menu={{ items }} placement="bottom">
                   <button
@@ -201,6 +170,7 @@ function Plan() {
             </div>
             <div className="sm:hidden flex w-full justify-end ">
               <button
+                onClick={() => setIsModalOpen(true)}
                 className="sm:hidden w-1/4 h-[30px] flex border border-[#ff7124fc] text-[10px] text-[#ff7124fc] bg-white rounded-md hover:bg-[#ff7124fc] hover:text-white duration-200 font-bold items-center justify-center"
               >
                 Lên kế hoạch
@@ -222,17 +192,40 @@ function Plan() {
             </div>
           )}
         </div>
-        <div className=" flex-col gap-1 sm:w-2/5 sm:flex hidden">
+        <div className="sm:w-2/5 sm:flex hidden flex-col gap-1">
           <AddPlan onAddSuccess={() => setIsPlanAdded((prev) => !prev)} />
-          {/* <span className="text-[#aeaeae] lg:text-base text-[13px] font-bold my-2">NHÓM GỢI Ý</span>
-          <div className="flex gap-8 lg:flex-row flex-col justify-start mb-2">
-            {listRecommendationPlan.slice(0, 2).map((plan) => (
-              <RecommendationPlanItem key={plan.id} plan={plan}></RecommendationPlanItem>
-            ))}
-          </div> */}
         </div>
+
+        {isMobile && isModalOpen && (
+          <div className="modalAddPlan">
+            <AddPlan
+              onAddSuccess={() => {
+                setIsPlanAdded((prev) => !prev);
+                setIsModalOpen(false); // Đóng modal sau khi thêm kế hoạch thành công
+              }}
+              onClose={() => setIsModalOpen(false)}
+            />
+          </div>
+        )}
+        {/* <div className=" flex-col gap-1 sm:w-2/5 sm:flex hidden">
+
+          <AddPlan onAddSuccess={() => setIsPlanAdded((prev) => !prev)} />
+
+        </div>
+        {
+          isModalOpen &&
+          <div className="modalAddPlan sm:hidden">
+            <AddPlan
+              onAddSuccess={() => {
+                setIsPlanAdded((prev) => !prev);
+                setIsModalOpen(false); // Đóng modal sau khi thêm kế hoạch thành công
+              }}
+              onClose={() => setIsModalOpen(false)}
+            />
+          </div>
+        } */}
       </div>
-    </div >
+    </div>
   );
 }
 

@@ -7,6 +7,7 @@ import Emotion from '../Emotion';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { getReplyComment, likeComment, revokeComment } from '../../services/commentPost';
 import { UserContext } from '../../contexts/UserContext';
+import toast from 'react-hot-toast';
 
 function CommentItem({
     commentVisible,
@@ -78,7 +79,8 @@ function CommentItem({
                 // console.log(res.comments.data);
                 setListReplyComment(res.comments.data);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
+                toast.error("Lỗi kết nối", error);
             }
         }
     };
@@ -111,6 +113,7 @@ function CommentItem({
             );
         } catch (error) {
             console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
 
     };
@@ -121,6 +124,7 @@ function CommentItem({
                 updateComment(commentId, { emotionByMe: null });
             }
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error('Failed to revoke emotion:', error);
         }
     };
@@ -138,6 +142,7 @@ function CommentItem({
                 )
             );
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error)
         }
     }

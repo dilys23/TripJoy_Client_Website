@@ -51,7 +51,6 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
             }
         } catch (error) {
             console.log(error);
-            toast.error("Lỗi kết nối");
             return [];
         }
     };
@@ -140,6 +139,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
             // console.log(res);
         } catch (error) {
             console.log(error);
+            toast.error("Lỗi kết nối");
         }
 
     }

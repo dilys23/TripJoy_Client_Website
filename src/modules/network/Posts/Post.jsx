@@ -18,6 +18,7 @@ import gifadd from "../../../assets/gif/icons8-add.gif"
 import ModalDetailRouting from '../../../components/Modal/ModalDetailRouting';
 import { UserContext } from '../../../contexts/UserContext';
 import ModalClonePlan from '../../../components/Modal/ModalClonePlan';
+import { toast } from 'react-toastify';
 function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const [post, setPost] = useState(data);
     // console.log(data);
@@ -37,7 +38,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const handleHide = () => {
         setTimeout(() => setVisible(false), 4000);
     };
-    const [clonePlan, setClonePlan] = useState(true);
+    const [clonePlan, setClonePlan] = useState(false);
     const { user } = useContext(UserContext);
     const tippyRef = useRef(null);
     const emotionRef = useRef(null);
@@ -101,6 +102,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     }));
                 }
             } catch (error) {
+                toast.error("Lỗi kết nối", error);
                 console.log(error);
             }
         }
@@ -132,7 +134,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     }
                     handleHide();
                 } catch (error) {
-                    console.log(error);
+                    toast.error("Lỗi kết nối", error);
                 }
 
             }
@@ -154,7 +156,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 commentCount: prevPost.commentCount + 1,
             }));
         } catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
     }
     const handleEmotionClick = async (commentId, label) => {
@@ -167,7 +169,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             const res = await likeComment(commentId, commentData);
             fetchComment();
         } catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
     };
     const handleDelete = async (commentId) => {
@@ -180,7 +182,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 commentCount: prevPost.commentCount > 0 ? prevPost.commentCount - 1 : 0,
             }));
         } catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
     }
     const handleSendReply = async (commentId, replyText) => {
@@ -193,7 +195,7 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
             const res = await replyComment(commentId, commentData);
             fetchComment();
         } catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
         }
     }
 
@@ -252,11 +254,13 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                 )
             );
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log('error', error)
         }
     }
     // console.log(data);
-    // console.log(user.profile.avatar.url);
+    // console.log(user.profile.id);
+    // console.log(post.userPosted.userId)
     // console.log(data.planPost.postPlanLocations);
     return (
         <div className="w-full bg-white border border-[#CCD0D5] lg:h-auto rounded-20 pt-5 mb-2 pb-3 px-1">
@@ -322,7 +326,8 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                                 {post?.postImages.length <= 3 ? (
                                     <div
                                         className={`grid w-full md:h-[250px] h-[120px] gap-3 
-            ${post?.postImages.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+    ${post?.postImages.length === 1 ? "grid-cols-1" :
+                                                post?.postImages.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
                                     >
                                         {post?.postImages.map((image, index) => (
                                             <img
@@ -498,15 +503,20 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     />
                     <span className='text-[#3a3a3a] sm:text-[15px] text-[13px]'>Bình luận </span>
                 </div>
-                <div
-                    onClick={() => {
-                        console.log("Đã nhấn vào Tạo chuyến đi");
-                        setClonePlan(true);
-                    }}
-                    className='flex gap-1 items-center w-1/3  justify-center text-[#056649] font-medium cursor-pointer transition-all duration-150 py-1 md:text-[14px] text-[12px]'>
-                    <img src={gifadd} alt="" className='w-8 h-8' />
-                    Tạo chuyến đi
-                </div>
+                {
+                    post.userPosted.userId !== user.profile.id
+                    &&
+                    <div
+                        onClick={() => {
+                            console.log("Đã nhấn vào Tạo chuyến đi");
+                            setClonePlan(true);
+                        }}
+                        className='flex gap-1 items-center w-1/3  justify-center text-[#056649] font-medium cursor-pointer transition-all duration-150 py-1 md:text-[14px] text-[12px]'>
+                        <img src={gifadd} alt="" className='w-8 h-8' />
+                        Tạo chuyến đi
+                    </div>
+                }
+
 
             </div>
 

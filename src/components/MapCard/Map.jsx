@@ -11,6 +11,7 @@ import locationProvinces from "./locations.json";
 import dayjs from "dayjs";
 import "leaflet-routing-machine";
 import { addPlanLocation } from "../../services/planLocation";
+import { toast } from "react-toastify";
 const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) => {
   const [mapInstance, setMapInstance] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // Lưu nội dung tìm kiếm
@@ -179,6 +180,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
           // openNotificationWithIcon('error', 'Lỗi định tuyến', 'Không thể tìm thấy tuyến đường.');
         });
       } catch (error) {
+        toast.error("Lỗi kết nối", error);
         console.error("Lỗi khi tạo Routing Control:", error);
       }
     }
@@ -247,6 +249,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         });
       }
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Lỗi khi lấy thông tin địa điểm:", error);
     }
   };
@@ -268,6 +271,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
       setLocations(response.data); // Lưu danh sách kết quả
       setIsDropdownVisible(true); // Hiển thị dropdown
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Lỗi khi tìm kiếm địa điểm:", error);
     }
   }, []);
@@ -381,6 +385,7 @@ const Map = ({ role, className, plan, planId, planLocation, onLocationAdded }) =
         Address: "",
       }));
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.log(error);
     } finally {
       setLoading(false);

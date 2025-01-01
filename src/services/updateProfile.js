@@ -12,7 +12,7 @@ const updateProfileRequest = async (formData) => {
         return res.data.users;
     } catch (error) {
         console.log('update error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { updateProfileRequest }

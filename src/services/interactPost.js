@@ -12,7 +12,7 @@ const likePost = async (id, emotion) => {
         return res.data;
     } catch (error) {
         console.log('ACCEPT FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 // revoke post 
@@ -29,7 +29,7 @@ const revokePost = async (id) => {
         return res.data;
     } catch (error) {
         console.log('ACCEPT FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 
@@ -46,7 +46,7 @@ const getUserLikePost = async (id) => {
         return res.data;
     } catch (error) {
         console.log('ACCEPT FRIEND error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 const getUserLikePostByIcon = async (id, emotion) => {

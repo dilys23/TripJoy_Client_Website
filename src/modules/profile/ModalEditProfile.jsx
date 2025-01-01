@@ -9,6 +9,7 @@ import moment from 'moment';
 import { updateProfileRequest } from "../../services/updateProfile.js";
 import dayjs from "dayjs";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { toast } from "react-toastify";
 function ModalEditProfile({ handleClose, onSuccess }) {
 
     useEffect(() => {
@@ -116,6 +117,7 @@ function ModalEditProfile({ handleClose, onSuccess }) {
             onSuccess();
 
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error)
         }
     }

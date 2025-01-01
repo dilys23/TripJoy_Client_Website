@@ -14,7 +14,7 @@ const ratingLocationRequest = async (LocationId, Value) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -34,7 +34,7 @@ const getRatingByLocationId = async (LocationId, pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 //DELETE RATING LOCATION BY ID
@@ -49,7 +49,7 @@ const deleteRatingLocationById = async (LocationId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 export { ratingLocationRequest, getRatingByLocationId, deleteRatingLocationById }

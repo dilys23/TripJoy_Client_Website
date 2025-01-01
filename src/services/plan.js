@@ -16,7 +16,7 @@ const getMyPlanRequest = async (pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // SEARCH PLAN BY TITLE
@@ -37,7 +37,7 @@ const searchMyPlanByTitleRequest = async (pageIndex, pageSize, title, startDate)
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -58,7 +58,7 @@ const searchMyPlanByDateRequest = async (pageIndex, pageSize, startDate) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 // ADD PLAN 
@@ -81,7 +81,7 @@ const addPlanRequest = async (formData) => {
             headers: error.response.headers,
         });
         console.error("Error occurred while adding plan:", error);
-        throw error;
+        throw error.response.data.detail;
     }
 };
 // GET DETAIL PLAN
@@ -96,7 +96,7 @@ const getPlanByIDRequest = async (id) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -114,7 +114,7 @@ const updatePlanRequest = async (id, formData) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -130,7 +130,7 @@ const getPlanInvitationAvailable = async (planId) => {
         })
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 export { getMyPlanRequest, getPlanInvitationAvailable, addPlanRequest, updatePlanRequest, searchMyPlanByTitleRequest, searchMyPlanByDateRequest, getPlanByIDRequest }

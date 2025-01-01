@@ -10,7 +10,7 @@ import ImageUploader from "../../../components/Image/ImageUpload";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
 import { getPlanLocationByIdService } from "../../../services/planLocation";
-function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateImage }) {
+function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, updateImage }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -37,12 +37,13 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
         setNote(journey?.note || "");
         fetchPlanLocation(journey.planLocationId);
     }, [journey]);
-
+    // console.log(journey)
     const [planLocationExpense, setPlanLocationExpense] = useState({
-        userSpenderIds: journey.userSpenders || [],
-        payerId: journey.payerId || null,
-        amount: journey.amount || null
+        payerId: journey?.userPayer?.userId || null,
+        amount: journey?.amount || null,
+        userSpenderIds: journey?.userSpenders || [],
     })
+    console.log(planLocationExpense.userSpenderIds)
     const colorBorder = journey.status === 0
         ? '#FF7324'
         : journey.status === 1
@@ -97,15 +98,22 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
             };
         });
     };
-
     useEffect(() => {
         setPlanLocationExpense((prevExpense) => ({
             ...prevExpense,
             userSpenderIds: journey.userSpenders.some((spender) => spender.userId === "all")
-                ? members.map((member) => ({ userId: member.userId }))
-                : journey.userSpenders.map((spender) => ({ userId: spender.userSpenderId })),
+                ? members.map((member) => ({ userId: member.userId }))  // Gán userId từ members
+                : journey.userSpenders.map((spender) => ({ userId: spender.userId })),  // Gán userId từ journey.userSpenders
         }));
     }, [journey.userSpenders, members]);
+    // useEffect(() => {
+    //     setPlanLocationExpense((prevExpense) => ({
+    //         ...prevExpense,
+    //         userSpenderIds: journey.userSpenders.some((spender) => spender.userId === "all")
+    //             ? members.map((member) => ({ userId: member.userId }))
+    //             : journey.userSpenders.map((spender) => ({ userId: spender.userSpenderId })),
+    //     }));
+    // }, [journey.userSpenders, members]);
 
     const handleNoteChange = useCallback((e) => {
         const newNote = e.target.value;
@@ -132,6 +140,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
     //     setImages(updatedImages);
     //     updateJourneyInfo(journey, { images: updatedImages });
     // };
+    console.log(planLocationExpense);
     return (
         <div className={`w-full flex ${images?.length <= 5 ? "sm:h-[300px] h-fit" : "sm:h-[340px] h-fit"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
@@ -168,6 +177,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
                             <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium sm:w-[70px]">Tham gia</span>
                             <div className="relative h-[30px]">
                                 <button
+                                    disabled={plan?.status === 2}
                                     onClick={toggleDropdown}
                                     className="shadow sm:w-[150px] w-[100px] h-full rounded-[20px] border border-[#CCD0D5] text-[12px] flex px-2 items-center overflow-x-hidden"
                                     type="button"
@@ -232,7 +242,10 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
                                 value={planLocationExpense.amount}
                                 onChange={(e) => handleInputChange("amount", e.target.value.replace(/[^0-9]/g, ""))}
                                 type="text"
-                                className="shadow sm:w-[150px] w-[100px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 sm:text-[15px] text-[10px]" />
+                                disabled={plan?.status === 2} // Vô hiệu hóa khi status là 2
+                                className={`shadow sm:w-[150px] w-[100px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 sm:text-[15px] text-[10px] ${plan?.status === 2 ? "bg-gray-200 cursor-not-allowed" : ""
+                                    }`} />
+                            {/* // className="shadow sm:w-[150px] w-[100px] h-[30px] rounded-[20px] border border-[#CCD0D5] outline-none px-2 sm:text-[15px] text-[10px]" /> */}
                         </div>
                     </div>
 
@@ -247,6 +260,7 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
                                     console.log(value)
                                     handleInputChange("payerId", value);
                                 }}
+                                disabled={plan?.status === 2}
                                 placeholder="Chọn tên"
                                 loading={loading}
                                 notFoundContent={loading ? <Spin size="small" /> : "Không tìm thấy dữ liệu"}
@@ -274,11 +288,11 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
                             </Select>
                             {/* <img src={ava1} alt="" className="sm:w-[32px] sm:h-[32px] w-[20px] h-[20px] rounded-full" /> */}
                         </div>
-                        <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
+                        {/* <div className="w-5/12 flex gap-2 items-center ml-[-25px]">
                             <FaStar className="text-yellow-500 text-[25px] w-[30px]" ></FaStar>
                             <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[70px]">Đánh giá</span>
                             <RatingStar />
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="w-full flex gap-4">
@@ -288,19 +302,26 @@ function EvaluationJourneyItem({ journey, listMember, updateJourneyInfo, updateI
                                 <span className="sm:text-[15px] text-[10px] text-[#333333] font-medium w-[70px]">Ghi chú</span>
                             </div>
                             <TextArea
+                                disabled={plan?.status === 2}
                                 value={note}
                                 onChange={handleNoteChange}
-                                width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn" className="bg-[#F1F2F3] sm:text-[12px] text-[8px]"></TextArea>
+                                width="w-[80%]" height="100px" placeholder="VIết tiêu đề của chuyến đi của bạn"
+                                className={`bg-[#F1F2F3] sm:text-[12px] text-[8px] ${plan?.status === 2 ? "bg-gray-200 cursor-not-allowed" : ""
+                                    }`}></TextArea>
                         </div>
                         <ImageUploader planLocationId={journey.planLocationId} images={images} setImages={setImages} onSuccess={updateImageSuccess}></ImageUploader>
                     </div>
 
                 </div>
-                <button
-                    onClick={handleSubmit}
-                    className="w-[150px] h-[35px] bg-[#46E8A5] hover:bg-[#40d497] rounded-[10px] font-bold text-white mx-auto transition-all duration-200">Hoàn thành</button>
+                {
+                    plan?.status !== 2 &&
+                    <button
+                        onClick={handleSubmit}
+                        className="w-[150px] h-[35px] bg-[#46E8A5] hover:bg-[#40d497] rounded-[10px] font-bold text-white mx-auto transition-all duration-200">Hoàn thành</button>
+                }
+
             </div>
-        </div>
+        </div >
     );
 }
 

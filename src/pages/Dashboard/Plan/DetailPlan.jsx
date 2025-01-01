@@ -24,6 +24,7 @@ import { updatePlanStatus } from "../../../services/joinRequest.js";
 import CustomModal from "../../../components/Modal/CustomModal.jsx";
 import ModalAllJoinRequest from "../../../components/Modal/ModalAllJoinRequest.jsx";
 import { UserContext } from "../../../contexts/UserContext.jsx";
+import { toast } from "react-toastify";
 function DetailPlan() {
     const id = useParams();
     const planId = id.id;
@@ -51,7 +52,7 @@ function DetailPlan() {
             const data = await getPlanLocation(planId, 0, 10);
             const res = await getMemberByPlanId(planId);
             setListMember(res.members.data);
-            console.log(data);
+            // console.log(data);
             setPlan(data.plan);
             setRole(data.plan.role);
             setPlanLocation(data.planLocations.data);
@@ -144,6 +145,7 @@ function DetailPlan() {
             setSelectedOption(statusPlan);
             setOpenModalConfirmChangeStatus(false)
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
 
         }
@@ -184,13 +186,18 @@ function DetailPlan() {
                         <img src={plan?.avatar || hoian} alt="" className="w-full h-full object-cover rounded-lg" />
                         <div className="absolute top-0 left-0 w-full h-full opacity-15  rounded-lg bg-black"></div>
                         <div className="absolute top-4 right-5 flex gap-3">
-                            <button
-                                onClick={() => setOpenModalInviteMember(true)}
-                                className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
-                                <BsFillPersonPlusFill />
-                                <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
-                            </button>
+                            {
+                                role !== 2
+                                &&
+                                <button
+                                    onClick={() => setOpenModalInviteMember(true)}
+                                    className="flex md:py-1 md:px-3 px-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer gap-2">
+                                    <BsFillPersonPlusFill />
+                                    <span className="md:text-[14px] text-[10px]">Mời thành viên</span>
+                                </button>
+                            }
                             <Button
+                                disabled={role === 2}
                                 leftIcon={selectedOption === 0 ? <FcGlobe /> : <FcPrivacy />}
                                 onClick={() => setIsOpen(!isOpen)}
                                 className="flex md:w-[40px] md:h-[40px] w-[30px] h-[30px] p-2 items-center justify-center bg-white hover:bg-[#f2f2f2] rounded-full  cursor-pointer">
@@ -289,6 +296,7 @@ function DetailPlan() {
                     }
                     {plan?.status === 3 &&
                         <button
+                            onClick={() => setOpenModalStartPlan(true)}
                             className="text-[15px] bg-[#FF2424] font-semibold px-3 py-1 shadow outline-none text-white rounded-md">Đã huỷ</button>
                     }
 
@@ -316,7 +324,7 @@ function DetailPlan() {
             {contextHolder}
             <Map role={role} plan={plan} planId={planId} planLocation={planLocation} onLocationAdded={refreshPlanLocations} className="w-2/5 object-cover h-[630px] rounded-md lg:flex pt-2 hidden sticky top-[60px]" ></Map>
             {openModalEditPlan && <ModalEditPlan planId={planId} plan={plan} handleClose={() => setOpenModalEditPlan(false)} OnSuccess={() => refreshPlanLocations('edit')}></ModalEditPlan>}
-            {openModalInviteMember && <ModalInviteMember planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
+            {openModalInviteMember && <ModalInviteMember role={role} planId={planId} handleClose={() => setOpenModalInviteMember(false)}></ModalInviteMember>}
             {openModalStartPlan && <ModalStartPlan planId={planId} handleClose={() => setOpenModalStartPlan(false)} onSuccess={refreshPlanLocations} openNotificationWithIcon={openNotificationWithIcon}></ModalStartPlan>}
             {openModalSoonEndPlan && <ModalSoonEndPlan planId={planId} handleClose={() => setOpenModalSoonEndPlan(false)} onSuccess={refreshPlanLocations} openNotificationWithIcon={openNotificationWithIcon}></ModalSoonEndPlan>}
         </div>

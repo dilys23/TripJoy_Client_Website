@@ -4,6 +4,7 @@ import useInfiniteScroll from "../../hooks/useInfiniteScroll ";
 import AvatarDefault from "../Avatar/AvatarDefault";
 import { MdCircle } from "react-icons/md";
 import Chat from "./Chat";
+import toast from "react-hot-toast";
 
 function FrameChat({ createRoomChat }) {
 
@@ -13,7 +14,8 @@ function FrameChat({ createRoomChat }) {
             return res.conversations.data || [];
         }
         catch (error) {
-            console.log(error);
+            toast.error("Lỗi kết nối", error);
+            // console.log(error);
             return [];
         }
     }

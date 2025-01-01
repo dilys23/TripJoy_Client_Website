@@ -1,6 +1,7 @@
 import { AiOutlineWarning } from "react-icons/ai";
 import { MdClose } from "react-icons/md";
 import { removeMemberService } from "../../services/member";
+import { toast } from "react-toastify";
 
 function ModalRemoveMember({ planId, member, handleClose, onSuccess }) {
 
@@ -14,6 +15,7 @@ function ModalRemoveMember({ planId, member, handleClose, onSuccess }) {
             }
         }
         catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }

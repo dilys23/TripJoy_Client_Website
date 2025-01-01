@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getMyFriend } from "../../services/friend";
 import { getMemberByPlanId, inviteMemberRequest, revokeMemberRequest } from "../../services/member";
 import { getPlanInvitationAvailable } from "../../services/plan";
+import { toast } from "react-toastify";
 function ModalInviteMember({ planId, handleClose }) {
     const [listMyFriend, setListMyFriend] = useState([]);
     // const [listMember, setListMember] = useState([]);
@@ -30,6 +31,7 @@ function ModalInviteMember({ planId, handleClose }) {
             // setListMember(listMember.members.data);
             console.log(sortedFriends);
         } catch (error) {
+
             console.log('Error while getting my friend request:', error);
         }
     };
@@ -47,9 +49,11 @@ function ModalInviteMember({ planId, handleClose }) {
             // console.log(res);
             await fetchFriends();
         } catch (error) {
+            toast.error("Bạn không có quyền mời thành viên", error);
             console.log('Error while inviting member:', error);
         }
     }
+
     return (
         <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
@@ -64,11 +68,12 @@ function ModalInviteMember({ planId, handleClose }) {
                     <div className="flex flex-col justify-center w-full sm:gap-4 pb-3 gap-3 sm:px-6 px-3 pt-3 ">
                         <span className="sm:text-[20px] text-base font-semibold">Mời bạn bè tham gia</span>
                     </div>
+
                     <div className="absolute right-5 top-6">
                         <MdClose onClick={handleClose} className="text-[25px] cursor-pointer" />
                     </div>
                     <div className="w-full flex flex-col text-start">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 h-[300px] overflow-auto">
                             {listMyFriend.map((friend) => (
                                 <div className="w-full justify-between flex px-5 py-2 ">
                                     <div className="flex gap-3 items-center cursor-pointer">

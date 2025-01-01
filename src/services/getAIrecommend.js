@@ -16,7 +16,7 @@ const fetchTripPlans = async (payload) => {
     return response?.data?.data?.trip_plans; // Trả về dữ liệu trip_plans
   } catch (error) {
     console.error("Error fetching trip plans:", error);
-    throw error;
+    throw error.response.data.detail;
   }
 };
 

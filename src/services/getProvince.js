@@ -15,7 +15,7 @@ const getProvinces = async (pageIndex, pageSize) => {
         );
         return res.data;
     } catch (error) {
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { getProvinces }

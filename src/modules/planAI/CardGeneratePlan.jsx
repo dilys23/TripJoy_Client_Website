@@ -4,6 +4,7 @@ import addGenarateTripbyAI from "../../services/addGenarateTripbyAI";
 import config from "../../config";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 function CardRecommendationPlan({
   isActive,
@@ -70,6 +71,7 @@ function CardRecommendationPlan({
       return response;
       // Handle response
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Error:", error);
     }
   };

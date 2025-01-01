@@ -13,7 +13,7 @@ const addFeePlanLocation = async (planLocationId, PlanLocationExpense) => {
         console.log('thanh cong ne', res);
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // get expense by plan id
@@ -28,7 +28,7 @@ const getExpenseByPlanId = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -44,7 +44,7 @@ const getMyExpenseByPlanId = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // get expense of all member by plan id 
@@ -59,7 +59,7 @@ const getExpenseOfMembersByPlanId = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -75,7 +75,7 @@ const getExpenseOfEachMemberByPlanId = async (planId, memberId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -93,7 +93,7 @@ const addImageIntoPlan = async (planLocationId, image) => {
         console.log(res);
         return res.data;
     } catch (error) {
-        throw error;
+        throw error.response.data.detail;
     }
 }
 // DELETE IMAGE of PLAN
@@ -108,7 +108,7 @@ const removeImageIntoPlan = async (planLocationId, image) => {
         });
         return res.data;
     } catch (error) {
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { addFeePlanLocation, getExpenseByPlanId, getMyExpenseByPlanId, getExpenseOfMembersByPlanId, getExpenseOfEachMemberByPlanId, addImageIntoPlan, removeImageIntoPlan }

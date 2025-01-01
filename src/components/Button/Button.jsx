@@ -13,12 +13,14 @@ function Button({
     onClick,
     to,
     hide = false,
-    rightIcon
+    rightIcon,
+    disabled = false
 }) {
     const buttonContent = (
         <button
-            onClick={onClick}
+            onClick={disabled ? (e) => e.preventDefault() : onClick}
             style={{ width, height }}
+            disabled={disabled}
             className={`flex items-center gap-2 cursor-pointer font-semibold shadow outline-none justify-center text-start 
             ${primary ? 'bg-[#ff7224] font-semibold  hover:bg-[#ff7124fc] transition-all duration-150 text-white px-2 py-1' : ''}
             ${secondary ? 'bg-[#007AFF]  font-semibold px-3 py-1 text-white rounded-lg hover:bg-[#006ee6] transition-all duration-150' : ''}

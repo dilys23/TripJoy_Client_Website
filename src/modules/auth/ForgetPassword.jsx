@@ -63,6 +63,7 @@ function ForgetPassword({ onClose, email, switchToLogin }) {
             handleClose();
             switchToLogin()
         } catch (error) {
+            // toast.error("Lỗi kết nối", error);
             // console.error("Error during password reset:", error);
             console.error("Error during password confirmation:", error);
             if (error.response) {

@@ -11,7 +11,7 @@ const getLocationByIDRequest = async (id) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -31,7 +31,7 @@ const getLocationByCoordinatesRequest = async (Latitude, Longitude) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 // GET IMAGES BY LOCATION ID
@@ -50,7 +50,7 @@ const getImagesByLocationIDRequest = async (id, pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 export { getLocationByIDRequest, getLocationByCoordinatesRequest, getImagesByLocationIDRequest }

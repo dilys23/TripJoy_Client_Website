@@ -8,12 +8,14 @@ import ModalEditRole from "../../../components/Modal/ModalEditRole";
 import { SmileOutlined } from '@ant-design/icons';
 import { notification } from "antd";
 import ModalRemoveMember from "../../../components/Modal/ModalRemoveMember";
+import ModalOutPlan from "../../../components/Modal/ModalOutPlan";
 
 function DetailMember({ role, planId, listMember, fetchMember }) {
     // const [listMember, setListMember] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
     const [openModalEditRole, setOpenModalEditRole] = useState(false);
     const [openModalRemoveMember, setOpenModalRemoveMember] = useState(false);
+    const [openModalOutPlan, setOpenModalOutPlan] = useState(false)
     const [api, contextHolder] = notification.useNotification();
     // const [isLeader, setIsLeader] = useState(false);
     const openNotificationWithIcon = (type, message, description) => {
@@ -48,6 +50,9 @@ function DetailMember({ role, planId, listMember, fetchMember }) {
         setSelectedMember(member);
         setOpenModalRemoveMember(true);
     }
+    const handleOpenModalOut = () => {
+        setOpenModalOutPlan(true)
+    }
     const refreshMember = async (mode) => {
         await fetchMember();
         if (mode === 'edit') {
@@ -65,9 +70,10 @@ function DetailMember({ role, planId, listMember, fetchMember }) {
             <span className="font-bold nunito-text">Thành viên</span>
             {listMember.length > 1 &&
                 listMember.slice(1).map((member) => (
-                    <CardMember role={role} key={member.userId} member={member} handleOpenModalEdit={handleOpenModalEdit} handleOpenModalRemoveMember={handleOpenModalRemove}></CardMember>
+                    <CardMember role={role} key={member.userId} member={member} handleOpenModalEdit={handleOpenModalEdit} handleOpenModalRemoveMember={handleOpenModalRemove} handleOpenOutPlan={handleOpenModalOut}></CardMember>
                 ))
             }
+            {openModalOutPlan && <ModalOutPlan planId={planId} handleClose={() => setOpenModalOutPlan(false)}></ModalOutPlan>}
             {openModalEditRole && <ModalEditRole planId={planId} member={selectedMember} onSuccess={() => refreshMember('edit')} handleClose={() => setOpenModalEditRole(false)}></ModalEditRole>}
             {openModalRemoveMember && <ModalRemoveMember planId={planId} member={selectedMember} onSuccess={() => refreshMember('delete')} handleClose={() => setOpenModalRemoveMember(false)}></ModalRemoveMember>}
             {contextHolder}

@@ -16,7 +16,7 @@ const getPlanLocation = async (planId, pageIndex, pageSize) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -32,7 +32,7 @@ const getPlanLocationByIdService = async (planLocationId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 
@@ -52,7 +52,7 @@ const addPlanLocation = async (planId, newFormData) => {
         return res.data;
     } catch (error) {
 
-        throw error;
+        throw error.response.data.detail;
     }
 }
 
@@ -70,7 +70,7 @@ const removePlanLocation = async (planLocationId) => {
         return res.data;
     } catch (error) {
 
-        throw error;
+        throw error.response.data.detail;
     }
 }
 
@@ -92,7 +92,7 @@ const changeOrderPlanLocation = async (planId, planLocationIdFirst, planLocation
             });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 }
 export { getPlanLocation, addPlanLocation, removePlanLocation, changeOrderPlanLocation, getPlanLocationByIdService }

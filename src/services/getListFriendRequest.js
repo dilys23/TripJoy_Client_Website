@@ -12,7 +12,7 @@ const getListFriendRequest = async () => {
         return res.data;
     } catch (error) {
         console.log('get friend error: ', error);
-        throw error;
+        throw error.response.data.detail;
     }
 }
 export { getListFriendRequest }

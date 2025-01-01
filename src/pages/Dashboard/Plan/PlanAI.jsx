@@ -13,6 +13,7 @@ import CalendarContainer from "../../../components/Calendar/CalendarContainer";
 import ModelAddTopic from "../../../modules/trips/ModelAddTopic";
 import config from "../../../config";
 import fetchTripPlans from "../../../services/getAIrecommend";
+import { toast } from "react-toastify";
 
 function PlanAI() {
   const listImage = [
@@ -159,6 +160,7 @@ function PlanAI() {
       history.push(config.routes.generatePlan, { plan });
 
     } catch (error) {
+      toast.error("Lỗi kết nối", error);
       console.error("Error in handleFinished:", error);
     }
   };

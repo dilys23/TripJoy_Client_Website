@@ -18,13 +18,9 @@ function DefaultLayout({ children }) {
                 {/* <Navbar></Navbar> */}
                 <Header></Header>
                 <div className='flex w-full md:px-6 px-0 bg-[#f5f6f7] pt-20 min-h-screen h-full '>
-                    {/* <Sidebar showSidebar={showSidebar} toggleSidebar={toggleSidebar} /> */}
+
                     {children}
-                    {/* <div className={`${showSidebar ? 'sm:ml-[270px]' : 'lg:ml-[140px] md:ml-[120px] ml-[0px]'}  h-full bg-[#f5f6f7] mx-auto
-                    `}
-                        style={isSmOrLarger() ? { width: `calc(100%)`, minWidth: '0', maxWidth: '1500px' } : { width: '100%' }}>
-                        {children}
-                    </div> */}
+
                 </div>
             </div>
         </>

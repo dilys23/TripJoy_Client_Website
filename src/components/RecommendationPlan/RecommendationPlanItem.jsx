@@ -4,6 +4,7 @@ import ava2 from "../../assets/images/anh3.jpg";
 import thiennhien from "../../assets/images/thiennhien.jpg"
 import { Avatar, notification } from "antd";
 import { acceptInvitationService, declineInvitationService } from "../../services/member";
+import { toast } from "react-toastify";
 
 function RecommendationPlanItem({ plan, onSuccess, openNotificationWithIcon }) {
     // console.log(plan);
@@ -22,6 +23,7 @@ function RecommendationPlanItem({ plan, onSuccess, openNotificationWithIcon }) {
             openNotificationWithIcon('success', 'Thông báo', 'Chúc bạn có chuyến đi vui vẻ', true);
             onSuccess();
         } catch (error) {
+            toast.error("Thời gian này bạn đang nằm trong một chuyến đi khác");
             openNotificationWithIcon('success', 'Thông báo', 'Thời gian chuyến đi này trùng với một hành trình khác.', false)
             console.log(error);
         }
@@ -32,6 +34,7 @@ function RecommendationPlanItem({ plan, onSuccess, openNotificationWithIcon }) {
             openNotificationWithIcon('success', 'Thông báo', 'Hẹn gặp bạn ở một dịp khác', true);
             onSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             // openNotificationWithIcon('success', 'Thông báo', 'Thời gian chuyến đi này trùng với một hành trình khác.', false)
             console.log(error);
         }

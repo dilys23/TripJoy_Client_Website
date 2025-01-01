@@ -2,15 +2,18 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import { Avatar, Skeleton } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CardExpense from '../../../components/Card/CardExpense';
 import { getExpense, getMemberExpense } from '../../../services/budget';
 import AvatarDefault from '../../../components/Avatar/AvatarDefault';
+import ModalDetailBudgetMember from '../../../components/Modal/ModalDetailBudgetMember';
 function DetailBudget({ planId }) {
     const [listMyExpense, setListMyExpense] = useState([])
     const [listMember, setListMember] = useState([]);
     const [loading, setLoading] = useState(false);
     const [overView, setOverView] = useState();
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [openModalDetailBudget, setOpenModalDetailBudget] = useState(false);
     const fetchExpense = async () => {
         const pageIndex = 0;
         const pageSize = 5;
@@ -29,13 +32,18 @@ function DetailBudget({ planId }) {
     }
     useEffect(() => {
         fetchExpense();
-    }, [])
+    }, []);
+
 
     const data = [
         { type: 'Chi phí cả nhóm', value: overView?.totalExpense },
         { type: 'Đã chi', value: overView?.expense },
     ];
     const COLORS = ['#557AFF', '#FF7324'];
+    const handleOpenModalMember = (member) => {
+        setSelectedUserId(member);
+        setOpenModalDetailBudget(true);
+    }
 
     return (
         <div className="w-full  min-h-[400px]  mt-[-20px] mb-16  flex flex-col gap-6">
@@ -108,20 +116,22 @@ function DetailBudget({ planId }) {
 
                     </div>
                 </div>
-                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex sm:w-1/2 w-full h-[300px] flex-col px-4 py-3 gap-2'>
-                    <div className='flex items-center justify-between '>
+                <div className='bg-white shadow-md rounded-[10px] border border-[#CCD0D5] flex sm:w-1/2 w-full h-[300px] flex-col  py-3 gap-2'>
+                    <div className='flex items-center justify-between px-4'>
                         <span className='font-semibold '>Thành viên</span>
                         <a href="#" className='text-[15px] font-semibold text-[#17A1FA] cursor-pointer'>Tất cả</a>
                     </div>
-                    <hr className='w-[90%] text-[#CCD0D5] mx-auto' />
-                    <div className="w-full max-h-[250px] overflow-y-hidden gap-4 flex flex-col">
+                    <hr className='w-full text-[#CCD0D5] mx-auto' />
+                    <div className="w-full max-h-[250px] overflow-y-hidden gap-1 flex flex-col">
                         {loading ? (
                             <>
-                                <Skeleton active />
+                                <Skeleton active className='px-4' />
                             </>
                         ) : (
                             listMember.map((member) => (
-                                <div key={member.userName} className="w-full flex justify-between items-center">
+                                <div
+                                    onClick={() => handleOpenModalMember(member)}
+                                    key={member.userName} className="w-full flex justify-between px-4 py-2 cursor-pointer items-center hover:bg-[#F2F2F2] ">
                                     <div className="flex gap-3 items-center cursor-pointer">
                                         <AvatarDefault src={member.url} className="w-[40px] h-[40px]" />
                                         <span className="font-medium text-[14px]">{member.userName}</span>
@@ -134,6 +144,14 @@ function DetailBudget({ planId }) {
 
                 </div>
             </div>
+            {
+                openModalDetailBudget &&
+                <ModalDetailBudgetMember
+                    planId={planId}
+                    userId={selectedUserId}
+                    open={() => setOpenModalDetailBudget(true)}
+                    handleClose={() => setOpenModalDetailBudget(false)}></ModalDetailBudgetMember>
+            }
         </div>
     );
 }

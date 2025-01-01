@@ -1,6 +1,7 @@
 import { MdClose } from "react-icons/md";
 import image from "../../assets/images/travel.png"
 import { startPlanService } from "../../services/statusPlanService";
+import { toast } from "react-toastify";
 function ModalStartPlan({ handleClose, planId, onSuccess, openNotificationWithIcon }) {
     const handleStartPlan = async () => {
         try {
@@ -11,6 +12,7 @@ function ModalStartPlan({ handleClose, planId, onSuccess, openNotificationWithIc
             }
             onSuccess();
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.log(error);
         }
     }

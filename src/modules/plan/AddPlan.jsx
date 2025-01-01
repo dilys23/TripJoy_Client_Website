@@ -3,7 +3,7 @@ const { RangePicker } = DatePicker;
 import InputWithLabel from "../../components/Input/InputWithLabel";
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdClose } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import { notification } from 'antd';
 
@@ -11,7 +11,7 @@ import { addPlanRequest } from '../../services/plan';
 import { UploadIconPage } from '../../components/Icons/Icons';
 import LoadingSpinner from '../../components/Loading';
 
-function AddPlan({ onAddSuccess }) {
+function AddPlan({ onAddSuccess, onClose }) {
     const [formData, setFormData] = useState({
         namePlan: "",
         startDestination: "",
@@ -130,6 +130,7 @@ function AddPlan({ onAddSuccess }) {
             }
             openNotificationWithIcon('success');
         } catch (error) {
+            toast.error("Lỗi kết nối", error);
             console.error(error);
         } finally {
             setLoading(false);
@@ -165,11 +166,18 @@ function AddPlan({ onAddSuccess }) {
     };
 
     return (
-        <div className="flex h-fit  flex-col rounded-md border-[0.4px] border-[#CCD0D5] bg-white shadow-md">
+        <div className="flex h-fit sm:w-full  w-[350px] relative flex-col rounded-md border-[0.4px] border-[#CCD0D5] bg-white shadow-md">
             <div className="flex py-3 w-[90%] mx-auto items-center justify-center border-b-2 border-[#DEDFDF] lg:text-[20px] font-bold">
                 Bạn đã có chuyến đi của mình chưa ?
             </div>
-            <div className="flex flex-col gap-2 px-5 py-4 text-start ">
+            {
+                onClose
+                &&
+                <MdClose
+                    onClick={onClose}
+                    className='absolute top-4 right-5 text-[20px]' />
+            }
+            <div className="flex flex-col gap-2 sm:px-5 px-4 sm:py-4 py-2 text-start ">
                 <div className='w-full flex flex-col  justify-center '>
                     <span className='text-[#a7a5b4] px-1 lg:text-base text-[14px]'>Chọn ảnh bìa
                         <span className="text-[red] ml-1 text-[15px]">*</span></span>
@@ -198,7 +206,7 @@ function AddPlan({ onAddSuccess }) {
                     onChange={(e) => handleInputChange("namePlan", e.target.value)}
                 />
                 {!formData.namePlan && errors.namePlan && <span className="text-[12px] font-normal text-red-500 h-[5px]">{errors?.namePlan}</span>}
-                <div className="flex gap-10  pt-4">
+                <div className="flex lg:gap-10 gap-2 pt-4">
                     <div className="flex w-1/2 flex-col gap-2">
                         <InputWithLabel
                             label="Điểm bắt đầu"
@@ -207,7 +215,7 @@ function AddPlan({ onAddSuccess }) {
                             // onChange={(e) => handleInputChange("startDestination", e.target.value)}
                             onChange={(e) => handleStartDestinationChange(e)}
                             isDropdown={true}
-                        // uniqueKey="start"
+
                         />
                         {!formData.startDestination && errors.startDestination && <span className="text-[12px] font-normal text-red-500">{errors?.startDestination}</span>}
                     </div>
@@ -219,7 +227,6 @@ function AddPlan({ onAddSuccess }) {
                             onChange={(e) => handleEndDestinationChange(e)}
                             // onChange={(e) => handleInputChange("endDestination", e.target.value)}
                             isDropdown={true}
-                        // uniqueKey="end"
                         />
                         {!formData.endDestination && errors.endDestination && <span className="text-[12px] font-normal text-red-500">{errors?.endDestination}</span>}
                     </div>
@@ -260,6 +267,50 @@ function AddPlan({ onAddSuccess }) {
                 </div>
                 <div className="flex flex-col gap-2">
                     <span className="text-[#a7a5b4] px-1">Phương tiện</span>
+                    <ul className="flex flex-wrap gap-4">
+                        <li
+                            className={`flex border justify-center items-center border-[#E3E6E8] p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 0 ? "bg-blue-300 text-white" : ""
+                                }`}
+                            onClick={() => handleClick(0)}
+                        >
+                            <img width="48" height="48" src="https://img.icons8.com/fluency/48/scooter.png" alt="scooter" />
+                        </li>
+                        <li
+                            className={`flex border justify-center items-center border-[#E3E6E8] p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 1 ? "bg-blue-300 text-white" : ""
+                                }`}
+                            onClick={() => handleClick(1)}
+                        >
+                            <img width="48" height="48" src="https://img.icons8.com/color/48/car--v1.png" alt="car--v1" />
+                        </li>
+                        <li
+                            className={`flex border justify-center items-center border-[#E3E6E8] p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 2 ? "bg-blue-300 text-white" : ""
+                                }`}
+                            onClick={() => handleClick(2)}
+                        >
+                            <img width="48" height="48" src="https://img.icons8.com/emoji/48/train-emoji.png" alt="train-emoji" />
+                        </li>
+                        <li
+                            className={`flex border justify-center items-center border-[#E3E6E8] p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 3 ? "bg-blue-300 text-white" : ""
+                                }`}
+                            onClick={() => handleClick(3)}
+                        >
+                            <img width="48" height="48" src="https://img.icons8.com/clouds/100/airport.png" alt="airport" />
+                        </li>
+                        <li
+                            className={`flex border justify-center items-center border-[#E3E6E8] p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 4 ? "bg-blue-300 text-white" : ""
+                                }`}
+                            onClick={() => handleClick(4)}
+                        >
+                            <img width="48" height="48" src="https://img.icons8.com/fluency/48/sailing-ship-medium.png" alt="sailing-ship-medium" />
+                        </li>
+                        <li className="flex border border-[#E3E6E8] justify-center items-center p-1 sm:p-2 lg:p-3 rounded-xl shadow-md cursor-pointer">
+                            <MdAdd className="text-[#f2cca2] w-[48px] h-[48px]" />
+                        </li>
+                    </ul>
+                </div>
+
+                {/* <div className="flex flex-col gap-2">
+                    <span className="text-[#a7a5b4] px-1">Phương tiện</span>
                     <ul className="flex gap-4 flex-wrap">
                         <li
                             className={`flex border justify-center items-center border-[#E3E6E8] lg:p-3 md:p-2 p-1 rounded-xl shadow-md cursor-pointer ${formData.vehicle === 0 ? "bg-blue-300 text-white" : ""
@@ -296,14 +347,13 @@ function AddPlan({ onAddSuccess }) {
                         >
                             <img width="48" height="48" src="https://img.icons8.com/fluency/48/sailing-ship-medium.png" alt="sailing-ship-medium" />
                         </li>
-                        <li
+                        {/* <li
                             className={`flex border border-[#E3E6E8] lg:p-3 p-2 rounded-xl shadow-md cursor-pointer `}
 
                         >
                             <MdAdd className='text-[#f2cca2] w-[48px] h-[48px]' />
-                        </li>
-                    </ul>
-                </div>
+                        </li> */}
+
 
                 <button
                     onClick={handleAddPlan}
@@ -316,10 +366,10 @@ function AddPlan({ onAddSuccess }) {
                     )}
                 </button>
 
-            </div>
+            </div >
             {contextHolder}
             {/* {loading && <LoadingSpinner></LoadingSpinner>} */}
-        </div>
+        </div >
     );
 }
 

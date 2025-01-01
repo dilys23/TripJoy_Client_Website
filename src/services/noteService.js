@@ -12,7 +12,7 @@ const editNotePlan = async (planId) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
@@ -29,7 +29,7 @@ const editNotePlanLocation = async (planLocationId, note) => {
         });
         return res.data;
     } catch (error) {
-        throw error
+        throw error.response.data.detail
     }
 };
 
