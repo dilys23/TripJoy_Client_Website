@@ -24,11 +24,14 @@ import { getPlansAvailableToJoin, viewDetailAvailablePlan } from "../../../servi
 import ModalDetailRouting from "../../../components/Modal/ModalDetailRouting";
 import AvatarDefault from "../../../components/Avatar/AvatarDefault";
 import { toast } from "react-toastify";
+import ModalEditPost from "../../../modules/posts/ModalEditPost";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false);
   const [showModalDeletePost, setShowModalDeletePost] = useState(false);
   const [showModalUserLike, setShowModalUserLike] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [postIdToEdit, setPostIdToEdit] = useState(null);
+  const [showModalEditPost, setShowModalEditPost] = useState(false);
   const [listRecommendation, setListRecommendation] = useState([]);
   const [mySelf, setMySelf] = useState({});
   const { user } = useContext(UserContext);
@@ -166,6 +169,10 @@ function Network() {
     setPostIdToDelete(postId);
     setShowModalDeletePost(true);
   };
+  const handleOpenModalEditPost = (postId) => {
+    setPostIdToEdit(postId);
+    setShowModalEditPost(true);
+  }
   const handleOpenUserLike = (postId) => {
     setPostIdToDelete(postId);
     setShowModalUserLike(true);
@@ -244,7 +251,7 @@ function Network() {
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:px-0 px-1 w-full">
           {posts.map((data) => (
-            <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
+            <Post key={data.postId} data={data} onEditPost={handleOpenModalEditPost} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
           ))}
           <div ref={observerRefPosts} style={{ height: '20px' }}>
             {loadingPosts &&
@@ -282,6 +289,7 @@ function Network() {
           ))}
         </div>
       </div>
+      {showModalEditPost && <ModalEditPost handleClose={() => setShowModalEditPost(false)} postId={postIdToEdit}></ModalEditPost>}
       {showDetailPlan && <ModalDetailRouting leader={leader} routing={dataDetail} handleClose={() => setShowDetailPlan(false)} data={budget} />}
       {/* {showDetailPlan && <ModalDetailRouting routing={{ planLocation: dataDetail }} />} */}
       {showModalUserLike &&

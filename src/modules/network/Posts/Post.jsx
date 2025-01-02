@@ -19,7 +19,7 @@ import ModalDetailRouting from '../../../components/Modal/ModalDetailRouting';
 import { UserContext } from '../../../contexts/UserContext';
 import ModalClonePlan from '../../../components/Modal/ModalClonePlan';
 import { toast } from 'react-toastify';
-function Post({ data, onDelete, onShowUserLike, mySelf }) {
+function Post({ data, onEditPost, onDelete, onShowUserLike, mySelf }) {
     const [post, setPost] = useState(data);
     // console.log(data);
     const [showFullText, setShowFullText] = useState(false);
@@ -202,7 +202,8 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
     const handleMenuClick = (e) => {
         // console.log('Clicked item:', e.key);
         if (e.key === '1') {
-            console.log(data.postId)
+            console.log(data.postId);
+            onEditPost(data.postId)
         } else if (e.key === '2') {
             onDelete(data.postId);
         }

@@ -50,7 +50,7 @@ function Plan() {
   const [dateSelect, setDateSelect] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
+  // const {user} = useCon
   // Lắng nghe sự thay đổi kích thước màn hình
   useEffect(() => {
     const handleResize = () => {
