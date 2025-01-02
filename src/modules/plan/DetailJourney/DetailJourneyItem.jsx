@@ -35,7 +35,10 @@ function DetailJourneyItem({ isEdit, journey, index, toggleDetail, dragHandlePro
             const response = await removePlanLocation(journey.planLocationId);
             onSuccess();
         } catch (error) {
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
             console.log(error);
         }
     }

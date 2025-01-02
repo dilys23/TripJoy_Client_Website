@@ -188,7 +188,7 @@ function MyProfile() {
                                 <div className="text-white font-bold lg:text-[32px] text-[32px] sm:text-[20px] leading-8 cursor-pointer nunito-text">{profile?.userName}</div>
                                 <div className="text-white text-[20px] nunito-text ">@kwiwiwiii</div>
                             </div>
-                            <div className="flex gap-10 sm:pt-10 ">
+                            {/* <div className="flex gap-10 sm:pt-10 ">
                                 <div className="flex flex-col justify-center text-center">
                                     <div className="text-[18px] nunito-text font-bold">2.3k</div>
                                     <div className="flex items-center gap-1" >
@@ -204,7 +204,7 @@ function MyProfile() {
                                     <div className="text-[18px] nunito-text font-bold">21</div>
                                     <div className="text-[13px] leading-8 nunito-text">Bài đăng</div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     {stateFriend === 4 ? (

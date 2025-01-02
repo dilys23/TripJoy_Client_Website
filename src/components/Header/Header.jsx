@@ -227,9 +227,9 @@ function Header() {
                                                     </svg>
                                                 </span>
 
-                                                <span className="absolute -mt-6 ms-5 rounded-full bg-red-600 px-[0.50em] py-[0.25em] text-[0.6rem] font-bold leading-none text-white">
+                                                {/* <span className="absolute -mt-6 ms-5 rounded-full bg-red-600 px-[0.50em] py-[0.25em] text-[0.6rem] font-bold leading-none text-white">
                                                     6
-                                                </span>
+                                                </span> */}
                                             </button>
                                             {isOpen && (
                                                 <FrameChat

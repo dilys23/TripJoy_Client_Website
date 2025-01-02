@@ -9,6 +9,7 @@ import 'tippy.js/dist/tippy.css';
 import { UserContext } from "../../contexts/UserContext";
 import { toast } from "react-toastify";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll ";
+import AvatarDefault from "../Avatar/AvatarDefault";
 function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact = false }) {
     const [listMessage, setListMessage] = useState([]);
     const { user, connection } = useContext(UserContext);
@@ -106,7 +107,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
             };
         }
     }, [groupRoomChat, connection]);
-
+    // console.log(user);
     const sendMessage = async () => {
         if (message.trim() && message.length > 0) {
             try {
@@ -171,7 +172,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
         <div ref={chatContainerRef} className="w-[300px] h-[350px] bg-white border border-[#007AFF] rounded-[15px] fixed bottom-5 right-[110px] z-1000 flex flex-col cursor-pointer">
             <div className="w-full h-[50px] flex justify-between px-3 py-2 items-center border-b border-b-[#007AFF]">
                 <div className="flex gap-3 ">
-                    <img src={friend?.avatar.url || friend?.avatar || plan?.avatar || avatar} alt="" className="rounded-full w-10 h-10"></img>
+                    <img src={friend?.avatar?.url || friend?.avatar || plan?.avatar || avatar} alt="" className="rounded-full w-10 h-10"></img>
                     <div className="flex items-center">
                         <span className="text-[14px] font-bold">{friend?.userName || groupRoomChat?.chatRoomName}</span>
                         {/* <span className="text-[#08A879] text-[10px] flex items-center gap-1"><MdCircle />Đang hoạt động</span> */}
@@ -189,7 +190,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
                 {listMessage.map((msg, index) => {
                     // Gọi hàm `findUser` để lấy thông tin người dùng
                     const { userName, avatar } = findUser(msg.postedByUser, members, friend);
-                    const avatarUrl = typeof avatar === 'object' && avatar?.url ? avatar.url : avatar;
+                    const avatarUrl = typeof avatar === 'object' && avatar?.url ? avatar?.url : avatar;
                     if (msg.sendByMe) {
                         return (
                             <div key={index} className="flex flex-col w-full items-end pt-1">
@@ -204,7 +205,7 @@ function Chat({ handleClose, currentRoom, friend, groupRoomChat, plan, contact =
 
                     return (
                         <div key={index} className="w-full flex gap-2 items-start pt-1">
-                            <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full" />
+                            <AvatarDefault src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full" />
                             <div className="flex flex-col text-start">
                                 <span className="text-[10px] font-semibold">{userName}</span>
                                 <div className="px-3 w-fit min-h-[25px] flex justify-center bg-[#FF8B4A] rounded-[17px] text-white text-[13px] leading-3 items-center">

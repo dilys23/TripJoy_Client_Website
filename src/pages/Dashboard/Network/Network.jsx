@@ -46,12 +46,13 @@ function Network() {
   const [api, contextHolder] = notification.useNotification();
   const [showDetailPlan, setShowDetailPlan] = useState(false);
   const [dataDetail, setDataDetail] = useState({});
+  const [leader, setLeader] = useState({})
   const [budget, setBudget] = useState({});
 
   const fetchDataDetail = async (planId) => {
     try {
       const res = await viewDetailAvailablePlan(planId);
-      console.log(res.planLocations.data);
+      setLeader(res.leadUser);
       setDataDetail(res.planLocations.data);
       setBudget(res);
     } catch (error) {
@@ -205,7 +206,7 @@ function Network() {
               <AvatarDefault src={mySelf.avatar?.url} alt="avatar" className="lg:w-10 lg:h-10 w-5 h-5 rounded-full"></AvatarDefault>
               <div className="font-medium lg:text-[16px] text-[13px]">{mySelf.userName}</div>
             </div>
-            <div className="flex gap-2 justify-around">
+            {/* <div className="flex gap-2 justify-around">
               <div className="flex flex-col justify-center text-center">
                 <div className="lg:text-[15px] text-[12px] font-medium">2.3k</div>
                 <div className="lg:text-[13px] text-[10px]">Bạn bè</div>
@@ -214,7 +215,7 @@ function Network() {
                 <div className="lg:text-[15px] text-[12px] font-medium">21</div>
                 <div className="lg:text-[13px] text-[10px]">Bài đăng</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <Contact></Contact>
@@ -281,7 +282,7 @@ function Network() {
           ))}
         </div>
       </div>
-      {showDetailPlan && <ModalDetailRouting routing={dataDetail} handleClose={() => setShowDetailPlan(false)} data={budget} />}
+      {showDetailPlan && <ModalDetailRouting leader={leader} routing={dataDetail} handleClose={() => setShowDetailPlan(false)} data={budget} />}
       {/* {showDetailPlan && <ModalDetailRouting routing={{ planLocation: dataDetail }} />} */}
       {showModalUserLike &&
         (

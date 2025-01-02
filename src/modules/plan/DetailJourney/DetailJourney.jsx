@@ -54,12 +54,17 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
 
         return grouped;
     }, [listItemJourney, plan?.estimatedStartDate, plan?.estimatedEndDate]);
-
     useEffect(() => {
         if (Object.keys(groupedJourneys).length > 0) {
-            setExpandedGroups([Object.keys(groupedJourneys)[0]]);
+            // Mở rộng tất cả các nhóm khi có dữ liệu
+            setExpandedGroups(Object.keys(groupedJourneys));
         }
     }, [groupedJourneys]);
+    // useEffect(() => {
+    //     if (Object.keys(groupedJourneys).length > 0) {
+    //         setExpandedGroups([Object.keys(groupedJourneys)[0]]);
+    //     }
+    // }, [groupedJourneys]);
     const toggleGroup = (date) => {
         if (expandedGroups.includes(date)) {
 
@@ -94,7 +99,10 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
             const res = await changeOrderPlanLocation(planId, planLocationIdFirst, planLocationIdSecond);
             onSuccess();
         } catch (error) {
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
             console.log(error);
         }
     }
@@ -169,7 +177,7 @@ function DetailJourney({ role, planId, plan, planLocation, listMember, onSuccess
                                                             onSuccess={onSuccess}
                                                         />
                                                         {expandedEvaluationItems.includes(journey.planLocationId) && (
-                                                            <EvaluationJourneyItem plan={plan} journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} updateImage={updateImage} />
+                                                            <EvaluationJourneyItem onSuccess={onSuccess} plan={plan} journey={journey} listMember={listMember} updateJourneyInfo={updateJourneyInfo} updateImage={updateImage} />
                                                         )}
                                                     </div>
                                                 )}

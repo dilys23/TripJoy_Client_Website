@@ -504,7 +504,8 @@ function Post({ data, onDelete, onShowUserLike, mySelf }) {
                     <span className='text-[#3a3a3a] sm:text-[15px] text-[13px]'>Bình luận </span>
                 </div>
                 {
-                    post.userPosted.userId !== user.profile.id
+                    post?.userPosted?.userId !== user?.profile?.id
+                    && post?.postType === 1
                     &&
                     <div
                         onClick={() => {

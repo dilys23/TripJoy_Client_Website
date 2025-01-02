@@ -230,7 +230,10 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
             setLoading(false);
         } catch (error) {
             console.log('error', error);
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
         }
     }
 
@@ -420,11 +423,11 @@ function ModalAddPost({ handleClose, onRefresh, openNotificationWithIcon }) {
                                                 <FcAddImage className="text-[#f24822]" />
                                             </button>
                                         </Tippy>
-                                        <Tippy content="Thành viên">
+                                        {/* <Tippy content="Thành viên">
                                             <button className="w-8 h-8 border border-[#17A1fa] rounded-[8px] flex justify-center items-center">
                                                 <MdGroups className="text-[#0D99FF]" />
                                             </button>
-                                        </Tippy>
+                                        </Tippy> */}
                                         <Tippy content="Thêm ảnh">
                                             <button
                                                 onClick={() => setOpenFieldAddImage((prev) => (!prev))}

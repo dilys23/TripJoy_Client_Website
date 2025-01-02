@@ -13,7 +13,7 @@ function FriendItem({ info, onAcceptRequest, onDeclineRequest }) {
     return (
         <div className="w-full h-fit bg-white rounded-20 py-1 px-1   border border-[#CCD0D5]">
             <div onClick={handleToProfile} className="flex gap-3 items-center px-2 py-1 ">
-                <AvatarDefault src={info?.avatar.url} alt="" className="lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] "></AvatarDefault>
+                <AvatarDefault src={info?.avatar?.url} alt="" className="lg:w-[40px] lg:h-[40px] w-[28px] h-[28px] "></AvatarDefault>
                 <div>
                     <span className="font-bold  lg:text-base md:text-[13px] cursor-pointer">{info.userName}</span>
                     <span className=' lg:text-base md:text-[13px]'> đã gửi yêu cầu kết bạn</span>

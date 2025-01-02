@@ -56,9 +56,7 @@ function RecommendationAddressItem({ mySelf, plan, handleShowDetailRouting }) {
                     <span className="lg:text-[14px] text-[12px]">Chia sẻ và cùng lập kế hoạch với bạn đồng hành</span>
                     <div className="flex  lg:gap-3 gap-1 items-center">
                         <Button primary onClick={handleButtonClick} className="text-[10px] rounded-md">{!applyStatus ? "Tham gia" : "Đã gửi"}</Button>
-                        {/* <span
-                            onClick={handleButtonClick}
-                            className="text-[13px] text-[#0354AD] font-semibold italic cursor-pointer">  {!applyStatus ? "Tham gia" : "Đã gửi lời mời"}</span> */}
+                        
                         <span
                             onClick={handleViewDetails}
                             className="text-[12px] text-[#0354AD] font-semibold italic cursor-pointer">Xem chi tiết</span>

@@ -127,7 +127,7 @@ function ModalClonePlan({
                 }))
             }
         };
-       
+
         try {
             const res = await addGenarateTripbyAI(transformedPlan);
             console.log(res.planId);
@@ -137,8 +137,11 @@ function ModalClonePlan({
 
             handleClose();
         } catch (error) {
-            
-            toast.error(error)
+
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
         }
         setLoading(false);
     }
