@@ -292,6 +292,7 @@ function DetailPlan() {
                     }
                     {plan?.status === 2 &&
                         <button
+                            onClick={() => setOpenModalStartPlan(true)}
                             className="text-[15px] bg-[#13C892] font-semibold px-3 py-1 shadow outline-none text-white rounded-md">Kết thúc</button>
                     }
                     {plan?.status === 3 &&

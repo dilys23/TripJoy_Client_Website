@@ -13,7 +13,10 @@ function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWith
             }
             onSuccess();
         } catch (error) {
-            toast.error("Bạn không có quyền chỉnh sửa");
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
             console.log(error);
         }
     }
@@ -27,7 +30,11 @@ function ModalSoonEndPlan({ handleClose, planId, onSuccess, openNotificationWith
             }
             onSuccess();
         } catch (error) {
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
+
             console.log(error);
         }
     }

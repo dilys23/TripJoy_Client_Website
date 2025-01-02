@@ -130,7 +130,10 @@ function AddPlan({ onAddSuccess, onClose }) {
             }
             openNotificationWithIcon('success');
         } catch (error) {
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
             console.error(error);
         } finally {
             setLoading(false);

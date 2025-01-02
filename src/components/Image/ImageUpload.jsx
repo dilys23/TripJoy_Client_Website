@@ -20,7 +20,10 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
                 setImages((prevImages) => [...prevImages, newImageUrl]);
                 onSuccess();
             } catch (error) {
-                toast.error(error);
+                const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                    (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+                const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+                toast.error(extractedMessage);
                 console.log(error);
             }
         }
@@ -32,7 +35,10 @@ function ImageUploader({ planLocationId, images, setImages, onSuccess }) {
             await removeImageIntoPlan(planLocationId, image);
             setImages(updatedImages);
         } catch (error) {
-            toast.error(error);
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
             console.log('Error removing image:', error);
         }
     };

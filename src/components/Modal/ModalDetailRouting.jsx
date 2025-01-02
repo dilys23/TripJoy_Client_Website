@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { MdAccessTime, MdAddCircle, MdAttachMoney, MdCircle, MdClose, MdOutlineKeyboardArrowDown, MdOutlineKeyboardControlKey, MdOutlineShareLocation } from "react-icons/md";
 
 import RoutingMap from "../MapCard/RoutingMap";
-function ModalDetailRouting({ handleClose, routing, data }) {
+import AvatarDefault from "../Avatar/AvatarDefault";
+function ModalDetailRouting({ leader, handleClose, routing, data }) {
     const [isUpInformationDetail, setIsUpInformaitonDetail] = useState(false);
     console.log(data);
     const formatDate = (dateString) => {
@@ -67,10 +68,16 @@ function ModalDetailRouting({ handleClose, routing, data }) {
                                         </div>
 
                                     </div>
+                                    {leader &&
+                                        <div className="flex gap-2 px-2 items-center">
+                                            <AvatarDefault src={leader?.avatar || leader?.avatar?.url} className="w-8 h-8 "></AvatarDefault>
+                                            <span className="text-[13px]">{leader?.userName}</span>
+
+                                        </div>}
                                     {
                                         data &&
-                                        <div className="flex gap-1 px-2">
-                                            <div className="flex gap-1 items-center text-[#616161] font-semibold text-[11px]">
+                                        <div className="flex gap-1 px-2 w-full">
+                                            <div className="flex gap-1 items-center text-[#616161] font-semibold text-[11px] max-w-[120px]">
                                                 <MdOutlineShareLocation />
                                                 <span>{data?.plan?.provinceStart?.provinceName} - {data?.plan?.provinceEnd?.provinceName}</span>
                                             </div>
@@ -86,7 +93,7 @@ function ModalDetailRouting({ handleClose, routing, data }) {
                                 </div>
                                 <div className={`w-full  px-2 pt-4 sm:h-[90%] h-[90%] ${isUpInformationDetail ? "block" : "hidden"} sm:block`}>
                                     <div className="w-full flex flex-col pt-2 gap-5 relative overflow-auto h-full list-address">
-                                        <div className="flex flex-col sm:gap-5 gap-2 h-full overflow-auto">
+                                        <div className="flex flex-col sm:gap-5 gap-2 md:h-full h-[230px] overflow-auto">
                                             {
                                                 routing.length > 0 &&
                                                 routing.map((address) => (

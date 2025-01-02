@@ -24,11 +24,14 @@ import { getPlansAvailableToJoin, viewDetailAvailablePlan } from "../../../servi
 import ModalDetailRouting from "../../../components/Modal/ModalDetailRouting";
 import AvatarDefault from "../../../components/Avatar/AvatarDefault";
 import { toast } from "react-toastify";
+import ModalEditPost from "../../../modules/posts/ModalEditPost";
 function Network() {
   const [showModalListPost, setShowModalListPost] = useState(false);
   const [showModalDeletePost, setShowModalDeletePost] = useState(false);
   const [showModalUserLike, setShowModalUserLike] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [postIdToEdit, setPostIdToEdit] = useState(null);
+  const [showModalEditPost, setShowModalEditPost] = useState(false);
   const [listRecommendation, setListRecommendation] = useState([]);
   const [mySelf, setMySelf] = useState({});
   const { user } = useContext(UserContext);
@@ -46,12 +49,13 @@ function Network() {
   const [api, contextHolder] = notification.useNotification();
   const [showDetailPlan, setShowDetailPlan] = useState(false);
   const [dataDetail, setDataDetail] = useState({});
+  const [leader, setLeader] = useState({})
   const [budget, setBudget] = useState({});
 
   const fetchDataDetail = async (planId) => {
     try {
       const res = await viewDetailAvailablePlan(planId);
-      console.log(res.planLocations.data);
+      setLeader(res.leadUser);
       setDataDetail(res.planLocations.data);
       setBudget(res);
     } catch (error) {
@@ -165,6 +169,10 @@ function Network() {
     setPostIdToDelete(postId);
     setShowModalDeletePost(true);
   };
+  const handleOpenModalEditPost = (postId) => {
+    setPostIdToEdit(postId);
+    setShowModalEditPost(true);
+  }
   const handleOpenUserLike = (postId) => {
     setPostIdToDelete(postId);
     setShowModalUserLike(true);
@@ -205,7 +213,7 @@ function Network() {
               <AvatarDefault src={mySelf.avatar?.url} alt="avatar" className="lg:w-10 lg:h-10 w-5 h-5 rounded-full"></AvatarDefault>
               <div className="font-medium lg:text-[16px] text-[13px]">{mySelf.userName}</div>
             </div>
-            <div className="flex gap-2 justify-around">
+            {/* <div className="flex gap-2 justify-around">
               <div className="flex flex-col justify-center text-center">
                 <div className="lg:text-[15px] text-[12px] font-medium">2.3k</div>
                 <div className="lg:text-[13px] text-[10px]">Bạn bè</div>
@@ -214,7 +222,7 @@ function Network() {
                 <div className="lg:text-[15px] text-[12px] font-medium">21</div>
                 <div className="lg:text-[13px] text-[10px]">Bài đăng</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <Contact></Contact>
@@ -243,7 +251,7 @@ function Network() {
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:px-0 px-1 w-full">
           {posts.map((data) => (
-            <Post key={data.postId} data={data} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
+            <Post key={data.postId} data={data} onEditPost={handleOpenModalEditPost} onDelete={handleOpenModal} onShowUserLike={handleOpenUserLike} mySelf={mySelf} />
           ))}
           <div ref={observerRefPosts} style={{ height: '20px' }}>
             {loadingPosts &&
@@ -281,7 +289,8 @@ function Network() {
           ))}
         </div>
       </div>
-      {showDetailPlan && <ModalDetailRouting routing={dataDetail} handleClose={() => setShowDetailPlan(false)} data={budget} />}
+      {showModalEditPost && <ModalEditPost handleClose={() => setShowModalEditPost(false)} postId={postIdToEdit}></ModalEditPost>}
+      {showDetailPlan && <ModalDetailRouting leader={leader} routing={dataDetail} handleClose={() => setShowDetailPlan(false)} data={budget} />}
       {/* {showDetailPlan && <ModalDetailRouting routing={{ planLocation: dataDetail }} />} */}
       {showModalUserLike &&
         (

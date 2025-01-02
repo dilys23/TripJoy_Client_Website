@@ -25,19 +25,34 @@ function CardRecommendationPlan({
   const handleSavePlan = async () => {
     const formatDate = (date) => {
       if (!date) return null;
-      const d = new Date(date);
-      if (isNaN(d)) {
+
+      // Kiểm tra nếu định dạng đã là YYYY-MM-DD
+      const isoFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (isoFormatRegex.test(date)) {
+        return date; // Trả về đúng như đầu vào
+      }
+
+      // Xử lý định dạng DD/MM/YYYY
+      const ddMmYyyyRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+      if (ddMmYyyyRegex.test(date)) {
         const [day, month, year] = date.split("/");
+        if (parseInt(day, 10) > 31 || parseInt(month, 10) > 12) {
+          throw new Error("Invalid date: day or month out of range");
+        }
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      }
+
+      // Xử lý bằng Date object nếu có thể
+      const d = new Date(date);
+      if (!isNaN(d)) {
+        let month = (d.getMonth() + 1).toString().padStart(2, "0");
+        let day = d.getDate().toString().padStart(2, "0");
+        const year = d.getFullYear();
         return `${year}-${month}-${day}`;
       }
-      let month = "" + (d.getMonth() + 1);
-      let day = "" + d.getDate();
-      const year = d.getFullYear();
 
-      if (month.length < 2) month = "0" + month;
-      if (day.length < 2) day = "0" + day;
-
-      return [year, month, day].join("-");
+      // Nếu không match định dạng nào
+      throw new Error("Unsupported date format");
     };
 
     const planLocations = details.map((detail, index) => ({

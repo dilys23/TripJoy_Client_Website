@@ -345,7 +345,13 @@ function PlanAI() {
                   }`}
                 placeholder="1.500.000đ"
                 value={budget}
-                onChange={(e) => setBudget(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setBudget(value);
+                  }
+                }}
+              // onChange={(e) => setBudget(e.target.value)}
               />
               {errors.endLocation && (
                 <span className="text-[12px] text-red-500">

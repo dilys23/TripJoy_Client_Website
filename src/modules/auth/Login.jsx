@@ -9,6 +9,7 @@ import InputType from "../../components/Input/InputType";
 import { getCurrentUser } from "../../services/getCurrentUser";
 import LoadingSpinner from "../../components/Loading";
 import DialogSucess from "../../components/Notification/DialogSuccess";
+import { MdClose } from "react-icons/md";
 
 function Login({ onClose, onForgetPassword, setEmailParent }) {
 
@@ -115,11 +116,12 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                 onClick={handleClose}
             >
                 <div
-                    className="modal md:w-[500px] w-4/5 h-[580px] flex px-3  border-2 border-none rounded-lg shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center"
+                    className="modal relative md:w-[500px] w-4/5 h-fit pb-10 flex px-3  border-2 border-none rounded-lg shadow-xl stroke-2 bg-white stroke-[#D7D7D7] flex-col items-center"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="md:text-[27px] text-[20px] md:w-[400px] text-[#0F3E4A] font-bold mt-8 mb-5">Đăng nhập và tiếp tục cuộc hành trình của bạn!</div>
-                    <div
+                    <MdClose onClick={handleClose} className="absolute top-7 right-3 text-[25px] cursor-pointer"></MdClose>
+                    <div className="md:text-[25px] text-[20px] md:w-[400px] text-[#0F3E4A] font-bold mt-8 mb-5">Đăng nhập và tiếp tục cuộc hành trình của bạn!</div>
+                    {/* <div
                         className="flex mb-5 gap-3 shadow-md stroke-[#D7D7D7] bg-[#f9f7f7] justify-center hover:bg-[#fbf9f9] md:w-[450px] w-full md:px-0 px-5 h-[40px] stroke-3 rounded-lg items-center pl-3 cursor-pointer">
                         <img src={google} alt="" className="w-[35px] h-[30px] object-cover" />
                         <div className="text-[#0F3E4A] font-bold md:text-[16px] text-[14px]">Đăng nhập với Google</div>
@@ -132,7 +134,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                         <hr className="flex-grow border-t border-[#DDE9ED]" />
                         <span className="text-[#658C96] md:text-[16px] text-[14px]">or</span>
                         <hr className="flex-grow border-t border-[#DDE9ED]" />
-                    </div>
+                    </div> */}
 
                     <input
                         id="email"
@@ -160,7 +162,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                         <div
                             style={{ pointerEvents: emailError ? 'none' : 'auto' }}
                             onClick={handleForgetPassword}
-                            className="underline text-[#818080] md:text-[16px] text-[13px] cursor-pointer hover:text-primary"
+                            className="underline text-[#818080] md:text-[16px] text-[13px] cursor-pointer hover:text-primary text-start justify-start w-full"
                         >Quên mật khẩu?</div>
                     </div>
                     <div className={`flex justify-between  items-center md:w-[450px] w-full mt-5`}>
@@ -172,10 +174,7 @@ function Login({ onClose, onForgetPassword, setEmailParent }) {
                         </button>
                     </div>
                 </div>
-                {/* {showDialog && <DialogSucess
-                    message="Đăng nhập thành công"
-                    description="Chào mừng bạn đến với TripJoy"
-                />} */}
+
                 {isLoading && <LoadingSpinner></LoadingSpinner>}
 
             </div>

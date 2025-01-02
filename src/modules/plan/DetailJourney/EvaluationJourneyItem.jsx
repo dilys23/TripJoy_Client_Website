@@ -10,7 +10,8 @@ import ImageUploader from "../../../components/Image/ImageUpload";
 import { addFeePlanLocation } from "../../../services/detailPlanLocationService";
 import { editNotePlanLocation } from "../../../services/noteService";
 import { getPlanLocationByIdService } from "../../../services/planLocation";
-function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, updateImage }) {
+import { toast } from "react-toastify";
+function EvaluationJourneyItem({ onSuccess, plan, journey, listMember, updateJourneyInfo, updateImage }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -43,7 +44,7 @@ function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, u
         amount: journey?.amount || null,
         userSpenderIds: journey?.userSpenders || [],
     })
-    console.log(planLocationExpense.userSpenderIds)
+    // console.log(planLocationExpense.userSpenderIds)
     const colorBorder = journey.status === 0
         ? '#FF7324'
         : journey.status === 1
@@ -123,13 +124,29 @@ function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, u
 
     const callApi = async () => {
         try {
+            if (planLocationExpense.userSpenderIds.length === 0) {
+                toast.error("Vui lòng chọn người tham gia");
+                return;
+            }
+            if (!planLocationExpense.payerId) {
+                toast.error("Vui lòng nhập người trả tiền");
+                return;
+            }
+
+            if (!planLocationExpense.amount) {
+                toast.error("Vui lòng nhập số tiền");
+                return;
+            }
             if (planLocationExpense.payerId || planLocationExpense.amount || planLocationExpense.userSpenderIds.length > 0) {
                 console.log(note);
                 await addFeePlanLocation(journey.planLocationId, { planLocationExpense: planLocationExpense });
                 await editNotePlanLocation(journey.planLocationId, { note: note });
             }
+            onSuccess();
+            toast.success('Thêm thông tin chi tiết thành công!')
         } catch (error) {
-            console.error("Error calling API:", error);
+            toast.error(error)
+
         }
     };
     const handleSubmit = async () => {
@@ -140,7 +157,7 @@ function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, u
     //     setImages(updatedImages);
     //     updateJourneyInfo(journey, { images: updatedImages });
     // };
-    console.log(planLocationExpense);
+    // console.log(planLocationExpense);
     return (
         <div className={`w-full flex ${images?.length <= 5 ? "sm:h-[300px] h-fit" : "sm:h-[340px] h-fit"} pt-1 mt-3 px-[1px]`}>
             <div className="w-[25px] h-1/2 flex items-center relative border-dashed border-b-[1px] overflow-hidden "
@@ -270,6 +287,7 @@ function EvaluationJourneyItem({ plan, journey, listMember, updateJourneyInfo, u
                                 }
                                 optionFilterProp="children"
                                 optionLabelProp="label"
+                                allowClear={true}
                             >
                                 {members.map((member) => (
                                     <Select.Option

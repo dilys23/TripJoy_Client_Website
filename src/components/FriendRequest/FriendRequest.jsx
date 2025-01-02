@@ -29,7 +29,10 @@ function FriendRequest() {
             setCountFriendRequest(prevCount => prevCount - 1);
         } catch (error) {
             // throw console.error();
-            toast.error(error)
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
         }
     }
     const handleDeclineRequest = async (userId) => {
@@ -43,8 +46,11 @@ function FriendRequest() {
             });
             setCountFriendRequest(prevCount => prevCount - 1);
         } catch (error) {
-            toast.error(error)
-
+            // toast.error(error)
+            const errorMessage = (typeof error === 'string' && error.split(': ')[1]) ||
+                (error.message ? error.message.split(': ')[1] : "Lỗi không xác định");
+            const extractedMessage = errorMessage?.match(/"([^"]+)"/)?.[1] || errorMessage;
+            toast.error(extractedMessage);
         }
     }
     return (
